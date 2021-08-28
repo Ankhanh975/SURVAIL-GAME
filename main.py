@@ -16,6 +16,7 @@ class Player:
     angle = 0
     isPunch = False
     animationNumber = 0 
+    
     def __init__(self):
         self.animation = []
         for i in range(27):
@@ -31,7 +32,10 @@ class Player:
                         color[3] = 0
                     animationImg.set_at((i, j), color)
             self.animation.append(animationImg)
+            
     def update(self, events):
+        dt = pygame.time.get_ticks()
+        
         mousePos = pygame.mouse.get_pos()
         mouseState = pygame.mouse.get_pressed()[0] # Left button state
         keys = pygame.key.get_pressed()
@@ -60,7 +64,9 @@ class Player:
             blitRotate(surf, self.animation[0], self.pos, self.angle)
         else:
             blitRotate(surf, self.animation[self.animationNumber], self.pos, self.angle)
-            
+    
+    def push(self, vector):
+        pass 
         
 # EventSound = pygame.mixer.Sound("Resources/EventSound.mp3")
 
