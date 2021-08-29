@@ -7,10 +7,13 @@ class Player:
     name = "Player 1"
     heart = 20
     
-    pos = pygame.math.Vector2(100,100)
+    pos = pygame.math.Vector2(1024//2,768//2)
     velocity = pygame.math.Vector2(0,0)
     arcuation = pygame.math.Vector2(0,0)
-    angle = 0
+    # Angle use in all events
+    TrueAngle = 90
+    # Angle use in draw() and have a maximum acceleration
+    DisplayAngle = 90
     isPunch = False
     isPunchWithRightHand = True
     animationNumber = 0
@@ -42,42 +45,50 @@ class Player:
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            self.pos[1] -= 5
+            self.pos[1] -= dt/3
         elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            self.pos[1] += 5
+            self.pos[1] += dt/3
         
         if keys[pygame.K_a] or keys[pygame.K_RIGHT]:
-            self.pos[0] -= 5
+            self.pos[0] -= dt/3
         elif keys[pygame.K_d] or keys[pygame.K_LEFT]:
-            self.pos[0] += 5
+            self.pos[0] += dt/3
         
         if mouseState==True and not self.isPunch:
             self.isPunch = True
-            self.isPunchWithRightHand = (random.randint(0, 3) != 0) # 33%
+            self.isPunchWithRightHand = (random.randint(0, 100) < 60) # 33%
         elif self.isPunch:
             self.animationNumber+=0.22
+            
+            if 3.0< self.animationNumber <3.5 :
+                self.pos += pygame.math.Vector2(0,7).rotate(self.TrueAngle)
+            if 5< self.animationNumber <5.5 :
+                self.pos += pygame.math.Vector2(0,10).rotate(self.TrueAngle-180)
             if self.animationNumber >= len(self.animation):
                 self.animationNumber = 0
                 self.isPunch = False
+            
         
         mouseVector = self.pos - pygame.math.Vector2(mousePos)
-        self.angle = mouseVector.angle_to(pygame.math.Vector2(-100,0))-90
+        self.TrueAngle = mouseVector.angle_to(pygame.math.Vector2(-100,0))-90
         
     def draw(self, surf):
         if self.isPunch:
             animation = self.animation[int(self.animationNumber)]
         else:
             animation = self.animation[0]
-        # animation.fill((10,10,10))
+        animation.fill((10,10,10))
 
         center = self.pos[0], self.pos[1]
-        # animation = rotate(animation, center, self.angle)
+        center = 1024//2,768//2
+        # animation = rotate(animation, center, self.TrueAngle)
         if self.isPunchWithRightHand: 
-            blitRotate(surf, animation, center, self.angle)
+            blitRotate(surf, animation, center, self.TrueAngle)
         else:
-            blitRotate(surf, pygame.transform.flip(animation, True, False), center, self.angle)
+            blitRotate(surf, pygame.transform.flip(animation, True, False), center, self.TrueAngle)
             
     def push(self, vector):
+        # When externa force push the player, different direction will push different amounts
         pass
 
 class Enemy(Player):
