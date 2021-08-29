@@ -23,19 +23,19 @@ def save_image( npdata, outfilename ) :
     cv2.imwrite(outfilename, npdata)
     
 if __name__ == "__main__":
-    for n in range(27):
-        data = load_image(f"Resources/Anmation_{n+44}.jpg")
+    for n in range(1,7):
+        data = load_image(f"Resources/Anmation_{n}.png")
         shape = data.shape
         # print(data, shape)
         for x in range(shape[0]):
             for y in range(shape[1]):
-                if data[x][y][0] < 10 and data[x][y][1] < 10 and data[x][y][0] < 10:
-                    continue
-                elif data[x][y][0] > 235 and data[x][y][1] > 235 and data[x][y][2] > 235:
-                    continue
+                if data[x][y][0] < 6 and data[x][y][1] < 6 and data[x][y][0] < 6:
+                    data[x][y] = (0, 0, 0, 255)
+                elif data[x][y][0] > 249 and data[x][y][1] > 249 and data[x][y][2] > 249:
+                    data[x][y] = (255, 255, 255, 255)
                 else:
-                    data[x][y] = (255, 255, 0)
+                    data[x][y] = (100, 100, 100, 0)
                     
                     
-        save_image(data, f"Anmation_{n}.jpg")
+        save_image(data, f"Anmation_{n}.png")
 
