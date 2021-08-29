@@ -1,3 +1,4 @@
+import pygame
 class F3Menu:
     # Debug purpose
     display = True
@@ -54,3 +55,13 @@ class ScoreBar:
     def display(self):
         if self.display:
             pass
+
+class EscMenu:
+    display = False
+    def __init__(self):
+        pass
+    def update(self, events):
+        for event in events:
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    self.display = not self.display

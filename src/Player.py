@@ -1,11 +1,11 @@
-
 from src._main import *
-
+from src import _player
 GoodSkinColor = [255, 255, 255], [255, 255, 0], [0, 0, 255], [248, 147, 29], [0, 255, 0], [255, 0, 0]
 
 class Player:
     name = "Player 1"
     heart = 20
+    color = [255, 255, 255]
     
     pos = pygame.math.Vector2(1000,1000)
     velocity = pygame.math.Vector2(0,0)
@@ -22,6 +22,7 @@ class Player:
     def __init__(self):
         self.animation = []
         color = random.choice(GoodSkinColor)
+        self.color = color
         for i in range(1,7):
             animationImg = pygame.image.load(f"Resources/Animation_{i}.png").convert().convert_alpha()
             size = animationImg.get_size()
@@ -73,18 +74,9 @@ class Player:
         
         mouseVector = self.pos - pygame.math.Vector2(mousePos)
         self.TrueAngle = mouseVector.angle_to(pygame.math.Vector2(-100,0))-90
-    
+    ChooseHandToPunch = _player.ChooseHandToPunch
 
-    def ChooseHandToPunch(self):
-        input_ = self.PunchHandHistory
-        present = input_[-1] + input_[-2] + input_[-3] + input_[-4] + input_[-5]
-        if input_[-1] == input_[-2]:
-            return (not input_[-1])
-        elif present >= 4 or present <= 1:
-            return True if present >= 4 else False
-        else:
-            return (random.randint(0, 100) <= 60) # 60%
-            
+ 
     def draw(self, surf):
         if self.isPunch:
             animation = self.animation[int(self.animationNumber)]
@@ -104,8 +96,7 @@ class Player:
         # When externa force push the player, different direction will push different amounts
         pass
     
-    def __str__(self):
-        return self.TrueAngle, self.pos, self.acceleration, self.velocity, self.animationNumber, self.isPunchWithRightHand
+
         
 class Enemy(Player):
     def __init__(self):

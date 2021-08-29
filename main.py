@@ -2,10 +2,6 @@ from src._main import *
 from src.Player import *
 from src import displayInfo
 SetUp()
-"Resources/C418-Sweden.mp3"
-"Resources/C418-Beginning 2.mp3"
-"Resources/C418-Danny.mp3"
-"Resources/C418-Wet Hands.mp3"
 clock = pygame.time.Clock()
 
 pygame.init()
@@ -14,7 +10,8 @@ screen = pygame.display.set_mode((1024, 768), DOUBLEBUF)
 
 
 EventSound = pygame.mixer.Sound("Resources/EventSound.mp3")
-# BackGroundSong = pygame.mixer.music.load("Resources/C418-Sweden.mp3")
+BackGroundSoundTrack = ["Resources/C418 - Sweden.mp3", "Resources/C418 - Beginning 2.mp3", "Resources/C418 - Danny.mp3", "Resources/C418 - Wet Hands.mp3"]
+pygame.mixer.music.load(random.choice(BackGroundSoundTrack))
 # pygame.mixer.music.play(-1)
 
 class Ground:
@@ -70,10 +67,10 @@ def draw(events, FPS):
             pass
         elif event.type == pygame.MOUSEMOTION:
             pass
-f3Menu = displayInfo.F3Menu
-tabMenu = displayInfo.TabMenu
-chatMenu = displayInfo.ChatMenu
-scoreBar = displayInfo.ScoreBar
+f3Menu = displayInfo.F3Menu()
+tabMenu = displayInfo.TabMenu()
+chatMenu = displayInfo.ChatMenu()
+scoreBar = displayInfo.ScoreBar()
 
 frame = 0
 while True:

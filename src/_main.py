@@ -10,9 +10,6 @@ import win32gui
 import itertools
 from pygame.locals import *
 
-# https://github.com/000Nobody/Pygame-Platformer-Shooter
-
-
 def SetUp():
     pygame.mixer.init(44100, -16, 2, 64)
     pygame.mixer.pre_init(44100, 16, 2, 4096)
@@ -27,9 +24,6 @@ def SetUp():
 
     pygame.display.set_icon(programIcon)
     pygame.display.set_caption("Try to survive!")
-
-
-
     
 def blitRotate(surf, image, pos, angle):
     originPos = image.get_size()
