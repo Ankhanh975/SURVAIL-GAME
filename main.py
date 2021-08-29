@@ -17,9 +17,12 @@ BackGroundSong = pygame.mixer.music.load("Resources/C418-Sweden.mp3")
 pygame.mixer.music.play(-1)
 class Ground:
     # Set background base on player position
-    def __init__(self):# 
-        self.img = pygame.image.load("Resources/BackGround.jpg").convert().convert_alpha()
-        self.x, self.y = self.img.get_size()
+    def __init__(self): 
+        self.img = []
+        for i in range(1, 5):
+            img = pygame.image.load(f"Resources/BackGround{i}.png").convert().convert_alpha()
+            self.img.append(img)
+        self.x, self.y = self.img[0].get_size()
     def draw(self,surf, playerPos):
         print(playerPos)
         # Rect: Rect containing the surf in world coordinates
