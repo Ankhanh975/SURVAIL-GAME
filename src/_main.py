@@ -26,8 +26,7 @@ def SetUp():
             programIcon.set_at((x,y), ( n[3], n[3], n[3], 255))
 
     pygame.display.set_icon(programIcon)
-    pygame.display.set_caption("Try to survive!") #TODO: anime between "Smart Clicker" - " Auto Clicker" - "Good Luck!"
-
+    pygame.display.set_caption("Try to survive!")
 
 
 

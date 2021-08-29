@@ -7,7 +7,7 @@ class Player:
     name = "Player 1"
     heart = 20
     
-    pos = pygame.math.Vector2(1024//2,768//2)
+    pos = pygame.math.Vector2(1000,1000)
     velocity = pygame.math.Vector2(0,0)
     arcuation = pygame.math.Vector2(0,0)
     # Angle use in all events
@@ -18,6 +18,7 @@ class Player:
     isPunchWithRightHand = True
     animationNumber = 0
     lastTick = pygame.time.get_ticks()
+    PunchHandHistory = [False, False, False, False, False]
     def __init__(self):
         self.animation = []
         color = random.choice(GoodSkinColor)
@@ -56,14 +57,15 @@ class Player:
         
         if mouseState==True and not self.isPunch:
             self.isPunch = True
-            self.isPunchWithRightHand = (random.randint(0, 100) < 60) # 33%
+            self.isPunchWithRightHand = self.ChooseHandToPunch()
+            self.PunchHandHistory.append(self.isPunchWithRightHand)
         elif self.isPunch:
             self.animationNumber+=0.22
             
-            if 3.0< self.animationNumber <3.5 :
-                self.pos += pygame.math.Vector2(0,7).rotate(self.TrueAngle)
-            if 5< self.animationNumber <5.5 :
-                self.pos += pygame.math.Vector2(0,10).rotate(self.TrueAngle-180)
+            # if 3.0< self.animationNumber <3.5 :
+            #     self.pos += pygame.math.Vector2(0,7).rotate(self.TrueAngle)
+            # if 5< self.animationNumber <5.5 :
+            #     self.pos += pygame.math.Vector2(0,10).rotate(self.TrueAngle-180)
             if self.animationNumber >= len(self.animation):
                 self.animationNumber = 0
                 self.isPunch = False
@@ -71,13 +73,24 @@ class Player:
         
         mouseVector = self.pos - pygame.math.Vector2(mousePos)
         self.TrueAngle = mouseVector.angle_to(pygame.math.Vector2(-100,0))-90
-        
+    
+
+    def ChooseHandToPunch(self):
+        input_ = self.PunchHandHistory
+        present = input_[-1] + input_[-2] + input_[-3] + input_[-4] + input_[-5]
+        if input_[-1] == input_[-2]:
+            return (not input_[-1])
+        elif present >= 4 or present <= 1:
+            return True if present >= 4 else False
+        else:
+            return (random.randint(0, 100) <= 60) # 60%
+            
     def draw(self, surf):
         if self.isPunch:
             animation = self.animation[int(self.animationNumber)]
         else:
             animation = self.animation[0]
-        animation.fill((10,10,10))
+        # animation.fill((10,10,10))
 
         center = self.pos[0], self.pos[1]
         center = 1024//2,768//2
@@ -90,7 +103,10 @@ class Player:
     def push(self, vector):
         # When externa force push the player, different direction will push different amounts
         pass
-
+    
+    def __str__(self):
+        return self.TrueAngle, self.pos, self.acceleration, self.velocity, self.animationNumber, self.isPunchWithRightHand
+        
 class Enemy(Player):
     def __init__(self):
         super().__init__()
