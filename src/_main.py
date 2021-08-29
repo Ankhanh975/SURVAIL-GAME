@@ -10,6 +10,8 @@ import win32gui
 import itertools
 from pygame.locals import *
 
+# https://github.com/000Nobody/Pygame-Platformer-Shooter
+
 
 def SetUp():
     pygame.mixer.init(44100, -16, 2, 64)
