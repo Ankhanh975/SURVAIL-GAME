@@ -24,6 +24,12 @@ Punch: {"Right" if self.isPunchWithRightHand else "Left"}
 '''
     return s
 
+def FindPointByRotate(A, H, alpha):
+    OA = pygame.math.Vector2(A)
+    OH = pygame.math.Vector2(H)
+    HA = OA - OH 
+    HA.rotate(alpha)
+    return HA + OH
 # class Control:
 #     pos = pygame.math.Vector2(1000, 1000)
 #     velocity = pygame.math.Vector2(0, 0)

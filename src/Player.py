@@ -55,6 +55,7 @@ class Player:
     pos = pygame.math.Vector2(1000, 1000)
     velocity = pygame.math.Vector2(0, 0)
     arcuation = pygame.math.Vector2(0, 0)
+    center = pygame.math.Vector2(1024, 768)
     # Angle use in all events
     TrueAngle = 90
     # Angle use in draw() with a maximum acceleration (average of TrueAngle)
@@ -99,8 +100,14 @@ class Player:
                 self.animationNumber = 0
                 self.isPunch = False
 
-        mouseVector = self.pos - pygame.math.Vector2(mousePos)
-        self.TrueAngle = mouseVector.angle_to(pygame.math.Vector2(-100, 0))-90
+        OM = pygame.math.Vector2(mousePos)
+        OH = self.center
+        OP0 = pygame.math.Vector2(Character["right"][self.color][0].get_rect().center)
+        HM = OH - OM
+        HP0 = OP0 - OH
+        self.TrueAngle = HP0.angle_to(HM)
+        
+        
         self.AngleSaveHistory.add(self.TrueAngle)
         self.DisplayAngle = self.AngleSaveHistory.average()
         
@@ -108,7 +115,6 @@ class Player:
     __str__ = _player.__str__
 
     def draw(self, surf):
-        # self.DisplayAngle = self.AngleSaveHistory.read(0)
         
         Hand = "right" if self.isPunchWithRightHand else "left"
         num = int(self.animationNumber) if self.isPunch else 0
@@ -118,7 +124,7 @@ class Player:
         center = self.pos[0], self.pos[1]
         center = 1024//2, 768//2
         # animation = rotate(animation, center, self.TrueAngle)
-        blitRotate(surf, animation, center, self.TrueAngle)
+        blitRotate(surf, animation, center, self.DisplayAngle)
 
     def push(self, vector):
         # When externa force push the player, different direction will push different amounts
