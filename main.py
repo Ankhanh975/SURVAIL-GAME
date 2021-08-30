@@ -51,7 +51,7 @@ def draw(events, FPS):
 
     background.draw(screen, player.pos)
     player.update(events)
-    player.draw(screen)
+    player.draw(screen, (1024//2, 768//2))
 
     for event in events:
         if event.type == pygame.KEYDOWN:
@@ -61,6 +61,7 @@ def draw(events, FPS):
             pass
         elif event.type == pygame.MOUSEMOTION:
             pass
+        
 f3Menu = displayInfo.F3Menu()
 tabMenu = displayInfo.TabMenu()
 chatMenu = displayInfo.ChatMenu()

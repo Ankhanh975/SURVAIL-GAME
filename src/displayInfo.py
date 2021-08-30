@@ -1,21 +1,23 @@
 import pygame
 
 def blit_text(surface, text, pos, font, color=pygame.Color('black')):
-    words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
+
+
+    words = text.splitlines()  # 2D array where each row is a list of words.
     space = font.size(' ')[0]  # The width of a space.
     max_width, max_height = surface.get_size()
     x, y = pos
     for line in words:
-        for word in line:
-            word_surface = font.render(word, 0, color)
-            word_width, word_height = word_surface.get_size()
-            if x + word_width >= max_width:
-                x = pos[0]  # Reset the x.
-                y += word_height  # Start on new row.
-            surface.blit(word_surface, (x, y))
-            x += word_width + space
+        line_surface = font.render(line, 1, color)
+        line_width, line_height = line_surface.get_size()
+
+        transparent = pygame.Surface((line_width, line_height))
+        transparent.set_alpha(35)         
+        transparent.fill((15,15,15))     
+        surface.blit(transparent, (x, y, )) 
+        surface.blit(line_surface, (x, y))
         x = pos[0]  # Reset the x.
-        y += word_height  # Start on new row.
+        y += line_height  # Start on new row.
 
 class F3Menu:
     # Debug purpose
@@ -30,7 +32,7 @@ class F3Menu:
 
     def update(self, events, player, fps):
         self.playerInfo = str(player)
-        self.FPS = f"FPS: {fps}"
+        self.FPS = f"{fps} fps"
         self.text = f"{self.introduction} \n {self.FPS} \n {self.playerInfo}"
         
         for event in events:
