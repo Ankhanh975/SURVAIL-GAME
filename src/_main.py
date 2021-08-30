@@ -31,27 +31,25 @@ class SaveHistory:
     # This class is used to save the last n elements without overflow data
     def __init__(self, size):
         self.size = size
+        self.i = self.size-1
         self.dict = {}
-        self.i = 0
         for x in range(self.size):
             self.dict[x] = 0
 
-    def save(self, info):
+    def add(self, info):
+        self.i = (self.i+1) % self.size
         self.dict[self.i] = info
-        self.i += 1
-        if self.i >= self.size:
-            self.i = 0
 
     def read(self, num: int):
         # Read the info save in num times backwards
-        if not (1 <= num <= self.size):
+        if not (0 <= num <= self.size-1):
             raise IndexError("List index out of range")
         else:
-            return self.dict[self.i-1-num] % self.size
+            return self.dict[(self.i-num)% self.size] 
     
     def average(self):
         if type(self.dict[0]) not in (int, float):
-            raise ValueError(f"Not calcaulate for type: {type(self.dict[0])}")
+            raise ValueError(f"Not calcaulateable type for type: {type(self.dict[0])}")
         else:
             total = 0
             for i in range(self.size):
@@ -80,18 +78,3 @@ def blitRotate(surf, image, pos, angle):
 
     rotated_image = pygame.transform.rotate(image, angle)
     surf.blit(rotated_image, origin)
-
-
-def rotate(img, pos, angle):
-    w, h = img.get_size()
-    img2 = pygame.Surface((w*2, h*2), pygame.SRCALPHA)
-    img2.blit(img, (w-pos[0], h-pos[1]))
-    return pygame.transform.rotate(img2, angle)
-
-
-def blitRotate2(surf, img, pos, angle):
-    w, h = img.get_size()
-    img2x = pygame.Surface((w*2, h*2), pygame.SRCALPHA)
-    img2x.blit(img, (w-pos[0], h-pos[1]))
-
-    surf.blit(img2x, (10, 10))

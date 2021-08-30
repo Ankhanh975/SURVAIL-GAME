@@ -10,6 +10,14 @@ Character = {"red": [],
              "yellow": [],
              "orange": [],
              "white": []}
+             
+CharacterFlip = {"red": [],
+             "green": [],
+             "blue": [],
+             "yellow": [],
+             "orange": [],
+             "white": []}
+             
 def SetUpAnimation():
     for x in range(len(GoodSkinColor)):
         for i in range(1, 7):
@@ -28,8 +36,17 @@ def SetUpAnimation():
                     animationImg.set_at((i, j), C)
                     
             Character[GoodSkinColor[x]].append(animationImg)
-
+            
+def SetUpAnimationFlip():
+    for x in range(len(GoodSkinColor)):
+        for i in range(6):
+            animationImg = Character[GoodSkinColor[x]][i]
+            CharacterFlip[GoodSkinColor[x]].append(pygame.transform.flip( animationImg, True, False))
+            
 SetUpAnimation()
+SetUpAnimationFlip()
+Character = {"right": Character, "left": CharacterFlip}
+
 class Player:
     name = "Player 1"
     heart = 20
@@ -49,11 +66,9 @@ class Player:
     PunchHandHistory = [False, False, False, False, False]
 
     def __init__(self):
-        self.animation = []
         self.color = random.choice(GoodSkinColor)
-        self.animation = Character[self.color]
-        
-        # self.AngleSaveHistory = SaveHistory(6)
+        self.numOfAnimationFrames = len(Character["right"][self.color])
+        self.AngleSaveHistory = SaveHistory(6)
 
     def update(self, events):
         dt = pygame.time.get_ticks() - self.lastTick
@@ -80,17 +95,14 @@ class Player:
         elif self.isPunch:
             self.animationNumber += 0.22
 
-            # if 3.0< self.animationNumber <3.5 :
-            #     self.pos += pygame.math.Vector2(0,7).rotate(self.TrueAngle)
-            # if 5< self.animationNumber <5.5 :
-            #     self.pos += pygame.math.Vector2(0,10).rotate(self.TrueAngle-180)
-            if self.animationNumber >= len(self.animation):
+            if self.animationNumber >= self.numOfAnimationFrames :
                 self.animationNumber = 0
                 self.isPunch = False
 
         mouseVector = self.pos - pygame.math.Vector2(mousePos)
         self.TrueAngle = mouseVector.angle_to(pygame.math.Vector2(-100, 0))-90
-        # self.AngleSaveHistory.save(self.TrueAngle)
+        self.AngleSaveHistory.add(self.TrueAngle)
+        self.DisplayAngle = self.AngleSaveHistory.average()
         
     ChooseHandToPunch = _player.ChooseHandToPunch
     __str__ = _player.__str__
@@ -98,20 +110,15 @@ class Player:
     def draw(self, surf):
         # self.DisplayAngle = self.AngleSaveHistory.read(0)
         
-        if self.isPunch:
-            animation = self.animation[int(self.animationNumber)]
-        else:
-            animation = self.animation[0]
+        Hand = "right" if self.isPunchWithRightHand else "left"
+        num = int(self.animationNumber) if self.isPunch else 0
+        animation = Character[Hand][self.color][num]
         # animation.fill((10,10,10))
 
         center = self.pos[0], self.pos[1]
         center = 1024//2, 768//2
         # animation = rotate(animation, center, self.TrueAngle)
-        if self.isPunchWithRightHand:
-            blitRotate(surf, animation, center, self.TrueAngle)
-        else:
-            blitRotate(surf, pygame.transform.flip(
-                animation, True, False), center, self.TrueAngle)
+        blitRotate(surf, animation, center, self.TrueAngle)
 
     def push(self, vector):
         # When externa force push the player, different direction will push different amounts

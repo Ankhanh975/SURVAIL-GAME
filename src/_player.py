@@ -1,5 +1,4 @@
 import random
-
 import pygame
 
 def ChooseHandToPunch(self):
@@ -20,12 +19,36 @@ def __str__(self):
 Color: {self.color.upper()}
 Angle: {self.TrueAngle%180:2.2f}°
 Coordinates: {self.pos[0]:9.3f}, {self.pos[1]:9.3f}
-AnimationNumber: {self.animationNumber:4.1f} / {len(self.animation)}
+AnimationNumber: {self.animationNumber:4.1f} / {self.numOfAnimationFrames }
 Punch: {"Right" if self.isPunchWithRightHand else "Left"}
 '''
     return s
-    
 
+# class Control:
+#     pos = pygame.math.Vector2(1000, 1000)
+#     velocity = pygame.math.Vector2(0, 0)
+#     arcuation = pygame.math.Vector2(0, 0)
+#     # Angle use in all events
+#     TrueAngle = 90
+#     # Angle use in draw() with a maximum acceleration (average of TrueAngle)
+#     DisplayAngle = 90
+
+#     def __init__(self, color):
+#         self.color = random.choice(GoodSkinColor)
+
+#     def update(self, events, dt):
+#         mousePos = pygame.mouse.get_pos()
+#         mouseState = pygame.mouse.get_pressed()[0]  # Left button state
+#         keys = pygame.key.get_pressed()
+        
+#         if keys[pygame.K_w] or keys[pygame.K_UP]:
+#             self.pos[1] -= dt/3
+#         elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
+#             self.pos[1] += dt/3
+#         if keys[pygame.K_a] or keys[pygame.K_RIGHT]:
+#             self.pos[0] -= dt/3
+#         elif keys[pygame.K_d] or keys[pygame.K_LEFT]:
+#             self.pos[0] += dt/3
 
 # Velocity: {self.velocity}
 # Acceleration: {self.acceleration}
