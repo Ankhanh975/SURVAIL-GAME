@@ -1,7 +1,15 @@
 from src._main import *
 from src import _player
+
 GoodSkinColor = [255, 255, 255], [255, 255, 0], [0, 0, 255], [248, 147, 29], [0, 255, 0], [255, 0, 0]
 
+Character = {"red": [],
+            "green": [],
+            "blue": [],
+            "yellow": [],
+            "orange": [],
+            "white": []}
+Character     
 class Player:
     name = "Player 1"
     heart = 20
@@ -75,7 +83,7 @@ class Player:
         mouseVector = self.pos - pygame.math.Vector2(mousePos)
         self.TrueAngle = mouseVector.angle_to(pygame.math.Vector2(-100,0))-90
     ChooseHandToPunch = _player.ChooseHandToPunch
-
+    __str__ = _player.__str__
  
     def draw(self, surf):
         if self.isPunch:

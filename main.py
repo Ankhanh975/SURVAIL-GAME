@@ -97,13 +97,14 @@ while True:
                 debugScreen = not debugScreen
             elif event.key == pygame.K_F11:
                 pass
-        
-    draw(events, round(clock.get_fps(), 2))
-    f3Menu.update(events)    
-    f3Menu.display()
+    fps = clock.get_fps()
+    fps = round(fps, 2)
+    draw(events, fps)
+    f3Menu.update(events, player, fps)    
+    f3Menu.display(screen)
     tabMenu.update(events)    
-    tabMenu.display()
+    tabMenu.display(screen)
     chatMenu.update(events)    
-    chatMenu.display()
+    chatMenu.display(screen)
     scoreBar.update(events)    
-    scoreBar.display()
+    scoreBar.display(screen)
