@@ -48,12 +48,7 @@ background = Ground()
 debugScreen = False
 
 def draw(events, FPS):
-    if debugScreen:
-        pygame.display.set_caption(str(FPS))
-    else:
-        pygame.display.set_caption("Try to survive!")
-        
-    
+
     background.draw(screen, player.pos)
     player.update(events)
     player.draw(screen)

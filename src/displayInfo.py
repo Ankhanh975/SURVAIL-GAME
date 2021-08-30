@@ -19,7 +19,7 @@ def blit_text(surface, text, pos, font, color=pygame.Color('black')):
 
 class F3Menu:
     # Debug purpose
-    display = True
+    show = True
     introduction = "Game make by KHANH."
     playerInfo = ""
     FPS = "0"
@@ -36,11 +36,11 @@ class F3Menu:
         for event in events:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_F3:
-                    self.display = not self.display
+                    self.show = not self.show
 
     def display(self, surf):
         lines = self.text.splitlines()
-        if self.display:
+        if self.show:
             blit_text(surf, self.text, (20, 20), self.font, color=(255, 254, 253))
             # for i, line in enumerate(lines):
             #     self.img = self.font.render(line, True, (255, 0, 0))
@@ -49,7 +49,7 @@ class F3Menu:
 
 
 class TabMenu:
-    display = False
+    show = False
 
     def __init__(self):
         pass
@@ -58,17 +58,17 @@ class TabMenu:
         for event in events:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_F3:
-                    self.display = not self.display
+                    self.show = not self.show
 
     def display(self, surf):
 
-        if self.display:
+        if self.show:
             return
             surf.blit(self)
 
 
 class ChatMenu:
-    display = False
+    show = False
 
     def __init__(self):
         pass
@@ -77,17 +77,17 @@ class ChatMenu:
         for event in events:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RSHIFT:
-                    self.display = not self.display
+                    self.show = not self.show
 
     def display(self, surf):
 
-        if self.display:
+        if self.show:
             return
             surf.blit(self)
 
 
 class ScoreBar:
-    display = True
+    show = True
 
     def __init__(self):
         pass
@@ -96,17 +96,17 @@ class ScoreBar:
         for event in events:
             if event.type == pygame.KEYUP:
                 if event.key == None:
-                    self.display = not self.display
+                    self.show = not self.show
 
     def display(self, surf):
 
-        if self.display:
+        if self.show:
             return
             surf.blit(self)
 
 
 class EscMenu:
-    display = False
+    show = False
 
     def __init__(self):
         pass
@@ -115,4 +115,4 @@ class EscMenu:
         for event in events:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
-                    self.display = not self.display
+                    self.show = not self.show
