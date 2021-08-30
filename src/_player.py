@@ -1,5 +1,7 @@
 import random
 
+import pygame
+
 def ChooseHandToPunch(self):
     input_ = self.PunchHandHistory
     present = input_[-1] + input_[-2] + input_[-3] + input_[-4] + input_[-5]
@@ -10,14 +12,16 @@ def ChooseHandToPunch(self):
     else:
         return (random.randint(0, 100) <= 60) # 60%
 
+s=""
+s
 def __str__(self):
-    coordinates = round(self.pos[0], 5), round(self.pos[1], 5)
+    
     s = f'''\
-Color: RGB({self.color[0]}, {self.color[1]}, {self.color[2]})
-Angle: {round(self.TrueAngle, 2)}°
-Coordinates: {coordinates[0]}, {coordinates[1]}
-AnimationNumber: {round(self.animationNumber, 1)} / {len(self.animation)}
-Punch: {"With Right Hand" if self.isPunchWithRightHand else "With Left Hand"}
+Color: {self.color.upper()}
+Angle: {self.TrueAngle%180:2.2f}°
+Coordinates: {self.pos[0]:9.3f}, {self.pos[1]:9.3f}
+AnimationNumber: {self.animationNumber:4.1f} / {len(self.animation)}
+Punch: {"Right" if self.isPunchWithRightHand else "Left"}
 '''
     return s
     

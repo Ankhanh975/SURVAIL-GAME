@@ -1,13 +1,12 @@
 from src._main import *
-from src.Player import *
-from src import displayInfo
 SetUp()
+
+
 clock = pygame.time.Clock()
-
-pygame.init()
-
 screen = pygame.display.set_mode((1024, 768), DOUBLEBUF)
 
+from src.Player import *
+from src import displayInfo
 
 EventSound = pygame.mixer.Sound("Resources/EventSound.mp3")
 BackGroundSoundTrack = ["Resources/C418 - Sweden.mp3", "Resources/C418 - Beginning 2.mp3", "Resources/C418 - Danny.mp3", "Resources/C418 - Wet Hands.mp3"]

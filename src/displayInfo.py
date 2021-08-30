@@ -20,7 +20,7 @@ def blit_text(surface, text, pos, font, color=pygame.Color('black')):
 class F3Menu:
     # Debug purpose
     display = True
-    introduction = "Game make by KHANH"
+    introduction = "Game make by KHANH."
     playerInfo = ""
     FPS = "0"
     text = f"{introduction} + {FPS} + {playerInfo}"
