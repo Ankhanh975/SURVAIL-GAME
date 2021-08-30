@@ -17,7 +17,7 @@ def __str__(self):
     
     s = f'''\
 Color: {self.color.upper()}
-Angle: {self.TrueAngle%180:2.2f}°
+Angle: {self.TrueAngle:2.2f}°
 XY: {self.pos[0]:9.3f} / {self.pos[1]:9.3f}
 AnimationNumber: {self.animationNumber:4.1f} / {self.numOfAnimationFrames }
 Punch: {"Right" if self.isPunchWithRightHand else "Left"}

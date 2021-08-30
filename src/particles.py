@@ -1,17 +1,8 @@
-# Setup Python ----------------------------------------------- #
 from pygame.locals import *
 import pygame
 import sys
 import math
 import random
-
-# Setup pygame/window ---------------------------------------- #
-mainClock = pygame.time.Clock()
-pygame.init()
-pygame.display.set_caption('game base')
-screen = pygame.display.set_mode((500, 500), 0, 32)
-
-sparks = []
 
 class Spark():
     def __init__(self, loc, angle, speed, color, scale=1):
@@ -37,14 +28,11 @@ class Spark():
     def calculate_movement(self, dt):
         return [math.cos(self.angle) * self.speed * dt, math.sin(self.angle) * self.speed * dt]
 
-    # gravity and friction
-
-    def velocity_adjust(self, friction, force, terminal_velocity, dt):
+    # Friction
+    def velocity_adjust(self, friction, dt):
         movement = self.calculate_movement(dt)
-        movement[1] = min(terminal_velocity, movement[1] + force * dt)
         movement[0] *= friction
         self.angle = math.atan2(movement[1], movement[0])
-        # if you want to get more realistic, the speed should be adjusted here
 
     def move(self, dt):
         movement = self.calculate_movement(dt)
@@ -52,9 +40,8 @@ class Spark():
         self.loc[1] += movement[1]
 
         # a bunch of options to mess around with relating to angles...
-        #self.point_towards(math.pi / 2, 0.02)
-        #self.velocity_adjust(0.975, 0.2, 8, dt)
-        #self.angle += 0.1
+        self.velocity_adjust(0.975, dt)
+        # self.angle += 0.1
 
         self.speed -= 0.1
 
@@ -74,32 +61,43 @@ class Spark():
                  self.loc[1] - math.sin(self.angle + math.pi / 2) * self.speed * self.scale * 0.3],
             ]
             pygame.draw.polygon(surf, self.color, points)
+            
+sparks = []
+if __name__ == '__main__':          
+    clock = pygame.time.Clock()
+    pygame.init()
+    screen = pygame.display.set_mode((500, 500))
 
 
-while True:
-
-    screen.fill((0, 0, 0))
-
-    for i, spark in sorted(enumerate(sparks), reverse=True):
-        spark.move(1)
-        spark.draw(screen)
-        if not spark.alive:
-            sparks.pop(i)
-
-    mx, my = pygame.mouse.get_pos()
-    sparks.append(Spark([mx, my], math.radians(random.randint(
-        0, 360)), random.randint(3, 6), (255, 255, 255), 2))
-
-    # Buttons ------------------------------------------------ #
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
+    while True:
+        pygame.display.update()
+        screen.fill((0, 0, 0))
+        clock.tick(60)
+        
+        for event in pygame.event.get():
+            if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == KEYPRESS:
+                mx, my = pygame.mouse.get_pos()
+                sparks.append(Spark([mx, my], math.radians(random.randint(
+                    0, 360)), random.randint(3, 6), (255, 255, 255), 2))
+                
+                sparks.append(Spark([mx, my], math.radians(random.randint(
+                    0, 360)), random.randint(3, 6), (255, 255, 255), 2))
+                
+                sparks.append(Spark([mx, my], math.radians(random.randint(
+                    0, 360)), random.randint(3, 6), (255, 255, 255), 2))
+                
+        for i, spark in sorted(enumerate(sparks), reverse=True):
+            spark.move(1)
+            spark.draw(screen)
+            if not spark.alive:
+                sparks.pop(i)
 
-    # Update ------------------------------------------------- #
-    pygame.display.update()
-    mainClock.tick(60)
+        
+
+        
+
+
+

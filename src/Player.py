@@ -79,16 +79,25 @@ class Player:
         mousePos = pygame.mouse.get_pos()
         mouseState = pygame.mouse.get_pressed()[0]  # Left button state
         keys = pygame.key.get_pressed()
+        up = keys[pygame.K_w] or keys[pygame.K_UP]
+        down = keys[pygame.K_s] or keys[pygame.K_DOWN]
+        right = keys[pygame.K_a] or keys[pygame.K_RIGHT]
+        left = keys[pygame.K_d] or keys[pygame.K_LEFT]
+        
+        if up+down+left+right>=2:
+            speed = dt/3.2
+        else:
+            speed = dt/2.8
 
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            self.pos[1] -= dt/2.8
-        elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            self.pos[1] += dt/2.8
+        if up:
+            self.pos[1] -= speed
+        elif down:
+            self.pos[1] += speed
 
-        if keys[pygame.K_a] or keys[pygame.K_RIGHT]:
-            self.pos[0] -= dt/2.8
-        elif keys[pygame.K_d] or keys[pygame.K_LEFT]:
-            self.pos[0] += dt/2.8
+        if right:
+            self.pos[0] -= speed
+        elif left:
+            self.pos[0] += speed
 
         if mouseState == True and not self.isPunch:
             self.isPunch = True
@@ -102,11 +111,11 @@ class Player:
                 self.isPunch = False
                 
         # self.center = pygame.math.Vector2(self.size[0]/2, self.size[1]/2)
-        OM = pygame.math.Vector2(mousePos)
-        OH = self.center
-        HM = OH - OM
-        HP0 =  pygame.math.Vector2(0, -10)
-        self.TrueAngle = 180-(HP0.angle_to(HM))
+        self.OM = pygame.math.Vector2(mousePos)
+        self.OH = self.center
+        self.HM = self.OH - self.OM
+        self.HP0 =  pygame.math.Vector2(0, -10)
+        self.TrueAngle = (180-(self.HP0.angle_to(self.HM)))%360
         
         
         self.AngleSaveHistory.add(self.TrueAngle)
@@ -133,11 +142,19 @@ class Player:
         num = int(self.animationNumber) if self.isPunch else 0
         animation = Character[Hand][self.color][num]
 
-        blitRotate(surf, animation, pos, self.DisplayAngle)
+        blitRotate(surf, animation, pos, self.TrueAngle)
 
-    def push(self, vector):
+    def push(self, FPO):    
         # When externa force push the player, different direction will push different amounts
-        pass
+        min, max = 60, 100 # percentage 
+        a = (max - min) / 180 
 
+        self.HM = self.OM - self.OH
+        alpha = self.HM.angle_to(FPO)
+        alpha = min(alpha, 360-alpha)
+
+        FPT = FPO.scale_to_length(min+a*alpha)
+        return FPT
+        
 class Enemy(Player):
     pass

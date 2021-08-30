@@ -1,4 +1,5 @@
 from src._main import *
+from src import particles
 SetUp()
 
 
@@ -24,6 +25,7 @@ class Ground:
         self.size = self.img[0].get_size()
         self.size = self.size[0]-1, self.size[1]-1
 
+
     def getChunk(self, playerPos):
         x, y = playerPos
         x = x // self.size[0]
@@ -48,14 +50,27 @@ background = Ground()
 debugScreen = False
 
 def draw(events, FPS):
-
     background.draw(screen, player.pos)
     player.update(events)
     player.draw(screen, (1024//2, 768//2))
+    
+    mousePos = list(pygame.mouse.get_pos())
+    mouseState = pygame.mouse.get_pressed()[0]
+    if mouseState :
+        particles.sparks.append(particles.Spark(mousePos, math.radians(random.randint(
+                    0, 360)), random.randint(3, 6), (255, 255, 255), 2))
+                    
+    for i, spark in sorted(enumerate(particles.sparks), reverse=True):
+        spark.move(1)
+        spark.draw(screen)
+        if not spark.alive:
+            particles.sparks.pop(i)
+            
 
     for event in events:
         if event.type == pygame.KEYDOWN:
-            pass
+            if event.key == pygame.K_n:
+                player.color = random.choice((["white", "yellow",  "green", "orange",  "blue",  "red"]))
 
         elif event.type == pygame.KEYUP:
             pass
@@ -75,7 +90,7 @@ while True:
     pygame.display.update()
     clock.tick(60)
     screen.fill((0, 255, 255))
-
+    
     events = pygame.event.get()
     keys = pygame.key.get_pressed()
         
