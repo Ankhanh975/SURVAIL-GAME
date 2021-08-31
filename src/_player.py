@@ -82,31 +82,6 @@ Character = {"rightPunch": Character, "leftPunch": CharacterFlip.copy()}
 del CharacterFlip
 del SkinColorRGB
 
-class angelNumber(int):
-    # Want to have a continuous number line in 0-360-0 (no use for negative numbers)
-    def __init__(self, n):
-        super().__init__()
-        self.n = float(n)
-
-    def __add__(self, other):
-        n = self.n + float(other)
-        return n % 360
-
-    def __sub__(self, other):
-        n = abs(self.n - float(other))
-        return min(n, 360 - n)
-
-    def __mul__(self, other):
-        n = self.n * float(other) / 360
-        return n
-    
-    def average(self, other):
-        dx = (float(self) - float(other))/2
-        return dx%180
-
-    def __float__(self):
-        return self.n
-
 class DrawPlayer:
     ANIMATIONFRAMES = 6
     ANIMATIONSPEED = 0.21
@@ -155,11 +130,12 @@ class DrawPlayer:
     def draw(self, surf, PLAYER, pos):
         # PLAYER: player object, pos: actual position to draw
         # Also: if the angle is changeing pass a constan speed it will be limited
+        angle = angelNumber(PLAYER.angle)
         self.update()
-        if 22 > PLAYER.angle - self.AngleSaveHistory.read(0) > -22:
-            self.AngleSaveHistory.add(PLAYER.angle)
+        if 22 > angle - self.AngleSaveHistory.read(0) > -22:
+            self.AngleSaveHistory.add(angle)
         else:
-            sign = PLAYER.angle - self.AngleSaveHistory.read(0)
+            sign = angle - self.AngleSaveHistory.read(0)
             sign = sign/abs(sign)
             self.AngleSaveHistory.add(self.AngleSaveHistory.read(0) + sign*22)
 
@@ -168,7 +144,7 @@ class DrawPlayer:
         HAND = self.state if self.state is not None else "rightPunch"
         animation = Character[HAND][PLAYER.color][num]
         blitRotate(surf, animation, pos, self.DisplayAngle)
-        self.DisplayAngle, PLAYER.angle
+        self.DisplayAngle, angle
 
 
 
