@@ -4,29 +4,26 @@ from src import _player
 SkinColor = ["white", "yellow",  "green", "orange",  "blue",  "red"]
 
 class Player:
-
-
     def __init__(self):
-        self.drawPlayer = _player.DrawPlayer()
-        self.name = "Player 1"
-        self.heart = 20
-        
         self.pos = pygame.math.Vector2(1000, 1000)
         self.velocity = pygame.math.Vector2(0, 0)
         self.arcuation = pygame.math.Vector2(0, 0)
         self.center = pygame.math.Vector2(1024/2, 768/2)
-        # Angle use in all events
-        self.TrueAngle = 90
-        # Angle use in draw() with a maximum acceleration (average of TrueAngle)
-        self.DisplayAngle = 90
+        self.angle = 90
+        self.color = random.choice(SkinColor)
+        
+        self.drawPlayer = _player.DrawPlayer()
+        self.name = ""
+        self.heart = 20
+
+        
         self.isPunch = False
         self.isPunchWithRightHand = True
         self.lastTick = pygame.time.get_ticks()
         self.PunchHandHistory = [False, False, False, False, False]
-        
-        self.color = random.choice(SkinColor)
-        
-    def update(self, events):
+
+    def update(self, events, mousePos):
+        # mousePos: point to look at relative to world coordinates
         dt = pygame.time.get_ticks() - self.lastTick
         self.lastTick = pygame.time.get_ticks()
 
@@ -37,8 +34,8 @@ class Player:
         down = keys[pygame.K_s] or keys[pygame.K_DOWN]
         right = keys[pygame.K_a] or keys[pygame.K_LEFT]
         left = keys[pygame.K_d] or keys[pygame.K_RIGHT]
-        
-        if up+down+left+right>=2:
+
+        if up+down+left+right >= 2:
             speed = dt/3.2
         else:
             speed = dt/2.8
@@ -52,39 +49,36 @@ class Player:
             self.pos[0] -= speed
         elif left:
             self.pos[0] += speed
-
-        if mouseState == True and not self.isPunch:
-            HAND = self.ChooseHandToPunch(self)
+        if mouseState == True and self.drawPlayer.state is None:
+            HAND = self.ChooseHandToPunch()
             self.drawPlayer.StartAnimation(HAND)
             self.PunchHandHistory.append(HAND)
-            
-        # self.center = pygame.math.Vector2(self.size[0]/2, self.size[1]/2)
+
         self.OM = pygame.math.Vector2(mousePos)
         self.OH = self.center
         self.HM = self.OH - self.OM
-        self.HP0 =  pygame.math.Vector2(0, -10)
-        self.TrueAngle = (180-(self.HP0.angle_to(self.HM))) % 360
-        
-            
-        
+        self.HP0 = pygame.math.Vector2(0, -10)
+        self.angle = (180-(self.HP0.angle_to(self.HM))) % 360
+
     def ChooseHandToPunch(self):
         input_ = self.PunchHandHistory
-        present = input_[-1] + input_[-2] + input_[-3] + input_[-4] + input_[-5]
+        present = input_[-1] + input_[-2] + \
+            input_[-3] + input_[-4] + input_[-5]
         if input_[-1] == input_[-2]:
             return (not input_[-1])
         elif present >= 4 or present <= 1:
             return True if present >= 4 else False
         else:
-            return (random.randint(0, 100) <= 60) # 60%
+            return (random.randint(0, 100) <= 60)  # 60%
     __str__ = _player.__str__
-    
+
     def draw(self, surf, pos):
-        self.drawPlayer(surf, self, pos)
- 
-    def push(self, FPO):    
+        self.drawPlayer.draw(surf, self, pos)
+
+    def push(self, FPO):
         # When externa force push the player, different direction will push different amounts
-        min, max = 60, 100 # percentage 
-        a = (max - min) / 180 
+        min, max = 60, 100  # percentage
+        a = (max - min) / 180
 
         self.HM = self.OM - self.OH
         alpha = self.HM.angle_to(FPO)
@@ -92,6 +86,7 @@ class Player:
 
         FPT = FPO.scale_to_length(min+a*alpha)
         return FPT
-        
+
+
 class Enemy(Player):
     pass

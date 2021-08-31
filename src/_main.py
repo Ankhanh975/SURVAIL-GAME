@@ -10,12 +10,16 @@ import win32gui
 import itertools
 from pygame.locals import *
 
+if not pygame.get_init():
+    pygame.init()
+    
 
 def SetUp():
     print("Running")
     pygame.mixer.init(44100, -16, 2, 64)
     pygame.mixer.pre_init(44100, 16, 2, 4096)
-    pygame.init()
+    if not pygame.get_init():
+        pygame.init()
     programIcon = pygame.image.load('Resources/Logo.png')
 
     size = programIcon.get_rect().size
@@ -26,7 +30,6 @@ def SetUp():
 
     pygame.display.set_icon(programIcon)
     pygame.display.set_caption("Try to survive!")
-
 
 class SaveHistory:
     # This class is used to save the last n elements without overflow data

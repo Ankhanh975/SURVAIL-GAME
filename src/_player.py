@@ -2,15 +2,17 @@ import random
 import pygame
 from src._main import *
 
-
+"sot"
 def __str__(self):
-
+    direction = ["south", "north", "east", "west"]
+    print((self.angle/90-45)%90)
+    direction = direction[round((self.angle-45)/45%3)]
     s = f'''\
 Color: {self.color.upper()}
-Angle: {self.TrueAngle:2.2f}°
+Facing: {direction} ({self.angle:2.2f}°)
 XY: {self.pos[0]:9.3f} / {self.pos[1]:9.3f}
-AnimationNumber: {self.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES }
-Punch: {"Right" if self.isPunchWithRightHand else "Left"}
+AnimationNumber: {self.drawPlayer.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES }
+Punch: {self.drawPlayer.state}
 Heart: {self.heart: 3.1f} / 20
 '''
     return s
@@ -25,7 +27,7 @@ def FindPointByRotate(A, H, alpha):
     return HA + OH
 
 
-SkinColor = ["white", "yellow",  "green", "orange",  "blue",  "red"]
+SkinColor = ["white", "yellow", "blue", "orange", "green", "red"]
 SkinColorRGB = [255, 255, 255], [255, 255, 0], [
     0, 0, 255], [248, 147, 29], [0, 255, 0], [255, 0, 0]
 
@@ -36,7 +38,13 @@ Character = {"red": [],
              "orange": [],
              "white": []}
 
-CharacterFlip = dict(Character)
+CharacterFlip = Character.copy()
+CharacterFlip = {"red": [],
+             "green": [],
+             "blue": [],
+             "yellow": [],
+             "orange": [],
+             "white": []}
 def SetUpAnimation():
     for x in range(len(SkinColor)):
         for i in range(6):
@@ -67,7 +75,7 @@ def SetUpAnimationFlip():
 
 SetUpAnimation()
 SetUpAnimationFlip()
-Character = {"rightPunch": Character, "leftPunch": CharacterFlip}
+Character = {"rightPunch": Character, "leftPunch": CharacterFlip.copy()}
 del CharacterFlip
 del SkinColorRGB
 
@@ -104,9 +112,9 @@ class DrawPlayer:
         return num
 
     def StartAnimation(self, state):
-        if state == "leftPunch":
+        if state == "leftPunch" or state == True:
             self.state = "leftPunch"
-        elif state == "rightPunch":
+        elif state == "rightPunch" or state == False:
             self.state = "rightPunch"
         elif state == "boring":
             self.state = None
@@ -119,13 +127,18 @@ class DrawPlayer:
     def draw(self, surf, PLAYER, pos):
         # PLAYER: player object, pos: actual position to draw
         # Also: if the angle is changeing pass a constan speed it will be limited
+        self.update()
+        if 22 > PLAYER.angle - self.AngleSaveHistory.read(0) > -22:
+            self.AngleSaveHistory.add(PLAYER.angle)
+        else:
+            sign = PLAYER.angle - self.AngleSaveHistory.read(0)
+            sign = sign/abs(sign)
+            self.AngleSaveHistory.add(self.AngleSaveHistory.read(0) + sign*22)
         
-        self.AngleSaveHistory.add(PLAYER.TrueAngle)
         self.DisplayAngle = self.AngleSaveHistory.average()
-        
-        num = int(self.animationNumber) if self.isPunch is not None else 0
-        Hand = self.state
-        animation = Character[Hand][PLAYER.color][num]
-        blitRotate(surf, animation, pos, self.DisplayAngle)
-
+        num = int(self.animationNumber)
+        HAND = self.state if self.state is not None else "rightPunch"
+        animation = Character[HAND][PLAYER.color][num]
+        blitRotate(surf, animation, pos, PLAYER.angle)
+        self.DisplayAngle
 
