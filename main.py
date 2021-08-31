@@ -14,6 +14,7 @@ BackGroundSoundTrack = ["Resources/C418 - Sweden.mp3", "Resources/C418 - Beginni
 pygame.mixer.music.load(random.choice(BackGroundSoundTrack))
 # pygame.mixer.music.play(-1)
 
+
 class Ground:
     # Set background base on player position
     def __init__(self):
@@ -46,6 +47,8 @@ class Ground:
 
 
 player = Player()
+        
+
 background = Ground()
 debugScreen = False
 

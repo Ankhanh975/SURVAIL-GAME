@@ -12,6 +12,7 @@ from pygame.locals import *
 
 
 def SetUp():
+    print("Running")
     pygame.mixer.init(44100, -16, 2, 64)
     pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
@@ -55,7 +56,9 @@ class SaveHistory:
             for i in range(self.size):
                 total += self.dict[i]
             return total/(self.size+1)
-
+    def fill(self, value):
+        for i in range(self.size):
+            self.dict[i] = value
 
 def blitRotate(surf, image, pos, angle):
     originPos = image.get_size()

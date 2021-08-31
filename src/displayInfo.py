@@ -1,4 +1,8 @@
 import pygame
+import platform
+import pygame
+import ctypes
+import time
 
 def blit_text(surface, text, pos, font, color=pygame.Color('black')):
 
@@ -22,18 +26,24 @@ def blit_text(surface, text, pos, font, color=pygame.Color('black')):
 class F3Menu:
     # Debug purpose
     show = True
-    introduction = "Game make by KHANH."
+    INTRODUCTION = "Game make by KHANH."
     playerInfo = ""
-    FPS = "0"
-    text = f"{introduction} + {FPS} + {playerInfo}"
+    fps = "0"
+    VERSION = f"python-{platform.python_version()} / pygame-{pygame.version.ver}. ({ctypes.sizeof(ctypes.c_voidp)*8} bits)"
+    RunTime = f"RunTime: {pygame.time.get_ticks()/1000:3.2f}s"
+
 
     def __init__(self):
         self.font = pygame.font.SysFont("Minecraft", 32)
+        self.leftText = ""
+        self.rightText = ""
 
     def update(self, events, player, fps):
+        self.RunTime = f"RunTime: {pygame.time.get_ticks()/1000:3.2f}s"
         self.playerInfo = str(player)
-        self.FPS = f"{fps} fps"
-        self.text = f"{self.introduction} \n {self.FPS} \n {self.playerInfo}"
+        self.fps = f"{fps} fps"
+        self.leftText = f"{self.INTRODUCTION} \n{self.fps} \n{self.playerInfo}"
+        self.rightText = f"{self.VERSION} \n{self.RunTime}"
         
         for event in events:
             if event.type == pygame.KEYUP:
@@ -41,14 +51,10 @@ class F3Menu:
                     self.show = not self.show
 
     def display(self, surf):
-        lines = self.text.splitlines()
         if self.show:
-            blit_text(surf, self.text, (20, 20), self.font, color=(255, 254, 253))
-            # for i, line in enumerate(lines):
-            #     self.img = self.font.render(line, True, (255, 0, 0))
-            #     surf.blit(self.img, (x, y + fsize*i))
-            #     screen.blit(sys_font.render(line, 0, hecolor), )
-
+            UpRightCorer = (1024, 768-768)
+            blit_text(surf, self.leftText, (20, 20), self.font, color=(250, 254, 253))
+            blit_text(surf, self.rightText, (UpRightCorer[0]-390, UpRightCorer[1]+10), self.font, color=(250, 254, 253))
 
 class TabMenu:
     show = False
