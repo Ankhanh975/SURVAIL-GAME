@@ -44,7 +44,7 @@ class Ground:
                 x2, y2 = (x+1)*self.size[0]-1, (y+1)*self.size[1]-1
                 w, h = abs(x1-x2), abs(y1-y2)
 
-                surf.blit(img, (x1-playerPos[0], y1-playerPos[1]))
+                surf.blit(img, (int(x1-playerPos[0]), int(y1-playerPos[1])))
 
 
 player = Player()

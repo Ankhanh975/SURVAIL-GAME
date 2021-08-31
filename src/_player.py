@@ -5,7 +5,6 @@ from src._main import *
 
 def __str__(self):
     direction = ["south", "north", "east", "west"]
-    print((self.angle/90-45) % 90)
     direction = direction[round((self.angle-45)/45 % 3)]
     s = f'''\
 Color: {self.color.upper()}
@@ -130,7 +129,8 @@ class DrawPlayer:
     def draw(self, surf, PLAYER, pos):
         # PLAYER: player object, pos: actual position to draw
         # Also: if the angle is changeing pass a constan speed it will be limited
-        angle = angelNumber(PLAYER.angle)
+        # angle = angelNumber(PLAYER.angle)
+        angle = PLAYER.angle
         self.update()
         if 22 > angle - self.AngleSaveHistory.read(0) > -22:
             self.AngleSaveHistory.add(angle)
