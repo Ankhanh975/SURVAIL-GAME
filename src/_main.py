@@ -13,7 +13,6 @@ from pygame.locals import *
 if not pygame.get_init():
     pygame.init()
     
-
 def SetUp():
     print("Running")
     pygame.mixer.init(44100, -16, 2, 64)
@@ -52,13 +51,14 @@ class SaveHistory:
             return self.dict[(self.i-num)% self.size] 
     
     def average(self):
-        if type(self.dict[0]) not in (int, float):
+        
+        if not (isinstance(type(self.dict[0]), int) or isinstance(type(self.dict[0]), float)):
             raise ValueError(f"Not calcaulateable type for type: {type(self.dict[0])}")
         else:
             total = 0
             for i in range(self.size):
                 total += self.dict[i]
-            return total/(self.size+1)
+            return (total%360)/(self.size+1)
     def fill(self, value):
         for i in range(self.size):
             self.dict[i] = value

@@ -2,11 +2,11 @@ import random
 import pygame
 from src._main import *
 
-"sot"
+
 def __str__(self):
     direction = ["south", "north", "east", "west"]
-    print((self.angle/90-45)%90)
-    direction = direction[round((self.angle-45)/45%3)]
+    print((self.angle/90-45) % 90)
+    direction = direction[round((self.angle-45)/45 % 3)]
     s = f'''\
 Color: {self.color.upper()}
 Facing: {direction} ({self.angle:2.2f}°)
@@ -18,6 +18,7 @@ Heart: {self.heart: 3.1f} / 20
     return s
 # Velocity: {self.velocity}
 # Acceleration: {self.acceleration}
+
 
 def FindPointByRotate(A, H, alpha):
     OA = pygame.math.Vector2(A)
@@ -40,11 +41,13 @@ Character = {"red": [],
 
 CharacterFlip = Character.copy()
 CharacterFlip = {"red": [],
-             "green": [],
-             "blue": [],
-             "yellow": [],
-             "orange": [],
-             "white": []}
+                 "green": [],
+                 "blue": [],
+                 "yellow": [],
+                 "orange": [],
+                 "white": []}
+
+
 def SetUpAnimation():
     for x in range(len(SkinColor)):
         for i in range(6):
@@ -79,6 +82,31 @@ Character = {"rightPunch": Character, "leftPunch": CharacterFlip.copy()}
 del CharacterFlip
 del SkinColorRGB
 
+class angelNumber(int):
+    # Want to have a continuous number line in 0-360-0 (no use for negative numbers)
+    def __init__(self, n):
+        super().__init__()
+        self.n = float(n)
+
+    def __add__(self, other):
+        n = self.n + float(other)
+        return n % 360
+
+    def __sub__(self, other):
+        n = abs(self.n - float(other))
+        return min(n, 360 - n)
+
+    def __mul__(self, other):
+        n = self.n * float(other) / 360
+        return n
+    
+    def average(self, other):
+        dx = (float(self) - float(other))/2
+        return dx%180
+
+    def __float__(self):
+        return self.n
+
 class DrawPlayer:
     ANIMATIONFRAMES = 6
     ANIMATIONSPEED = 0.21
@@ -86,7 +114,7 @@ class DrawPlayer:
     def __init__(self):
         self.state = None
         self.animationNumber = 0
-        self.DisplayAngle = 0 
+        self.DisplayAngle = 0
         self.AngleSaveHistory = SaveHistory(9)
         self.PosSaveHistory = SaveHistory(15)
 
@@ -102,7 +130,7 @@ class DrawPlayer:
         # What next frame should be
         # Each frame have a different display time
         N = int(num)
-        
+
         if N == 0:
             return 1
         elif N in (4, 6):
@@ -134,11 +162,19 @@ class DrawPlayer:
             sign = PLAYER.angle - self.AngleSaveHistory.read(0)
             sign = sign/abs(sign)
             self.AngleSaveHistory.add(self.AngleSaveHistory.read(0) + sign*22)
-        
+
         self.DisplayAngle = self.AngleSaveHistory.average()
         num = int(self.animationNumber)
         HAND = self.state if self.state is not None else "rightPunch"
         animation = Character[HAND][PLAYER.color][num]
-        blitRotate(surf, animation, pos, PLAYER.angle)
-        self.DisplayAngle
+        blitRotate(surf, animation, pos, self.DisplayAngle)
+        self.DisplayAngle, PLAYER.angle
 
+
+
+
+
+if __name__ == '__main__':
+    x = angelNumber(1)
+    x = x.average(180)
+    print(x)
