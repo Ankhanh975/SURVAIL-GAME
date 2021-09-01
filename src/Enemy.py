@@ -8,12 +8,14 @@ with open("Resources/NOTE.txt", "r") as f:
     commonName = f
 
 class Enemy(Player.Player):
-    def __init__(self,position):
+    def __init__(self, position):
         super().__init__()
         self.position = position
         self.name = random.choice(commonName)
+        
         print(self.name)
     
     def attack(self):
         pass
+    
     

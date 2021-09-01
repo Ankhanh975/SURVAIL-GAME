@@ -11,8 +11,7 @@ class Player:
         self.center = pygame.math.Vector2(1024/2, 768/2)
         self.angle = 90
         self.color = random.choice(SkinColor)
-        
-        self.drawPlayer = _player.DrawPlayer()
+        self.drawPlayer = _player.DrawPlayer(self.color)
         self.name = ""
         self.heart = 20
 
@@ -21,6 +20,7 @@ class Player:
         self.isPunchWithRightHand = True
         self.lastTick = pygame.time.get_ticks()
         self.PunchHandHistory = [False, False, False, False, False]
+        self.PunchHandHistory = SaveHistory(5)
 
     def update(self, events, mousePos):
         # mousePos: point to look at relative to world coordinates
@@ -49,10 +49,11 @@ class Player:
             self.pos[0] -= speed
         elif left:
             self.pos[0] += speed
+        
         if mouseState == True and self.drawPlayer.state is None:
             HAND = self.ChooseHandToPunch()
             self.drawPlayer.StartAnimation(HAND)
-            self.PunchHandHistory.append(HAND)
+            self.PunchHandHistory.add(HAND)
 
         self.OM = pygame.math.Vector2(mousePos)
         self.OH = self.center
@@ -62,10 +63,9 @@ class Player:
 
     def ChooseHandToPunch(self):
         input_ = self.PunchHandHistory
-        present = input_[-1] + input_[-2] + \
-            input_[-3] + input_[-4] + input_[-5]
-        if input_[-1] == input_[-2]:
-            return (not input_[-1])
+        present = self.PunchHandHistory.total()
+        if input_.read(1) == input_.read(2):
+            return (not input_.read(1))
         elif present >= 4 or present <= 1:
             return True if present >= 4 else False
         else:
@@ -86,7 +86,3 @@ class Player:
 
         FPT = FPO.scale_to_length(min+a*alpha)
         return FPT
-
-
-class Enemy(Player):
-    pass

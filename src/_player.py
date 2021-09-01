@@ -51,7 +51,7 @@ def SetUpAnimation():
     for x in range(len(SkinColor)):
         for i in range(6):
             animationImg = pygame.image.load(
-                f"Resources/Animation_{i}.png").convert().convert_alpha()
+                f"Resources/Animation_{i}.png").convert_alpha()
             size = animationImg.get_size()
 
             # Make alpha animationImg
@@ -60,7 +60,7 @@ def SetUpAnimation():
                     C = animationImg.get_at((i, j))
                     if C == (255, 255, 255, 255):
                         C = SkinColorRGB[x] + [255]
-                    elif C == (237, 28, 36, 255):
+                    elif C[3] == 0:
                         C = (100, 100, 100, 0)
                     animationImg.set_at((i, j), C)
 
@@ -85,21 +85,32 @@ class DrawPlayer:
     ANIMATIONFRAMES = 6
     ANIMATIONSPEED = 0.21
 
-    def __init__(self):
+    def __init__(self, color):
         self.state = None
         self.animationNumber = 0
         self.DisplayAngle = 0
         self.AngleSaveHistory = SaveHistory(9)
         self.PosSaveHistory = SaveHistory(15)
-
+        self.color = color
+        self.damageNumber = 0
+        
     def update(self):
+        print(f"self.damageNumber = {self.damageNumber},")
         if self.state is not None:
             if self.state in ("leftPunch", "rightPunch"):
                 self.animationNumber = self.mapAnimation(self.animationNumber)
                 if self.animationNumber >= self.ANIMATIONFRAMES:
                     self.animationNumber = 0
                     self.state = None
-
+        
+        if self.damageNumber >= 10:
+            self.damageNumber = 0
+        elif self.damageNumber > 0:
+            self.damageNumber += 1
+            
+        if 1<self.damageNumber<9:
+            self.color = "red"
+            
     def mapAnimation(self, num):
         # What next frame should be
         # Each frame have a different display time
@@ -114,6 +125,7 @@ class DrawPlayer:
         return num
 
     def StartAnimation(self, state):
+        # TODO: punch faster if needed
         if state == "leftPunch" or state == True:
             self.state = "leftPunch"
         elif state == "rightPunch" or state == False:
@@ -132,6 +144,11 @@ class DrawPlayer:
         # angle = angelNumber(PLAYER.angle)
         angle = PLAYER.angle
         self.update()
+        if self.damageNumber != 0:
+            COLOR = self.color
+        else:
+            COLOR=PLAYER.color
+            
         if 22 > angle - self.AngleSaveHistory.read(0) > -22:
             self.AngleSaveHistory.add(angle)
         else:
@@ -142,11 +159,14 @@ class DrawPlayer:
         self.DisplayAngle = self.AngleSaveHistory.average()
         num = int(self.animationNumber)
         HAND = self.state if self.state is not None else "rightPunch"
-        animation = Character[HAND][PLAYER.color][num]
-        blitRotate(surf, animation, pos, self.DisplayAngle)
+        animation = Character[HAND][COLOR][num]
+        blitRotate(surf, animation, pos, angle)
         self.DisplayAngle, angle
-
-
+        
+    def getDamage(self):
+        # Animation git damaged
+        if self.damageNumber == 0:
+            self.damageNumber = 1
 
 if __name__ == '__main__':
     x = angelNumber(1)

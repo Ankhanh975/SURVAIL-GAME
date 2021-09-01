@@ -1,11 +1,11 @@
 from src._main import *
-
 screen = pygame.display.set_mode((1024, 768), DOUBLEBUF)
-# This code need set_mode to setup
-from src import displayInfo
-from src.Player import *
-from src import Enemy
 from src import particles
+from src import Enemy
+from src.Player import *
+from src import displayInfo
+
+# This code need set_mode to setup
 
 SetUp()
 clock = pygame.time.Clock()
@@ -49,23 +49,21 @@ class Ground:
 
 
 player = Player()
-enemy = Enemy.Enemy((1000, 1000))
+# enemy = Enemy.Enemy((1000, 1000))
 background = Ground()
 debugScreen = False
- 
+
 
 def draw(events, FPS):
     mousePos = list(pygame.mouse.get_pos())
     mouseState = pygame.mouse.get_pressed()[0]
-    
+
     background.draw(screen, player.pos)
     player.update(events, (mousePos[0]+1000, mousePos[1]+1000))
-    enemy.update(events, player.pos)
-    
-    
-    
+    # enemy.update(events, player.pos)
+
     player.draw(screen, (1024//2, 768//2))
-    enemy.draw(screen, (1024//2, 768//2+100))
+    # enemy.draw(screen, (1024//2, 768//2+100))
 
     if mouseState:
         mousePos = mousePos[0], mousePos[1]+random.uniform(-2.5, 2.5)
@@ -78,6 +76,7 @@ def draw(events, FPS):
             if event.key == pygame.K_n:
                 player.color = random.choice(
                     (["white", "yellow",  "green", "orange",  "blue",  "red"]))
+            
 
         elif event.type == pygame.KEYUP:
             pass
@@ -113,7 +112,7 @@ while True:
                 debugScreen = not debugScreen
             elif event.key == pygame.K_F11:
                 pass
-            
+
     fps = clock.get_fps()
     fps = round(fps, 2)
     draw(events, fps)

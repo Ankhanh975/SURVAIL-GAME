@@ -89,9 +89,14 @@ class SaveHistory:
                 total += self.dict[i]
             return (total)/(self.size+1)
     def fill(self, value):
+        # Reset the data
         for i in range(self.size):
             self.dict[i] = value
-
+    def total(self):
+        total = 0
+        for i in range(self.size):
+            total += self.dict[i]
+        return total
 def blitRotate(surf, image, pos, angle):
     originPos = image.get_size()
     originPos = originPos[0]/2, originPos[1]/2
