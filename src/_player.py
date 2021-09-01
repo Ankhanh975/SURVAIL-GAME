@@ -46,7 +46,7 @@ CharacterFlip = {"red": [],
                  "orange": [],
                  "white": []}
 
-
+https://stackoverflow.com/questions/34673424/how-to-get-numpy-array-of-rgb-colors-from-pygame-surface
 def SetUpAnimation():
     for i in range(6):
         animationImg = pygame.image.load(
