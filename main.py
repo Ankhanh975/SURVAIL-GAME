@@ -34,7 +34,7 @@ class Ground:
         y = y // self.size[1]
         return round(x), round(y)
 
-    def draw(self, surf, playerPos):
+    def draw(self, surf, playerPos, offset=(0,0)):
         i, j = self.getChunk(playerPos)
         for x in range(i, i+6):
             for y in range(j, j+6):
