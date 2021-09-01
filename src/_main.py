@@ -76,6 +76,7 @@ class SaveHistory:
             return self.dict[(self.i-num)% self.size] 
     
     def average(self):
+        "pygame.math.Vector2"
         if isinstance(self.dict[0], angelNumber) and not isinstance(self.dict[0], (int, float)):
             a = self.read(0)
             for i in range(1, self.size):
@@ -87,11 +88,16 @@ class SaveHistory:
             total = 0
             for i in range(self.size):
                 total += self.dict[i]
-            return (total)/(self.size+1)
+            return (total)/(self.size)
     def fill(self, value):
+        # Reset the data
         for i in range(self.size):
             self.dict[i] = value
-
+    def total(self):
+        total = 0
+        for i in range(self.size):
+            total += self.dict[i]
+        return total
 def blitRotate(surf, image, pos, angle):
     originPos = image.get_size()
     originPos = originPos[0]/2, originPos[1]/2

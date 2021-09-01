@@ -34,7 +34,7 @@ class F3Menu:
 
 
     def __init__(self):
-        self.font = pygame.font.SysFont("Minecraft", 32)
+        self.font = pygame.font.SysFont("Contrail", 32)
         self.leftText = ""
         self.rightText = ""
 

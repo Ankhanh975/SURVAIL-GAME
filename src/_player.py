@@ -28,8 +28,8 @@ def FindPointByRotate(A, H, alpha):
 
 
 SkinColor = ["white", "yellow", "blue", "orange", "green", "red"]
-SkinColorRGB = [255, 255, 255], [255, 255, 0], [
-    0, 0, 255], [248, 147, 29], [0, 255, 0], [255, 0, 0]
+SkinColorRGB = [255, 255, 255, 255], [255, 255, 0, 255], [
+    0, 0, 255, 255], [248, 147, 29, 255], [0, 255, 0, 255], [255, 0, 0, 255]
 
 Character = {"red": [],
              "green": [],
@@ -46,29 +46,31 @@ CharacterFlip = {"red": [],
                  "orange": [],
                  "white": []}
 
-
+https://stackoverflow.com/questions/34673424/how-to-get-numpy-array-of-rgb-colors-from-pygame-surface
 def SetUpAnimation():
-    for x in range(len(SkinColor)):
-        for i in range(6):
-            animationImg = pygame.image.load(
-                f"Resources/Animation_{i}.png").convert().convert_alpha()
-            size = animationImg.get_size()
-
-            # Make alpha animationImg
+    for i in range(6):
+        animationImg = pygame.image.load(
+                f"Resources/Animation_{i}.png").convert_alpha()
+        size = animationImg.get_size()
+        
+        for x in range(len(SkinColor)):
+            img = animationImg.copy()
+            
             for i in range(size[0]):
                 for j in range(size[1]):
-                    C = animationImg.get_at((i, j))
+                    C = img.get_at((i, j))
                     if C == (255, 255, 255, 255):
-                        C = SkinColorRGB[x] + [255]
-                    elif C == (237, 28, 36, 255):
-                        C = (100, 100, 100, 0)
-                    animationImg.set_at((i, j), C)
+                        img.set_at((i, j), SkinColorRGB[x])
+            Character[SkinColor[x]].append(img)
+            
 
-            Character[SkinColor[x]].append(animationImg)
-
+# About 27ms
+# print("Start proscessing img: ", time.perf_counter()*1000)
+# print("Done proscessing img : ", time.perf_counter()*1000)
 
 def SetUpAnimationFlip():
     for x in range(len(SkinColor)):
+        
         for i in range(6):
             animationImg = Character[SkinColor[x]][i]
             CharacterFlip[SkinColor[x]].append(
@@ -85,13 +87,15 @@ class DrawPlayer:
     ANIMATIONFRAMES = 6
     ANIMATIONSPEED = 0.21
 
-    def __init__(self):
+    def __init__(self, color):
         self.state = None
         self.animationNumber = 0
         self.DisplayAngle = 0
         self.AngleSaveHistory = SaveHistory(9)
         self.PosSaveHistory = SaveHistory(15)
-
+        self.color = color
+        self.damageNumber = 0
+        
     def update(self):
         if self.state is not None:
             if self.state in ("leftPunch", "rightPunch"):
@@ -99,7 +103,15 @@ class DrawPlayer:
                 if self.animationNumber >= self.ANIMATIONFRAMES:
                     self.animationNumber = 0
                     self.state = None
-
+        
+        if self.damageNumber >= 10:
+            self.damageNumber = 0
+        elif self.damageNumber > 0:
+            self.damageNumber += 1
+            
+        if 1<self.damageNumber<9:
+            self.color = "red"
+            
     def mapAnimation(self, num):
         # What next frame should be
         # Each frame have a different display time
@@ -114,6 +126,7 @@ class DrawPlayer:
         return num
 
     def StartAnimation(self, state):
+        # TODO: punch faster if needed
         if state == "leftPunch" or state == True:
             self.state = "leftPunch"
         elif state == "rightPunch" or state == False:
@@ -132,6 +145,11 @@ class DrawPlayer:
         # angle = angelNumber(PLAYER.angle)
         angle = PLAYER.angle
         self.update()
+        if self.damageNumber != 0:
+            COLOR = self.color
+        else:
+            COLOR=PLAYER.color
+            
         if 22 > angle - self.AngleSaveHistory.read(0) > -22:
             self.AngleSaveHistory.add(angle)
         else:
@@ -142,13 +160,14 @@ class DrawPlayer:
         self.DisplayAngle = self.AngleSaveHistory.average()
         num = int(self.animationNumber)
         HAND = self.state if self.state is not None else "rightPunch"
-        animation = Character[HAND][PLAYER.color][num]
-        blitRotate(surf, animation, pos, self.DisplayAngle)
+        animation = Character[HAND][COLOR][num]
+        blitRotate(surf, animation, pos, angle)
         self.DisplayAngle, angle
-
-
-
-
+        
+    def getDamage(self):
+        # Animation git damaged
+        if self.damageNumber == 0:
+            self.damageNumber = 1
 
 if __name__ == '__main__':
     x = angelNumber(1)
