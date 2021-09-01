@@ -23,8 +23,8 @@ def save_image( npdata, outfilename ) :
     cv2.imwrite(outfilename, npdata)
     
 if __name__ == "__main__":
-    for n in range(1,7):
-        data = load_image(f"Resources/Anmation_{n}.png")
+    for n in range(6):
+        data = load_image(f"Anmation{n}.png")
         shape = data.shape
         # print(data, shape)
         for x in range(shape[0]):
@@ -37,5 +37,5 @@ if __name__ == "__main__":
                     data[x][y] = (100, 100, 100, 0)
                     
                     
-        save_image(data, f"Anmation_{n}.png")
+        save_image(data, f"Animation_{n}.png")
 

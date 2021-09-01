@@ -148,8 +148,6 @@ class DrawPlayer:
 
 
 
-
-
 if __name__ == '__main__':
     x = angelNumber(1)
     x = x.average(180)

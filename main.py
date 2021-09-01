@@ -23,7 +23,8 @@ class Ground:
         self.img = []
         for i in range(1, 5):
             img = pygame.image.load(
-                f"Resources/BackGround{i}.png").convert().convert_alpha()
+                f"Resources/BackGround{i}.png").convert()
+            # img = img.convert_alpha()
             self.img.append(img)
         self.size = self.img[0].get_size()
         self.size = self.size[0]-1, self.size[1]-1
