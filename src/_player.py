@@ -2,11 +2,10 @@ import random
 import pygame
 from src._main import *
 
-"sot"
+
 def __str__(self):
     direction = ["south", "north", "east", "west"]
-    print((self.angle/90-45)%90)
-    direction = direction[round((self.angle-45)/45%3)]
+    direction = direction[round((self.angle-45)/45 % 3)]
     s = f'''\
 Color: {self.color.upper()}
 Facing: {direction} ({self.angle:2.2f}°)
@@ -18,6 +17,7 @@ Heart: {self.heart: 3.1f} / 20
     return s
 # Velocity: {self.velocity}
 # Acceleration: {self.acceleration}
+
 
 def FindPointByRotate(A, H, alpha):
     OA = pygame.math.Vector2(A)
@@ -40,11 +40,13 @@ Character = {"red": [],
 
 CharacterFlip = Character.copy()
 CharacterFlip = {"red": [],
-             "green": [],
-             "blue": [],
-             "yellow": [],
-             "orange": [],
-             "white": []}
+                 "green": [],
+                 "blue": [],
+                 "yellow": [],
+                 "orange": [],
+                 "white": []}
+
+
 def SetUpAnimation():
     for x in range(len(SkinColor)):
         for i in range(6):
@@ -86,7 +88,7 @@ class DrawPlayer:
     def __init__(self):
         self.state = None
         self.animationNumber = 0
-        self.DisplayAngle = 0 
+        self.DisplayAngle = 0
         self.AngleSaveHistory = SaveHistory(9)
         self.PosSaveHistory = SaveHistory(15)
 
@@ -102,7 +104,7 @@ class DrawPlayer:
         # What next frame should be
         # Each frame have a different display time
         N = int(num)
-        
+
         if N == 0:
             return 1
         elif N in (4, 6):
@@ -127,18 +129,28 @@ class DrawPlayer:
     def draw(self, surf, PLAYER, pos):
         # PLAYER: player object, pos: actual position to draw
         # Also: if the angle is changeing pass a constan speed it will be limited
+        # angle = angelNumber(PLAYER.angle)
+        angle = PLAYER.angle
         self.update()
-        if 22 > PLAYER.angle - self.AngleSaveHistory.read(0) > -22:
-            self.AngleSaveHistory.add(PLAYER.angle)
+        if 22 > angle - self.AngleSaveHistory.read(0) > -22:
+            self.AngleSaveHistory.add(angle)
         else:
-            sign = PLAYER.angle - self.AngleSaveHistory.read(0)
+            sign = angle - self.AngleSaveHistory.read(0)
             sign = sign/abs(sign)
             self.AngleSaveHistory.add(self.AngleSaveHistory.read(0) + sign*22)
-        
+
         self.DisplayAngle = self.AngleSaveHistory.average()
         num = int(self.animationNumber)
         HAND = self.state if self.state is not None else "rightPunch"
         animation = Character[HAND][PLAYER.color][num]
-        blitRotate(surf, animation, pos, PLAYER.angle)
-        self.DisplayAngle
+        blitRotate(surf, animation, pos, self.DisplayAngle)
+        self.DisplayAngle, angle
 
+
+
+
+
+if __name__ == '__main__':
+    x = angelNumber(1)
+    x = x.average(180)
+    print(x)

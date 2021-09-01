@@ -1,10 +1,30 @@
-import sys
-import platform
-import pygame
-import ctypes
-import time
+class angelNumber(int):
+    # Want to have a continuous number line in 0-360-0 (no use for negative numbers)
+    def __init__(self, n):
+        super().__init__()
+        self.n = float(n)
 
-pygame.init()
-VERISON = f"python-{platform.python_version()} / pygame-{pygame.version.ver}. ({ctypes.sizeof(ctypes.c_voidp)*8} bits)"
-RunTime = f"RunTime: {pygame.time.get_ticks()/1000:3.2f}s"
-print(0/0)
+    def __add__(self, other):
+        n = self.n + float(other)
+        return n % 360
+
+    def __sub__(self, other):
+        n = abs(self.n - float(other))
+        return min(n, 360 - n)
+
+    def __mul__(self, other):
+        n = self.n * float(other) / 360
+        return n
+    
+    def average(self, other):
+        dx = (float(self) - float(other))/2
+        return dx%180
+
+    def __float__(self):
+        return self.n
+
+
+if __name__ == '__main__':
+    x = angelNumber(0)
+    x = x.average(181)
+    print(x)

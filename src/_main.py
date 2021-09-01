@@ -13,7 +13,6 @@ from pygame.locals import *
 if not pygame.get_init():
     pygame.init()
     
-
 def SetUp():
     print("Running")
     pygame.mixer.init(44100, -16, 2, 64)
@@ -30,7 +29,32 @@ def SetUp():
 
     pygame.display.set_icon(programIcon)
     pygame.display.set_caption("Try to survive!")
+    
+class angelNumber(int):
+    # Want to have a continuous number line in 0-360-0 (no use for negative numbers)
+    def __init__(self, n):
+        super().__init__()
+        self.n = float(n)
 
+    def __add__(self, other):
+        n = self.n + float(other)
+        return n % 360
+
+    def __sub__(self, other):
+        n = abs(self.n - float(other))
+        return min(n, 360 - n)
+
+    def __mul__(self, other):
+        n = self.n * float(other) / 360
+        return n
+    
+    def average(self, other):
+        dx = (float(self) - float(other))/2
+        return dx%180
+
+    def __float__(self):
+        return self.n
+        
 class SaveHistory:
     # This class is used to save the last n elements without overflow data
     def __init__(self, size):
@@ -52,13 +76,18 @@ class SaveHistory:
             return self.dict[(self.i-num)% self.size] 
     
     def average(self):
-        if type(self.dict[0]) not in (int, float):
+        if isinstance(self.dict[0], angelNumber) and not isinstance(self.dict[0], (int, float)):
+            a = self.read(0)
+            for i in range(1, self.size):
+                a = a.average(self.read(i))
+            return a
+        elif not isinstance(self.dict[0], (int, float)):
             raise ValueError(f"Not calcaulateable type for type: {type(self.dict[0])}")
         else:
             total = 0
             for i in range(self.size):
                 total += self.dict[i]
-            return total/(self.size+1)
+            return (total)/(self.size+1)
     def fill(self, value):
         for i in range(self.size):
             self.dict[i] = value
