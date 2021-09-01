@@ -46,7 +46,6 @@ CharacterFlip = {"red": [],
                  "orange": [],
                  "white": []}
 
-https://stackoverflow.com/questions/34673424/how-to-get-numpy-array-of-rgb-colors-from-pygame-surface
 def SetUpAnimation():
     for i in range(6):
         animationImg = pygame.image.load(
@@ -64,9 +63,7 @@ def SetUpAnimation():
             Character[SkinColor[x]].append(img)
             
 
-# About 27ms
-# print("Start proscessing img: ", time.perf_counter()*1000)
-# print("Done proscessing img : ", time.perf_counter()*1000)
+# About 27ms per img
 
 def SetUpAnimationFlip():
     for x in range(len(SkinColor)):

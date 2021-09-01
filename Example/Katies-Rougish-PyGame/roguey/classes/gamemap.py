@@ -285,10 +285,9 @@ class Map(object):
         return treasure
 
     def print_ascii_map(self):
+        pass
         ''' Prints an ascii map to the console. For troubleshooting only.
         '''
-        for row in self.floor:
-            print(row, row.__len__())
 
     def move_monsters(self):
         monsters = self.get_all_monsters()

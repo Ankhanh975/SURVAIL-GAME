@@ -81,8 +81,7 @@ class Admin(object):
 
 	def list_treasures(self):
 		for treasure in self.treasures:
-			print treasure.find('title').text.strip()
-
+			pass
 	def save_and_quit(self):
 		f = open("roguey/resources/items.xml", "w")
 		f.write(prettify(self.treasures))
@@ -129,9 +128,8 @@ class Admin(object):
 		get the users selection and return the index of the selected option
 		"""
 		retval = None
-		# Print out the numbered options
 		for i, option in enumerate(options):
-			print "%3s. %s" % (i+1, option)
+			pass
 		# Continue to prompt user until valid input is recieved.
 		while retval == None:
 			# Get the users selection
@@ -140,12 +138,9 @@ class Admin(object):
 			try:
 				retval = int(selection) - 1
 			except ValueError:
-				print "Invalid input. Please enter a number."
 				continue
 			# Ensure input is within the valid range
 			if retval < 0 or retval >= len(options):
-				print ("Please enter a number between 1 and %d inclusive." 
-					% len(options))
 				retval = None  # reset the illegal value
 				continue
 		return retval

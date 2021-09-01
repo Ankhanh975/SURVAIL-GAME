@@ -43,9 +43,7 @@ class Treasure(object):
                         "string": str,
                     }[attr_type](value)
                 except KeyError:
-                    print ("%s attribute has illegal 'type' attribute '%d'")
-                    print ("Supported conversion types: 'int', 'float', 'string'")
-
+                    pass
             attribs[attribute] = value
 
         # Now that we have all of the attribute, we can create the treasure

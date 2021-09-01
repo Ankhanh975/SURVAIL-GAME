@@ -7,6 +7,8 @@ from src import displayInfo
 
 # This code need set_mode to setup
 
+# imgdata = pygame.surfarray.array3d(img)
+
 SetUp()
 clock = pygame.time.Clock()
 
