@@ -1,20 +1,36 @@
-import datetime
-import threading
-import sys
-import os
-import pygame
-import math
-import random
+import numpy
 import time
-import win32gui
-import numpy as np
-
-import itertools
+import random
+import math
 from pygame.locals import *
+import pygame
+import sys
+import importlib.util
+
+# This loader is ~300ms faster and more stable but ~100ms slower (for all Modules ) if Modules have been cached 
+def lazy(fullname):
+    # https://stackoverflow.com/questions/42703908/how-do-i-use-importlib-lazyloader
+    try:
+        return sys.modules[fullname]
+    except KeyError:
+        spec = importlib.util.find_spec(fullname)
+        module = importlib.util.module_from_spec(spec)
+        loader = importlib.util.LazyLoader(spec.loader)
+        # Make module with proper locking and get it inserted into sys.modules.
+        loader.exec_module(module)
+        return module
+
+
+os = lazy("os")
+datetime = lazy("datetime")
+threading = lazy("threading")
+win32gui = lazy("win32gui")
+itertools = lazy("itertools")
 
 if not pygame.get_init():
     pygame.init()
-    
+
+
 def SetUp():
     print("Running")
     pygame.mixer.init(44100, -16, 2, 64)
@@ -31,7 +47,8 @@ def SetUp():
 
     pygame.display.set_icon(programIcon)
     pygame.display.set_caption("Try to survive!")
-    
+
+
 class angelNumber(int):
     # Want to have a continuous number line in 0-360-0 (no use for negative numbers)
     def __init__(self, n):
@@ -49,14 +66,15 @@ class angelNumber(int):
     def __mul__(self, other):
         n = self.n * float(other) / 360
         return n
-    
+
     def average(self, other):
         dx = (float(self) - float(other))/2
-        return dx%180
+        return dx % 180
 
     def __float__(self):
         return self.n
-        
+
+
 class SaveHistory:
     # This class is used to save the last n elements without overflow data
     def __init__(self, size):
@@ -75,8 +93,8 @@ class SaveHistory:
         if not (0 <= num <= self.size-1):
             raise IndexError("List index out of range")
         else:
-            return self.dict[(self.i-num)% self.size] 
-    
+            return self.dict[(self.i-num) % self.size]
+
     def average(self):
         "pygame.math.Vector2"
         if isinstance(self.dict[0], angelNumber) and not isinstance(self.dict[0], (int, float)):
@@ -85,21 +103,26 @@ class SaveHistory:
                 a = a.average(self.read(i))
             return a
         elif not isinstance(self.dict[0], (int, float)):
-            raise ValueError(f"Not calcaulateable type for type: {type(self.dict[0])}")
+            raise ValueError(
+                f"Not calcaulateable type for type: {type(self.dict[0])}")
         else:
             total = 0
             for i in range(self.size):
                 total += self.dict[i]
             return (total)/(self.size)
+
     def fill(self, value):
         # Reset the data
         for i in range(self.size):
             self.dict[i] = value
+
     def total(self):
         total = 0
         for i in range(self.size):
             total += self.dict[i]
         return total
+
+
 def blitRotate(surf, image, pos, angle):
     originPos = image.get_size()
     originPos = originPos[0]/2, originPos[1]/2

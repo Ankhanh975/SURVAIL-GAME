@@ -3,11 +3,12 @@ screen = pygame.display.set_mode((1024, 768), DOUBLEBUF)
 from src import particles
 from src import Enemy
 from src.Player import *
+
+pygame.event.set_allowed([QUIT, KEYUP])
+
 from src import displayInfo
 
 # This code need set_mode to setup
-
-# 
 
 SetUp()
 clock = pygame.time.Clock()

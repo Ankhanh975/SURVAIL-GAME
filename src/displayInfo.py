@@ -1,7 +1,7 @@
 import pygame
-import platform
+from platform import python_version
 import pygame
-import ctypes
+from ctypes import sizeof, c_voidp
 import time
 
 def blit_text(surface, text, pos, font, color=pygame.Color('black')):
@@ -29,7 +29,7 @@ class F3Menu:
     INTRODUCTION = "Game make by KHANH."
     playerInfo = ""
     fps = "0"
-    VERSION = f"python-{platform.python_version()} / pygame-{pygame.version.ver}. ({ctypes.sizeof(ctypes.c_voidp)*8} bits)"
+    VERSION = f"python-{python_version()} / pygame-{pygame.version.ver}. ({sizeof(c_voidp)*8} bits)"
     RunTime = f"RunTime: {pygame.time.get_ticks()/1000:3.2f}s"
 
 

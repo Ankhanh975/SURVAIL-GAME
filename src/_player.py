@@ -1,5 +1,3 @@
-import random
-import pygame
 from src._main import *
 
 
@@ -62,12 +60,11 @@ def SetUpAnimation():
             start = time.perf_counter()*1000
             img = animationImg.copy()
             imgData = pygame.surfarray.pixels3d(animationImg)
-            filter = np.all(imgData, axis=2)
+            filter = numpy.all(imgData, axis=2)
             imgData[filter] = SkinColorRGB[x]
-            # del imgData
-            # Out of scope anyways
+            # del imgData # Out of scope anyways
             Character[SkinColor[x]].append(img)
-            print(time.perf_counter()*1000-start)
+            # print(time.perf_counter()*1000-start)
 
 
 def SetUpAnimationFlip():
