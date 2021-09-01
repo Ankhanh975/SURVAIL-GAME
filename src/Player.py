@@ -5,6 +5,7 @@ SkinColor = ["white", "yellow",  "green", "orange",  "blue",  "red"]
 
 class Player:
     def __init__(self):
+        self.LinearPos = pygame.math.Vector2(1000, 1000)
         self.pos = pygame.math.Vector2(1000, 1000)
         self.velocity = pygame.math.Vector2(0, 0)
         self.arcuation = pygame.math.Vector2(0, 0)
@@ -19,9 +20,11 @@ class Player:
         self.isPunch = False
         self.isPunchWithRightHand = True
         self.lastTick = pygame.time.get_ticks()
-        self.PunchHandHistory = [False, False, False, False, False]
         self.PunchHandHistory = SaveHistory(5)
-
+        self.positionHistory = SaveHistory(2), SaveHistory(2)
+        self.positionHistory[0].fill(self.LinearPos[0])
+        self.positionHistory[1].fill(self.LinearPos[1])
+        
     def update(self, events, mousePos):
         # mousePos: point to look at relative to world coordinates
         dt = pygame.time.get_ticks() - self.lastTick
@@ -41,14 +44,19 @@ class Player:
             speed = dt/2.8
 
         if up:
-            self.pos[1] -= speed
+            self.LinearPos[1] -= speed
         elif down:
-            self.pos[1] += speed
+            self.LinearPos[1] += speed
 
         if right:
-            self.pos[0] -= speed
+            self.LinearPos[0] -= speed
         elif left:
-            self.pos[0] += speed
+            self.LinearPos[0] += speed
+        
+        self.positionHistory[0].add(self.LinearPos[0])
+        self.positionHistory[1].add(self.LinearPos[1])
+        # This average graph line should look like haveing impelements acceleration
+        self.pos = self.positionHistory[0].average(), self.positionHistory[1].average()
         
         if mouseState == True and self.drawPlayer.state is None:
             HAND = self.ChooseHandToPunch()

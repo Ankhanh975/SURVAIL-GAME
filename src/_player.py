@@ -28,8 +28,8 @@ def FindPointByRotate(A, H, alpha):
 
 
 SkinColor = ["white", "yellow", "blue", "orange", "green", "red"]
-SkinColorRGB = [255, 255, 255], [255, 255, 0], [
-    0, 0, 255], [248, 147, 29], [0, 255, 0], [255, 0, 0]
+SkinColorRGB = [255, 255, 255, 255], [255, 255, 0, 255], [
+    0, 0, 255, 255], [248, 147, 29, 255], [0, 255, 0, 255], [255, 0, 0, 255]
 
 Character = {"red": [],
              "green": [],
@@ -48,27 +48,29 @@ CharacterFlip = {"red": [],
 
 
 def SetUpAnimation():
-    for x in range(len(SkinColor)):
-        for i in range(6):
-            animationImg = pygame.image.load(
+    for i in range(6):
+        animationImg = pygame.image.load(
                 f"Resources/Animation_{i}.png").convert_alpha()
-            size = animationImg.get_size()
-
-            # Make alpha animationImg
+        size = animationImg.get_size()
+        
+        for x in range(len(SkinColor)):
+            img = animationImg.copy()
+            
             for i in range(size[0]):
                 for j in range(size[1]):
-                    C = animationImg.get_at((i, j))
+                    C = img.get_at((i, j))
                     if C == (255, 255, 255, 255):
-                        C = SkinColorRGB[x] + [255]
-                    elif C[3] == 0:
-                        C = (100, 100, 100, 0)
-                    animationImg.set_at((i, j), C)
+                        img.set_at((i, j), SkinColorRGB[x])
+            Character[SkinColor[x]].append(img)
+            
 
-            Character[SkinColor[x]].append(animationImg)
-
+# About 27ms
+# print("Start proscessing img: ", time.perf_counter()*1000)
+# print("Done proscessing img : ", time.perf_counter()*1000)
 
 def SetUpAnimationFlip():
     for x in range(len(SkinColor)):
+        
         for i in range(6):
             animationImg = Character[SkinColor[x]][i]
             CharacterFlip[SkinColor[x]].append(
@@ -95,7 +97,6 @@ class DrawPlayer:
         self.damageNumber = 0
         
     def update(self):
-        print(f"self.damageNumber = {self.damageNumber},")
         if self.state is not None:
             if self.state in ("leftPunch", "rightPunch"):
                 self.animationNumber = self.mapAnimation(self.animationNumber)
