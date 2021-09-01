@@ -4,8 +4,16 @@ from src._main import *
 
 
 def __str__(self):
-    direction = ["south", "north", "east", "west"]
-    direction = direction[round((self.angle-45)/45 % 3)]
+    direction = ["north", "east", "south", "west"]
+    if 45<self.angle<=135:
+        direction = direction[1]
+    elif 135<self.angle<=225:
+        direction = direction[2]
+    elif 225<self.angle<=315:
+        direction = direction[3]
+    elif self.angle>315 or self.angle<45:
+        direction = direction[0]
+        
     s = f'''\
 Color: {self.color.upper()}
 Facing: {direction} ({self.angle:2.2f}°)
@@ -75,7 +83,6 @@ SetUpAnimation()
 SetUpAnimationFlip()
 Character = {"rightPunch": Character, "leftPunch": CharacterFlip.copy()}
 del CharacterFlip
-del SkinColorRGB
 
 class DrawPlayer:
     ANIMATIONFRAMES = 6
