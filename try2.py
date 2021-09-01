@@ -1,30 +1,36 @@
-class angelNumber(int):
-    # Want to have a continuous number line in 0-360-0 (no use for negative numbers)
-    def __init__(self, n):
-        super().__init__()
-        self.n = float(n)
+from src._main import *
+screen = pygame.display.set_mode((300, 300), DOUBLEBUF)
+import numpy as np
+import numba as nb
+SetUp()
+clock = pygame.time.Clock()
 
-    def __add__(self, other):
-        n = self.n + float(other)
-        return n % 360
+animationImg = pygame.image.load(
+                f"Resources/Animation_0.png").convert_alpha()
 
-    def __sub__(self, other):
-        n = abs(self.n - float(other))
-        return min(n, 360 - n)
+# print("Start: " + str(time.perf_counter()*1000))
+imgData = pygame.surfarray.pixels3d(animationImg)
+filter = np.all(imgData, axis=2)
+# print(filter)
+# print(filter.shape)
+# print(filter[98, 98])
+imgData[filter] = (255,0,0)
+del imgData
+# print("End: " + str(time.perf_counter()*1000))
 
-    def __mul__(self, other):
-        n = self.n * float(other) / 360
-        return n
-    
-    def average(self, other):
-        dx = (float(self) - float(other))/2
-        return dx%180
+frame = 0
+while True:
+    frame += 1
+    pygame.display.update()
+    clock.tick(60)
+    screen.fill((0, 255, 255))
 
-    def __float__(self):
-        return self.n
+    events = pygame.event.get()
+    keys = pygame.key.get_pressed()
 
+    screen.blit(animationImg, (0,0))
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
 
-if __name__ == '__main__':
-    x = angelNumber(0)
-    x = x.average(181)
-    print(x)

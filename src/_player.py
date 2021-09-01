@@ -11,7 +11,7 @@ Color: {self.color.upper()}
 Facing: {direction} ({self.angle:2.2f}°)
 XY: {self.pos[0]:9.3f} / {self.pos[1]:9.3f}
 AnimationNumber: {self.drawPlayer.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES }
-Punch: {self.drawPlayer.state}
+Punch: {None if self.drawPlayer.state==None else ("Left" if self.drawPlayer.state=="leftPunch" else "Right")}
 Heart: {self.heart: 3.1f} / 20
 '''
     return s
@@ -28,8 +28,8 @@ def FindPointByRotate(A, H, alpha):
 
 
 SkinColor = ["white", "yellow", "blue", "orange", "green", "red"]
-SkinColorRGB = [255, 255, 255, 255], [255, 255, 0, 255], [
-    0, 0, 255, 255], [248, 147, 29, 255], [0, 255, 0, 255], [255, 0, 0, 255]
+SkinColorRGB = [255, 255, 255], [255, 255, 0], [
+    0, 0, 255], [248, 147, 29], [0, 255, 0], [255, 0, 0]
 
 Character = {"red": [],
              "green": [],
@@ -50,20 +50,17 @@ def SetUpAnimation():
     for i in range(6):
         animationImg = pygame.image.load(
                 f"Resources/Animation_{i}.png").convert_alpha()
-        size = animationImg.get_size()
-        
         for x in range(len(SkinColor)):
+            start = time.perf_counter()*1000
             img = animationImg.copy()
-            
-            for i in range(size[0]):
-                for j in range(size[1]):
-                    C = img.get_at((i, j))
-                    if C == (255, 255, 255, 255):
-                        img.set_at((i, j), SkinColorRGB[x])
+            imgData = pygame.surfarray.pixels3d(animationImg)
+            filter = np.all(imgData, axis=2)
+            imgData[filter] = SkinColorRGB[x]
+            # del imgData
+            # Out of scope anyways
             Character[SkinColor[x]].append(img)
-            
+            print(time.perf_counter()*1000-start)
 
-# About 27ms per img
 
 def SetUpAnimationFlip():
     for x in range(len(SkinColor)):

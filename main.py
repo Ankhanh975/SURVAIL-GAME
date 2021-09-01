@@ -7,7 +7,7 @@ from src import displayInfo
 
 # This code need set_mode to setup
 
-# imgdata = pygame.surfarray.array3d(img)
+# 
 
 SetUp()
 clock = pygame.time.Clock()
@@ -53,7 +53,6 @@ class Ground:
 player = Player()
 # enemy = Enemy.Enemy((1000, 1000))
 background = Ground()
-debugScreen = False
 
 
 def draw(events, FPS):
@@ -110,9 +109,7 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_F3:
-                debugScreen = not debugScreen
-            elif event.key == pygame.K_F11:
+            if event.key == pygame.K_F11:
                 pass
 
     fps = clock.get_fps()

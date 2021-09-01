@@ -7,6 +7,8 @@ import math
 import random
 import time
 import win32gui
+import numpy as np
+
 import itertools
 from pygame.locals import *
 
