@@ -35,9 +35,8 @@ class Player:
         self.center = pygame.math.Vector2(196/2, 196/2)
         self.center = pygame.math.Vector2(0/2, 0/2)
         self.angle = 90
-        self.color = random.choice(SkinColor)
-        self.drawPlayer = _player.DrawPlayer(self.color)
-        self.name = ""
+        self.drawPlayer = _player.DrawPlayer(random.choice(SkinColor))
+        self.name = "P"
         self.heart = 20
         self.damage = 10
         # Whether control able with keyboard and mouse or not
@@ -50,7 +49,7 @@ class Player:
         self.positionHistory[0].fill(self.LinearPos[0])
         self.positionHistory[1].fill(self.LinearPos[1])
         
-    def update(self, events, mousePos):
+    def update(self, entities, mousePos):
         # mousePos: point to look at relative to world coordinates
         dt = pygame.time.get_ticks() - self.lastTick
         self.lastTick = pygame.time.get_ticks()
@@ -58,16 +57,11 @@ class Player:
         
         if self.control:
             self.LinearPos += move(self, dt)
-            if mouseState == True and self.drawPlayer.state is None:
-                HAND = self.ChooseHandToPunch()
-                self.drawPlayer.StartAnimation(HAND)
-                self.PunchHandHistory.add(HAND)
+            
         self.positionHistory[0].add(self.LinearPos[0])
         self.positionHistory[1].add(self.LinearPos[1])
         # This average graph line should look like haveing impelements acceleration
         self.pos = pygame.math.Vector2(self.positionHistory[0].average(), self.positionHistory[1].average())
-        
-        
         
         # relative to the screen coordinates
         self.OH = self.pos
@@ -75,16 +69,28 @@ class Player:
         self.HM = self.OH - self.OM
         self.HP0 = pygame.math.Vector2(0, -10)
         self.angle = (180-(self.HP0.angle_to(self.HM))) % 360
-
+    
+    def createPunch(self):
+        if self.drawPlayer.state is None:
+            HAND = self.ChooseHandToPunch()
+            self.drawPlayer.StartAnimation(HAND)
+            self.PunchHandHistory.add(HAND)
+            return True
+        else:
+            return False
     def ChooseHandToPunch(self):
         input_ = self.PunchHandHistory
         present = self.PunchHandHistory.total()
-        if input_.read(1) == input_.read(2):
-            return (not input_.read(1))
+        if input_.read(0) == input_.read(1):
+            return (not input_.read(0))
         elif present >= 4 or present <= 1:
             return True if present >= 4 else False
         else:
-            return (random.randint(0, 100) <= 60)  # 60%
+            if input_.read(0):
+                return (random.randint(0, 100) <= 30)  # 30%
+            else:
+                return (random.randint(0, 100) <= 90)  # 90%
+                
     __str__ = _player.__str__
 
     def draw(self, surf, pos):
@@ -101,3 +107,6 @@ class Player:
 
         FPT = FPO.scale_to_length(min+a*alpha)
         return FPT
+    
+    def punch(self):
+        pass

@@ -42,8 +42,9 @@ class F3Menu:
         self.RunTime = f"RunTime: {pygame.time.get_ticks()/1000:3.2f}s "
         self.playerInfo = str(player)
         self.fps = f" {fps:.0f} fps "
+        self.mouseInWorldCoords = f"Mouse: {mouseInWorldCoords[0]:5.0f} / {mouseInWorldCoords[1]:5.0f} "
         self.leftText = f"{self.INTRODUCTION} \n{self.fps} \n{self.playerInfo} "
-        self.rightText = f"{self.VERSION} \n{self.RunTime} \n{mouseInWorldCoords} "
+        self.rightText = f"{self.VERSION} \n{self.RunTime} \n{self.mouseInWorldCoords} "
         
         for event in events:
             if event.type == pygame.KEYUP:

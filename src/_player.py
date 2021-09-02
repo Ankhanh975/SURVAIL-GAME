@@ -3,21 +3,21 @@ from src._main import *
 
 def __str__(self):
     direction = ["north", "east", "south", "west"]
-    if 45<self.angle<=135:
+    if 45<=self.angle<=135:
         direction = direction[1]
-    elif 135<self.angle<=225:
+    elif 135<=self.angle<=225:
         direction = direction[2]
-    elif 225<self.angle<=315:
+    elif 225<=self.angle<=315:
         direction = direction[3]
-    elif self.angle>315 or self.angle<45:
+    elif self.angle>=315 or self.angle<=45:
         direction = direction[0]
         
     s = f'''\
-Color: {self.color.upper()} 
+Color: {self.drawPlayer.color.upper()} 
 Facing: {direction} ({self.angle:2.2f}°) 
 XY: {self.pos[0]:9.3f} / {self.pos[1]:9.3f} 
-AnimationNumber: {self.drawPlayer.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES } 
 Punch: {None if self.drawPlayer.state==None else ("Left" if self.drawPlayer.state=="leftPunch" else "Right")} 
+Animate: {self.drawPlayer.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES } 
 Heart: {self.heart: 3.1f} / 20 
 '''
     return s
@@ -82,6 +82,7 @@ Character = {"rightPunch": Character, "leftPunch": CharacterFlip.copy()}
 del CharacterFlip
 
 class DrawPlayer:
+    # This class also control the entity color
     ANIMATIONFRAMES = 6
     ANIMATIONSPEED = 0.21
 
@@ -92,6 +93,7 @@ class DrawPlayer:
         self.AngleSaveHistory = SaveHistory(9)
         self.PosSaveHistory = SaveHistory(15)
         self.color = color
+        self.defaultColor = color
         self.damageNumber = 0
         
     def update(self):
@@ -146,7 +148,7 @@ class DrawPlayer:
         if self.damageNumber != 0:
             COLOR = self.color
         else:
-            COLOR=PLAYER.color
+            COLOR=self.defaultColor
             
         if 22 > angle - self.AngleSaveHistory.read(0) > -22:
             self.AngleSaveHistory.add(angle)
@@ -159,13 +161,17 @@ class DrawPlayer:
         num = int(self.animationNumber)
         HAND = self.state if self.state is not None else "rightPunch"
         animation = Character[HAND][COLOR][num]
-        blitRotate(surf, animation, pos, angle)
+        if -1124 < pos[0] < 1124 and -878 < pos[1] < 878:
+            blitRotate(surf, animation, pos, angle)
         self.DisplayAngle, angle
         
     def getDamage(self):
-        # Animation git damaged
+        # Animation take damaged
         if self.damageNumber == 0:
             self.damageNumber = 1
+    # TODO: sound effects
+    def changeColorAnimation(self, color):
+        pass
 
 if __name__ == '__main__':
     x = angelNumber(1)

@@ -22,11 +22,10 @@ def lazy(fullname):
         return module
 
 
-os = lazy("os")
-datetime = lazy("datetime")
-threading = lazy("threading")
-win32gui = lazy("win32gui")
-itertools = lazy("itertools")
+# os = lazy("os")
+# datetime = lazy("datetime")
+# win32gui = lazy("win32gui")
+# itertools = lazy("itertools")
 
 if not pygame.get_init():
     pygame.init()
