@@ -13,13 +13,12 @@ def __str__(self):
         direction = direction[0]
         
     s = f'''\
-Color: {self.color.upper()}
-Facing: {direction} ({self.angle:2.2f}°)
-XY: {self.pos[0]:9.3f} / {self.pos[1]:9.3f}
-AnimationNumber: {self.drawPlayer.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES }
-Punch: {None if self.drawPlayer.state==None else ("Left" if self.drawPlayer.state=="leftPunch" else "Right")}
-Heart: {self.heart: 3.1f} / 20
-mouseInWorldCoords: {self.mouseInWorldCoords}
+Color: {self.color.upper()} 
+Facing: {direction} ({self.angle:2.2f}°) 
+XY: {self.pos[0]:9.3f} / {self.pos[1]:9.3f} 
+AnimationNumber: {self.drawPlayer.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES } 
+Punch: {None if self.drawPlayer.state==None else ("Left" if self.drawPlayer.state=="leftPunch" else "Right")} 
+Heart: {self.heart: 3.1f} / 20 
 '''
     return s
 # Velocity: {self.velocity}

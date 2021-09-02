@@ -3,7 +3,9 @@ screen = pygame.display.set_mode((1024, 768), DOUBLEBUF)
 from src import particles
 from src import Enemy
 from src.Player import *
+from src.background import *
 
+# https://www.python.org/doc/essays/list2str/
 pygame.event.set_allowed([QUIT, KEYUP])
 
 from src import displayInfo
@@ -20,53 +22,31 @@ pygame.mixer.music.load(random.choice(BackGroundSoundTrack))
 # pygame.mixer.music.play(-1)
 
 
-class Ground:
-    # Set background base on player position
-    def __init__(self):
-        self.img = []
-        for i in range(1, 5):
-            img = pygame.image.load(
-                f"Resources/BackGround{i}.png").convert()
-            # img = img.convert_alpha()
-            self.img.append(img)
-        self.size = self.img[0].get_size()
-        self.size = self.size[0]-1, self.size[1]-1
-
-    def getChunk(self, playerPos):
-        x, y = playerPos
-        x = x // self.size[0]
-        y = y // self.size[1]
-        return round(x), round(y)
-
-    def draw(self, surf, playerPos, offset=(0,0)):
-        i, j = self.getChunk(playerPos)
-        for x in range(i, i+6):
-            for y in range(j, j+6):
-                img = self.img[0]
-                # img = random.choice(self.img)
-                x1, y1 = x*self.size[0], y*self.size[1]
-                x2, y2 = (x+1)*self.size[0]-1, (y+1)*self.size[1]-1
-                w, h = abs(x1-x2), abs(y1-y2)
-
-                surf.blit(img, (int(x1-playerPos[0]), int(y1-playerPos[1])))
-
-
 player = Player()
+enemy = []
+enemy.append(Enemy.Enemy((0,100)))
+enemy.append(Enemy.Enemy((100,0)))
+enemy.append(Enemy.Enemy((0,-100)))
+enemy.append(Enemy.Enemy((-100,0)))
+
 enemy = Enemy.Enemy((0,100))
 background = Ground()
 
-
+mouseInWorldCoords = pygame.math.Vector2(0,0)
 def draw(events, FPS):
+    global mouseInWorldCoords
     mousePos = pygame.mouse.get_pos()
     mouseState = pygame.mouse.get_pressed()[0]
 
     background.draw(screen, player.pos)
     mouseInWorldCoords = (mousePos[0]+player.pos[0]-1024/2, mousePos[1]+player.pos[1]-768/2)
     player.update(events, mouseInWorldCoords)
-    enemy.update(events, mouseInWorldCoords)
+    enemy.update(events, player.pos)
 
     player.draw(screen, (1024//2, 768//2))
-    enemy.draw(screen, (0,0)+player.pos)
+    pos = -player.pos-enemy.pos
+    print(pos, enemy.pos)
+    enemy.draw(screen, pos)
 
     if mouseState:
         mousePos = mousePos[0], mousePos[1]+random.uniform(-2.5, 2.5)
@@ -117,7 +97,7 @@ while True:
     fps = clock.get_fps()
     fps = round(fps, 2)
     draw(events, fps)
-    f3Menu.update(events, enemy, fps)
+    f3Menu.update(events, player, fps, mouseInWorldCoords)
     f3Menu.display(screen)
     tabMenu.update(events)
     tabMenu.display(screen)

@@ -38,12 +38,12 @@ class F3Menu:
         self.leftText = ""
         self.rightText = ""
 
-    def update(self, events, player, fps):
-        self.RunTime = f"RunTime: {pygame.time.get_ticks()/1000:3.2f}s"
+    def update(self, events, player, fps, mouseInWorldCoords):
+        self.RunTime = f"RunTime: {pygame.time.get_ticks()/1000:3.2f}s "
         self.playerInfo = str(player)
-        self.fps = f" {fps:.0f} fps"
-        self.leftText = f"{self.INTRODUCTION} \n{self.fps} \n{self.playerInfo}"
-        self.rightText = f"{self.VERSION} \n{self.RunTime}"
+        self.fps = f" {fps:.0f} fps "
+        self.leftText = f"{self.INTRODUCTION} \n{self.fps} \n{self.playerInfo} "
+        self.rightText = f"{self.VERSION} \n{self.RunTime} \n{mouseInWorldCoords} "
         
         for event in events:
             if event.type == pygame.KEYUP:
