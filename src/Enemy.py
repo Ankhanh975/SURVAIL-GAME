@@ -10,7 +10,7 @@ with open("Resources/NOTE.txt", "r") as f:
 class Enemy(Player.Player):
     def __init__(self, position):
         super().__init__()
-        self.position = position
+        self.pos = pygame.math.Vector2(position)
         self.name = random.choice(commonName)
         
         print(self.name)

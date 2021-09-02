@@ -52,20 +52,21 @@ class Ground:
 
 
 player = Player()
-# enemy = Enemy.Enemy((1000, 1000))
+enemy = Enemy.Enemy((0,100))
 background = Ground()
 
 
 def draw(events, FPS):
-    mousePos = list(pygame.mouse.get_pos())
+    mousePos = pygame.mouse.get_pos()
     mouseState = pygame.mouse.get_pressed()[0]
 
     background.draw(screen, player.pos)
-    player.update(events, (mousePos[0]+1000, mousePos[1]+1000))
-    # enemy.update(events, player.pos)
+    mouseInWorldCoords = (mousePos[0]+player.pos[0]-1024/2, mousePos[1]+player.pos[1]-768/2)
+    player.update(events, mouseInWorldCoords)
+    enemy.update(events, mouseInWorldCoords)
 
     player.draw(screen, (1024//2, 768//2))
-    # enemy.draw(screen, (1024//2, 768//2+100))
+    enemy.draw(screen, (0,0)+player.pos)
 
     if mouseState:
         mousePos = mousePos[0], mousePos[1]+random.uniform(-2.5, 2.5)
@@ -74,7 +75,7 @@ def draw(events, FPS):
     particles.draw(screen)
 
     for event in events:
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN:    
             if event.key == pygame.K_n:
                 player.color = random.choice(
                     (["white", "yellow",  "green", "orange",  "blue",  "red"]))
@@ -116,7 +117,7 @@ while True:
     fps = clock.get_fps()
     fps = round(fps, 2)
     draw(events, fps)
-    f3Menu.update(events, player, fps)
+    f3Menu.update(events, enemy, fps)
     f3Menu.display(screen)
     tabMenu.update(events)
     tabMenu.display(screen)

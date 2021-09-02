@@ -19,6 +19,7 @@ XY: {self.pos[0]:9.3f} / {self.pos[1]:9.3f}
 AnimationNumber: {self.drawPlayer.animationNumber:4.1f} / {self.drawPlayer.ANIMATIONFRAMES }
 Punch: {None if self.drawPlayer.state==None else ("Left" if self.drawPlayer.state=="leftPunch" else "Right")}
 Heart: {self.heart: 3.1f} / 20
+mouseInWorldCoords: {self.mouseInWorldCoords}
 '''
     return s
 # Velocity: {self.velocity}
@@ -57,9 +58,9 @@ def SetUpAnimation():
         animationImg = pygame.image.load(
                 f"Resources/Animation_{i}.png").convert_alpha()
         for x in range(len(SkinColor)):
-            start = time.perf_counter()*1000
+            # start = time.perf_counter()*1000
             img = animationImg.copy()
-            imgData = pygame.surfarray.pixels3d(animationImg)
+            imgData = pygame.surfarray.pixels3d(img)
             filter = numpy.all(imgData, axis=2)
             imgData[filter] = SkinColorRGB[x]
             # del imgData # Out of scope anyways

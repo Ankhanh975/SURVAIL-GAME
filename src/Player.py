@@ -3,19 +3,43 @@ from src import _player
 
 SkinColor = ["white", "yellow",  "green", "orange",  "blue",  "red"]
 
+def move(self, dt):
+    keys = pygame.key.get_pressed()
+    up = keys[pygame.K_w] or keys[pygame.K_UP]
+    down = keys[pygame.K_s] or keys[pygame.K_DOWN]
+    right = keys[pygame.K_a] or keys[pygame.K_LEFT]
+    left = keys[pygame.K_d] or keys[pygame.K_RIGHT]
+    change = pygame.math.Vector2(0,0)
+    if up+down+left+right >= 2:
+        speed = dt/3.2
+    else:
+        speed = dt/2.8
+
+    if up:
+        change[1] -= speed
+    elif down:
+        change[1] += speed
+
+    if right:
+        change[0] -= speed
+    elif left:
+        change[0] += speed
+    return change
+        
 class Player:
-    def __init__(self):
-        self.LinearPos = pygame.math.Vector2(1000, 1000)
-        self.pos = pygame.math.Vector2(1000, 1000)
+    def __init__(self, pos=(0,0)):
+        self.LinearPos = pygame.math.Vector2(pos[0], pos[1])
+        self.pos = pygame.math.Vector2(pos[0], pos[1])
         self.velocity = pygame.math.Vector2(0, 0)
         self.arcuation = pygame.math.Vector2(0, 0)
-        self.center = pygame.math.Vector2(1024/2, 768/2)
+        self.center = pygame.math.Vector2(196/2, 196/2)
+        self.center = pygame.math.Vector2(0/2, 0/2)
         self.angle = 90
         self.color = random.choice(SkinColor)
         self.drawPlayer = _player.DrawPlayer(self.color)
         self.name = ""
         self.heart = 20
-
+        self.damage = 10
         
         self.isPunch = False
         self.isPunchWithRightHand = True
@@ -26,32 +50,13 @@ class Player:
         self.positionHistory[1].fill(self.LinearPos[1])
         
     def update(self, events, mousePos):
+        self.mouseInWorldCoords = mousePos
         # mousePos: point to look at relative to world coordinates
         dt = pygame.time.get_ticks() - self.lastTick
         self.lastTick = pygame.time.get_ticks()
-
-        mousePos = pygame.mouse.get_pos()
         mouseState = pygame.mouse.get_pressed()[0]  # Left button state
-        keys = pygame.key.get_pressed()
-        up = keys[pygame.K_w] or keys[pygame.K_UP]
-        down = keys[pygame.K_s] or keys[pygame.K_DOWN]
-        right = keys[pygame.K_a] or keys[pygame.K_LEFT]
-        left = keys[pygame.K_d] or keys[pygame.K_RIGHT]
 
-        if up+down+left+right >= 2:
-            speed = dt/3.2
-        else:
-            speed = dt/2.8
-
-        if up:
-            self.LinearPos[1] -= speed
-        elif down:
-            self.LinearPos[1] += speed
-
-        if right:
-            self.LinearPos[0] -= speed
-        elif left:
-            self.LinearPos[0] += speed
+        self.LinearPos += move(self, dt)
         
         self.positionHistory[0].add(self.LinearPos[0])
         self.positionHistory[1].add(self.LinearPos[1])
@@ -62,9 +67,11 @@ class Player:
             HAND = self.ChooseHandToPunch()
             self.drawPlayer.StartAnimation(HAND)
             self.PunchHandHistory.add(HAND)
-
+        
+        print(type(mousePos), mousePos, self.pos)
+        # relative to the screen coordinates
         self.OM = pygame.math.Vector2(mousePos)
-        self.OH = self.center
+        self.OH = self.pos
         self.HM = self.OH - self.OM
         self.HP0 = pygame.math.Vector2(0, -10)
         self.angle = (180-(self.HP0.angle_to(self.HM))) % 360

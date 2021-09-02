@@ -74,7 +74,12 @@ class TabMenu:
             return
             surf.blit(self)
 
-
+class TagName:
+    def __init__(self):
+        pass
+    def display(self, surf, names: list):
+        for name in names:
+            pass
 class ChatMenu:
     show = False
 
