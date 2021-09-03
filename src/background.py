@@ -30,3 +30,10 @@ class Ground:
 
                 surf.blit(img, (int(x1-playerPos[0]), int(y1-playerPos[1])))
 
+class System:
+    def __init__(self, main):
+        self.main = main
+    
+    def update(self):
+        return
+        self.main
