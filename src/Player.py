@@ -78,6 +78,7 @@ class Player:
             return True
         else:
             return False
+            
     def ChooseHandToPunch(self):
         input_ = self.PunchHandHistory
         present = self.PunchHandHistory.total()
@@ -101,7 +102,6 @@ class Player:
         min, max = 60, 100  # percentage
         a = (max - min) / 180
 
-        self.HM = self.OM - self.OH
         alpha = self.HM.angle_to(FPO)
         alpha = min(alpha, 360-alpha)
 
@@ -110,3 +110,24 @@ class Player:
     
     def punch(self):
         pass
+    
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, game, pos, dir):
+        self.groups = game.all_sprites, game.bullets
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = game.bullet_img
+        self.rect = self.image.get_rect()
+        self.pos = pygame.math.Vector2(pos)
+        self.rect.center = pos
+        spread = math.uniform(-GUN_SPREAD, GUN_SPREAD)
+        self.vel = dir.rotate(spread) * BULLET_SPEED
+        self.spawn_time = pygame.time.get_ticks()
+
+    def update(self):
+        self.pos += self.vel * self.game.dt
+        self.rect.center = self.pos
+        if pygame.sprite.spritecollideany(self, self.game.walls):
+            self.kill()
+        if pygame.time.get_ticks() - self.spawn_time > BULLET_LIFETIME:
+            self.kill()

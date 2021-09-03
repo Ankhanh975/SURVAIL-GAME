@@ -7,7 +7,7 @@ from pygame.locals import *
 import pygame
 import sys
 import importlib.util
-
+vector = pygame.math.Vector2
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -19,6 +19,16 @@ YELLOW = (255, 255, 0)
 BROWN = (106, 55, 5)
 CYAN = (0, 255, 255)
 
+BULLET_SPEED = 500
+BULLET_LIFETIME = 1000
+BULLET_RATE = 150
+KICKBACK = 200
+GUN_SPREAD = 5
+
+# Mob settings
+MOB_SPEED = 150
+MOB_HIT_RECT = pygame.Rect(0, 0, 30, 30)
+TILESIZE = 64
 # This loader is ~300ms faster and more stable but ~100ms slower (for all Modules ) if Modules have been cached 
 def lazy(fullname):
     # https://stackoverflow.com/questions/42703908/how-do-i-use-importlib-lazyloader
@@ -132,13 +142,13 @@ class SaveHistory:
         for i in range(self.size):
             total += self.dict[i]
         return total
-
+# Ge
 
 def blitRotate(surf, image, pos, angle):
     originPos = image.get_size()
+    w, h = originPos
     originPos = originPos[0]/2, originPos[1]/2
     # calcaulate the axis aligned bounding box of the rotated image
-    w, h = image.get_size()
     box = [pygame.math.Vector2(p) for p in [(0, 0), (w, 0), (w, -h), (0, -h)]]
     box_rotate = [p.rotate(angle) for p in box]
     min_box = (min(box_rotate, key=lambda p: p[0])[

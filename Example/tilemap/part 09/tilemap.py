@@ -1,4 +1,4 @@
-import pygame as pg
+import pygame as pygame
 from settings import *
 
 def collide_hit_rect(one, two):
@@ -18,7 +18,7 @@ class Map:
 
 class Camera:
     def __init__(self, width, height):
-        self.camera = pg.Rect(0, 0, width, height)
+        self.camera = pygame.Rect(0, 0, width, height)
         self.width = width
         self.height = height
 
@@ -34,4 +34,4 @@ class Camera:
         y = min(0, y)  # top
         x = max(-(self.width - WIDTH), x)  # right
         y = max(-(self.height - HEIGHT), y)  # bottom
-        self.camera = pg.Rect(x, y, self.width, self.height)
+        self.camera = pygame.Rect(x, y, self.width, self.height)

@@ -164,6 +164,9 @@ class DrawPlayer:
         animation = self.CHARACTER[HAND][COLOR][num]
         if -1124 < pos[0] < 1124 and -878 < pos[1] < 878:
             blitRotate(surf, animation, pos, angle)
+            return
+            animation = pygame.transform.rotate(animation, angle)
+            surf.blit(animation, pos)
         self.DisplayAngle, angle
         
     def getDamage(self):

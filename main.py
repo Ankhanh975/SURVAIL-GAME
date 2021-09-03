@@ -23,10 +23,8 @@ pygame.mixer.music.load(random.choice(BackGroundSoundTrack))
 
 
 entities = [Player()]
-entities.append(Enemy.Enemy((0,100)))
-entities.append(Enemy.Enemy((100,0)))
-entities.append(Enemy.Enemy((0,-100)))
-entities.append(Enemy.Enemy((-100,0)))
+for x in range(25):
+    entities.append(Enemy.Enemy((random.uniform(-1500, 1500), random.uniform(-1500, 1500))))
 
 background = Ground()
 
@@ -56,8 +54,8 @@ def draw(events, FPS):
         particles.create_particle(mousePos, num=3)
         if entities[0].createPunch():
             print("Punch")
-            for entity in entities:
-                entity.createPunch()
+            # for entity in entities:
+            #     entity.createPunch()
 
     particles.draw(screen)
 
@@ -71,7 +69,6 @@ def draw(events, FPS):
             pass
         elif event.type == pygame.MOUSEMOTION:
             pass
-
 
 f3Menu = displayInfo.F3Menu()
 tabMenu = displayInfo.TabMenu()

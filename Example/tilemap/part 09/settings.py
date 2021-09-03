@@ -1,5 +1,5 @@
-import pygame as pg
-vec = pg.math.Vector2
+import pygame as pygame
+vec = pygame.math.Vector2
 
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
@@ -28,7 +28,7 @@ WALL_IMG = 'tileGreen_39.png'
 PLAYER_SPEED = 300
 PLAYER_ROT_SPEED = 250
 PLAYER_IMG = 'manBlue_gun.png'
-PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
+PLAYER_HIT_RECT = pygame.Rect(0, 0, 35, 35)
 BARREL_OFFSET = vec(30, 10)
 
 # Gun settings
@@ -42,4 +42,4 @@ GUN_SPREAD = 5
 # Mob settings
 MOB_IMG = 'zombie1_hold.png'
 MOB_SPEED = 150
-MOB_HIT_RECT = pg.Rect(0, 0, 30, 30)
+MOB_HIT_RECT = pygame.Rect(0, 0, 30, 30)
