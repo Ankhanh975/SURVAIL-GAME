@@ -65,7 +65,8 @@ class Enemy(Player.Player):
     def update(self, entities, mousePos):
         super().update(entities, mousePos)
         for entity in entities:
-            if 
+            if entity:
+                pass
         self.attack()
 
     def attack(self):

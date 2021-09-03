@@ -19,24 +19,24 @@ def draw_player_health(surf, x, y, percentage):
     pygame.draw.rect(surf, col, fill_rect)
     pygame.draw.rect(surf, WHITE, outline_rect, 2)
 
-def blit_text(surface, text, pos, font, color=pygame.Color('black')):
-
-
+def blit_text(surface, text, pos, font, color=pygame.Color('black'), transparentRect=True, reverse=False):
     words = text.splitlines()  # 2D array where each row is a list of words.
-    space = font.size(' ')[0]  # The width of a space.
     max_width, max_height = surface.get_size()
-    x, y = pos
+    x, y = pos # Don't touch the pos
     for line in words:
         line_surface = font.render(line, 1, color)
         line_width, line_height = line_surface.get_size()
-
-        transparent = pygame.Surface((line_width, line_height))
-        transparent.set_alpha(35)         
-        transparent.fill((15,15,15))     
-        surface.blit(transparent, (x, y, )) 
+        if transparentRect:
+            transparent = pygame.Surface((line_width, line_height))
+            transparent.set_alpha(35)         
+            transparent.fill((15,15,15))     
+            surface.blit(transparent, (x, y, )) 
         surface.blit(line_surface, (x, y))
-        x = pos[0]  # Reset the x.
-        y += line_height  # Start on new row.
+        if not reverse:
+            y += line_height  # Start on new row.
+        else:
+            y-=line_height
+    return pygame.Rect(pos, (x, y))
 
 class F3Menu:
     # Debug purpose
@@ -74,6 +74,42 @@ class F3Menu:
             blit_text(surf, self.leftText, (20, 20), self.font, color=(250, 254, 253))
             blit_text(surf, self.rightText, (UpRightCorer[0]-390, UpRightCorer[1]+10), self.font, color=(250, 254, 253))
 
+class ScoreBar:
+    # TODO
+    # Heavily inspired from minecraft score-bar 
+    show = True
+    # The visibility of the number line
+    numberLine = False
+    def __init__(self, numberLine = False):
+        self.numberLine = numberLine
+        self.font = pygame.font.SysFont("Minecraft", 32)
+        
+        text_surface = self.font.render(" ", 1, (0,0,0))
+        self.surface_height = text_surface.get_size()[1] + 19
+        surface_weight = text_surface.get_size()[0] + 19
+        self.surface = pygame.Surface((surface_weight, self.surface_height))
+        self.surface.fill((100,100,100))
+        self.surface.set_alpha(60)
+        
+        self.numberLineText = ""
+    def update(self, events, text):
+        self.text = text
+        if self.numberLine:
+            for x in range(self.text.count("\n")):
+                self.numberLineText += "\n" + x
+            
+    def display(self, surf):
+
+        if self.show:
+            surface_height = self.text.count("\n")*self.surface_height + 19
+            
+            self.surface = pygame.Surface((400, surface_height))
+            self.surface.fill((100,100,100))
+            self.surface.set_alpha(60)
+
+            surf.blit(self.surface, (1024-200-10, 240-10))
+            
+            blit_text(surf, self.text, (1024-200, 240), self.font, color=(250, 254, 253), transparentRect=False, reverse=True)
 class TabMenu:
     show = False
 
@@ -98,6 +134,7 @@ class TagName:
     def display(self, surf, names: list):
         for name in names:
             pass
+        
 class ChatMenu:
     show = False
 
@@ -115,27 +152,6 @@ class ChatMenu:
         if self.show:
             return
             surf.blit(self)
-
-
-class ScoreBar:
-    show = True
-
-    def __init__(self):
-        pass
-
-    def update(self, events):
-        for event in events:
-            if event.type == pygame.KEYUP:
-                if event.key == None:
-                    self.show = not self.show
-
-    def display(self, surf):
-
-        if self.show:
-            return
-            surf.blit(self)
-
-
 class EscMenu:
     show = False
 

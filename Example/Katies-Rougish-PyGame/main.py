@@ -4,6 +4,7 @@ from pygame.locals import *
 sys.path.append("roguey/classes")
 from os.path import abspath, dirname, join, sep
 
+
 MOVEMENT_SIZE = 12
 RADIUS = 2
 BLACK = (0, 0, 0)

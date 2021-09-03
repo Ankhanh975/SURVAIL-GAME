@@ -56,9 +56,11 @@ def draw(events, FPS):
             print("Punch")
             # for entity in entities:
             #     entity.createPunch()
-
+    
     particles.draw(screen)
-
+    text = f"Punch: {10}\nKill: {10}\nDead: "
+    scoreBar.update(events, text)
+    
     for event in events:
         if event.type == pygame.KEYDOWN:    
             if event.key == pygame.K_n:
@@ -106,5 +108,5 @@ while True:
     tabMenu.display(screen)
     chatMenu.update(events)
     chatMenu.display(screen)
-    scoreBar.update(events)
+    # scoreBar.update(events)
     scoreBar.display(screen)
