@@ -1,5 +1,3 @@
-# Tilemap Demo
-# KidsCanCode 2017
 import pygame as pygame
 import sys
 from random import choice, random
