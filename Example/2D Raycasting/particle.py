@@ -12,7 +12,7 @@ class Particle:
         self.pos = pygame.math.Vector2(width / 2, height / 2)
         self.rays = []
         for a in range(360):
-            self.rays.append(Ray(self.pos, math.radians(a)))
+            self.rays.append(Ray(self.pos, a))
 
     def update(self, x, y):
         self.pos.set(x, y)
@@ -36,8 +36,8 @@ class Particle:
                 # stroke(255, 100)
                 pygame.draw.line(self.pos.x, self.pos.y, closest.x, closest.y)
 
-    def show(self):
+    def show(self, surf):
         # fill(255)
         pygame.draw.ellipse(self.pos.x, self.pos.y, 4)
         for ray in self.rays:
-            ray.show()
+            ray.show(surf)

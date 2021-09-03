@@ -4,7 +4,7 @@ import pygame
 class Ray:
     def __init__(self, pos, angle):
         self.pos = pos
-        self.dir = pygame.math.Vector2.fromAngle(angle)
+        self.dir = pygame.math.Vector2(0, 10).rotate(angle)
 
     def lookAt(self, x, y):
         self.dir.x = x - self.pos.x
@@ -15,7 +15,7 @@ class Ray:
         # stroke(255)
         # push()
         # translate(self.pos.x, self.pos.y)
-        pygame.draw.line(surf, 0, 0, self.dir.x * 10, self.dir.y * 10)
+        pygame.draw.line(surf, (0, 0), (self.dir.x * 10, self.dir.y * 10), (255, 255, 255))
         # pop()
 
     def cast(self, wall):

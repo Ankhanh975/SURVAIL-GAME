@@ -37,13 +37,13 @@ setup()
 def draw(events, FPS):
     global xoff, yoff
     for wall in walls:
-        wall.show()
+        wall.show(screen)
 
     # particle.update(noise(xoff) * width, noise(yoff) * height)
     mouseX, mouseY = pygame.mouse.get_pos()
     
     particle.update(mouseX, mouseY)
-    particle.show()
+    particle.show(screen)
     particle.look(walls)
 
     xoff += 0.01
