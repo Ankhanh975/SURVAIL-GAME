@@ -8,6 +8,17 @@ import pygame
 import sys
 import importlib.util
 
+# define some colors (R, G, B)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+DARKGREY = (40, 40, 40)
+LIGHTGREY = (100, 100, 100)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+BROWN = (106, 55, 5)
+CYAN = (0, 255, 255)
+
 # This loader is ~300ms faster and more stable but ~100ms slower (for all Modules ) if Modules have been cached 
 def lazy(fullname):
     # https://stackoverflow.com/questions/42703908/how-do-i-use-importlib-lazyloader

@@ -1,8 +1,23 @@
-import pygame
+from src._main import *
 from platform import python_version
-import pygame
 from ctypes import sizeof, c_voidp
-import time
+
+def draw_player_health(surf, x, y, percentage):
+    if percentage < 0:
+        percentage = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 20
+    fill = percentage * BAR_LENGTH
+    outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+    fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
+    if percentage > 0.6:
+        col = GREEN
+    elif percentage > 0.3:
+        col = YELLOW
+    else:
+        col = RED
+    pygame.draw.rect(surf, col, fill_rect)
+    pygame.draw.rect(surf, WHITE, outline_rect, 2)
 
 def blit_text(surface, text, pos, font, color=pygame.Color('black')):
 

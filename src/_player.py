@@ -95,6 +95,7 @@ class DrawPlayer:
         self.color = color
         self.defaultColor = color
         self.damageNumber = 0
+        self.CHARACTER = Character
         
     def update(self):
         if self.state is not None:
@@ -145,7 +146,6 @@ class DrawPlayer:
         # angle = angelNumber(PLAYER.angle)
         angle = PLAYER.angle
         self.update()
-        print(self.color, self.defaultColor)
         if self.damageNumber != 0:
             COLOR = self.color
         else:
@@ -161,7 +161,7 @@ class DrawPlayer:
         self.DisplayAngle = self.AngleSaveHistory.average()
         num = int(self.animationNumber)
         HAND = self.state if self.state is not None else "rightPunch"
-        animation = Character[HAND][COLOR][num]
+        animation = self.CHARACTER[HAND][COLOR][num]
         if -1124 < pos[0] < 1124 and -878 < pos[1] < 878:
             blitRotate(surf, animation, pos, angle)
         self.DisplayAngle, angle

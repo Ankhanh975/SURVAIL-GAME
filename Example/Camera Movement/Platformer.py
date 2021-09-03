@@ -38,15 +38,12 @@ player_img.set_colorkey((255, 255, 255))
 
 player_rect = pygame.Rect(100, 100, 5, 13)
 
-
-
 def collision_test(rect, tiles):
     hit_list = []
     for tile in tiles:
         if rect.colliderect(tile):
             hit_list.append(tile)
     return hit_list
-
 
 def move(rect, movement, tiles):
     collision_types = {'top': False, 'bottom': False,

@@ -31,6 +31,7 @@ entities.append(Enemy.Enemy((-100,0)))
 background = Ground()
 
 mouseInWorldCoords = pygame.math.Vector2(0,0)
+zombie = pygame.image.load("Resources/Zombie.png").convert_alpha()
 def draw(events, FPS):
     global mouseInWorldCoords
     mousePos = pygame.mouse.get_pos()
@@ -38,6 +39,7 @@ def draw(events, FPS):
     
     background.draw(screen, entities[0].pos)
         
+    screen.blit(zombie, (100, 100))
     mouseInWorldCoords = (mousePos[0]+entities[0].pos[0]-1024/2, mousePos[1]+entities[0].pos[1]-768/2)
 
     for entity in entities:
@@ -62,7 +64,7 @@ def draw(events, FPS):
     for event in events:
         if event.type == pygame.KEYDOWN:    
             if event.key == pygame.K_n:
-                entities[0].drawPlayer.color = random.choice((["white", "yellow",  "green", "orange",  "blue",  "red"]))
+                entities[0].drawPlayer.defaultColor = random.choice((["white", "yellow",  "green", "orange",  "blue",  "red"]))
                 
 
         elif event.type == pygame.KEYUP:
@@ -80,7 +82,7 @@ frame = 0
 while True:
     frame += 1
     pygame.display.update()
-    clock.tick(600)
+    clock.tick(60)
     screen.fill((0, 255, 255))
 
     events = pygame.event.get()
