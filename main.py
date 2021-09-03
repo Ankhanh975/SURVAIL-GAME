@@ -80,7 +80,7 @@ frame = 0
 while True:
     frame += 1
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(600)
     screen.fill((0, 255, 255))
 
     events = pygame.event.get()

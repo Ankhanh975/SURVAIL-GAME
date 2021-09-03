@@ -145,6 +145,7 @@ class DrawPlayer:
         # angle = angelNumber(PLAYER.angle)
         angle = PLAYER.angle
         self.update()
+        print(self.color, self.defaultColor)
         if self.damageNumber != 0:
             COLOR = self.color
         else:

@@ -109,10 +109,3 @@ if __name__ == '__main__':
             spark.draw(screen)
             if not spark.alive:
                 sparks.pop(i)
-
-        
-
-        
-
-
-
