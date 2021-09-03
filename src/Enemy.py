@@ -17,8 +17,8 @@ class RunThread:
     def Stuff(self):
         pass
 
-AIThreard = 
-Thread(target=AIThreard.loop, daemon=True).start()
+# AIThreard = 
+# Thread(target=AIThreard.loop, daemon=True).start()
 
 with open("Resources/NOTE.txt", "r") as f:
     f = f.read()
