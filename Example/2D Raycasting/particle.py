@@ -38,6 +38,6 @@ class Particle:
 
     def show(self, surf):
         # fill(255)
-        pygame.draw.ellipse(self.pos.x, self.pos.y, 4)
+        pygame.draw.ellipse(surf, (255, 255, 255), (self.pos.x, self.pos.y), width=4)
         for ray in self.rays:
             ray.show(surf)
