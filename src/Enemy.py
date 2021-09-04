@@ -2,8 +2,10 @@ from src._main import *
 from src import Player
 from threading import Thread
 
+
 class RunThread():
     stop = False
+
     def __init__(self, name: str = "AIThread", FPS=20):
         self.clock = pygame.time.Clock()
         self.name = name
@@ -51,33 +53,43 @@ class RunThread():
 #         self.rect.center = self.hit_rect.center
 
 
-
 with open("Resources/NOTE.txt", "r") as f:
     f = f.read()
     f = f.split("\n")
     commonName = f
 
+
 class Enemy(Player.Player):
     def __init__(self, position):
-        super().__init__(pos=position, control = False)
+        super().__init__(pos=position, control=False)
         self.name = random.choice(commonName)
+        self.attack = False
 
     def update(self, entities, mousePos):
         super().update(entities, mousePos)
         for entity in entities:
             if entity:
                 pass
-        self.attack()
+        self.response()
 
-    def attack(self):
+    def response(self):
         HM = pygame.math.Vector2(self.HM)
-        HM = HM.rotate(180) # Point to the player instead of away
-        if 70 < HM.length() < 140:
-            if random.randint(0, 100) < 90:
-                self.createPunch()
-        if 135 < HM.length():
-            HM.scale_to_length(2+random.uniform(1, 2))
-            self.LinearPos += HM
+        if self.attack:
+            HM = HM.rotate(180) # Point to the player instead of away
+            if 70 < HM.length() < 140:
+                if random.randint(0, 100) < 90:
+                    self.createPunch()
+            if 135 < HM.length():
+                HM.scale_to_length(2+random.uniform(1, 2))
+                self.LinearPos += HM
+            else:
+                # Too close so run away
+                HM.scale_to_length(2+random.uniform(1, 2))
+                self.LinearPos -= HM
         else:
-            HM.scale_to_length(2+random.uniform(1, 2))
-            self.LinearPos -= HM
+            if 1000 > HM.length():
+                HM.scale_to_length(2+random.uniform(1, 2))
+                self.LinearPos += HM
+            else:
+                pass
+            

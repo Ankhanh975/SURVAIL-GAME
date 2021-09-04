@@ -7,6 +7,7 @@ from pygame.locals import *
 import pygame
 import sys
 import importlib.util
+from threading import Thread
 vector = pygame.math.Vector2
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
