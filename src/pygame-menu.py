@@ -1,13 +1,11 @@
 from _main import *
-import pygame_menu  
 
+import pygame_menu
 from typing import List, Tuple, Optional
 
-pygame
 
 ABOUT = [f'pygame-menu {pygame_menu.__version__}',
          f'Author: {pygame_menu.__author__}',
-         '',
          f'Email: {pygame_menu.__email__}']
 COLOR_BACKGROUND = [128, 0, 128]
 FPS = 60
@@ -18,29 +16,27 @@ HELP = ['Press ESC to enable/disable Menu',
         'Press LEFT/RIGHT to move through Selectors']
 W_SIZE = 800  # Width of window size
 
-surface: Optional['pygame.Surface'] = None
 timer: Optional[List[float]] = None
 
-def mainmenu_background():
-    surface.fill((40, 0, 40))
-    print(f"CAlled mainmenu_background")
+screen = pygame.display.set_mode((W_SIZE, H_SIZE), pygame.DOUBLEBUF)
+clock = pygame.time.Clock()
+dt = 1.0 / FPS
 
+timer_font = pygame.font.SysFont("Minecraft", 32)
+
+def mainmenu_background():
+    screen.fill((40, 0, 40))
 
 def reset_timer():
     timer[0] = 0
 
-
-class TestCallClassMethod(object):
-    """
-    Class call method.
-    """
+class TestCallClassMethod:
+    # Class call method.
 
     @staticmethod
     def update_game_settings():
         """
         Class method.
-
-        :return: None
         """
         print('Update game with new settings')
 
@@ -55,66 +51,53 @@ def change_color_bg(value: Tuple, c: Optional[Tuple] = None, **kwargs):
     """
     color, _ = value
     if c == (-1, -1, -1):  # If random color
-        c = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        c = (random.randrange(0, 255), random.randrange(
+            0, 255), random.randrange(0, 255))
     if kwargs['write_on_console']:
         print('New background color: {0} ({1},{2},{3})'.format(color[0], *c))
     COLOR_BACKGROUND[0] = c[0]
     COLOR_BACKGROUND[1] = c[1]
     COLOR_BACKGROUND[2] = c[2]
 
-
-def main(test: bool = False):
-    # Init
-    # Create window
-    global surface
-    surface = pygame.display.set_mode((W_SIZE, H_SIZE), pygame.DOUBLEBUF)
+frame = 0
+def main():
+    # Init and game loop
+    global screen, timer
 
     # Main timer and game clock
-    clock = pygame.time.Clock()
-    global timer
-    timer = [0]
-    dt = 1.0 / FPS
-    timer_font = pygame_menu.font.get_font(pygame_menu.font.FONT_NEVIS, 100)
-    frame = 0
+    reset_timer()
+    
 
     # Create menus: Timer
-
     timer_theme = pygame_menu.themes.THEME_DARK.copy()  # Create a new copy
     timer_theme.background_color = (0, 0, 0, 180)  # Enable transparency
 
     # Timer
-    timer_menu = pygame_menu.Menu(
-        height=400,
-        onclose=pygame_menu.events.RESET,
-        theme=timer_theme,
-        title='Timer Menu',
-        width=600
-    )
+    timer_menu = pygame_menu.Menu(height=400, onclose=pygame_menu.events.RESET, theme=timer_theme, title='Timer Menu', width=600
+                                  )
 
     # Add widgets
     timer_menu.add.button('Reset timer', reset_timer)
 
     # Adds a selector (element that can handle functions)
-    timer_menu.add.selector(
-        title='Change color ',
-        items=[('Random', (-1, -1, -1)),  # Values of selector, call to change_color_bg
-               ('Default', (128, 0, 128)),
-               ('Black', (0, 0, 0)),
-               ('Blue', (12, 12, 200))],
-        default=1,  # Optional parameter that sets default item of selector
-        onchange=change_color_bg,  # Action when changing element with left/right
-        onreturn=change_color_bg,  # Action when pressing return on an element
-        # All the following kwargs are passed to change_color_bg function
-        write_on_console=True
-    )
+    timer_menu.add.selector(title='Change color ',
+                            items=[('Random', (-1, -1, -1)),  # Values of selector, call to change_color_bg
+                                   ('Default', (128, 0, 128)),
+                                   ('Black', (0, 0, 0)),
+                                   ('Blue', (12, 12, 200))],
+                            default=1,  # Optional parameter that sets default item of selector
+                            onchange=change_color_bg,  # Action when changing element with left/right
+                            onreturn=change_color_bg,  # Action when pressing return on an element
+                            # All the following kwargs are passed to change_color_bg function
+                            write_on_console=True
+                            )
     timer_menu.add.button('Update game object',
                           TestCallClassMethod().update_game_settings)
     timer_menu.add.button('Return to Menu', pygame_menu.events.BACK)
-    timer_menu.add.button('Close Menu', pygame_menu.events.CLOSE)
 
     # Create menus: Help
     help_theme = pygame_menu.Theme(
-        background_color=(30, 50, 107, 190),  # 75% opacity
+        background_color=(30, 50, 107, 128),  # 50% opacity
         title_background_color=(120, 45, 30, 190),
         title_font=pygame_menu.font.FONT_FRANCHISE,
         title_font_size=60,
@@ -146,7 +129,6 @@ def main(test: bool = False):
     about_menu = pygame_menu.Menu(
         center_content=False,
         height=400,
-        mouse_visible=False,
         theme=about_theme,
         title='About',
         width=600
@@ -175,7 +157,6 @@ def main(test: bool = False):
     # Main loop
     while True:
         print("Frame    ")
-        # Tick clock
         clock.tick(FPS)
         timer[0] += dt
         frame += 1
@@ -185,15 +166,15 @@ def main(test: bool = False):
         current_menu = main_menu.get_current()
         if current_menu.get_title() != 'Main Menu' or not main_menu.is_enabled():
             # Draw timer
-            surface.fill(COLOR_BACKGROUND)
+            screen.fill(COLOR_BACKGROUND)
             time_string = str(datetime.timedelta(seconds=int(timer[0])))
             time_blit = timer_font.render(time_string, True, (255, 255, 255))
             time_blit_size = time_blit.get_size()
-            surface.blit(time_blit, (int(W_SIZE / 2 - time_blit_size[0] / 2),
+            screen.blit(time_blit, (int(W_SIZE / 2 - time_blit_size[0] / 2),
                                      int(H_SIZE / 2 - time_blit_size[1] / 2)))
         else:
             # Background color if the menu is enabled and timer is hidden
-            surface.fill((40, 0, 40))
+            screen.fill((40, 0, 40))
 
         events = pygame.event.get()
         for event in events:
@@ -205,14 +186,10 @@ def main(test: bool = False):
                     main_menu.toggle()
 
         if main_menu.is_enabled():
-            main_menu.draw(surface)
+            main_menu.draw(screen)
             main_menu.update(events)
 
         pygame.display.flip()
-
-        # At first loop returns
-        if test and frame == 2:
-            break
 
 
 if __name__ == '__main__':
