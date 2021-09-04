@@ -44,7 +44,7 @@ def lazy(fullname):
 
 
 # os = lazy("os")
-# datetime = lazy("datetime")
+datetime = lazy("datetime")
 # win32gui = lazy("win32gui")
 # itertools = lazy("itertools")
 
