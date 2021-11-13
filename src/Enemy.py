@@ -87,7 +87,7 @@ class Enemy(Player.Player):
                 HM.scale_to_length(2+random.uniform(1, 2))
                 self.LinearPos -= HM
         else:
-            if 1000 > HM.length():
+            if 200 > HM.length():
                 HM.scale_to_length(2+random.uniform(1, 2))
                 self.LinearPos += HM
             else:

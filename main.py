@@ -20,7 +20,7 @@ BackGroundSoundTrack = ["Resources/C418 - Sweden.mp3", "Resources/C418 - Beginni
                         "Resources/C418 - Danny.mp3", "Resources/C418 - Wet Hands.mp3"]
 pygame.mixer.music.load(random.choice(BackGroundSoundTrack))
 # pygame.mixer.music.play(-1)
-
+# structure
 
 entities = [Player()]
 for x in range(25):
