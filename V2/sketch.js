@@ -6,10 +6,12 @@ function preload() {
   // img = loadImage("Animation_3.png");
   // img = loadImage("Animation_4.png");
   // img = loadImage("Animation_5.png");
+  // img = loadImage(" Zombie.png");
+ 
 }
 
 class Player {
-  constructor() {
+  constructor(color) {
     this.pos = createVector(0, 0);
     this.lookAt = createVector(0, 0);
     this.normal = createVector(0, -1);
@@ -48,13 +50,15 @@ function setup() {
   frameRate(60); // Attempt to refresh at starting FPS
   rectMode(CENTER);
   angleMode(DEGREES);
+  // textureWrap(REPEAT);
+  // textureMode(IMAGE)
   player = new Player();
 }
 function draw() {
   // background(255, 255, 255, 25);
 
-  translate(-width / 2, -height / 2);
   background(100);
+  translate(-width / 2, -height / 2);
 
   let mouse = createVector(mouseX, mouseY);
   player.update(mouse);
