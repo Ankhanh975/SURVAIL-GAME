@@ -14,7 +14,9 @@ function mousePressed(event) {
 function mouseReleased(event) {
   console.log("mouseReleased", event.button);
 }
-
+function mouseClicked(event) {
+  console.log("mouseClicked", event.button);
+}
 // a 65
 // d 68
 // w 87

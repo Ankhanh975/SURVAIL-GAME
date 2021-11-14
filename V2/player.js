@@ -1,3 +1,4 @@
+
 class Player {
   constructor(animation) {
     this.pos = createVector(100, 100);
@@ -19,11 +20,11 @@ class Player {
     rect(0, 0, 196, 196);
     pop();
   }
-  drawNameTag(name="love") {
+  drawNameTag(name = "love") {
     push();
     translate(this.pos);
     translate(0, -27);
-      
+
     textAlign(CENTER);
     textFont(myFont);
     textSize(21);
@@ -33,17 +34,21 @@ class Player {
     pop();
   }
 
-  update(lookAt) {
+  update(lookAt, onController = false) {
     this.lookAt = lookAt;
-    if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      this.pos.x -= 5;
-    } else if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      this.pos.x += 5;
-    } else if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      this.pos.y -= 5;
-    } else if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      this.pos.y += 5;
+    if (onController) {
+      if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+        this.pos.x -= 5;
+      } else if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+        this.pos.x += 5;
+      } else if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+        this.pos.y -= 5;
+      } else if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+        this.pos.y += 5;
+      }
     }
   }
-  startPunch() {}
+  startPunch(hand="right") {
+      
+  }
 }
