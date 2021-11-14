@@ -8,6 +8,13 @@ function keyPressed() {
     console.log("keyReleased", key);
 }
   
+function mousePressed(event) {
+  console.log("mousePressed", event.button);
+}
+function mouseReleased(event) {
+console.log("mouseReleased", event.button);
+}
+
 
   // a 65
   // d 68

@@ -77,8 +77,9 @@ class Sparks:
         self.update()
         for spark in self.particles:
             spark.draw(surf)
-            
+ 
 if __name__ == '__main__':          
+    sparks=[]           
     clock = pygame.time.Clock()
     pygame.init()
     screen = pygame.display.set_mode((500, 500))
@@ -93,7 +94,7 @@ if __name__ == '__main__':
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == KEYPRESS:
+            if event.type == KEYDOWN:
                 mx, my = pygame.mouse.get_pos()
                 sparks.append(Spark([mx, my], math.radians(random.randint(
                     0, 360)), random.randint(3, 6), (255, 255, 255), 2))
