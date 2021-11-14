@@ -93,11 +93,12 @@ class Sparks {
   }
   update() {
     let l = this.particles.length;
-    for (let i = 0; i < l; i++) {
+    for (var i = l - 1; i >= 0; i--) {
       this.particles[l - i - 1].move(1);
 
-      if (!this.particles[l - i - 1].alive) {
-        this.particles.pop(l - i - 1);
+      if (this.particles[l - i - 1].alive === false) {
+        // this.particles.splice(l - i - 1, 1);
+        this.particles.pop();
       }
     }
   }
@@ -121,35 +122,33 @@ class Sparks {
       this.particles.push(n);
     }
   }
-    draw() {
-      this.update()
+  draw() {
+    this.update();
     for (let spark of this.particles) {
       spark.draw();
     }
   }
 }
-let sparks 
+let sparks;
 
 function setup() {
   createCanvas(500, 500);
-    frameRate(60);
-    sparks = new Sparks();
+  frameRate(60);
+  sparks = new Sparks();
 }
 function draw() {
   background(0);
-    if (isPressed) {
-        
-        sparks.create_particle([mouseX, mouseY], num = 3);
-        sparks.draw();
-        
-    }
-//   for (var i = sparks.length - 1; i >= 0; i--) {
-//     sparks[i].move(1);
-//     sparks[i].draw();
-//     if (!sparks[i].alive) {
-//       sparks.pop(i);
-//     }
-//   }
+  if (isPressed) {
+    sparks.create_particle([mouseX, mouseY], (num = 3));
+  }
+  sparks.draw();
+  //   for (var i = sparks.length - 1; i >= 0; i--) {
+  //     sparks[i].move(1);
+  //     sparks[i].draw();
+  //     if (!sparks[i].alive) {
+  //       sparks.pop(i);
+  //     }
+  //   }
 }
 
 // function keyPressed() {
