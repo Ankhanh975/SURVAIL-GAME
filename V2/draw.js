@@ -21,7 +21,7 @@ class DrawPlayer
                 if this.animationNumber >= this.ANIMATIONFRAMES
                     this.animationNumber = 0
                     this.state = None
-        
+            
         if this.damageNumber >= 10
             this.damageNumber = 0
         elif this.damageNumber > 0
