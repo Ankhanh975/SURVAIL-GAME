@@ -17,21 +17,25 @@ function preload() {
 let img = [];
 let song;
 let player;
+let sparks;
 function setup() {
   createCanvas(1024, 768, WEBGL);
   frameRate(60); // Attempt to refresh at starting FPS
   rectMode(CENTER);
-  angleMode(DEGREES);
+  // angleMode(DEGREES);
   // textureWrap(REPEAT);
   // textureMode(IMAGE)
   player = new Player(img);
-  // song.play();
+  sparks = new Sparks();
 }
 function draw() {
   // background(255, 255, 255, 25);
   background(100);
   translate(-width / 2, -height / 2);
-
+  if (isPressed) {
+    sparks.create_particle([mouseX, mouseY], (num = 1));
+  }
+  sparks.draw();
   let mouse = createVector(mouseX, mouseY);
   player.update(mouse, (onController = true));
   player.drawPlayer();
@@ -39,4 +43,16 @@ function draw() {
 }
 function mouseClicked() {
   player.startPunch();
+}
+
+let isPressed = false;
+function mousePressed(event) {
+  if (event.button === 0) {
+    isPressed = true;
+  }
+}
+function mouseReleased(event) {
+  if (event.button === 0) {
+    isPressed = false;
+  }
 }

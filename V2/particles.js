@@ -28,11 +28,9 @@ class Spark {
   }
 
   point_towards(angle, rate) {
-    let rotate_sign;
     rotate_direction = ((angle - this.angle + PI * 3) % (PI * 2)) - PI;
-    try {
-      rotate_sign = abs(rotate_direction) / rotate_direction;
-    } catch {
+    let rotate_sign = abs(rotate_direction) / rotate_direction;
+    if (rotate_sign === NaN) {
       rotate_sing = 1;
     }
     if (abs(rotate_direction) < rate) {
@@ -94,11 +92,11 @@ class Sparks {
   update() {
     let l = this.particles.length;
     for (var i = l - 1; i >= 0; i--) {
-      this.particles[l - i - 1].move(1);
+      this.particles[i].move(1);
 
-      if (this.particles[l - i - 1].alive === false) {
-        // this.particles.splice(l - i - 1, 1);
-        this.particles.pop();
+      if (this.particles[i].alive === false) {
+        this.particles.splice(i, 1);
+        // this.particles.pop();
       }
     }
   }
@@ -129,68 +127,66 @@ class Sparks {
     }
   }
 }
-let sparks;
+let __main__ = false;
+if (__main__ === "__main__") {
+  let sparks;
 
-function setup() {
-  createCanvas(500, 500);
-  frameRate(60);
-  sparks = new Sparks();
-}
-function draw() {
-  background(0);
-  if (isPressed) {
-    sparks.create_particle([mouseX, mouseY], (num = 3));
+  function setup() {
+    createCanvas(500, 500);
+    frameRate(60);
+    sparks = [];
+    sparks = new Sparks();
   }
-  sparks.draw();
-  //   for (var i = sparks.length - 1; i >= 0; i--) {
-  //     sparks[i].move(1);
-  //     sparks[i].draw();
-  //     if (!sparks[i].alive) {
-  //       sparks.pop(i);
-  //     }
-  //   }
-}
+  function draw() {
+    background(0);
+    if (isPressed) {
+      sparks.create_particle([mouseX, mouseY], (num = 1));
+    }
+    sparks.draw();
+    // if (isPressed) {
+    //   sparks.push(
+    //     new Spark(
+    //       [mouseX, mouseY],
+    //       random(0, 360),
+    //       random(3, 6),
+    //       [255, 255, 255],
+    //       2
+    //     )
+    //   );
+    // }
 
-// function keyPressed() {
-//   print("keyPressed", mouseX, mouseY);
-//   sparks.push(
-//     new Spark(
-//       [mouseX, mouseY],
-//       radians(random(0, 360)),
-//       random(3, 6),
-//       [255, 255, 255],
-//       2
-//     )
-//   );
+    // for (var i = sparks.length - 1; i >= 0; i--) {
+    //   sparks[i].move(1);
+    //   sparks[i].draw();
+    //   if (sparks[i].alive===false) {
+    //     // sparks.pop(i);
+    //     sparks.splice(i, 1);
 
-//   sparks.push(
-//     new Spark(
-//       [mouseX, mouseY],
-//       radians(random(0, 360)),
-//       random(3, 6),
-//       [255, 255, 255],
-//       2
-//     )
-//   );
-
-//   sparks.push(
-//     new Spark(
-//       [mouseX, mouseY],
-//       radians(random(0, 360)),
-//       random(3, 6),
-//       [255, 255, 255],
-//       2
-//     )
-//   );
-// }
-let isPressed = false;
-function mousePressed(event) {
-  if (event.button === 0) {
-    isPressed = true;
+    //   }
+    // }
   }
-}
-function mouseReleased(event) {
-  if (event.button === 0) {
-    isPressed = false;
+
+  // function keyPressed() {
+  //   print("keyPressed", mouseX, mouseY);
+  //   sparks.push(
+  //     new Spark(
+  //       [mouseX, mouseY],
+  //       random(0, 360),
+  //       random(3, 6),
+  //       [255, 255, 255],
+  //       2
+  //     )
+  //   );
+  // }
+  let isPressed = false;
+  function mousePressed(event) {
+    if (event.button === 0) {
+      isPressed = true;
+    }
+  }
+  function mouseReleased(event) {
+    if (event.button === 0) {
+      isPressed = false;
+    }
   }
 }
