@@ -60,21 +60,21 @@ class Player {
     this.lookAt = lookAt;
     // console.log(this.pos, this.lookAt);
 
-      
     // Crop to max rotate speed
     let mouseVec = p5.Vector.sub(this.lookAt, this.pos);
     let angle = this.normal.angleBetween(mouseVec);
-    let change = min(
-      average([this.angle, angle]),
-      (-PI + average([this.angle, angle])) % (PI)
-    );
+    let change = min((this.angle - angle) / 2, -(this.angle - angle) / 2 + PI);
     // average([this.angle, angle]);
-    print("angle", angle, change);
+    print("angle", int(change * 1000));
 
-    if (change < radians(15)) {
+    if (change < radians(3  )) {
       this.angle = angle;
     } else {
-      // this.angle += radians(5);
+      if (this.angle - angle / 2 - PI > 0) {
+        this.angle += radians(3 );
+      } else {
+        this.angle -= radians(3 );
+      }
     }
     if (onController) {
       if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
