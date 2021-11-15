@@ -40,7 +40,7 @@ function setup() {
 }
 
 function draw() {
-  print("frameRate", round(frameRate()));
+  // print("frameRate", round(frameRate()));
   // translate(-width / 2, -height / 2);
   background(100);
 

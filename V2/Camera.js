@@ -3,15 +3,24 @@ class Ground {
   constructor(img) {
     this.img = img;
   }
-  draw(playerPos) {
+  draw(playerPos, radius) {
     this.size = [this.img[0].width, this.img[0].height];
     playerPos = [
       round(playerPos[0] / this.size[0]),
       round(playerPos[1] / this.size[1]),
     ];
     // print("this.size", this.size, playerPos);
-    for (let x = playerPos[0] - 3; x < playerPos[0] + 4; x++) {
-      for (let y = playerPos[1] - 3; y < playerPos[1] + 4; y++) {
+
+    for (
+      let x = playerPos[0] + radius[0][0];
+      x < playerPos[0] + radius[0][1];
+      x++
+    ) {
+      for (
+        let y = playerPos[1] + radius[1][0];
+        y < playerPos[1] + radius[1][1];
+        y++
+      ) {
         let x1 = x * this.size[0];
         let y1 = y * this.size[1];
         // img = random.choice(this.img)
@@ -22,6 +31,7 @@ class Ground {
     }
   }
 }
+
 class Camera {
   // transform world coordinates to screen coordinates
   constructor() {
@@ -38,9 +48,14 @@ class Camera {
     translate(-player.pos.x, -player.pos.y);
     this.transformed = [-player.pos.x, -player.pos.y];
   }
-  draw_background(radius = [[-3, +4], [-3 + 4]]) {
+  draw_background(
+    radius = [
+      [-3, +4],
+      [-3, +4],
+    ]
+  ) {
     // Draw background behind everything (close to player for speed)
-    this.ground.draw([-this.transformed[0], -this.transformed[1]]);
+    this.ground.draw([-this.transformed[0], -this.transformed[1]], radius);
   }
   toWorldCoords(pos = null) {
     // Transform screen coordinates to world coordinates

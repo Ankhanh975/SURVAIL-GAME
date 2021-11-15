@@ -1,22 +1,42 @@
+function average(angles) {
+  // https://www.youtube.com/watch?v=xHq4UlJiUaE
+  let x = 0;
+  let y = 0;
+  angles.forEach((n) => {
+    x += cos(n - 180);
+    y += sin(n - 180);
+  });
+  return atan2(y, x) + 180;
+}
+function average(angles) {
+  // https://www.youtube.com/watch?v=xHq4UlJiUaE
+  let x = 0;
+  let y = 0;
+  angles.forEach((n) => {
+    x += cos(n - 0);
+    y += sin(n - 0);
+  });
+  return atan2(y, x) + 0;
+}
+
 class Player {
   constructor(animation, name = "love", pos = [0, 0]) {
+    this.normal = createVector(0, -1);
+
     this.pos = createVector(...pos);
     this.lookAt = createVector(0, 0);
-    this.normal = createVector(0, -1);
     this.animation = animation;
     this.name = name;
+
     if (this.name === null) {
     }
+    this.velocity = createVector(0, 0);
+    this.angle = 0;
   }
   drawPlayer() {
-    // console.log(this.pos, this.lookAt);
-    let vec = p5.Vector.sub(this.lookAt, this.pos);
-    let angle = this.normal.angleBetween(vec);
-    // print(angle);
-
     push();
     translate(this.pos);
-    rotate(angle);
+    rotate(this.angle);
     texture(this.animation[0]);
     noStroke();
     rect(0, 0, 196, 196);
@@ -38,6 +58,24 @@ class Player {
 
   update(lookAt, onController = false) {
     this.lookAt = lookAt;
+    // console.log(this.pos, this.lookAt);
+
+      
+    // Crop to max rotate speed
+    let mouseVec = p5.Vector.sub(this.lookAt, this.pos);
+    let angle = this.normal.angleBetween(mouseVec);
+    let change = min(
+      average([this.angle, angle]),
+      (-PI + average([this.angle, angle])) % (PI)
+    );
+    // average([this.angle, angle]);
+    print("angle", angle, change);
+
+    if (change < radians(15)) {
+      this.angle = angle;
+    } else {
+      // this.angle += radians(5);
+    }
     if (onController) {
       if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
         this.pos.x -= 5;
