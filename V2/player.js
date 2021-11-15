@@ -1,10 +1,11 @@
 
 class Player {
-  constructor(animation) {
+  constructor(animation, name = "love") {
     this.pos = createVector(100, 100);
     this.lookAt = createVector(0, 0);
     this.normal = createVector(0, -1);
     this.animation = animation;
+    this.name = name;
   }
   drawPlayer() {
     // console.log(this.pos, this.lookAt);
@@ -20,7 +21,7 @@ class Player {
     rect(0, 0, 196, 196);
     pop();
   }
-  drawNameTag(name = "love") {
+  drawNameTag() {
     push();
     translate(this.pos);
     translate(0, -27);
@@ -29,7 +30,7 @@ class Player {
     textFont(myFont);
     textSize(21);
     fill(255, 255, 255);
-    text(name, 0, 0);
+    text(this.name, 0, 0);
 
     pop();
   }
