@@ -1,5 +1,5 @@
 class Player {
-  constructor(animation, name = "love", pos = [100, 100]) {
+  constructor(animation, name = "love", pos = [0, 0]) {
     this.pos = createVector(...pos);
     this.lookAt = createVector(0, 0);
     this.normal = createVector(0, -1);
@@ -27,8 +27,8 @@ class Player {
     translate(this.pos);
     translate(0, -27);
 
-    textAlign(CENTER);
     textFont(myFont);
+    textAlign(CENTER);
     textSize(21);
     fill(255, 255, 255);
     text(this.name, 0, 0);
@@ -42,13 +42,13 @@ class Player {
       if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
         this.pos.x -= 5;
       }
-        if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+      if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
         this.pos.x += 5;
       }
-        if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+      if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
         this.pos.y -= 5;
       }
-       if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+      if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
         this.pos.y += 5;
       }
     }

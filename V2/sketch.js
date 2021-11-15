@@ -17,45 +17,41 @@ function preload() {
 let img = [];
 let song;
 let player;
-let enemy = [];
 let sparks;
-let ground;
+let enemy = [];
+
+let camera;
 
 function setup() {
-  for (let element of document.getElementsByClassName("p5Canvas")) {
-    element.addEventListener("contextmenu", (e) => e.preventDefault());
-  }
-
   createCanvas(1024, 768, WEBGL);
   frameRate(60); // Attempt to refresh at starting FPS
   rectMode(CENTER);
+  textureMode(IMAGE);
   // angleMode(DEGREES);
   // textureWrap(REPEAT);
-  // textureMode(IMAGE)
 
   player = new Player(img);
+  camera = new Camera();
   sparks = new Sparks();
+
   for (let index = 0; index < 100; index++) {
     enemy.push(new Player(img, "n", [random(0, 400), random(0, 400)]));
   }
-  ground = new Ground([
-    loadImage("Resources/BackGround1.png"),
-    loadImage("Resources/BackGround2.png"),
-    loadImage("Resources/BackGround3.png"),
-    loadImage("Resources/BackGround4.png"),
-  ]);
 }
 
 function draw() {
+  print("frameRate", round(frameRate()));
+  // translate(-width / 2, -height / 2);
   background(100);
-  ground.draw([-3, -3]);
-  translate(-width / 2, -height / 2);
 
+  camera.follow(player.pos);
+  camera.draw_background();
+
+  let mouse = camera.toWorldCoords();
   if (isPressed) {
-    sparks.create_particle([mouseX, mouseY], (num = 1));
+    sparks.create_particle([mouse.x, mouse.y], (num = 1));
   }
   sparks.draw();
-  let mouse = createVector(mouseX, mouseY);
   player.update(mouse, (onController = true));
   player.drawPlayer();
   player.drawNameTag();

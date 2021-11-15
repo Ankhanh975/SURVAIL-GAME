@@ -86,6 +86,7 @@ class Spark {
 }
 
 class Sparks {
+  // Draw particles effects
   constructor() {
     this.particles = [];
   }
