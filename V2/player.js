@@ -168,7 +168,7 @@ class AIPlayer extends Player {
         toLookAt.rotate(radians(180));
         this.pos.add(toLookAt);
       }
-      if (dist > 200) {
+      if (dist > 250) {
         toLookAt.setMag(3.5);
         this.pos.add(toLookAt);
       }
@@ -179,10 +179,11 @@ class AIPlayer extends Player {
         print("dist", this.pos, a.pos);
         print("dist2", dist);
 
-        if (dist < 50) {
+        if (dist < 65) {
           let l = p5.Vector.sub(a.pos, this.pos);
           // l.mult(0.01);
-          l.setMag(0.03 / mag(l) ** 2);
+          l.setMag(0.02 / mag(l) ** 2);
+          a.pos.add(l);
           l.rotate(radians(180));
           this.pos.add(l);
         }
