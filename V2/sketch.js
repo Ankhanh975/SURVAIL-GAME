@@ -61,7 +61,7 @@ function setup() {
   sparks = new Sparks();
   player = new Player(img[5]);
 
-  for (let index = 0; index < 20; index++) {
+  for (let index = 0; index < 2; index++) {
     let pos = p5.Vector.random2D().setMag(210);
     // print(pos);
     enemy.push(new AIPlayer(img[int(random(0, 5))], [pos.x, pos.y]));
