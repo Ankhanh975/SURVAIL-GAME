@@ -45,7 +45,8 @@ function draw() {
   // print("frameRate", round(frameRate()));
   // translate(-width / 2, -height / 2);
   // background(100);
-
+  noSmooth()
+  
   camera.follow(player.pos);
   camera.draw_background();
 
