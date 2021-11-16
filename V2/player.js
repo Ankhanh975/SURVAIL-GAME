@@ -26,6 +26,7 @@ class Player {
     this.pos = createVector(...pos);
     this.lookAt = createVector(0, 0);
     this.animation = animation;
+    this.animateFrames = 0;
     this.name = name;
 
     if (this.name === null) {
@@ -35,11 +36,10 @@ class Player {
   }
   drawPlayer() {
     push();
+    noStroke();
     translate(this.pos);
     rotate(this.angle);
-    texture(this.animation[0]);
-    noStroke();
-    rect(0, 0, 196, 196);
+    image(this.animation[this.animateFrames], 0, 0);
     pop();
   }
   drawNameTag() {
@@ -57,25 +57,38 @@ class Player {
   }
 
   update(lookAt, onController = false) {
-    this.lookAt = lookAt;
-    // console.log(this.pos, this.lookAt);
+    {
+      this.lookAt = lookAt;
 
-    // Crop to max rotate speed
-    let mouseVec = p5.Vector.sub(this.lookAt, this.pos);
-    let angle = this.normal.angleBetween(mouseVec);
-    let change = min((this.angle - angle) / 2, -(this.angle - angle) / 2 + PI);
-    // average([this.angle, angle]);
-    print("angle", int(change * 1000));
+      // Crop to max rotate speed
+      let mouseVec = p5.Vector.sub(this.lookAt, this.pos);
+      let angle = this.normal.angleBetween(mouseVec);
+      if (angle !== NaN) {
+        let a = average([this.angle, angle]);
+        let change = min(abs(a - this.angle), abs(a - angle)) * 2;
+        // print(
+        //   "angle",
+        //   degrees(a - this.angle),
+        //   degrees(a - angle),
+        //   degrees(a - this.angle) -
+        //     degrees(a - angle)
+        // );
 
-    if (change < radians(3  )) {
-      this.angle = angle;
-    } else {
-      if (this.angle - angle / 2 - PI > 0) {
-        this.angle += radians(3 );
-      } else {
-        this.angle -= radians(3 );
+        if (change < radians(30)) {
+          this.angle = angle;
+        } else {
+          if (
+            degrees(angle - this.angle) < 0 &&
+            degrees(angle - this.angle) > -180
+          ) {
+            this.angle -= radians(30);
+          } else {
+            this.angle += radians(30);
+          }
+        }
       }
     }
+
     if (onController) {
       if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
         this.pos.x -= 5;
@@ -92,6 +105,19 @@ class Player {
     }
   }
   startPunch(hand = "right") {
-    print("StartPunch");
+    if (this.animateFrames !== 0) {
+      return;
+    }
+    print("startPunch", this.animateFrames, this.animation.length);
+    this.animateFrames = 1;
+    let id = setInterval(() => {
+      print("in setInterval", this.animateFrames, this.animation.length);
+      if (this.animateFrames === this.animation.length - 1) {
+        this.animateFrames = 0;
+        clearInterval(id);
+      } else {
+        this.animateFrames += 1;
+      }
+    }, 16 * 5);
   }
 }

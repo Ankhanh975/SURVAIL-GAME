@@ -24,9 +24,11 @@ let camera;
 
 function setup() {
   createCanvas(1024, 768, WEBGL);
+  frameRate(30); // Attempt to refresh at starting FPS
   frameRate(60); // Attempt to refresh at starting FPS
-  rectMode(CENTER);
-  textureMode(IMAGE);
+  imageMode(CENTER);
+  // rectMode(CENTER);
+  // textureMode(IMAGE);
   // angleMode(DEGREES);
   // textureWrap(REPEAT);
 
@@ -42,13 +44,14 @@ function setup() {
 function draw() {
   // print("frameRate", round(frameRate()));
   // translate(-width / 2, -height / 2);
-  background(100);
+  // background(100);
 
   camera.follow(player.pos);
   camera.draw_background();
 
   let mouse = camera.toWorldCoords();
   if (isPressed) {
+    player.startPunch();
     sparks.create_particle([mouse.x, mouse.y], (num = 1));
   }
   sparks.draw();
@@ -62,9 +65,7 @@ function draw() {
   //   e.drawNameTag();
   // });
 }
-function mouseClicked() {
-  player.startPunch();
-}
+function mouseClicked() {}
 
 let isPressed = false;
 function mousePressed(event) {
