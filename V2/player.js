@@ -39,8 +39,7 @@ class Player {
     this.animateFrames = 0;
     this.name = name;
     this.punchHand = "right";
-    if (this.name === null) {
-    }
+
     this.velocity = createVector(0, 0);
     this.angle = 0;
   }
@@ -64,12 +63,12 @@ class Player {
     textFont(myFont);
     textAlign(CENTER);
     textSize(21);
+    stroke(0, 0, 0);
     fill(255, 255, 255);
     text(this.name, 0, 0);
 
     pop();
   }
-
   update(lookAt, onController = false) {
     {
       this.lookAt = lookAt;
@@ -105,16 +104,16 @@ class Player {
 
     if (onController) {
       if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-        this.pos.x -= 5;
+        this.pos.x -= 7;
       }
       if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-        this.pos.x += 5;
+        this.pos.x += 7;
       }
       if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-        this.pos.y -= 5;
+        this.pos.y -= 7;
       }
       if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-        this.pos.y += 5;
+        this.pos.y += 7;
       }
     }
   }
@@ -148,11 +147,46 @@ class Player {
     // animation
   }
 }
+
 class AIPlayer extends Player {
   constructor(animation, pos = [0, 0]) {
     super(animation, "n", pos);
+    this.name = generateName.__call();
   }
-  update(lookAt) {
-    super.update(lookAt);
+
+  update(allyls, enemies) {
+
+    let lookAt, dist, toLookAt;
+    {
+      lookAt = enemies[0].pos;
+      dist = this.pos.dist(lookAt);
+      toLookAt = p5.Vector.sub(lookAt, this.pos);
+
+      super.update(lookAt);
+      if (dist < 120) {
+        toLookAt.setMag(3.5);
+        toLookAt.rotate(radians(180));
+        this.pos.add(toLookAt);
+      }
+      if (dist > 200) {
+        toLookAt.setMag(3.5);
+        this.pos.add(toLookAt);
+      }
+    }
+    {
+      allyls.forEach((a) => {
+        dist = this.pos.dist(a.pos);
+        print("dist", this.pos, a.pos);
+        print("dist2", dist);
+
+        if (dist < 50) {
+          let l = p5.Vector.sub(a.pos, this.pos);
+          // l.mult(0.01);
+          l.setMag(0.03 / mag(l) ** 2);
+          l.rotate(radians(180));
+          this.pos.add(l);
+        }
+      });
+    }
   }
 }

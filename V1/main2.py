@@ -30,7 +30,6 @@ particles = particles.Sparks()
 for x in range(25):
     entities.append(Enemy.Enemy(
         (random.uniform(-1500, 1500), random.uniform(-1500, 1500))))
-
 background = Ground()
 
 mouseInWorldCoords = pygame.math.Vector2(0, 0)

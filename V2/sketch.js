@@ -1,6 +1,7 @@
 var myFont;
 function preload() {
-  myFont = loadFont("Resources/Steps-Mono.otf");
+  // myFont = loadFont("Resources/Steps-Mono.otf");
+  myFont = loadFont("Resources/Minecraft.ttf");
 
   // song = loadSound("Resources/C418 - Beginning 2.mp3");
   // song.play();
@@ -52,22 +53,18 @@ function setup() {
         img[0][0].width,
         img[0][0].height
       );
-      print(img[1][0], img[0][0].width, img[0][0].height);
       change(img[ii + 1][i], [255, 255, 255], color);
     }
   });
 
   camera = new Camera();
   sparks = new Sparks();
-  player = new Player(img[0]);
+  player = new Player(img[5]);
 
-  for (let index = 0; index < 100; index++) {
-    enemy.push(
-      new AIPlayer(img[int(random(0, 6))], [
-        random(-400, 400),
-        random(-400, 400),
-      ])
-    );
+  for (let index = 0; index < 10; index++) {
+    let pos = p5.Vector.random2D().setMag(210);
+    // print(pos);
+    enemy.push(new AIPlayer(img[int(random(0, 5))], [pos.x, pos.y]));
   }
 }
 
@@ -100,7 +97,7 @@ function draw() {
   player.drawNameTag();
 
   enemy.forEach((e) => {
-    e.update(player.pos);
+    e.update(enemy, [player]);
     e.drawPlayer();
     e.drawNameTag();
   });
