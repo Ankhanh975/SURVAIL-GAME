@@ -175,6 +175,9 @@ class AIPlayer extends Player {
     }
     {
       allyls.forEach((a) => {
+        if (a===this) {
+          return
+        }
         dist = this.pos.dist(a.pos);
         print("dist", this.pos, a.pos);
         print("dist2", dist);
