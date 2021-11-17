@@ -61,7 +61,6 @@ class Player {
     this.circle.pos.y = this.pos.y;
   }
   drawPlayer() {
-    // TODO: moving animation
     push();
     noStroke();
     translate(this.pos);

@@ -62,7 +62,7 @@ function setup() {
   sparks = new Sparks();
   player = new Player(img[5]);
 
-  for (let index = 0; index < 2; index++) {
+  for (let index = 0; index < 20; index++) {
     let pos = p5.Vector.random2D().setMag(210 + random(0, 150));
     // print(pos);
     enemy.push(new AIPlayer(img[int(random(0, 5))], [pos.x, pos.y]));
@@ -105,7 +105,7 @@ function draw() {
         let dist = player.pos.dist(e.pos);
         if (dist < 140) {
           print("Hit enemy");
-          for (let i = 0; i < 14; i++) {
+          for (let i = 0; i < 10; i++) {
             sparks.create_particle([mouse.x, mouse.y], 1);
           }
         }
