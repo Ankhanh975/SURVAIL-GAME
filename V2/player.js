@@ -42,6 +42,23 @@ class Player {
 
     this.velocity = createVector(0, 0);
     this.angle = 0;
+
+    // physics circle for collision detection
+    this.circle = new DetectCollisions.Circle(
+      { x: this.pos.x, y: this.pos.y },
+      65/2
+    );
+    system.insert(this.circle);
+  }
+  setPos(pos) {
+    this.pos = pos;
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
+  }
+  addPos(pos) {
+    this.pos.add(pos);
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
   }
   drawPlayer() {
     // TODO: moving animation
@@ -71,9 +88,13 @@ class Player {
   }
   update(lookAt, onController = false) {
     {
+      this.pos.x = this.circle.pos.x;
+      this.pos.y = this.circle.pos.y;
+    }
+    {
       this.lookAt = lookAt;
 
-      // Crop to max rotate speed
+      // Limit to max rotate speed of radians(30) per frame
       let mouseVec = p5.Vector.sub(this.lookAt, this.pos);
       let angle = this.normal.angleBetween(mouseVec);
       if (angle !== NaN) {
@@ -105,17 +126,22 @@ class Player {
     if (onController) {
       if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
         this.pos.x -= 7;
+        this.circle.pos.x -= 7;
       }
       if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+        this.circle.pos.x += 7;
         this.pos.x += 7;
       }
       if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+        this.circle.pos.y -= 7;
         this.pos.y -= 7;
       }
       if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+        this.circle.pos.y += 7;
         this.pos.y += 7;
       }
     }
+
   }
   onPunch() {
     return this.animateFrames !== 0;
@@ -135,7 +161,7 @@ class Player {
         } else {
           this.animateFrames += 1;
         }
-      }, 16 * 5);
+      }, 16.6 * 5);
     }
     if (hand === null) {
       this.punchHand = ["left", "right"][int(random(0, 2))];
@@ -155,7 +181,6 @@ class AIPlayer extends Player {
   }
 
   update(allyls, enemies) {
-
     let lookAt, dist, toLookAt;
     {
       lookAt = enemies[0].pos;
@@ -166,31 +191,31 @@ class AIPlayer extends Player {
       if (dist < 120) {
         toLookAt.setMag(3.5);
         toLookAt.rotate(radians(180));
-        this.pos.add(toLookAt);
+        this.addPos(toLookAt);
       }
       if (dist > 250) {
         toLookAt.setMag(3.5);
-        this.pos.add(toLookAt);
+        this.addPos(toLookAt);
       }
     }
-    {
-      allyls.forEach((a) => {
-        if (a===this) {
-          return
-        }
-        dist = this.pos.dist(a.pos);
-        print("dist", this.pos, a.pos);
-        print("dist2", dist);
+    // {
+    //   allyls.forEach((a) => {
+    //     if (a === this) {
+    //       return;
+    //     }
+    //     dist = this.pos.dist(a.pos);
+    //     // print("dist", this.pos, a.pos);
+    //     // print("dist2", dist);
 
-        if (dist < 65) {
-          let l = p5.Vector.sub(a.pos, this.pos);
-          // l.mult(0.01);
-          l.setMag(0.02 / mag(l) ** 2);
-          a.pos.add(l);
-          l.rotate(radians(180));
-          this.pos.add(l);
-        }
-      });
-    }
+    //     if (dist < 65) {
+    //       let l = p5.Vector.sub(a.pos, this.pos);
+    //       // l.mult(0.01);
+    //       l.setMag(0.02 / mag(l) ** 2);
+    //       a.pos.add(l);
+    //       l.rotate(radians(180));
+    //       this.pos.add(l);
+    //     }
+    //   });
+    // }
   }
 }

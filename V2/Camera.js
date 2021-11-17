@@ -47,6 +47,7 @@ class Camera {
     // Move player to center
     translate(-player.pos.x, -player.pos.y);
     this.transformed = [-player.pos.x, -player.pos.y];
+    
   }
   draw_background(
     radius = [

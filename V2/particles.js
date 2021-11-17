@@ -104,9 +104,9 @@ class Sparks {
   create_particle(
     loc,
     num = 1,
+    color = [240, 20, 20],
     angle = null,
     speed = null,
-    color = [254, 254, 254],
     scale = 2.1
   ) {
     //  num{ number of particles to create
@@ -128,66 +128,64 @@ class Sparks {
     }
   }
 }
-let __main__ = false;
-if (__main__ === "__main__") {
-  let sparks;
 
-  function setup() {
-    createCanvas(500, 500);
-    frameRate(60);
-    sparks = [];
-    sparks = new Sparks();
-  }
-  function draw() {
-    background(0);
-    if (isPressed) {
-      sparks.create_particle([mouseX, mouseY], (num = 1));
-    }
-    sparks.draw();
-    // if (isPressed) {
-    //   sparks.push(
-    //     new Spark(
-    //       [mouseX, mouseY],
-    //       random(0, 360),
-    //       random(3, 6),
-    //       [255, 255, 255],
-    //       2
-    //     )
-    //   );
-    // }
+// let sparks;
 
-    // for (var i = sparks.length - 1; i >= 0; i--) {
-    //   sparks[i].move(1);
-    //   sparks[i].draw();
-    //   if (sparks[i].alive===false) {
-    //     // sparks.pop(i);
-    //     sparks.splice(i, 1);
+// function setup() {
+//   createCanvas(500, 500);
+//   frameRate(60);
+//   sparks = [];
+//   sparks = new Sparks();
+// }
+// function draw() {
+//   background(0);
+//   if (isPressed) {
+//     sparks.create_particle([mouseX, mouseY], (num = 1));
+//   }
+//   sparks.draw();
+//   // if (isPressed) {
+//   //   sparks.push(
+//   //     new Spark(
+//   //       [mouseX, mouseY],
+//   //       random(0, 360),
+//   //       random(3, 6),
+//   //       [255, 255, 255],
+//   //       2
+//   //     )
+//   //   );
+//   // }
 
-    //   }
-    // }
-  }
+//   // for (var i = sparks.length - 1; i >= 0; i--) {
+//   //   sparks[i].move(1);
+//   //   sparks[i].draw();
+//   //   if (sparks[i].alive===false) {
+//   //     // sparks.pop(i);
+//   //     sparks.splice(i, 1);
 
-  // function keyPressed() {
-  //   print("keyPressed", mouseX, mouseY);
-  //   sparks.push(
-  //     new Spark(
-  //       [mouseX, mouseY],
-  //       random(0, 360),
-  //       random(3, 6),
-  //       [255, 255, 255],
-  //       2
-  //     )
-  //   );
-  // }
-  let isPressed = false;
-  function mousePressed(event) {
-    if (event.button === 0) {
-      isPressed = true;
-    }
-  }
-  function mouseReleased(event) {
-    if (event.button === 0) {
-      isPressed = false;
-    }
-  }
-}
+//   //   }
+//   // }
+// }
+
+// // function keyPressed() {
+// //   print("keyPressed", mouseX, mouseY);
+// //   sparks.push(
+// //     new Spark(
+// //       [mouseX, mouseY],
+// //       random(0, 360),
+// //       random(3, 6),
+// //       [255, 255, 255],
+// //       2
+// //     )
+// //   );
+// // }
+// let isPressed = false;
+// function mousePressed(event) {
+//   if (event.button === 0) {
+//     isPressed = true;
+//   }
+// }
+// function mouseReleased(event) {
+//   if (event.button === 0) {
+//     isPressed = false;
+//   }
+// }
