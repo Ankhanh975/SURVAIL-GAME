@@ -69,6 +69,20 @@ class Player {
 
     pop();
   }
+  drawHeightBar() {
+    push();
+    translate(this.pos);
+    translate(0, -27);
+
+    textFont(myFont);
+    textAlign(CENTER);
+    textSize(21);
+    stroke(0, 0, 0);
+    fill(255, 255, 255);
+    text(this.name, 0, 0);
+
+    pop();
+  }
   update(lookAt, onController = false) {
     if (this.health < 20) {
       this.health += 0.04;
