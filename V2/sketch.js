@@ -53,14 +53,12 @@ let frameCount = 0;
 function draw() {
   frameCount++;
   translate(width / 2, height / 2);
-
   // print("frameRate", round(frameRate()));
   // background(100);
   noSmooth();
   // if (mouseX < 10) {
   //   camera.translate(min(10 - mouseX, 10)*10, 0);
   // }
-  // console.log("Translate", -mouseX + width - 10);
   // if (mouseX > width - 10) {
   //   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
   // }
@@ -76,9 +74,9 @@ function draw() {
 
   let mouse = camera.toWorldCoords();
   players.update(mouse);
-  // if (isPressed) {
-  //   sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
-  // }
+  if (isPressed2) {
+    sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
+  }
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
@@ -95,7 +93,7 @@ function draw() {
         );
 
         if (hit) {
-          print("Hit players.AIs", i);
+          // print("Hit players.AIs", i);
           e.getHit();
           if (e.health <= 0) {
             players.AIs.splice(i, 1);
@@ -109,18 +107,27 @@ function draw() {
 }
 
 let isPressed = false;
+let isPressed2 = false;
 function mousePressed(event) {
+  // console.log("mousePressed", event.button  )
   if (event.button === 0) {
     isPressed = true;
+  } else if (event.button === 2) {
+    isPressed2 = true;
   }
   return false;
 }
 function mouseReleased(event) {
+  // console.log("mouseReleased", event.button )
   if (event.button === 0) {
     isPressed = false;
+  } else if (event.button === 2) {
+    isPressed2 = false;
   }
   return false;
 }
-function mouseClicked() {
+function mouseClicked(event) {
+  // console.log("mouseClicked", event.button  )
+
   return false;
 }
