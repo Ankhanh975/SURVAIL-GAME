@@ -41,22 +41,23 @@ class Camera {
       loadImage("Resources/BackGround3.png"),
       loadImage("Resources/BackGround4.png"),
     ]);
-    this.transformed = [];
+    this.transform = [];
+    this.realTransform = []
   }
   follow(playerPos) {
     // Move player to center
     translate(-player.pos.x, -player.pos.y);
-    this.transformed = [-player.pos.x, -player.pos.y];
+    this.transform = [-player.pos.x, -player.pos.y];
     
   }
   draw_background(
     radius = [
       [-3, +4],
-      [-3, +4],
+      [-2, +3],
     ]
   ) {
     // Draw background behind everything (close to player for speed)
-    this.ground.draw([-this.transformed[0], -this.transformed[1]], radius);
+    this.ground.draw([-this.transform[0], -this.transform[1]], radius);
   }
   toWorldCoords(pos = null) {
     // Transform screen coordinates to world coordinates
@@ -68,7 +69,15 @@ class Camera {
     } else {
       [x, y] = pos;
     }
-    // console.log("xy", x, y, [x - this.transformed[0], y - this.transformed[1]]);
-    return createVector(x - this.transformed[0], y - this.transformed[1]);
+    // console.log("xy", x, y, [x - this.transform[0], y - this.transform[1]]);
+    return createVector(x - this.transform[0], y - this.transform[1]);
+  }
+  translate(x, y) {
+    // Average out the transformation over few frame
+    translate(x, y)
+    // = stack != null ? stack : [];
+  }
+  rotate(a) {
+    // Average out the transformation over few frame
   }
 }

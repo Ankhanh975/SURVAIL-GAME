@@ -21,7 +21,6 @@ let player;
 let sparks;
 let enemy = [];
 const system = new DetectCollisions.System();
-let frameCount = 0;
 let camera;
 
 function setup() {
@@ -71,11 +70,23 @@ function setup() {
 }
 
 function draw() {
-  ++frameCount;
   // print("frameRate", round(frameRate()));
   // translate(-width / 2, -height / 2);
   // background(100);
   noSmooth();
+  if (mouseX < 90) {
+    camera.translate(min(90 - mouseX, 90), 0);
+  }
+  console.log("Translate", -mouseX + width - 90);
+  if (mouseX > width - 90) {
+    camera.translate(max(-mouseX + width - 90, -90), 0);
+  }
+  if (mouseY < 90) {
+    camera.translate(0, min(90 - mouseY, 90));
+  }
+  if (mouseY > height - 90) {
+    camera.translate(0, max(-mouseY + height - 90, -90));
+  }
 
   camera.follow(player.pos);
   camera.draw_background();
@@ -84,7 +95,7 @@ function draw() {
     let b = system.response.b.pos;
     a = a.pos;
     let l = createVector(a.x - b.x, a.y - b.y);
-    console.log(overlapV);
+    // console.log(overlapV);
     // l.scale(0.0001 / l.len() ** 2);
     l.setMag(0.02 / mag(l) ** 2);
     // l.scale(1 / mal.len());
