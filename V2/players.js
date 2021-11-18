@@ -6,12 +6,12 @@ class Players {
     this.AIs = [];
     this.system = system;
 
-    for (let index = 0; index < 45; index++) {
+    for (let index = 0; index < 2; index++) {
       this.createAIPlayer();
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 45) {
+      if (this.AIs.length < 2) {
         this.createAIPlayer();
       }
     // }, 1250);

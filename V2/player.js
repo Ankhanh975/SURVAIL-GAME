@@ -63,6 +63,7 @@ class Player {
     textAlign(CENTER);
     textSize(21);
     stroke(0, 0, 0);
+    strokeWeight(1.5);
     fill(255, 255, 255);
     text(this.name, 0, 0);
 
@@ -74,13 +75,12 @@ class Player {
     translate(0, -35);
     strokeWeight(4);
 
-    stroke(200, 210, 220);
+    stroke(25, 25, 25);
     rect(0, 0, 55, 1);
 
     strokeWeight(3);
     stroke(250, 50, 25);
     rect(0, 0, 55 * (this.health / 20), 1);
-    print(55 * (this.health / 20));
     pop();
   }
 
