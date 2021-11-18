@@ -8,26 +8,7 @@ function average(angles) {
   });
   return atan2(y, x) + 0;
 }
-function change(image, pixelFrom, pixelTo) {
-  image.loadPixels();
 
-  // Replace pixelFrom with pixelTo in a image
-  for (let y = 0; y < image.height; y++) {
-    for (let x = 0; x < image.width; x++) {
-      let index = (x + y * image.width) * 4;
-      if (
-        image.pixels[index] === pixelFrom[0] &&
-        image.pixels[index + 1] === pixelFrom[1] &&
-        image.pixels[index + 2] === pixelFrom[2]
-      ) {
-        image.pixels[index] = pixelTo[0];
-        image.pixels[index + 1] = pixelTo[1];
-        image.pixels[index + 2] = pixelTo[2];
-      }
-    }
-  }
-  image.updatePixels();
-}
 
 class Player {
   constructor(animation, name = "love", pos = [0, 0]) {
