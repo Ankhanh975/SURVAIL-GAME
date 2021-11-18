@@ -1,7 +1,22 @@
 var myFont;
+let img = [
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+];
 function preload() {
   // myFont = loadFont("Resources/Steps-Mono.otf");
   myFont = loadFont("Resources/Minecraft.ttf");
+
+  img[0][0] = loadImage("Resources/Animation_0.png");
+  img[0][1] = loadImage("Resources/Animation_1.png");
+  img[0][2] = loadImage("Resources/Animation_2.png");
+  img[0][3] = loadImage("Resources/Animation_3.png");
+  img[0][4] = loadImage("Resources/Animation_4.png");
+  img[0][5] = loadImage("Resources/Animation_5.png");
 
   // song = loadSound("Resources/C418 - Beginning 2.mp3");
   // song.play();
@@ -28,7 +43,7 @@ function setup() {
   system = new DetectCollisions.System();
   camera = new Camera();
   sparks = new Sparks();
-  players = new Players(system);
+  players = new Players(system, img);
   // main player, store in players.player but player is a faster way to access
 
   player = new Player(players.img[5]);
@@ -41,19 +56,19 @@ function draw() {
   // translate(-width / 2, -height / 2);
   // background(100);
   noSmooth();
-  // if (mouseX < 90) {
-  //   camera.translate(min(90 - mouseX, 90), 0);
-  // }
-  // console.log("Translate", -mouseX + width - 90);
-  // if (mouseX > width - 90) {
-  //   camera.translate(max(-mouseX + width - 90, -90), 0);
-  // }
-  // if (mouseY < 90) {
-  //   camera.translate(0, min(90 - mouseY, 90));
-  // }
-  // if (mouseY > height - 90) {
-  //   camera.translate(0, max(-mouseY + height - 90, -90));
-  // }
+  if (mouseX < 10) {
+    camera.translate(min(10 - mouseX, 10)*10, 0);
+  }
+  console.log("Translate", -mouseX + width - 10);
+  if (mouseX > width - 10) {
+    camera.translate(max(-mouseX + width - 10, -10)*10, 0);
+  }
+  if (mouseY < 10) {
+    camera.translate(0, min(10 - mouseY, 10)*10);
+  }
+  if (mouseY > height - 10) {
+    camera.translate(0, max(-mouseY + height - 10, -10)*10);
+  }
 
   camera.follow(player.pos);
   camera.draw_background();

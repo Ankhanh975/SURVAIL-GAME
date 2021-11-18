@@ -154,11 +154,12 @@ class Player {
     // animation
 
     this.health -= 13;
-    if (this.health <= 0) {
+    if (this.health >= 0) {
       for (let i = 0; i < 4; i++) {
         sparks.create_particle([this.pos.x, this.pos.y], [200,0,0], 3.5);
       }
     } else {
+      // Dead
       for (let i = 0; i < 4; i++) {
         sparks.create_particle([this.pos.x, this.pos.y], [100, 0, 0], 3.5);
       }

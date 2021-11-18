@@ -1,13 +1,6 @@
 class Players {
-  constructor(system) {
-    this.img = [
-      [0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0],
-    ];
+  constructor(system, img) {
+    this.img = img;
     this.initAnimation();
     this.players = [];
     this.AIs = [];
@@ -24,17 +17,15 @@ class Players {
     }, 1250);
   }
   update(mouse) {
-    print(this.players[0]);
+    this.AIs.forEach((e) => {
+      e.update(this.AIs, this.players);
+      e.drawPlayer();
+      //   e.drawNameTag();
+    });
     this.players.forEach((player) => {
       player.update(mouse, true);
       player.drawPlayer();
       player.drawNameTag();
-    });
-
-    this.AIs.forEach((e) => {
-      e.update(this.AIs, this.players);
-      e.drawPlayer();
-      // e.drawNameTag();
     });
 
     this.system.update();
@@ -43,7 +34,7 @@ class Players {
       let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
       // console.log(overlapV);
       // l.scale(0.0001 / l.len() ** 2);
-      l.setMag(150 / l.mag() ** 2);
+      l.setMag(+100 / l.mag() ** 2);
       // l.scale(1 / mal.len());
       a.pos.x += l.x;
       a.pos.y += l.y;
@@ -60,12 +51,6 @@ class Players {
     this.AIs.push(new AIPlayer(this.img[int(random(0, 5))], [pos.x, pos.y]));
   }
   initAnimation() {
-    this.img[0][0] = loadImage("Resources/Animation_0.png");
-    this.img[0][1] = loadImage("Resources/Animation_1.png");
-    this.img[0][2] = loadImage("Resources/Animation_2.png");
-    this.img[0][3] = loadImage("Resources/Animation_3.png");
-    this.img[0][4] = loadImage("Resources/Animation_4.png");
-    this.img[0][5] = loadImage("Resources/Animation_5.png");
     [
       [255, 255, 0],
       [0, 0, 255],
@@ -74,8 +59,9 @@ class Players {
       [255, 0, 0],
     ].forEach((color, ii) => {
       for (let i = 0; i < this.img[0].length; i++) {
-        this.img[ii + 1].push(
-          createImage(this.img[0][0].width, this.img[0][0].height)
+        this.img[ii + 1][i] = createImage(
+          this.img[0][0].width,
+          this.img[0][0].height
         );
         this.img[ii + 1][i].copy(
           this.img[0][i],
