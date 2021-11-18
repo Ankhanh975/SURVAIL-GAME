@@ -75,17 +75,17 @@ function draw() {
   // background(100);
   noSmooth();
   if (mouseX < 90) {
-    camera.translate(min(90 - mouseX, 90), 0);
+    camera.translate(min(90 - mouseX, 90)/2, 0);
   }
   console.log("Translate", -mouseX + width - 90);
   if (mouseX > width - 90) {
-    camera.translate(max(-mouseX + width - 90, -90), 0);
+    camera.translate(max(-mouseX + width - 90, -90)/2, 0);
   }
   if (mouseY < 90) {
-    camera.translate(0, min(90 - mouseY, 90));
+    camera.translate(0, min(90 - mouseY, 90)/2);
   }
   if (mouseY > height - 90) {
-    camera.translate(0, max(-mouseY + height - 90, -90));
+    camera.translate(0, max(-mouseY + height - 90, -90)/2);
   }
 
   camera.follow(player.pos);
