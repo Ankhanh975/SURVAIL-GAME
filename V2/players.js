@@ -14,18 +14,21 @@ class Players {
       if (this.AIs.length < 45) {
         this.createAIPlayer();
       }
-    }, 1250);
+    // }, 1250);
+  }, 125);
   }
   update(mouse) {
     this.AIs.forEach((e) => {
       e.update(this.AIs, this.players);
       e.drawPlayer();
       //   e.drawNameTag();
+      e.drawHeightBar();
     });
     this.players.forEach((player) => {
       player.update(mouse, true);
       player.drawPlayer();
       player.drawNameTag();
+      // player.drawHeiaghtBar();
     });
 
     this.system.update();
@@ -34,7 +37,7 @@ class Players {
       let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
       // console.log(overlapV);
       // l.scale(0.0001 / l.len() ** 2);
-      l.setMag(+100 / l.mag() ** 2);
+      l.setMag(50 / l.mag());
       // l.scale(1 / mal.len());
       a.pos.x += l.x;
       a.pos.y += l.y;

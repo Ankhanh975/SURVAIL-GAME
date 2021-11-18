@@ -9,7 +9,6 @@ function average(angles) {
   return atan2(y, x) + 0;
 }
 
-
 class Player {
   constructor(animation, name = "love", pos = [0, 0]) {
     this.normal = createVector(0, -1);
@@ -58,7 +57,7 @@ class Player {
   drawNameTag() {
     push();
     translate(this.pos);
-    translate(0, -27);
+    translate(0, -18);
 
     textFont(myFont);
     textAlign(CENTER);
@@ -72,17 +71,19 @@ class Player {
   drawHeightBar() {
     push();
     translate(this.pos);
-    translate(0, -27);
+    translate(0, -35);
+    strokeWeight(4);
 
-    textFont(myFont);
-    textAlign(CENTER);
-    textSize(21);
-    stroke(0, 0, 0);
-    fill(255, 255, 255);
-    text(this.name, 0, 0);
+    stroke(200, 210, 220);
+    rect(0, 0, 55, 1);
 
+    strokeWeight(3);
+    stroke(250, 50, 25);
+    rect(0, 0, 55 * (this.health / 20), 1);
+    print(55 * (this.health / 20));
     pop();
   }
+
   update(lookAt, onController = false) {
     if (this.health < 20) {
       this.health += 0.04;
@@ -170,7 +171,7 @@ class Player {
     this.health -= 13;
     if (this.health >= 0) {
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle([this.pos.x, this.pos.y], [200,0,0], 3.5);
+        sparks.create_particle([this.pos.x, this.pos.y], [200, 0, 0], 3.5);
       }
     } else {
       // Dead
@@ -200,7 +201,7 @@ class AIPlayer extends Player {
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }
-      if (dist > 150) {
+      if (dist > 250) {
         toLookAt.setMag(3.5);
         this.addPos(toLookAt);
       }

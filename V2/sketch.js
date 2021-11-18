@@ -30,11 +30,11 @@ let players;
 let player;
 let system;
 function setup() {
-  createCanvas(1024, 768, WEBGL);
-  // frameRate(30); // Attempt to refresh at starting FPS
+  // createCanvas(1024, 768, WEBGL);
+  createCanvas(1024, 768);
   frameRate(60); // Attempt to refresh at starting FPS
   imageMode(CENTER);
-  // rectMode(CENTER);
+  rectMode(CENTER);
   // textureMode(IMAGE);
   // angleMode(DEGREES);
   // textureWrap(REPEAT);
@@ -52,23 +52,24 @@ function setup() {
 let frameCount = 0;
 function draw() {
   frameCount++;
+  translate(width / 2, height / 2);
+
   // print("frameRate", round(frameRate()));
-  // translate(-width / 2, -height / 2);
   // background(100);
   noSmooth();
-  if (mouseX < 10) {
-    camera.translate(min(10 - mouseX, 10)*10, 0);
-  }
-  console.log("Translate", -mouseX + width - 10);
-  if (mouseX > width - 10) {
-    camera.translate(max(-mouseX + width - 10, -10)*10, 0);
-  }
-  if (mouseY < 10) {
-    camera.translate(0, min(10 - mouseY, 10)*10);
-  }
-  if (mouseY > height - 10) {
-    camera.translate(0, max(-mouseY + height - 10, -10)*10);
-  }
+  // if (mouseX < 10) {
+  //   camera.translate(min(10 - mouseX, 10)*10, 0);
+  // }
+  // console.log("Translate", -mouseX + width - 10);
+  // if (mouseX > width - 10) {
+  //   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
+  // }
+  // if (mouseY < 10) {
+  //   camera.translate(0, min(10 - mouseY, 10)*10);
+  // }
+  // if (mouseY > height - 10) {
+  //   camera.translate(0, max(-mouseY + height - 10, -10)*10);
+  // }
 
   camera.follow(player.pos);
   camera.draw_background();
@@ -78,6 +79,7 @@ function draw() {
   // if (isPressed) {
   //   sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
   // }
+
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
@@ -87,7 +89,7 @@ function draw() {
           e.pos.y,
           player.pos.x,
           player.pos.y,
-          180,
+          1800,
           radians(0 - 90) + player.angle,
           radians(80)
         );
@@ -100,7 +102,7 @@ function draw() {
           }
         }
       });
-    }, 185);
+    }, 190);
   }
 
   sparks.draw();

@@ -46,6 +46,7 @@ class Camera {
   }
   follow(playerPos) {
     // Move player to center
+    
     translate(-player.pos.x, -player.pos.y);
     this.transform = [-player.pos.x, -player.pos.y];
     
