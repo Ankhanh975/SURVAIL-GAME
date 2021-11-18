@@ -171,10 +171,17 @@ class Player {
   }
   getHit() {
     // animation
-    for (let i = 0; i < 4; i++) {
-      sparks.create_particle([this.pos.x, this.pos.y], 1, [240, 20, 20], 3);
-    }
+
     this.health -= 13;
+    if (this.health <= 0) {
+      for (let i = 0; i < 4; i++) {
+        sparks.create_particle([this.pos.x, this.pos.y], [200,0,0], 3.5);
+      }
+    } else {
+      for (let i = 0; i < 4; i++) {
+        sparks.create_particle([this.pos.x, this.pos.y], [100, 0, 0], 3.5);
+      }
+    }
   }
 }
 
@@ -197,7 +204,7 @@ class AIPlayer extends Player {
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }
-      if (dist > 250) {
+      if (dist > 150) {
         toLookAt.setMag(3.5);
         this.addPos(toLookAt);
       }

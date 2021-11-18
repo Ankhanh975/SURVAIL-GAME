@@ -61,20 +61,23 @@ function setup() {
   sparks = new Sparks();
   player = new Player(img[5]);
 
-  for (let index = 0; index < 59; index++) {
-    let pos = p5.Vector.random2D().setMag(210 + random(0, 150));
+  for (let index = 0; index < 45; index++) {
+    let pos = p5.Vector.random2D().setMag(170 + random(0, 500));
+    pos.add(player.pos);
     // print(pos);
     enemy.push(new AIPlayer(img[int(random(0, 5))], [pos.x, pos.y]));
     // enemy.push(new AIPlayer(img[int(random(0, 5))], [0, 150]));
   }
   setInterval(function gameTick() {
-    print("gameTick");
-    if (enemy.length < 59) {
-      let pos = p5.Vector.random2D().setMag(210 + random(0, 150));
+    // print("gameTick");
+    if (enemy.length < 45) {
+      let pos = p5.Vector.random2D().setMag(170 + random(0, 500));
+      pos.add(player.pos);
 
       enemy.push(new AIPlayer(img[int(random(0, 5))], [pos.x, pos.y]));
     }
   }, 1000);
+  collideDebug(true);
 }
 let frameCount = 0;
 function draw() {
@@ -105,25 +108,32 @@ function draw() {
     let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
     // console.log(overlapV);
     // l.scale(0.0001 / l.len() ** 2);
-    l.setMag(0.02 / mag(l) ** 2);
+    l.setMag(150 / l.mag() ** 2);
     // l.scale(1 / mal.len());
     a.pos.x += l.x;
     a.pos.y += l.y;
     a.parent.pos.add(l);
     // console.log("2", a);
   });
-
   let mouse = camera.toWorldCoords();
-  if (isPressed) {
-    sparks.create_particle([mouse.x, mouse.y], 1, [240, 251, 252]);
-  }
+  // if (isPressed) {
+  //   sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
+  // }
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
       enemy.forEach((e, i) => {
-        print("forEach", i, frameCount);
-        let dist = player.pos.dist(e.pos);
-        if (dist < 140) {
+        let hit = collidePointArc(
+          e.pos.x,
+          e.pos.y,
+          player.pos.x,
+          player.pos.y,
+          180,
+          radians(0 - 90) + player.angle,
+          radians(80)
+        );
+
+        if (hit) {
           print("Hit enemy");
           e.getHit();
           if (e.health <= 0) {
@@ -151,9 +161,14 @@ function mousePressed(event) {
   if (event.button === 0) {
     isPressed = true;
   }
+  return false;
 }
 function mouseReleased(event) {
   if (event.button === 0) {
     isPressed = false;
   }
+  return false;
+}
+function mouseClicked() {
+  return false;
 }

@@ -103,23 +103,19 @@ class Sparks {
   }
   create_particle(
     loc,
-    num = 1,
     color = [240, 20, 20],
     scale = 2.1,
     speed = null,
-    angle = null,
+    angle = null
   ) {
-    //  num{ number of particles to create
-    for (let i = 0; i < num; i++) {
-      if (angle === null) {
-        angle = radians(random(0, 360));
-      }
-      if (speed === null) {
-        speed = random(3, 6);
-      }
-      let n = new Spark(loc, angle, speed, color, scale);
-      this.particles.push(n);
+    if (angle === null) {
+      angle = radians(random(0, 360));
     }
+    if (speed === null) {
+      speed = random(3, 6);
+    }
+    let n = new Spark(loc, angle, speed, color, scale);
+    this.particles.push(n);
   }
   draw() {
     this.update();
