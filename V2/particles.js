@@ -105,9 +105,9 @@ class Sparks {
     loc,
     num = 1,
     color = [240, 20, 20],
-    angle = null,
+    scale = 2.1,
     speed = null,
-    scale = 2.1
+    angle = null,
   ) {
     //  num{ number of particles to create
     for (let i = 0; i < num; i++) {

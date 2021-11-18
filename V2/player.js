@@ -34,20 +34,23 @@ class Player {
     this.normal = createVector(0, -1);
 
     this.pos = createVector(...pos);
+    this.velocity = createVector(0, 0);
+    this.angle = 0;
+
     this.lookAt = createVector(0, 0);
     this.animation = animation;
     this.animateFrames = 0;
+
     this.name = name;
     this.punchHand = "right";
-
-    this.velocity = createVector(0, 0);
-    this.angle = 0;
+    this.health = 20;
 
     // physics circle for collision detection
     this.circle = new DetectCollisions.Circle(
       { x: this.pos.x, y: this.pos.y },
-      65/2
+      65 / 2
     );
+    this.circle.parent = this;
     system.insert(this.circle);
   }
   setPos(pos) {
@@ -86,9 +89,8 @@ class Player {
     pop();
   }
   update(lookAt, onController = false) {
-    {
-      this.pos.x = this.circle.pos.x;
-      this.pos.y = this.circle.pos.y;
+    if (this.health < 20) {
+      this.health += 0.04;
     }
     {
       this.lookAt = lookAt;
@@ -107,16 +109,16 @@ class Player {
         //     degrees(a - angle)
         // );
 
-        if (change < radians(30)) {
+        if (change < radians(40)) {
           this.angle = angle;
         } else {
           if (
             degrees(angle - this.angle) < 0 &&
             degrees(angle - this.angle) > -180
           ) {
-            this.angle -= radians(30);
+            this.angle -= radians(40);
           } else {
-            this.angle += radians(30);
+            this.angle += radians(40);
           }
         }
       }
@@ -140,7 +142,6 @@ class Player {
         this.pos.y += 7;
       }
     }
-
   }
   onPunch() {
     return this.animateFrames !== 0;
@@ -170,6 +171,10 @@ class Player {
   }
   getHit() {
     // animation
+    for (let i = 0; i < 4; i++) {
+      sparks.create_particle([this.pos.x, this.pos.y], 1, [240, 20, 20], 3);
+    }
+    this.health -= 13;
   }
 }
 

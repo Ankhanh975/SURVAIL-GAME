@@ -61,46 +61,55 @@ function setup() {
   sparks = new Sparks();
   player = new Player(img[5]);
 
-  for (let index = 0; index < 20; index++) {
+  for (let index = 0; index < 59; index++) {
     let pos = p5.Vector.random2D().setMag(210 + random(0, 150));
     // print(pos);
     enemy.push(new AIPlayer(img[int(random(0, 5))], [pos.x, pos.y]));
     // enemy.push(new AIPlayer(img[int(random(0, 5))], [0, 150]));
   }
-}
+  setInterval(function gameTick() {
+    print("gameTick");
+    if (enemy.length < 59) {
+      let pos = p5.Vector.random2D().setMag(210 + random(0, 150));
 
+      enemy.push(new AIPlayer(img[int(random(0, 5))], [pos.x, pos.y]));
+    }
+  }, 1000);
+}
+let frameCount = 0;
 function draw() {
+  frameCount++;
   // print("frameRate", round(frameRate()));
   // translate(-width / 2, -height / 2);
   // background(100);
   noSmooth();
-  if (mouseX < 90) {
-    camera.translate(min(90 - mouseX, 90)/2, 0);
-  }
-  console.log("Translate", -mouseX + width - 90);
-  if (mouseX > width - 90) {
-    camera.translate(max(-mouseX + width - 90, -90)/2, 0);
-  }
-  if (mouseY < 90) {
-    camera.translate(0, min(90 - mouseY, 90)/2);
-  }
-  if (mouseY > height - 90) {
-    camera.translate(0, max(-mouseY + height - 90, -90)/2);
-  }
+  // if (mouseX < 90) {
+  //   camera.translate(min(90 - mouseX, 90), 0);
+  // }
+  // console.log("Translate", -mouseX + width - 90);
+  // if (mouseX > width - 90) {
+  //   camera.translate(max(-mouseX + width - 90, -90), 0);
+  // }
+  // if (mouseY < 90) {
+  //   camera.translate(0, min(90 - mouseY, 90));
+  // }
+  // if (mouseY > height - 90) {
+  //   camera.translate(0, max(-mouseY + height - 90, -90));
+  // }
 
   camera.follow(player.pos);
   camera.draw_background();
   system.update();
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b.pos;
-    a = a.pos;
-    let l = createVector(a.x - b.x, a.y - b.y);
+    let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
     // console.log(overlapV);
     // l.scale(0.0001 / l.len() ** 2);
     l.setMag(0.02 / mag(l) ** 2);
     // l.scale(1 / mal.len());
-    a.x += l.x;
-    a.y += l.y;
+    a.pos.x += l.x;
+    a.pos.y += l.y;
+    a.parent.pos.add(l);
     // console.log("2", a);
   });
 
@@ -108,16 +117,17 @@ function draw() {
   if (isPressed) {
     sparks.create_particle([mouse.x, mouse.y], 1, [240, 251, 252]);
   }
-
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
-      enemy.forEach((e) => {
+      enemy.forEach((e, i) => {
+        print("forEach", i, frameCount);
         let dist = player.pos.dist(e.pos);
         if (dist < 140) {
           print("Hit enemy");
-          for (let i = 0; i < 10; i++) {
-            sparks.create_particle([mouse.x, mouse.y], 1);
+          e.getHit();
+          if (e.health <= 0) {
+            enemy.splice(i, 1);
           }
         }
       });
@@ -147,20 +157,3 @@ function mouseReleased(event) {
     isPressed = false;
   }
 }
-
-// function preload() {
-//   img = loadImage("Resources/Animation_0.png");
-// }
-// let img, img2;
-
-// function setup() {
-//   createCanvas(400, 400);
-//   background(100);
-//   img2 = createImage(img.width, img.height);
-//   img2.copy(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-
-//   change(img2, [255, 255, 255], [255, 255, 0]);
-
-//   image(img, 0, 0);
-//   image(img2, 100, 100);
-// }
