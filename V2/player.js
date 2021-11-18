@@ -98,6 +98,7 @@ class Player {
         let a = average([this.angle, angle]);
         let change = min(abs(a - this.angle), abs(a - angle)) * 2;
         // print(
+        
         //   "angle",
         //   degrees(a - this.angle),
         //   degrees(a - angle),

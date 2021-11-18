@@ -29,6 +29,9 @@ let camera;
 let players;
 let player;
 let system;
+let obstacles = [];
+let frameCount = 0;
+
 function setup() {
   // createCanvas(1024, 768, WEBGL);
   createCanvas(1024, 768);
@@ -45,11 +48,15 @@ function setup() {
   sparks = new Sparks();
   players = new Players(system, img);
   // main player, store in players.player but player is a faster way to access
-
+  let id3 = setInterval(() => {
+    obstacles.push(new Obstacle([random(-200, 200), random(-200, 200)]));
+  }, 150);
+  setTimeout(() => {
+    clearInterval(id3);
+  }, 3000);
   player = new Player(players.img[5]);
   players.players.push(player);
 }
-let frameCount = 0;
 function draw() {
   frameCount++;
   translate(width / 2, height / 2);
@@ -103,6 +110,22 @@ function draw() {
     }, 190);
   }
 
+  system.update();
+  system.checkAll(({ a, overlapV }) => {
+    let b = system.response.b.pos;
+    let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
+    // console.log(overlapV);
+    // l.scale(0.0001 / l.len() ** 2);
+    l.setMag(50 / (l.mag() - 10));
+    // l.scale(1 / mal.len());
+    a.pos.x += l.x;
+    a.pos.y += l.y;
+    a.parent.pos.add(l);
+    // console.log("2", a);
+  });
+  obstacles.forEach((obstacle) => {
+    obstacle.draw();
+  });
   sparks.draw();
 }
 

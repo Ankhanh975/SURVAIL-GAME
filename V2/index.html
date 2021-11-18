@@ -19,6 +19,7 @@
   <script src="Camera.js"></script>
 
   <script src="players.js"></script>
+  <script src="obstacles.js"></script>
   <script src="player.js"></script>
   <script src="particles.js"></script>
   <script src="generate.js"></script>
@@ -148,18 +149,18 @@
     // https://stackoverflow.com/questions/27321672/listen-for-all-events-in-javascript/27322253
     // let P5canvas = document.getElementById(".canvas")
     let P5canvas = window
-    Object.keys(P5canvas).forEach(key => {
-      // console.log("key", key)
-      if (/(key)/.test(key)) {
-        console.log("key", key)
-        // if (!/(key|mouse)/.test(key)) {
-        window.addEventListener(key.slice(2), event => {
-          // console.log("h", event, key.slice(2));
-          event.preventDefault()
-        });
-      }
-      document.addEventListener('contextmenu', event => event.preventDefault());
-    });
+    // Object.keys(P5canvas).forEach(key => {
+    //   // console.log("key", key)
+    //   if (/(key)/.test(key)) {
+    //     console.log("key", key)
+    //     // if (!/(key|mouse)/.test(key)) {
+    //     window.addEventListener(key.slice(2), event => {
+    //       // console.log("h", event, key.slice(2));
+    //       event.preventDefault()
+    //     });
+    //   }
+    // });
+    document.addEventListener('contextmenu', event => event.preventDefault());
 
   </script>
 </body>

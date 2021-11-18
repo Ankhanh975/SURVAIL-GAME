@@ -6,16 +6,15 @@ class Players {
     this.AIs = [];
     this.system = system;
 
-    for (let index = 0; index < 2; index++) {
+    for (let index = 0; index < 20; index++) {
       this.createAIPlayer();
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 2) {
+      if (this.AIs.length < 20) {
         this.createAIPlayer();
       }
-    // }, 1250);
-  }, 125);
+      }, 1250);
   }
   update(mouse) {
     this.AIs.forEach((e) => {
@@ -31,19 +30,6 @@ class Players {
       // player.drawHeiaghtBar();
     });
 
-    this.system.update();
-    this.system.checkAll(({ a, overlapV }) => {
-      let b = this.system.response.b.pos;
-      let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
-      // console.log(overlapV);
-      // l.scale(0.0001 / l.len() ** 2);
-      l.setMag(50 / l.mag());
-      // l.scale(1 / mal.len());
-      a.pos.x += l.x;
-      a.pos.y += l.y;
-      a.parent.pos.add(l);
-      // console.log("2", a);
-    });
   }
   createAIPlayer() {
     let pos = p5.Vector.random2D().setMag(170 + random(0, 500));
