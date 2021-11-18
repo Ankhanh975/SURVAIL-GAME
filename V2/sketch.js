@@ -46,16 +46,16 @@ function setup() {
   system = new DetectCollisions.System();
   camera = new Camera();
   sparks = new Sparks();
-  players = new Players(system, img);
   // main player, store in players.player but player is a faster way to access
-  let id3 = setInterval(() => {
-    obstacles.push(new Obstacle([random(-200, 200), random(-200, 200)]));
-  }, 150);
-  setTimeout(() => {
-    clearInterval(id3);
-  }, 3000);
+  players = new Players(system, img);
   player = new Player(players.img[5]);
   players.players.push(player);
+  // let id3 = setInterval(() => {
+  //   obstacles.push(new Obstacle([random(-200, 200), random(-200, 200)]));
+  // }, 150);
+  // setTimeout(() => {
+  //   clearInterval(id3);
+  // }, 3000);
 }
 function draw() {
   frameCount++;
@@ -116,7 +116,9 @@ function draw() {
     let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
     // console.log(overlapV);
     // l.scale(0.0001 / l.len() ** 2);
-    l.setMag(50 / (l.mag() - 10));
+    let newMag = 110 / max(l.mag() - 35, 7) ** 2;
+    l.setMag(newMag);
+
     // l.scale(1 / mal.len());
     a.pos.x += l.x;
     a.pos.y += l.y;
