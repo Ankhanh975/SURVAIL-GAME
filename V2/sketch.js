@@ -84,46 +84,40 @@ function draw() {
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
-    players.AIs.concat(obstacles.obstacles).forEach((e, i) => {
-      e.getHit();
-      if (e.health < 0) {
-        players.AIs.splice(i, 1);
-      }
-    });
-    // setTimeout(() => {
-    //   players.AIs.concat(obstacles.obstacles).forEach((e, i) => {
-    //     let hit = collidePointArc(
-    //       e.pos.x,
-    //       e.pos.y,
-    //       player.pos.x,
-    //       player.pos.y,
-    //       250,
-    //       radians(0 - 90) + player.angle,
-    //       radians(80)
-    //     );
+    setTimeout(() => {
+      players.AIs.concat(obstacles.obstacles).forEach((e, i) => {
+        let hit = collidePointArc(
+          e.pos.x,
+          e.pos.y,
+          player.pos.x,
+          player.pos.y,
+          250,
+          radians(0 - 90) + player.angle,
+          radians(80)
+        );
 
-    //     if (hit||true) {
-    //       // print("Hit players.AIs", i);
-    //       e.getHit();
-    //       if (e.health < 0) {
-    //         players.AIs.splice(i, 1);
-    //       } else {
-    //         let id2 = setInterval(() => {
-    //           let l = p5.Vector.sub(player.pos, e.pos);
-    //           l.setMag(-max(18888 / l.mag(), 12));
+        if (hit) {
+          // print("Hit players.AIs", i);
+          e.getHit();
+          if (e.health < 0) {
+            players.AIs.splice(i, 1);
+          } else {
+            let id2 = setInterval(() => {
+              let l = p5.Vector.sub(player.pos, e.pos);
+              l.setMag(-max(18888 / l.mag(), 12));
 
-    //           // l.scale(1 / mal.len());
-    //           e.circle.pos.x += l.x;
-    //           e.circle.pos.y += l.y;
-    //           e.pos.add(l);
-    //         }, 16.6);
-    //         setTimeout(() => {
-    //           clearInterval(id2);
-    //         }, 16.6 * 2);
-    //       }
-    //     }
-    //   });
-    // }, 190);
+              // l.scale(1 / mal.len());
+              e.circle.pos.x += l.x;
+              e.circle.pos.y += l.y;
+              e.pos.add(l);
+            }, 16.6);
+            setTimeout(() => {
+              clearInterval(id2);
+            }, 16.6 * 2);
+          }
+        }
+      });
+    }, 190);
   }
   // Should be in this exact order
   players.update(mouse);
