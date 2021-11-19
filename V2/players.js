@@ -6,31 +6,36 @@ class Players {
     this.AIs = [];
     this.system = system;
 
-    for (let index = 0; index < 40; index++) {
+    for (let index = 0; index < 0; index++) {
       this.createAIPlayer();
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 40) {
+      if (this.AIs.length < 0) {
         this.createAIPlayer();
       }
       // }, 1250);
     }, 120);
   }
-  draw(mouse) {
+  update(mouse) {
     this.AIs.forEach((e) => {
       e.update(this.AIs, this.players);
+    });
+    this.players.forEach((player) => {
+      player.update(mouse, true);
+    });
+  }
+  draw() {
+    this.AIs.forEach((e) => {
       e.drawPlayer();
       //   e.drawNameTag();
       e.drawHeightBar();
     });
     this.players.forEach((player) => {
-      player.update(mouse, true);
       player.drawPlayer();
       player.drawNameTag();
       // player.drawHeiaghtBar();
     });
-
   }
   createAIPlayer() {
     let pos = p5.Vector.random2D().setMag(random(65, 75));

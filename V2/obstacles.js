@@ -25,6 +25,7 @@ class Obstacle {
     pop();
   }
   update() {}
+  getHit() {}
 }
 class Obstacles {
   constructor() {
@@ -55,11 +56,11 @@ class Obstacles {
     this.obstacles.push(ob);
     this.system.insert(ob.circle);
     system.insert(ob.circle);
-    setTimeout(() => {
-      // Remove the obstacle from the world
-      let x = this.obstacles.shift();
-      system.remove(x);
-      this.system.remove(x);
-    }, 2 * 1000);
+    // setTimeout(() => {
+    //   // Remove the obstacle from the world
+    //   let x = this.obstacles.shift();
+    //   system.remove(x);
+    //   this.system.remove(x);
+    // }, 2 * 1000);
   }
 }

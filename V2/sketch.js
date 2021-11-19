@@ -77,7 +77,7 @@ function draw() {
   let mouse = camera.toWorldCoords();
   if (isPressed2) {
     sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
-    if (frameCount % 2 === 0) {
+    if (frameCount % 3 === 0) {
       obstacles.createObstacle(mouse);
     }
   }
@@ -85,7 +85,7 @@ function draw() {
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
-      players.AIs.forEach((e, i) => {
+      players.AIs.concat(obstacles.obstacles).forEach((e, i) => {
         let hit = collidePointArc(
           e.pos.x,
           e.pos.y,
@@ -99,12 +99,12 @@ function draw() {
         if (hit) {
           // print("Hit players.AIs", i);
           e.getHit();
-          if (e.health <= 0) {
+          if (e.health < 0) {
             players.AIs.splice(i, 1);
           } else {
             let id2 = setInterval(() => {
               let l = p5.Vector.sub(player.pos, e.pos);
-              l.setMag(-20000 / l.mag());
+              l.setMag(-max(18888 / l.mag(), 15));
 
               // l.scale(1 / mal.len());
               e.circle.pos.x += l.x;
@@ -121,33 +121,39 @@ function draw() {
   }
 
   system.update();
+  obstacles.update();
+  players.update(mouse);
+
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b;
     let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
     if (a.parent instanceof Player && b.parent instanceof Player) {
       // console.log(overlapV);
-      let newMag = 110 / max(l.mag() - 38, 7) ** 2;
+      let newMag = 110 / max(l.mag() - 35, 7) ** 2;
       l.setMag(newMag);
       // l.setMag(50 / l.mag());
 
-      a.pos.x += l.x;
-      a.pos.y += l.y;
-      a.parent.pos.add(l);
+      a.parent.addPos(l);
     } else if (a.parent instanceof Player && b.parent instanceof Obstacle) {
-      // console.log(overlapV);
+      console.log(
+        a.parent.pos.x,
+        a.parent.pos.y,
+        a.parent.lastPos.x,
+        a.parent.lastPos.y
+      );
+      // // console.log(overlapV);
+
+      // a.parent.addPos(l);
+      a.parent.setPos(a.parent.lastPos);
       let newMag = 200 / max(l.mag() - 35, 7) ** 2;
       l.setMag(newMag);
-      // l.setMag(50 / l.mag());
+      a.parent.addPos(l);
 
-      a.pos.x += l.x;
-      a.pos.y += l.y;
-      a.parent.pos.add(l);
+      // l.setMag(50 / l.mag());
     }
   });
-  // system.separate();
-  obstacles.update();
-  players.draw(mouse);
 
+  players.draw();
   obstacles.draw();
   sparks.draw();
 }

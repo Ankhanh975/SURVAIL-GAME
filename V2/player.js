@@ -14,6 +14,7 @@ class Player {
     this.normal = createVector(0, -1);
 
     this.pos = createVector(...pos);
+    this.lastPos = createVector(0, 0);
     this.velocity = createVector(0, 0);
     this.angle = 0;
 
@@ -28,7 +29,7 @@ class Player {
     // physics circle for collision detection
     this.circle = new DetectCollisions.Circle(
       { x: this.pos.x, y: this.pos.y },
-      72 / 2
+      65 / 2
     );
     this.circle.parent = this;
     system.insert(this.circle);
@@ -88,10 +89,7 @@ class Player {
     if (this.health < 20) {
       this.health += 0.04;
     }
-    {
-      this.pos.x = this.circle.pos.x;
-      this.pos.y = this.circle.pos.y;
-    }
+
     {
       this.lookAt = lookAt;
 
@@ -142,6 +140,11 @@ class Player {
         this.circle.pos.y += 7;
         this.pos.y += 7;
       }
+    }
+    {
+      this.pos.x = this.circle.pos.x;
+      this.pos.y = this.circle.pos.y;
+      this.lastPos = this.pos;
     }
   }
   onPunch() {
