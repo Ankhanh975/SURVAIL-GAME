@@ -28,7 +28,7 @@ class Player {
     // physics circle for collision detection
     this.circle = new DetectCollisions.Circle(
       { x: this.pos.x, y: this.pos.y },
-      65 / 2
+      72 / 2
     );
     this.circle.parent = this;
     system.insert(this.circle);
