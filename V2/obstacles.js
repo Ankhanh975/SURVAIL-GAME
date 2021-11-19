@@ -11,19 +11,13 @@ class Obstacle {
     // this.circle = new DetectCollisions.Box(
     //   { x: this.pos.x, y: this.pos.y }
     // );
-    this.circle = new DetectCollisions.Box(
-      { x: this.pos.x, y: this.pos.y },
-      50,
-      50
-    );
+    this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 50, 50);
     this.circle.parent = this;
-    system.insert(this.circle);
   }
   draw() {
     push();
     strokeWeight(1.5);
-    translate(this.pos);
-    translate(this.pos);
+    translate(this.circle.pos.x, this.circle.pos.y);
     rotate(this.angle);
     stroke(0, 0, 0);
     fill(220, 220, 10, 200);
@@ -40,37 +34,32 @@ class Obstacles {
   }
   update() {
     this.system.update();
-    this.system.checkAll(({ a, overlapV }) => {
-      let b = this.system.response.b;
-      let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
-
-      let newMag = 2 / max(l.mag(), 7) ** 2;
-      // l.setMag(newMag);
-      l.setMag(1);
-      // l.setMag(max(50 / l.mag(), 50));
-
-      a.pos.x += l.x;
-      a.pos.y += l.y;
-      a.parent.pos.add(l);
-    });
+    this.system.separate();
   }
   draw() {
     this.obstacles.forEach((obstacle) => {
       obstacle.draw();
     });
   }
+
   createObstacle(pos, angle = 0) {
-    if (this.lastCreate === pos) {
-      return;
+    if (this.lastCreate) {
+      if (this.lastCreate.x === pos.x && this.lastCreate.y === pos.y) {
+        return;
+      }
     }
+    // console.log("new", this.lastCreate, pos, this.lastCreate == pos);
+
     this.lastCreate = pos;
     let ob = new Obstacle(pos, angle);
     this.obstacles.push(ob);
     this.system.insert(ob.circle);
-    console.log(this.system, ob, ob.circle);
+    system.insert(ob.circle);
     // setTimeout(() => {
     //   // Remove the obstacle from the world
-    //   this.obstacles.shift();
-    // }, 10 * 1000);
+    //   let x = this.obstacles.shift();
+    //   system.remove(x);
+    //   this.system.remove(x);
+    // }, 2 * 1000);
   }
 }

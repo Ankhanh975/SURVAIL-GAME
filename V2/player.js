@@ -89,6 +89,10 @@ class Player {
       this.health += 0.04;
     }
     {
+      this.pos.x = this.circle.pos.x;
+      this.pos.y = this.circle.pos.y;
+    }
+    {
       this.lookAt = lookAt;
 
       // Limit to max rotate speed of radians(30) per frame

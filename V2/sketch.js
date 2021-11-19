@@ -54,7 +54,7 @@ function setup() {
 }
 function draw() {
   frameCount++;
-  // translate(width / 2, height / 2);
+  translate(width / 2, height / 2);
   // print("frameRate", round(frameRate()));
   // background(100);
   noSmooth();
@@ -75,7 +75,6 @@ function draw() {
   camera.draw_background();
 
   let mouse = camera.toWorldCoords();
-  players.update(mouse);
   if (isPressed2) {
     sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
     if (frameCount % 2 === 0) {
@@ -144,10 +143,11 @@ function draw() {
       a.pos.y += l.y;
       a.parent.pos.add(l);
     }
-  }); 
-
-
+  });
+  // system.separate();
   obstacles.update();
+  players.draw(mouse);
+
   obstacles.draw();
   sparks.draw();
 }

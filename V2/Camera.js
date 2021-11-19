@@ -41,12 +41,12 @@ class Camera {
       loadImage("Resources/BackGround3.png"),
       loadImage("Resources/BackGround4.png"),
     ]);
-    this.transform = [0,0];
+    this.transform = [];
     this.realTransform = []
   }
   follow(playerPos) {
     // Move player to center
-    translate(width / 2, height / 2);
+    
     translate(-player.pos.x, -player.pos.y);
     this.transform = [-player.pos.x, -player.pos.y];
     
