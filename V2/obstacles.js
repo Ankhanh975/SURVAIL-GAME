@@ -11,7 +11,7 @@ class Obstacle {
     // this.circle = new DetectCollisions.Box(
     //   { x: this.pos.x, y: this.pos.y }
     // );
-    this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 50, 50);
+    this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 52, 52);
     this.circle.parent = this;
   }
   draw() {
@@ -21,7 +21,9 @@ class Obstacle {
     rotate(this.angle);
     stroke(0, 0, 0);
     fill(220, 220, 10, 200);
-    rect(0, 0, 55, 55, 3.5);
+    translate(+52 / 2, +52 / 2);
+    // Draw rect in corner
+    rect(0, 0, 52, 52, 3.5);
     pop();
   }
   update() {}

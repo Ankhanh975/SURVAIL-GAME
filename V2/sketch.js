@@ -104,7 +104,7 @@ function draw() {
           } else {
             let id2 = setInterval(() => {
               let l = p5.Vector.sub(player.pos, e.pos);
-              l.setMag(-max(18888 / l.mag(), 15));
+              l.setMag(-max(18888 / l.mag(), 12));
 
               // l.scale(1 / mal.len());
               e.circle.pos.x += l.x;
@@ -119,10 +119,10 @@ function draw() {
       });
     }, 190);
   }
-
+  // Should be in this exact order
+  players.update(mouse);
   system.update();
   obstacles.update();
-  players.update(mouse);
 
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b;
@@ -135,24 +135,14 @@ function draw() {
 
       a.parent.addPos(l);
     } else if (a.parent instanceof Player && b.parent instanceof Obstacle) {
-      console.log(
-        a.parent.pos.x,
-        a.parent.pos.y,
-        a.parent.lastPos.x,
-        a.parent.lastPos.y
-      );
-      // // console.log(overlapV);
-
-      // a.parent.addPos(l);
-      a.parent.setPos(a.parent.lastPos);
-      let newMag = 200 / max(l.mag() - 35, 7) ** 2;
-      l.setMag(newMag);
-      a.parent.addPos(l);
-
-      // l.setMag(50 / l.mag());
+      // Player inside a obstacle
+      a.parent.setPos(a.parent.lastPos.copy());
+      // l.setMag(-.1);
+      // b.parent.circle.pos.x += l.x;
+      // b.parent.circle.pos.y += l.y;
+      // b.parent.pos.add(l);
     }
   });
-
   players.draw();
   obstacles.draw();
   sparks.draw();

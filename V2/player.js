@@ -89,7 +89,11 @@ class Player {
     if (this.health < 20) {
       this.health += 0.04;
     }
-
+    {
+      this.pos.x = this.circle.pos.x;
+      this.pos.y = this.circle.pos.y;
+      this.lastPos = this.pos.copy();
+    }
     {
       this.lookAt = lookAt;
 
@@ -141,11 +145,7 @@ class Player {
         this.pos.y += 7;
       }
     }
-    {
-      this.pos.x = this.circle.pos.x;
-      this.pos.y = this.circle.pos.y;
-      this.lastPos = this.pos;
-    }
+
   }
   onPunch() {
     return this.animateFrames !== 0;
