@@ -104,6 +104,19 @@ function draw() {
           e.getHit();
           if (e.health <= 0) {
             players.AIs.splice(i, 1);
+          } else {
+              let id2 = setInterval(() => {
+                let l = p5.Vector.sub(player.pos, e.pos);
+                l.setMag(-20000 / l.mag());
+
+                // l.scale(1 / mal.len());
+                e.circle.pos.x += l.x;
+                e.circle.pos.y += l.y;
+                e.pos.add(l);
+              }, 16.6);
+              setTimeout(() => {
+                clearInterval(id2);
+              }, 16.6 * 2);
           }
         }
       });

@@ -14,7 +14,8 @@ class Players {
       if (this.AIs.length < 70) {
         this.createAIPlayer();
       }
-      }, 1250);
+      // }, 1250);
+    }, 120);
   }
   update(mouse) {
     this.AIs.forEach((e) => {
@@ -34,7 +35,8 @@ class Players {
   createAIPlayer() {
     let pos = p5.Vector.random2D().setMag(170 + random(0, 500));
     if (this.players[0]) {
-      pos.add(this.players[0].pos);
+      // pos.add(this.players[0].pos);
+      pos.add(this.AIs[0].pos);
     }
 
     this.AIs.push(new AIPlayer(this.img[int(random(0, 5))], [pos.x, pos.y]));
