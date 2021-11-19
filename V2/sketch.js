@@ -29,7 +29,7 @@ let camera;
 let players;
 let player;
 let system;
-let obstacles = [];
+let obstacles;
 let frameCount = 0;
 
 function setup() {
@@ -49,17 +49,12 @@ function setup() {
   // main player, store in players.player but player is a faster way to access
   players = new Players(system, img);
   player = new Player(players.img[5]);
+  obstacles = new Obstacles();
   players.players.push(player);
-  // let id3 = setInterval(() => {
-  //   obstacles.push(new Obstacle([random(-200, 200), random(-200, 200)]));
-  // }, 150);
-  // setTimeout(() => {
-  //   clearInterval(id3);
-  // }, 3000);
 }
 function draw() {
   frameCount++;
-  translate(width / 2, height / 2);
+  // translate(width / 2, height / 2);
   // print("frameRate", round(frameRate()));
   // background(100);
   noSmooth();
@@ -83,6 +78,9 @@ function draw() {
   players.update(mouse);
   if (isPressed2) {
     sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
+    if (frameCount % 2 === 0) {
+      obstacles.createObstacle(mouse);
+    }
   }
 
   if (isPressed && !player.onPunch()) {
@@ -94,7 +92,7 @@ function draw() {
           e.pos.y,
           player.pos.x,
           player.pos.y,
-          1800,
+          250,
           radians(0 - 90) + player.angle,
           radians(80)
         );
@@ -105,18 +103,18 @@ function draw() {
           if (e.health <= 0) {
             players.AIs.splice(i, 1);
           } else {
-              let id2 = setInterval(() => {
-                let l = p5.Vector.sub(player.pos, e.pos);
-                l.setMag(-20000 / l.mag());
+            let id2 = setInterval(() => {
+              let l = p5.Vector.sub(player.pos, e.pos);
+              l.setMag(-20000 / l.mag());
 
-                // l.scale(1 / mal.len());
-                e.circle.pos.x += l.x;
-                e.circle.pos.y += l.y;
-                e.pos.add(l);
-              }, 16.6);
-              setTimeout(() => {
-                clearInterval(id2);
-              }, 16.6 * 2);
+              // l.scale(1 / mal.len());
+              e.circle.pos.x += l.x;
+              e.circle.pos.y += l.y;
+              e.pos.add(l);
+            }, 16.6);
+            setTimeout(() => {
+              clearInterval(id2);
+            }, 16.6 * 2);
           }
         }
       });
@@ -125,22 +123,32 @@ function draw() {
 
   system.update();
   system.checkAll(({ a, overlapV }) => {
-    let b = system.response.b.pos;
-    let l = createVector(a.pos.x - b.x, a.pos.y - b.y);
-    // console.log(overlapV);
-    // l.scale(0.0001 / l.len() ** 2);
-    let newMag = 110 / max(l.mag() - 35, 7) ** 2;
-    l.setMag(newMag);
+    let b = system.response.b;
+    let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+    if (a.parent instanceof Player && b.parent instanceof Player) {
+      // console.log(overlapV);
+      let newMag = 110 / max(l.mag() - 35, 7) ** 2;
+      l.setMag(newMag);
+      // l.setMag(50 / l.mag());
 
-    // l.scale(1 / mal.len());
-    a.pos.x += l.x;
-    a.pos.y += l.y;
-    a.parent.pos.add(l);
-    // console.log("2", a);
-  });
-  obstacles.forEach((obstacle) => {
-    obstacle.draw();
-  });
+      a.pos.x += l.x;
+      a.pos.y += l.y;
+      a.parent.pos.add(l);
+    } else if (a.parent instanceof Player && b.parent instanceof Obstacle) {
+      // console.log(overlapV);
+      let newMag = 200 / max(l.mag() - 35, 7) ** 2;
+      l.setMag(newMag);
+      // l.setMag(50 / l.mag());
+
+      a.pos.x += l.x;
+      a.pos.y += l.y;
+      a.parent.pos.add(l);
+    }
+  }); 
+
+
+  obstacles.update();
+  obstacles.draw();
   sparks.draw();
 }
 

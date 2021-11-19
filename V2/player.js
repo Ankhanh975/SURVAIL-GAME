@@ -10,7 +10,7 @@ function average(angles) {
 }
 
 class Player {
-  constructor(animation, name = "love", pos = [0, 0]) {
+  constructor(animation, name = "love", pos = [0, 0], health = 20) {
     this.normal = createVector(0, -1);
 
     this.pos = createVector(...pos);
@@ -23,7 +23,7 @@ class Player {
 
     this.name = name;
     this.punchHand = "right";
-    this.health = 20;
+    this.health = health;
 
     // physics circle for collision detection
     this.circle = new DetectCollisions.Circle(
@@ -98,7 +98,7 @@ class Player {
         let a = average([this.angle, angle]);
         let change = min(abs(a - this.angle), abs(a - angle)) * 2;
         // print(
-        
+
         //   "angle",
         //   degrees(a - this.angle),
         //   degrees(a - angle),
