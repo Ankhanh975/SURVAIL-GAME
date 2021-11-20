@@ -6,16 +6,16 @@ class Players {
     this.AIs = [];
     this.system = system;
 
-    for (let index = 0; index < 45; index++) {
+    for (let index = 0; index < 100; index++) {
       this.createAIPlayer();
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 45) {
+      if (this.AIs.length < 100) {
         this.createAIPlayer();
       }
-      }, 1250);
-    // }, 120);
+    }, 1250);
+    // }, 100);
   }
   update(mouse) {
     this.AIs.forEach((e) => {
@@ -38,10 +38,10 @@ class Players {
     });
   }
   createAIPlayer() {
-    let pos = p5.Vector.random2D().setMag(random(65, 75));
+    let pos = p5.Vector.random2D().setMag(random(600, 1000));
     if (this.players[0]) {
-      // pos.add(this.players[0].pos);
-      pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
+      pos.add(this.players[0].pos);
+      // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
     }
 
     this.AIs.push(new AIPlayer(this.img[int(random(0, 5))], [pos.x, pos.y]));

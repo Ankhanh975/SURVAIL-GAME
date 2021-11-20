@@ -78,14 +78,27 @@ function draw() {
   if (isPressed2) {
     sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
     if (frameCount % 3 === 0) {
+      // if (
+      // // !collideRectCircle(
+      //     mouse.x,
+      //     mouse.y,
+      //     52,
+      //     52,
+      //     player.pos.x,
+      //     player.pos.y,
+      //     player.r
+      //   )
+      // ) {
       obstacles.createObstacle(mouse);
+      // }
     }
   }
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
-      players.AIs.concat(obstacles.obstacles).forEach((e, i) => {
+      // .concat(obstacles.obstacles)
+      players.AIs.forEach((e, i) => {
         let hit = collidePointArc(
           e.pos.x,
           e.pos.y,
@@ -100,6 +113,7 @@ function draw() {
           // print("Hit players.AIs", i);
           e.getHit();
           if (e.health < 0) {
+            system.remove(e.circle);
             players.AIs.splice(i, 1);
           } else {
             let id2 = setInterval(() => {
@@ -119,11 +133,18 @@ function draw() {
       });
     }, 190);
   }
+  function d(system) {
+    let i = 0;
+    system.data.children.forEach((c) => {
+      i += c.length;
+    });
+    return i;
+  }
   // Should be in this exact order
   players.update(mouse);
   system.update();
   obstacles.update();
-
+  obstacles.obstacles.length;
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b;
     let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
@@ -137,10 +158,6 @@ function draw() {
     } else if (a.parent instanceof Player && b.parent instanceof Obstacle) {
       // Player inside a obstacle
       a.parent.setPos(a.parent.lastPos.copy());
-      // l.setMag(-.1);
-      // b.parent.circle.pos.x += l.x;
-      // b.parent.circle.pos.y += l.y;
-      // b.parent.pos.add(l);
     }
   });
   players.draw();

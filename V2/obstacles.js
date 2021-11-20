@@ -1,8 +1,5 @@
 class Obstacle {
   constructor(pos, angle = 0) {
-    this.normal = createVector(0, -1);
-
-    this.pos = pos;
     this.velocity = createVector(0, 0);
     this.angle = angle;
 
@@ -11,6 +8,7 @@ class Obstacle {
     // this.circle = new DetectCollisions.Box(
     //   { x: this.pos.x, y: this.pos.y }
     // );
+    this.size = 52
     this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 52, 52);
     this.circle.parent = this;
   }
@@ -58,11 +56,11 @@ class Obstacles {
     this.obstacles.push(ob);
     this.system.insert(ob.circle);
     system.insert(ob.circle);
-    // setTimeout(() => {
-    //   // Remove the obstacle from the world
-    //   let x = this.obstacles.shift();
-    //   system.remove(x);
-    //   this.system.remove(x);
-    // }, 2 * 1000);
+    setTimeout(() => {
+      // Remove the obstacle from the world
+      let x = this.obstacles.shift();
+      system.remove(x.circle);
+      this.system.remove(x.circle);
+    }, 30 * 1000);
   }
 }
