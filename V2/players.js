@@ -38,9 +38,10 @@ class Players {
     });
   }
   createAIPlayer() {
-    let pos = p5.Vector.random2D().setMag(random(600, 1000));
+    // let pos = p5.Vector.random2D().setMag(random(600, 1000));
+    let pos = p5.Vector.random2D().setMag(random(15, 200));
     if (this.players[0]) {
-      pos.add(this.players[0].pos);
+      // pos.add(this.players[0].pos);
       // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
     }
 

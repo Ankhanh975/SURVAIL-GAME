@@ -71,3 +71,21 @@
   }
   animate();
 }
+{
+  var easystar = new EasyStar.js();
+  easystar.setGrid(twoDimensionalArray);
+  easystar.setAcceptableTiles(arrayOfAcceptableTiles);
+  easystar.findPath(startX, startY, endX, endY, callback);
+  easystar.calculate();
+  easystar.setIterationsPerCalculation(someValue);
+  easystar.avoidAdditionalPoint(x, y);
+  easystar.enableDiagonals();
+  easystar.enableCornerCutting();
+  easystar.setAdditionalPointCost(x, y, cost);
+  easystar.setTileCost(tileType, multiplicativeCost);
+  easystar.enableSync();
+  easystar.setDirectionalCondition(x, y, [EasyStar.TOP, EasyStar.LEFT]); // only accessible from the top and left
+  var instanceId = easystar.findPath(startX, startY, endX, endY, callback);
+  // ...
+  easystar.cancelPath(instanceId);
+}

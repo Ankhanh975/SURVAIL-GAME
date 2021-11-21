@@ -1,5 +1,6 @@
 class Obstacle {
-  constructor(pos, angle = 0) {
+  constructor(pos, parent = null, lifeTime = 15 * 1000, angle = 0) {
+    // parent: the Obstacles object this Obstacle belongs to
     this.velocity = createVector(0, 0);
     this.angle = angle;
 
@@ -8,7 +9,7 @@ class Obstacle {
     // this.circle = new DetectCollisions.Box(
     //   { x: this.pos.x, y: this.pos.y }
     // );
-    this.size = 52
+    this.size = 52;
     this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 52, 52);
     this.circle.parent = this;
   }
@@ -18,7 +19,7 @@ class Obstacle {
     translate(this.circle.pos.x, this.circle.pos.y);
     rotate(this.angle);
     stroke(0, 0, 0);
-    fill(220, 220, 10, 200);
+    fill(220, 220, 10, map(this.health, 0, 20, 20, 200));
     translate(+52 / 2, +52 / 2);
     // Draw rect in corner
     rect(0, 0, 52, 52, 3.5);
@@ -56,11 +57,11 @@ class Obstacles {
     this.obstacles.push(ob);
     this.system.insert(ob.circle);
     system.insert(ob.circle);
-    setTimeout(() => {
-      // Remove the obstacle from the world
-      let x = this.obstacles.shift();
-      system.remove(x.circle);
-      this.system.remove(x.circle);
-    }, 30 * 1000);
+    // setTimeout(() => {
+    //   // Remove the obstacle from the world
+    //   let x = this.obstacles.shift();
+    //   system.remove(x.circle);
+    //   this.system.remove(x.circle);
+    // }, 30 * 1000);
   }
 }

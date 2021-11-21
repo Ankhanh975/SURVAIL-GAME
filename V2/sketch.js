@@ -97,7 +97,10 @@ function draw() {
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
-      // .concat(obstacles.obstacles)
+      obstacles.obstacles.forEach((e, i) => {
+        
+      });
+
       players.AIs.forEach((e, i) => {
         let hit = collidePointArc(
           e.pos.x,
@@ -147,17 +150,29 @@ function draw() {
   obstacles.obstacles.length;
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b;
-    let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
     if (a.parent instanceof Player && b.parent instanceof Player) {
+      let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
       // console.log(overlapV);
       let newMag = 110 / max(l.mag() - 35, 7) ** 2;
       l.setMag(newMag);
       // l.setMag(50 / l.mag());
 
       a.parent.addPos(l);
-    } else if (a.parent instanceof Player && b.parent instanceof Obstacle) {
+    }
+  });
+  system.checkAll(({ a, overlapV }) => {
+    let b = system.response.b;
+    if (a.parent instanceof Player && b.parent instanceof Obstacle) {
       // Player inside a obstacle
+      let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+
       a.parent.setPos(a.parent.lastPos.copy());
+
+      let newMag = 110 / max(l.mag() - 35, 7) ** 2;
+      l.setMag(newMag);
+      // l.setMag(50 / l.mag());
+
+      // a.parent.addPos(l);
     }
   });
   players.draw();
