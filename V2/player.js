@@ -195,7 +195,7 @@ class AIPlayer extends Player {
     this.name = generateName.__call();
   }
 
-  update(allyls, enemies) {
+  update(allyls, enemies, grid) {
     let lookAt, dist, toLookAt;
     {
       lookAt = enemies[0].pos;

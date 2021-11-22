@@ -34,9 +34,9 @@ class Players {
     }, 1250);
     // }, 100);
   }
-  update(mouse) {
+  update(mouse, grid) {
     this.AIs.forEach((e) => {
-      e.update(this.AIs, this.players);
+      e.update(this.AIs, this.players, grid);
     });
     this.players.forEach((player) => {
       player.update(mouse, true);
