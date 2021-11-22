@@ -1,7 +1,4 @@
-/*!
- * @package Game
- * @author Anders Evenrud <andersevenrud@gmail.com>
- */
+
 "use strict";
 
 var Game = window.Game || {}; // Namespace
