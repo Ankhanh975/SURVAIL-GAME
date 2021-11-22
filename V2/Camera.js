@@ -82,3 +82,16 @@ class Camera {
     // Average out the transformation over few frame
   }
 }
+
+  // if (mouseX < 10) {
+  //   camera.translate(min(10 - mouseX, 10)*10, 0);
+  // }
+  // if (mouseX > width - 10) {
+  //   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
+  // }
+  // if (mouseY < 10) {
+  //   camera.translate(0, min(10 - mouseY, 10)*10);
+  // }
+  // if (mouseY > height - 10) {
+  //   camera.translate(0, max(-mouseY + height - 10, -10)*10);
+  // }

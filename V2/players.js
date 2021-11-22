@@ -1,17 +1,34 @@
+let Players_img = [
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+];
+addFunction("preload", () => {
+  Players_img[0][0] = loadImage("Resources/Animation_0.png");
+  Players_img[0][1] = loadImage("Resources/Animation_1.png");
+  Players_img[0][2] = loadImage("Resources/Animation_2.png");
+  Players_img[0][3] = loadImage("Resources/Animation_3.png");
+  Players_img[0][4] = loadImage("Resources/Animation_4.png");
+  Players_img[0][5] = loadImage("Resources/Animation_5.png");
+});
+
 class Players {
-  constructor(system, img) {
-    this.img = img;
+  constructor(system) {
+    this.img = Players_img;
     this.initAnimation();
     this.players = [];
     this.AIs = [];
     this.system = system;
 
-    for (let index = 0; index < 100; index++) {
+    for (let index = 0; index < 1; index++) {
       this.createAIPlayer();
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 100) {
+      if (this.AIs.length < 1) {
         this.createAIPlayer();
       }
     }, 1250);

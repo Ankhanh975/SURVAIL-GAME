@@ -26,11 +26,10 @@ class Player {
     this.punchHand = "right";
     this.health = health;
     
-    this.r = 65 / 2;
     // physics circle for collision detection
     this.circle = new DetectCollisions.Circle(
       { x: this.pos.x, y: this.pos.y },
-      this.r
+      65 / 2
     );
     this.circle.parent = this;
     system.insert(this.circle);

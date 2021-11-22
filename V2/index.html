@@ -16,15 +16,21 @@
 </head>
 
 <body>
-  <script src="Lib/bundle.js"></script>
-  <!-- TODO: use https://github.com/Sinova/Collisions instead-->
 
+  <script src="setup.js"></script>
   <script src="Camera.js"></script>
-
   <script src="players.js"></script>
   <script src="obstacles.js"></script>
   <script src="player.js"></script>
   <script src="particles.js"></script>
+  <!-- old  detect-collisions-->
+  <script src="Lib/bundle.js"></script>
+  <!-- <script type="module">
+    import Collisions from "./Lib/node_modules/collisions/src/Collisions.mjs";
+
+    globalThis.DetectCollisions = Collisions;
+
+  </script> -->
   <script src="generate.js"></script>
   <script src="sketch.js"></script>
   <!-- <div class="container" id="container">

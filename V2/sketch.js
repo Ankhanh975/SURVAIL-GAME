@@ -1,38 +1,22 @@
 var myFont;
-let img = [
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-];
-function preload() {
+addFunction("preload", () => {
   // myFont = loadFont("Resources/Steps-Mono.otf");
   myFont = loadFont("Resources/Minecraft.ttf");
-
-  img[0][0] = loadImage("Resources/Animation_0.png");
-  img[0][1] = loadImage("Resources/Animation_1.png");
-  img[0][2] = loadImage("Resources/Animation_2.png");
-  img[0][3] = loadImage("Resources/Animation_3.png");
-  img[0][4] = loadImage("Resources/Animation_4.png");
-  img[0][5] = loadImage("Resources/Animation_5.png");
-
   // song = loadSound("Resources/C418 - Beginning 2.mp3");
   // song.play();
   // img = loadImage(" Zombie.png");
-}
+});
 
 let song;
 let sparks;
 let camera;
 let players;
-let player;
 let system;
+let player;
 let obstacles;
 let frameCount = 0;
-
-function setup() {
+let mouse;
+addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
   createCanvas(1024, 768);
   frameRate(60); // Attempt to refresh at starting FPS
@@ -42,64 +26,44 @@ function setup() {
   // angleMode(DEGREES);
   // textureWrap(REPEAT);
   background(100);
+});
 
+addFunction("setup", () => {
   system = new DetectCollisions.System();
+  // system.result = system.createResult();
   camera = new Camera();
   sparks = new Sparks();
   // main player, store in players.player but player is a faster way to access
-  players = new Players(system, img);
+  players = new Players(system);
   player = new Player(players.img[5]);
   obstacles = new Obstacles();
   players.players.push(player);
-}
-function draw() {
+});
+
+addFunction("draw", () => {
   frameCount++;
   translate(width / 2, height / 2);
   // print("frameRate", round(frameRate()));
   // background(100);
   noSmooth();
-  // if (mouseX < 10) {
-  //   camera.translate(min(10 - mouseX, 10)*10, 0);
-  // }
-  // if (mouseX > width - 10) {
-  //   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
-  // }
-  // if (mouseY < 10) {
-  //   camera.translate(0, min(10 - mouseY, 10)*10);
-  // }
-  // if (mouseY > height - 10) {
-  //   camera.translate(0, max(-mouseY + height - 10, -10)*10);
-  // }
+  mouse = camera.toWorldCoords();
+});
 
+addFunction("draw", () => {
   camera.follow(player.pos);
   camera.draw_background();
 
-  let mouse = camera.toWorldCoords();
   if (isPressed2) {
     sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
     if (frameCount % 3 === 0) {
-      // if (
-      // // !collideRectCircle(
-      //     mouse.x,
-      //     mouse.y,
-      //     52,
-      //     52,
-      //     player.pos.x,
-      //     player.pos.y,
-      //     player.r
-      //   )
-      // ) {
       obstacles.createObstacle(mouse);
-      // }
     }
   }
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
-      obstacles.obstacles.forEach((e, i) => {
-        
-      });
+      obstacles.obstacles.forEach((e, i) => {});
 
       players.AIs.forEach((e, i) => {
         let hit = collidePointArc(
@@ -136,18 +100,11 @@ function draw() {
       });
     }, 190);
   }
-  function d(system) {
-    let i = 0;
-    system.data.children.forEach((c) => {
-      i += c.length;
-    });
-    return i;
-  }
+
   // Should be in this exact order
   players.update(mouse);
   system.update();
   obstacles.update();
-  obstacles.obstacles.length;
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b;
     if (a.parent instanceof Player && b.parent instanceof Player) {
@@ -178,7 +135,7 @@ function draw() {
   players.draw();
   obstacles.draw();
   sparks.draw();
-}
+});
 
 let isPressed = false;
 let isPressed2 = false;
