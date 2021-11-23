@@ -781,7 +781,9 @@ var Game = window.Game || {}; // Namespace
           if ( sets[i].animations ) {
             for ( a in sets[i].animations ) {
               sets[i].animations[a]._lastTime = 0; //new Date();
-              sets[i].animations[a]._current  = sets[i].animations[a].frames[0] || 0;
+  
+              
+              ts[i].animations[a]._current = sets[i].animations[a].frames[0] || 0;
 
               console.log('inited animation for', i, '=>', a);
             }

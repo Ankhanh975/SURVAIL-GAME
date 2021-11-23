@@ -25,6 +25,7 @@
   //   https://keycode.info/
 }
 {
+  // fullscreen mode
   const wrapper = document.getElementById("wrapper");
   const canvas = document.getElementById("canvas1");
   const fullscreenButton = document.getElementById("fullscreenButton");
@@ -94,4 +95,8 @@
   aStar.setIterationsPerCalculation(1000);
   aStar.avoidAdditionalPoint(x, y);
   // aStar.cancelPath(instanceId);
+}
+
+{
+  
 }

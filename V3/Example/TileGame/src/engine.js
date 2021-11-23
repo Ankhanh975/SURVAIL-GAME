@@ -70,13 +70,6 @@ var Game = window.Game || {}; // Namespace
     this.canvas   = document.createElement('canvas');
     this.context  = this.canvas.getContext('2d');
 
-    if ( !this.canvas ) {
-      throw ("Cannot run: no DOMElement<#canvas> found!");
-    }
-    if ( !this.context ) {
-      throw ("Cannot run: no CanvasContext found!");
-    }
-
     var self = this;
     window.onresize = function() {
       self.resize(window.innerWidth, window.innerHeight);
@@ -84,9 +77,6 @@ var Game = window.Game || {}; // Namespace
 
     window.onresize();
 
-    window.onunload = function() {
-      self.destroy();
-    };
 
     window.oncontextmenu = function(ev) {
       ev = ev || window.event;
