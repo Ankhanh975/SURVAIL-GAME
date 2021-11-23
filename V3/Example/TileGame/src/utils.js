@@ -51,16 +51,11 @@ var Game = window.Game || {}; // Namespace
   /**
    * Radom number range
    */
+  // ! not use
   Game.Utils.randomRange = function(minVal, maxVal) {
     return Math.floor(Math.random() * (maxVal - minVal - 1)) + minVal;
   };
 
-  /**
-   * Clamp value between range
-   */
-  Game.Utils.clampRange = function(val, min, max) {
-    return (val + 1) / 2 * (max - min) + min;
-  };
 
   /**
    * Rectangle intersection check
