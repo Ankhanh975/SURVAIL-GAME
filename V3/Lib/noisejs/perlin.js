@@ -1,4 +1,3 @@
-// github.com/josephg/noisejs/blob/master/perlin.js
 /*
  * A speed-improved perlin and simplex noise algorithms for 2D.
  *
@@ -15,8 +14,8 @@
  *
  */
 
-https: (function (global) {
-  var module = (global.noise = {});
+(function (global) {
+  var module = (global.noisejs = {});
 
   function Grad(x, y, z) {
     this.x = x;
@@ -98,10 +97,10 @@ https: (function (global) {
   module.seed(0);
 
   /*
-    for(var i=0; i<256; i++) {
-      perm[i] = perm[i + 256] = p[i];
-      gradP[i] = gradP[i + 256] = grad3[perm[i] % 12];
-    }*/
+  for(var i=0; i<256; i++) {
+    perm[i] = perm[i + 256] = p[i];
+    gradP[i] = gradP[i + 256] = grad3[perm[i] % 12];
+  }*/
 
   // Skewing and unskewing factors for 2, 3, and 4 dimensions
   var F2 = 0.5 * (Math.sqrt(3) - 1);
