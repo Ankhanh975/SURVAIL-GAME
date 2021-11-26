@@ -1,5 +1,4 @@
-function createChunk(chunkX = 0, chunkY = 0, seed = random(0, 1)) {
-  noisejs.seed(seed);
+function createChunk(chunkX = 0, chunkY = 0) {
   let chunk = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -21,8 +20,8 @@ function createChunk(chunkX = 0, chunkY = 0, seed = random(0, 1)) {
   for (x = 0; x < chunk[0].length; x++) {
     for (y = 0; y < chunk.length; y++) {
       chunk[x][y] = noisejs.simplex2(
-        x / 40 + chunkX * 16,
-        y / 40 + chunkY * 16
+        x / 40 + (chunkX * 16) / 40,
+        y / 40 + (chunkY * 16) / 40
       );
       // chunk[x][y] += noisejs.simplex2(x / 5, y / 5) / 20;
     }
@@ -48,7 +47,7 @@ function getPoints(x, y, r) {
 }
 function setup() {
   createCanvas(800, 800);
-  noisejs.seed(random(0, 1));
+  // noisejs.seed(random(0, 1));
 
   let drawChunks = getPoints(playerX, playerY, radius);
   drawChunks.forEach((c) => {
@@ -56,33 +55,37 @@ function setup() {
     if (chunk !== undefined) {
       return;
     } else {
-      chunks[`${c.x},${c.y}`] = createChunk(0, 0);
+      chunks[`${c.x},${c.y}`] = createChunk(c.x, c.y);
     }
   });
 
-  noLoop();
 }
 let chunks = {};
 
 // Player position in chunks coordinates
 let playerX = 0;
 let playerY = 0;
-let radius = 8;
-
+let radius = 2;
+let chunkSize = 30;
 function draw() {
-  background(100);
-  translate(width / 2, height / 2);
+  console.log("draw", frameRate())
+  background(0);
+  translate(
+    width / 2 - (chunkSize * 16) / 2,
+    height / 2 - (chunkSize * 16) / 2
+  );
   let drawChunks = getPoints(playerX, playerY, radius);
   drawChunks.forEach((c) => {
-    console.log(c);
     let chunk = chunks[`${c.x},${c.y}`];
     if (chunk === undefined) {
       return;
     }
+    push();
+    translate(c.x * chunkSize * 16, c.y * chunkSize * 16);
     for (var i = 0; i < chunk.length; i++) {
       for (var j = 0; j < chunk[i].length; j++) {
-        var x = i * 8;
-        var y = j * 8;
+        var x = i * chunkSize;
+        var y = j * chunkSize;
         let v = chunk[i][j];
         if (v > 0 && v <= 0.1) {
           fill(128, 128, 0);
@@ -96,8 +99,9 @@ function draw() {
           fill(10 - v * 5, 10 - v * 5, 202 - v * 5);
         }
         stroke(0, 0, 0, 180);
-        rect(x, y, 8, 8);
+        rect(x, y, chunkSize, chunkSize);
       }
     }
+    pop();
   });
 }
