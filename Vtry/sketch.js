@@ -48,7 +48,7 @@ function getPoints(x, y, r) {
 }
 function setup() {
   createCanvas(800, 800);
-  noisejs.seed(random(0, 1));
+  // noisejs.seed(random(0, 1));
 }
 let chunks = {};
 let frame = 0;
@@ -112,3 +112,44 @@ function draw() {
     pop();
   });
 }
+
+// let grid = [
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+// ];
+// var aStar = new EasyStar.js();
+// aStar.setGrid(grid);
+// aStar.setAcceptableTiles(0);
+// aStar.setIterationsPerCalculation(1);
+
+// // Not find path => nothing is call
+// // aStar.findPath => findPath from scratch
+
+// var instanceId = aStar.findPath(0, 0, 2, 0, (path) => {
+//   if (path === null) {
+//     console.log("Path was not found.");
+//   } else {
+//     console.log("Path was found.", path);
+//   }
+// });
+// aStar.calculate();
+// aStar.calculate();
+// var instanceId = aStar.findPath(0, 0, 4, 0, (path) => {
+//   if (path === null) {
+//     console.log("Path2 was not found.");
+//   } else {
+//     console.log("Path2 was found.", path);
+//   }
+// });
+// aStar.calculate();
+// aStar.calculate();
+// aStar.calculate();
+// aStar.calculate();
+// aStar.calculate();
+// aStar.calculate();
+
+// // aStar.avoidAdditionalPoint(x, y);
+// // aStar.cancelPath(instanceId);
