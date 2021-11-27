@@ -201,6 +201,5 @@ function mouseClicked(event) {
 // aStar.calculate();
 // aStar.calculate();
 
-
 // // aStar.avoidAdditionalPoint(x, y);
 // // aStar.cancelPath(instanceId);

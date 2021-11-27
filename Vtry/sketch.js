@@ -29,11 +29,12 @@ function createChunk(chunkX = 0, chunkY = 0) {
   return chunk;
 }
 function distance(p1, p2) {
-  dx = p2.x - p1.x;
-  dx *= dx;
-  dy = p2.y - p1.y;
-  dy *= dy;
-  return Math.sqrt(dx + dy);
+  // dx = p2.x - p1.x;
+  // dx *= dx;
+  // dy = p2.y - p1.y;
+  // dy *= dy;
+  // return Math.sqrt(dx + dy);
+  return min(p1.x - p2.x, p1.y - p2.y);
 }
 
 function getPoints(x, y, r) {
@@ -47,9 +48,26 @@ function getPoints(x, y, r) {
 }
 function setup() {
   createCanvas(800, 800);
-  // noisejs.seed(random(0, 1));
+  noisejs.seed(random(0, 1));
+}
+let chunks = {};
+let frame = 0;
+// Player position in chunks coordinates
+let playerX = 0;
+let playerY = 0;
 
+let radius = 1;
+let chunkSize = 30;
+function draw() {
+  frame++;
+  // playerX = round((mouseX - width / 2) / (chunkSize * 16) - 0.5);
+  // playerY = round((mouseY - width / 2) / (chunkSize * 16) - 0.5);
+  // playerY = mouseY;
+  console.log("draw", frameRate(), playerX, playerY);
+  background(0);
+  translate(width / 2, height / 2);
   let drawChunks = getPoints(playerX, playerY, radius);
+  // update chunk
   drawChunks.forEach((c) => {
     let chunk = chunks[`${c.x},${c.y}`];
     if (chunk !== undefined) {
@@ -58,23 +76,7 @@ function setup() {
       chunks[`${c.x},${c.y}`] = createChunk(c.x, c.y);
     }
   });
-
-}
-let chunks = {};
-
-// Player position in chunks coordinates
-let playerX = 0;
-let playerY = 0;
-let radius = 2;
-let chunkSize = 30;
-function draw() {
-  console.log("draw", frameRate())
-  background(0);
-  translate(
-    width / 2 - (chunkSize * 16) / 2,
-    height / 2 - (chunkSize * 16) / 2
-  );
-  let drawChunks = getPoints(playerX, playerY, radius);
+  // drawChunks
   drawChunks.forEach((c) => {
     let chunk = chunks[`${c.x},${c.y}`];
     if (chunk === undefined) {
@@ -97,6 +99,11 @@ function draw() {
           fill(0, 0, 245);
         } else {
           fill(10 - v * 5, 10 - v * 5, 202 - v * 5);
+        }
+        if (v > 0.3) {
+          fill(128, 128, 0);
+        } else {
+          fill(0, 0, 0);
         }
         stroke(0, 0, 0, 180);
         rect(x, y, chunkSize, chunkSize);
