@@ -19,7 +19,6 @@ let mouse;
 addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
   createCanvas(1024, 768);
-  frameRate(60); // Attempt to refresh at starting FPS
   imageMode(CENTER);
   rectMode(CENTER);
   // textureMode(IMAGE);
