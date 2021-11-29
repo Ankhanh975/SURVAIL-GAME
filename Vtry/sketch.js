@@ -153,3 +153,4 @@ function draw() {
 
 // // aStar.avoidAdditionalPoint(x, y);
 // // aStar.cancelPath(instanceId);
+ 
