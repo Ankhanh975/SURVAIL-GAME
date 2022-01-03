@@ -16,7 +16,7 @@ let player;
 let obstacles;
 let frameCount = 0;
 let mouse;
-var r = Prob.normal(0, 2.5);
+var r = Prob.normal(0, 2.8);
 var shake = [0, 0];
 addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
@@ -64,12 +64,13 @@ addFunction("draw", () => {
   if (isPressed && !player.onPunch()) {
     setTimeout(() => {
       let id66 = setInterval(() => {
-        shake = [r(), r()];
+        shake = [+r(), +r()];
       }, 30);
       setTimeout(() => {
         clearInterval(id66);
+        shake = [0, 0];
       }, 16 * 7);
-    }, 180);
+    }, 196);
   }
 
   if (isPressed && !player.onPunch()) {
