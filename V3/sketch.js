@@ -52,7 +52,6 @@ addFunction("draw", () => {
 
 addFunction("draw", () => {
   camera.follow(player.pos);
-  camera.draw_background();
 
   if (isPressed2) {
     sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
@@ -146,6 +145,7 @@ addFunction("draw", () => {
       // a.parent.addPos(l);
     }
   });
+  camera.draw_background();
   players.draw();
   obstacles.draw();
   sparks.draw();
