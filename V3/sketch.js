@@ -58,9 +58,19 @@ addFunction("draw", () => {
       obstacles.createObstacle(mouse);
     }
   }
+  if (isPressed) {
+    // setTimeout(() => {
+    let x = [random(-10, 10), random(-10, 10)];
+    x = [round(x[0]), round(x[1])];
+    translate(...x);
+    console.log("x", x);
+    // redraw();
+    // }, 100);
+  }
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
+
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
 
