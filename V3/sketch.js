@@ -16,6 +16,8 @@ let player;
 let obstacles;
 let frameCount = 0;
 let mouse;
+var r = Prob.normal(0, 5);
+
 addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
   createCanvas(1024, 768);
@@ -60,8 +62,7 @@ addFunction("draw", () => {
   }
   if (isPressed) {
     // setTimeout(() => {
-    let x = [random(-10, 10), random(-10, 10)];
-    x = [round(x[0]), round(x[1])];
+    let x = [r(), r()];
     translate(...x);
     console.log("x", x);
     // redraw();
