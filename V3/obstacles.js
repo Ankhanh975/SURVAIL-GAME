@@ -57,7 +57,7 @@ class Obstacles {
     this.lastCreate = pos;
     let ob = new Obstacle(pos, angle);
     let InsertAble = true;
-    
+
     system.insert(ob.circle);
     system.updateBody(ob.circle);
     system.checkOne(ob.circle, () => {
@@ -76,6 +76,8 @@ class Obstacles {
         let x = this.obstacles.shift();
         system.remove(x.circle);
         this.system.remove(x.circle);
+        system.updateBody(x.circle);
+        this.system.updateBody(x.circle);
       }, 10 * 1000);
     } else {
       system.remove(ob.circle);
