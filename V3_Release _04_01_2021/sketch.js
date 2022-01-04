@@ -60,20 +60,20 @@ addFunction("draw", () => {
       obstacles.createObstacle(mouse);
     }
   }
-  // if (isPressed && !player.onPunch()) {
-  //   // shake
-  //   setTimeout(() => {
-  //     let id66 = setInterval(() => {
-  //       shake = [r(), r()];
-  //       queue.addPro(`
-  //         translate(${r()}, ${r()})
-  //       `);
-  //     }, 16);
-  //     setTimeout(() => {
-  //       clearInterval(id66);
-  //     }, 16 * 5.5);
-  //   }, 191);
-  // }
+  if (isPressed && !player.onPunch()) {
+    // shake
+    setTimeout(() => {
+      let id66 = setInterval(() => {
+        shake = [r(), r()];
+        queue.addPro(`
+          translate(${r()}, ${r()})
+        `);
+      }, 16);
+      setTimeout(() => {
+        clearInterval(id66);
+      }, 16 * 5.5);
+    }, 191);
+  }
 
   // if (isPressed && !player.onPunch()) {
   //   

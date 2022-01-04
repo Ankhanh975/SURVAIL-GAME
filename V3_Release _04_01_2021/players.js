@@ -51,11 +51,6 @@ class Players {
         }
       }
     }, 1250);
-    // }, 100);
-    setInterval(() => {
-      this.AIs.shuffle();
-      this.players.shuffle();
-    }, 125);
   }
   update(mouse, grid) {
     this.AIs.forEach((e) => {
