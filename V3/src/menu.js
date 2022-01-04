@@ -29,3 +29,8 @@ class Menu {
   }
 }
 let menu = new Menu();
+
+"Stay close to the origin to find more people." 
+"Press F1 if you find out that it cramped." 
+"Press F11 to play in fullscreen mode!" 
+"You can now play the game in multiplier!" 

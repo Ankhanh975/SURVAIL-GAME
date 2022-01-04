@@ -181,6 +181,15 @@ addFunction("draw", () => {
   push();
   camera.follow(player.pos);
   camera.draw_background();
+  {
+    // Draw spawn at position 0, 0
+    push();
+    let c = HSVtoRGB(0.5, 0.5, 1)
+    fill(...c, 125);
+    circle(0, 0, 50);
+
+    pop();
+  }
   queue.updateDraw();
   players.draw();
   obstacles.draw();
@@ -200,7 +209,9 @@ addFunction("draw", () => {
 
   // `
   //   );
-  menu.display(`Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}`);
+  menu.display(
+    `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}`
+  );
 });
 function mouseClicked(event) {
   // console.log("mouseClicked", event.button  )
