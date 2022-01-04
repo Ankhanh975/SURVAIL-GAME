@@ -52,7 +52,7 @@ class Players {
             this.createAIPlayer(
               pos.add(p5.Vector.random2D().setMag(random(0, 100)))
             );
-          }, Prob.normal(10, 4)());
+          }, Prob.normal(16, 6.5)());
           
         }
       }
