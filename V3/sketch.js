@@ -76,7 +76,7 @@ addFunction("draw", () => {
   // }
 
   // if (isPressed && !player.onPunch()) {
-  //   
+  //
   //   setTimeout(() => {
   //     queue.addDraw(`
   //     push();
@@ -101,7 +101,7 @@ addFunction("draw", () => {
   //     `);
   //   }, 190);
   // }
-  
+
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     setTimeout(() => {
@@ -209,4 +209,51 @@ function mouseClicked(event) {
   // console.log("mouseClicked", event.button  )
 
   return false;
+}
+function keyPressed() {
+  console.log("keyPressed", keyCode);
+  // if pressed Enter
+  if (keyCode === 32) {
+    function f(x, variance = 2, mu = 0) {
+      // follow a normal curve
+      return (
+        Math.exp(-((-x - mu) * (-x - mu)) / (2 * variance * variance)) /
+        (variance * sqrt(2 * Math.PI))
+      );
+    }
+    let start = millis();
+    let delta = p5.Vector.sub(player.pos, player.lastPos);
+    let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
+    toLookAt.setMag(20);
+    // toLookAt.setMag(0);
+    // delta.setMag(0);
+
+    if (delta.mag() < 5) {
+      delta.setMag(0);
+    } else {
+      delta.setMag(15);
+    }
+
+    let id99 = setInterval(() => {
+      let deltaT = (millis() - start) / 16 - 3.2;
+      let d = p5.Vector.add(delta, toLookAt);
+      d.setMag(d.mag() * f(deltaT) * 10);
+      // console.log("d", deltaT, f(deltaT));
+      console.log("d", d.x, d.y);
+      // idia: only follow in x-axis or y-axis
+      if (abs(d.x) > abs(d.y)) {
+        d.y = 0;
+        console.log("set d", d)
+      } else {
+        d.x = 0;
+        console.log("set d", d)
+      }
+      player.addPos(d);
+    }, 16);
+    setTimeout(() => {
+      clearInterval(id99);
+    }, 16 * 7);
+
+    console.log("delta", delta, player.pos, player.lastPos);
+  }
 }
