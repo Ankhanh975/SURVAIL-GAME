@@ -28,6 +28,7 @@
   <script src="src/players.js"></script>
   <script src="src/obstacles.js"></script>
   <script src="src/player.js"></script>
+  <script src="src/menu.js"></script>
   <script src="src/particles.js"></script>
   <!-- old  detect-collisions-->
   <!-- <script type="module">
@@ -38,7 +39,87 @@
   </script> -->
   <script src="src/generate.js"></script>
   <script src="sketch.js"></script>
-  <!-- <div class="container" id="container">
+  <script>
+    // Left button is down, right button is down, middle button is down respectively.
+    globalThis.isPressed = false;
+    globalThis.isPressed2 = false;
+    globalThis.isPressed3 = false;
+    globalThis.toggleF1 = false;
+    globalThis.toggleF3 = false;
+    document.addEventListener('mousedown', e => {
+      // console.log("mousePressed", event.button  )
+      if (e.button === 0) isPressed = true;
+      else if (e.button === 2) isPressed2 = true;
+      else isPressed3 = true;
+    });
+    document.addEventListener('mouseup', e => {
+      // console.log("mousePressed", event.button  )
+      if (e.button === 0) isPressed = false;
+      else if (e.button === 2) isPressed2 = false;
+      else isPressed3 = false;
+    });
+    document.addEventListener('keydown', e => {
+
+      if (e.code === "F1") {
+        toggleF1 = !toggleF1;
+      } else if (e.code === "F3") {
+        toggleF3 = !toggleF3;
+      }
+      if (e.code !== "F11") {
+        e.preventDefault();
+
+      }
+    });
+
+  </script>
+
+  <script>
+    // https://stackoverflow.com/questions/27321672/listen-for-all-events-in-javascript/27322253
+    // let P5canvas = document.getElementById(".canvas")
+    // let P5canvas = window
+    // Object.keys(P5canvas).forEach(key => {
+    //   // console.log("key", key)
+    //   if (/(key)/.test(key)) {
+    //     console.log("key", key)
+    //     // if (!/(key|mouse)/.test(key)) {
+    //     window.addEventListener(key.slice(2), event => {
+    //       // console.log("h", event, key.slice(2));
+    //       event.preventDefault()
+    //     });
+    //   }
+    // });
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+
+    Array.prototype.shuffle = function () {
+      var i = this.length,
+        j,
+        temp;
+      if (i == 0) return this;
+      while (--i) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = this[i];
+        this[i] = this[j];
+        this[j] = temp;
+      }
+      return this;
+    };
+
+    function windowResized() {
+      console.log("windowResized", windowWidth, windowHeight, width, height);
+      resizeCanvas(windowWidth, windowHeight);
+      // if (windowHeight >= 1080) {
+      // } else {
+      //   resizeCanvas(1024, 768);
+
+      // }
+    }
+  </script>
+</body>
+
+
+</html>
+<!-- <div class="container" id="container">
     
     <div class="ui">
       <div class="quest-journal-layout">
@@ -158,38 +239,3 @@
       </div>
     </div>
   </div> -->
-
-  <script>
-    // https://stackoverflow.com/questions/27321672/listen-for-all-events-in-javascript/27322253
-    // let P5canvas = document.getElementById(".canvas")
-    let P5canvas = window
-    // Object.keys(P5canvas).forEach(key => {
-    //   // console.log("key", key)
-    //   if (/(key)/.test(key)) {
-    //     console.log("key", key)
-    //     // if (!/(key|mouse)/.test(key)) {
-    //     window.addEventListener(key.slice(2), event => {
-    //       // console.log("h", event, key.slice(2));
-    //       event.preventDefault()
-    //     });
-    //   }
-    // });
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    Array.prototype.shuffle = function () {
-      var i = this.length,
-        j,
-        temp;
-      if (i == 0) return this;
-      while (--i) {
-        j = Math.floor(Math.random() * (i + 1));
-        temp = this[i];
-        this[i] = this[j];
-        this[j] = temp;
-      }
-      return this;
-    };
-  </script>
-</body>
-
-
-</html>

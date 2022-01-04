@@ -77,9 +77,13 @@ class Camera {
     this.transform = [-player.pos.x, -player.pos.y];
   }
   draw_background(
+    // radius = [
+    //   [-3, +4],
+    //   [-2, +3],
+    // ]
     radius = [
+      [-4, +5],
       [-3, +4],
-      [-2, +3],
     ]
   ) {
     // Draw background behind everything (close to player for speed)

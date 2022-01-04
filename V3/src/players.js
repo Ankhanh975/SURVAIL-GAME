@@ -28,7 +28,7 @@ class Players {
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 25) {
+      if (this.AIs.length < 18) {
         // while (this.AIs.length < 35) {
         let pos = p5.Vector.random2D().setMag(random(100, 1000));
         let color = random(0, 5);

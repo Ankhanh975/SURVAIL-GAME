@@ -10,7 +10,7 @@ function average(angles) {
 }
 
 class Player {
-  constructor(animation, name = "love", pos = [0, 0], health = 35) {
+  constructor(animation, name = "love", pos = [0, 0], health = 42) {
     this.normal = createVector(0, -1);
 
     this.pos = createVector(...pos);
@@ -81,7 +81,7 @@ class Player {
 
     strokeWeight(3);
     stroke(250, 50, 25);
-    rect(0, 0, 55 * (this.health / 35), 1);
+    rect(0, 0, 55 * (this.health / 42), 1);
     pop();
   }
 

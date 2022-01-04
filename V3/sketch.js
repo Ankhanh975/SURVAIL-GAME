@@ -14,15 +14,15 @@ let players;
 let system;
 let player;
 let obstacles;
-let frameCount = 0;
 let mouse;
 let queue = new Queue();
-
+let killCount = 0;
 addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
+  // createCanvas(windowWidth, windowHeight);
   createCanvas(1024, 768);
   imageMode(CENTER);
-  rectMode(CENTER);
+  // rectMode(CENTER);
   // textureMode(IMAGE);
   // angleMode(DEGREES);
   // textureWrap(REPEAT);
@@ -42,8 +42,8 @@ addFunction("setup", () => {
 });
 
 addFunction("draw", () => {
-  frameCount++;
   translate(width / 2, height / 2);
+
   // print("frameRate", round(frameRate()));
   // background(100);
   noSmooth();
@@ -51,8 +51,6 @@ addFunction("draw", () => {
 });
 
 addFunction("draw", () => {
-  camera.follow(player.pos);
-
   if (isPressed2) {
     sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
     if (frameCount % 3 === 0) {
@@ -125,6 +123,7 @@ addFunction("draw", () => {
           if (e.health < 0) {
             system.remove(e.circle);
             players.AIs.splice(i, 1);
+            killCount += 1;
           } else {
             // Push enemies backwards
             let id2 = setInterval(() => {
@@ -179,42 +178,36 @@ addFunction("draw", () => {
   });
 });
 addFunction("draw", () => {
+  push();
+  camera.follow(player.pos);
   camera.draw_background();
   queue.updateDraw();
   players.draw();
   obstacles.draw();
   sparks.draw();
+  pop();
+  menu.display(
+    `\
+Players: ${players.players.length}
+AIs: ${players.AIs.length}
+FPS: ${int(frameRate())}
+
+Kill: ${killCount}
+Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
+
+Game make 
+by KHANH.
+`
+  );
 });
-
-let isPressed = false;
-let isPressed2 = false;
-function mousePressed(event) {
-  // console.log("mousePressed", event.button  )
-  if (event.button === 0) {
-    player.startPunch();
-
-    isPressed = true;
-  } else if (event.button === 2) {
-    isPressed2 = true;
-  }
-  return false;
-}
-function mouseReleased(event) {
-  // console.log("mouseReleased", event.button )
-  if (event.button === 0) {
-    isPressed = false;
-  } else if (event.button === 2) {
-    isPressed2 = false;
-  }
-  return false;
-}
 function mouseClicked(event) {
   // console.log("mouseClicked", event.button  )
+  // player.startPunch();
   return false;
 }
 function keyPressed() {
   // console.log("keyPressed", keyCode);
-  // if pressed Enter
+  // if pressed Enter => jump
   if (keyCode === 32) {
     function f(x, variance = 2.75, mu = 0) {
       // follow a normal curve
@@ -241,14 +234,14 @@ function keyPressed() {
       let d = p5.Vector.add(delta, toLookAt);
       d.setMag(d.mag() * f(deltaT) * 10);
       // console.log("d", deltaT, f(deltaT));
-      console.log("d", d.x, d.y);
+      // console.log("d", d.x, d.y);
       // idia: only follow in x-axis or y-axis
       if (abs(d.x) > abs(d.y)) {
         d.y = 0;
-        console.log("set d", d);
+        // console.log("set d", d);
       } else {
         d.x = 0;
-        console.log("set d", d);
+        // console.log("set d", d);
       }
       player.addPos(d);
     }, 16);
