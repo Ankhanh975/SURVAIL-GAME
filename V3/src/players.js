@@ -15,20 +15,6 @@ addFunction("preload", () => {
   Players_img[0][5] = loadImage("Resources/Animation_5.png");
 });
 
-Array.prototype.shuffle = function () {
-  var i = this.length,
-    j,
-    temp;
-  if (i == 0) return this;
-  while (--i) {
-    j = Math.floor(Math.random() * (i + 1));
-    temp = this[i];
-    this[i] = this[j];
-    this[j] = temp;
-  }
-  return this;
-};
-
 class Players {
   constructor(system) {
     this.img = Players_img;
@@ -42,18 +28,18 @@ class Players {
     }
     // gameTick
     setInterval(() => {
-      while (this.AIs.length < 35) {
-        let pos = p5.Vector.random2D().setMag(random(900, 1000));
-        if (pos.dist(player.pos)<400) {
-          continue
-        }
+      if (this.AIs.length < 25) {
+        // while (this.AIs.length < 35) {
+        let pos = p5.Vector.random2D().setMag(random(100, 1000));
+        let color = random(0, 5);
+
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {
-          setTimeout(() => {
-            this.createAIPlayer(
-              pos.add(p5.Vector.random2D().setMag(random(0, 100)))
-            );
-          }, Prob.normal(16, 6.5)());
-          
+          // setTimeout(() => {
+          this.createAIPlayer(
+            pos.add(p5.Vector.random2D().setMag(random(0, 100))),
+            color + Prob.normal(0, 100)()
+          );
+          // }, Prob.normal(16, 16 * 40)());
         }
       }
     }, 2000);
@@ -83,14 +69,16 @@ class Players {
       // player.drawHeiaghtBar();
     });
   }
-  createAIPlayer(pos) {
-    pos = pos || p5.Vector.random2D().setMag(random(600, 1000));
+  createAIPlayer(pos, color) {
+    pos = pos || p5.Vector.random2D().setMag(random(300, 500));
+    color = int(((-color % 5) + 5) % 5) || int(random(0, 5));
+
     if (this.players[0]) {
       // pos.add(this.players[0].pos);
       // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
     }
 
-    this.AIs.push(new AIPlayer(this.img[int(random(0, 5))], [pos.x, pos.y]));
+    this.AIs.push(new AIPlayer(this.img[color], [pos.x, pos.y]));
   }
   initAnimation() {
     [

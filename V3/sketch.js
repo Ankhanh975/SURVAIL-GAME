@@ -18,7 +18,6 @@ let frameCount = 0;
 let mouse;
 let queue = new Queue();
 
-var r = Prob.normal(0, 2.8);
 addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
   createCanvas(1024, 768);
@@ -62,6 +61,7 @@ addFunction("draw", () => {
   }
   // if (isPressed && !player.onPunch()) {
   //   // shake
+  // var r = Prob.normal(0, 2.8);
   //   setTimeout(() => {
   //     let id66 = setInterval(() => {
   //       shake = [r(), r()];
@@ -103,7 +103,7 @@ addFunction("draw", () => {
   // }
 
   // if (isPressed && !player.onPunch()) {
-  if (isPressed && (frameCount % 30 === 0 || !player.onPunch())) {
+  if (isPressed && (frameCount % 24 === 0 || !player.onPunch())) {
     player.startPunch();
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
@@ -191,7 +191,8 @@ let isPressed2 = false;
 function mousePressed(event) {
   // console.log("mousePressed", event.button  )
   if (event.button === 0) {
-   
+    player.startPunch();
+
     isPressed = true;
   } else if (event.button === 2) {
     isPressed2 = true;
@@ -209,7 +210,6 @@ function mouseReleased(event) {
 }
 function mouseClicked(event) {
   // console.log("mouseClicked", event.button  )
-  player.startPunch()
   return false;
 }
 function keyPressed() {
@@ -255,5 +255,15 @@ function keyPressed() {
     setTimeout(() => {
       clearInterval(id99);
     }, 16 * 7);
+
+    // shake
+    // let id66 = setInterval(() => {
+    //   queue.addPro(`
+    //         translate(${Prob.normal(0, 2)()}, ${Prob.normal(0, 2)()})
+    //       `);
+    // }, 16);
+    // setTimeout(() => {
+    //   clearInterval(id66);
+    // }, 16 * 5.5);
   }
 }
