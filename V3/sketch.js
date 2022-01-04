@@ -191,6 +191,7 @@ let isPressed2 = false;
 function mousePressed(event) {
   // console.log("mousePressed", event.button  )
   if (event.button === 0) {
+   
     isPressed = true;
   } else if (event.button === 2) {
     isPressed2 = true;
@@ -208,7 +209,7 @@ function mouseReleased(event) {
 }
 function mouseClicked(event) {
   // console.log("mouseClicked", event.button  )
-
+  player.startPunch()
   return false;
 }
 function keyPressed() {
