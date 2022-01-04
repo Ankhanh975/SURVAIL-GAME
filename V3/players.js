@@ -42,12 +42,18 @@ class Players {
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 35) {
+      while (this.AIs.length < 35) {
         let pos = p5.Vector.random2D().setMag(random(900, 1000));
+        if (pos.dist(player.pos)<400) {
+          continue
+        }
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {
-          this.createAIPlayer(
-            pos.add(p5.Vector.random2D().setMag(random(0, 100)))
-          );
+          setTimeout(() => {
+            this.createAIPlayer(
+              pos.add(p5.Vector.random2D().setMag(random(0, 100)))
+            );
+          }, Prob.normal(10, 4)());
+          
         }
       }
     }, 2000);
