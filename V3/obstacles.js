@@ -56,14 +56,29 @@ class Obstacles {
 
     this.lastCreate = pos;
     let ob = new Obstacle(pos, angle);
-    this.obstacles.push(ob);
-    this.system.insert(ob.circle);
+    let InsertAble = true;
+    
     system.insert(ob.circle);
-    // setTimeout(() => {
-    //   // Remove the obstacle from the world
-    //   let x = this.obstacles.shift();
-    //   system.remove(x.circle);
-    //   this.system.remove(x.circle);
-    // }, 30 * 1000);
+    system.updateBody(ob.circle);
+    system.checkOne(ob.circle, () => {
+      let b = system.response.b;
+      if (b.parent instanceof Player) {
+        // ob.circle to be inserted is overlap with a player
+        InsertAble = false;
+      }
+    });
+    if (InsertAble) {
+      this.obstacles.push(ob);
+      this.system.insert(ob.circle);
+
+      setTimeout(() => {
+        // Remove the obstacle from the world
+        let x = this.obstacles.shift();
+        system.remove(x.circle);
+        this.system.remove(x.circle);
+      }, 10 * 1000);
+    } else {
+      system.remove(ob.circle);
+    }
   }
 }

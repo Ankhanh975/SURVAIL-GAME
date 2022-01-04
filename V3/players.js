@@ -7,12 +7,12 @@ let Players_img = [
   [0, 0, 0, 0, 0, 0],
 ];
 addFunction("preload", () => {
-  Players_img[0][0] = loadImage("./Resources/Animation_0.png");
-  Players_img[0][1] = loadImage("./Resources/Animation_1.png");
-  Players_img[0][2] = loadImage("./Resources/Animation_2.png");
-  Players_img[0][3] = loadImage("./Resources/Animation_3.png");
-  Players_img[0][4] = loadImage("./Resources/Animation_4.png");
-  Players_img[0][5] = loadImage("./Resources/Animation_5.png");
+  Players_img[0][0] = loadImage("Resources/Animation_0.png");
+  Players_img[0][1] = loadImage("Resources/Animation_1.png");
+  Players_img[0][2] = loadImage("Resources/Animation_2.png");
+  Players_img[0][3] = loadImage("Resources/Animation_3.png");
+  Players_img[0][4] = loadImage("Resources/Animation_4.png");
+  Players_img[0][5] = loadImage("Resources/Animation_5.png");
 });
 
 Array.prototype.shuffle = function () {
@@ -52,10 +52,10 @@ class Players {
       }
     }, 1250);
     // }, 100);
-    setInterval(() => {
-      this.AIs.shuffle();
-      this.players.shuffle();
-    }, 125);
+    // setInterval(() => {
+    //   this.AIs.shuffle();
+    //   this.players.shuffle();
+    // }, 125);
   }
   update(mouse, grid) {
     this.AIs.forEach((e) => {
