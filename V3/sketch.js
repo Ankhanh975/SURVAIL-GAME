@@ -184,7 +184,7 @@ addFunction("draw", () => {
   {
     // Draw spawn at position 0, 0
     push();
-    let c = HSVtoRGB(0.5, 0.5, 1)
+    let c = HSVtoRGB(0.5, 0.5, 1);
     fill(...c, 125);
     circle(0, 0, 50);
 
@@ -212,6 +212,7 @@ addFunction("draw", () => {
   menu.display(
     `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}`
   );
+  chatbox.draw();
 });
 function mouseClicked(event) {
   // console.log("mouseClicked", event.button  )

@@ -5,8 +5,7 @@ class Menu {
       return;
     }
     if (millis() < 5000) {
-      txt +=
-        "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11";
+      txt += "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11";
     }
     push();
     // translate(310, -160);
@@ -28,9 +27,25 @@ class Menu {
     pop();
   }
 }
-let menu = new Menu();
+class Chatbox {
+  constructor(chatbox) {
+    this.message = [];
+  }
+  sayMessage(txt) {
+    this.message.push("You: " + txt);
+    console.log("this.message", this.message);
+  }
+  draw() {
+    push();
 
-"Stay close to the origin to find more people." 
-"Press F1 if you find out that it cramped." 
-"Press F11 to play in fullscreen mode!" 
-"You can now play the game in multiplier!" 
+    pop();
+  }
+}
+let menu = new Menu();
+let chatbox = new Chatbox();
+
+// Stay close to the origin to find more people.
+// Press F1 if you find out that it cramped.
+// Press F11 to play in fullscreen mode!
+// You can now play the game in multiplier!
+// New to the game? Read introduction at https://github.com/Ankhanh975/SURVAIL-GAME
