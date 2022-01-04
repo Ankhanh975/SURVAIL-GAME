@@ -186,20 +186,21 @@ addFunction("draw", () => {
   obstacles.draw();
   sparks.draw();
   pop();
-  menu.display(
-    `\
-Players: ${players.players.length}
-AIs: ${players.AIs.length}
-FPS: ${int(frameRate())}
+  //   menu.display(
+  //     `\
+  // Players: ${players.players.length}
+  // AIs: ${players.AIs.length}
+  // FPS: ${int(frameRate())}
 
-Kill: ${killCount}
-Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
+  // Kill: ${killCount}
+  // Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
 
-Game make 
-by KHANH.
+  // Game make
+  // by KHANH.
 
-`
-  );
+  // `
+  //   );
+  menu.display(`Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}`);
 });
 function mouseClicked(event) {
   // console.log("mouseClicked", event.button  )

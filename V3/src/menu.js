@@ -4,7 +4,10 @@ class Menu {
     if (toggleF1 === true) {
       return;
     }
-
+    if (millis() < 5000) {
+      txt +=
+        "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11";
+    }
     push();
     // translate(310, -160);
     translate(width / 2 - 205, height / 4 - 400);
@@ -21,16 +24,6 @@ class Menu {
     strokeWeight(0);
     fill(0, 0, 0, 255);
     text(txt, 0, 0);
-
-    if (millis() < 2000) {
-      fill(255, 255, 255, 150);
-      translate(-500, 500);
-      text(
-        "How to play?\n Press a, w, s, d, enter, And Left/Right Click, F1 F11,",
-        0,
-        0
-      );
-    }
 
     pop();
   }
