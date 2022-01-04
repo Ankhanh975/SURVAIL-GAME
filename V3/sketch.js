@@ -17,6 +17,23 @@ let obstacles;
 let mouse;
 let queue = new Queue();
 let killCount = 0;
+let talkative =
+  "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11";
+setInterval(() => {
+  let t = [
+    "\n\nStay close to\nthe origin\nto find more\npeople.\n",
+    "\n\nPress F1 if \nyou find out\nthat it \ncramped.\n",
+    "\n\nPress F11 to\nplay in \nfullscreen mode!\n\n",
+    "\n\nYou can now \nplay the game\nin multiplier!\n\n",
+    "\n\nNew to the \ngame? \nRead introduction\nat https://github.com/\nAnkhanh975/SURVAIL-GAME",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ];
+  talkative = t[int(random(0, t.length))];
+}, 2000);
 addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
   // createCanvas(windowWidth, windowHeight);
@@ -210,7 +227,8 @@ addFunction("draw", () => {
   // `
   //   );
   menu.display(
-    `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}`
+    `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}` +
+      talkative
   );
   chatbox.draw();
 });
