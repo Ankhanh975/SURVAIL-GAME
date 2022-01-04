@@ -197,6 +197,7 @@ Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
 
 Game make 
 by KHANH.
+
 `
   );
 });

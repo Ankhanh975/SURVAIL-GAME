@@ -22,6 +22,16 @@ class Menu {
     fill(0, 0, 0, 255);
     text(txt, 0, 0);
 
+    if (millis() < 2000) {
+      fill(255, 255, 255, 150);
+      translate(-500, 500);
+      text(
+        "How to play?\n Press a, w, s, d, enter, And Left/Right Click, F1 F11,",
+        0,
+        0
+      );
+    }
+
     pop();
   }
 }
