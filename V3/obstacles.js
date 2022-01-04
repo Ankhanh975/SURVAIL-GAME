@@ -74,10 +74,11 @@ class Obstacles {
       setTimeout(() => {
         // Remove the obstacle from the world
         let x = this.obstacles.shift();
+        system.update(x.circle);
+        this.system.update(x.circle);
+
         system.remove(x.circle);
         this.system.remove(x.circle);
-        system.updateBody(x.circle);
-        this.system.updateBody(x.circle);
       }, 10 * 1000);
     } else {
       system.remove(ob.circle);

@@ -210,7 +210,7 @@ class AIPlayer extends Player {
       }
       if (dist < 125) {
         if (!this.onPunch()) {
-          if (random(0, 100) >= 90) {
+          if (random(0, 100) >= 92.5) {
             this.startPunch();
           }
         }

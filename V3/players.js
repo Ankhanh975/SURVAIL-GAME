@@ -42,15 +42,15 @@ class Players {
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 40) {
-        let pos = p5.Vector.random2D().setMag(random(1250, 1500));
-        for (let index = 0; index < 12; index++) {
+      if (this.AIs.length < 35) {
+        let pos = p5.Vector.random2D().setMag(random(900, 1000));
+        for (let index = 0; index < Prob.normal(10, 2)(); index++) {
           this.createAIPlayer(
             pos.add(p5.Vector.random2D().setMag(random(0, 100)))
           );
         }
       }
-    }, 1250);
+    }, 2000);
     // }, 100);
     // setInterval(() => {
     //   this.AIs.shuffle();
@@ -78,7 +78,7 @@ class Players {
     });
   }
   createAIPlayer(pos) {
-    pos = pos || p5.Vector.random2D().setMag(random(200, 300));
+    pos = pos || p5.Vector.random2D().setMag(random(600, 1000));
     if (this.players[0]) {
       // pos.add(this.players[0].pos);
       // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);

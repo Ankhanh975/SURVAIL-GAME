@@ -223,19 +223,19 @@ function keyPressed() {
       );
     }
     let start = millis();
-    let delta = p5.Vector.sub(player.pos, player.lastPos);
-    let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
-    // toLookAt.setMag(15);
-    toLookAt.setMag(0);
-    // delta.setMag(0);
-
-    if (delta.mag() < 5) {
-      delta.setMag(0);
-    } else {
-      delta.setMag(25);
-    }
 
     let id99 = setInterval(() => {
+      let delta = p5.Vector.sub(player.pos, player.lastPos);
+      let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
+      // toLookAt.setMag(15);
+      toLookAt.setMag(0);
+      // delta.setMag(0);
+
+      if (delta.mag() < 5) {
+        delta.setMag(0);
+      } else {
+        delta.setMag(25);
+      }
       let deltaT = (millis() - start) / 16 - 3.2;
       let d = p5.Vector.add(delta, toLookAt);
       d.setMag(d.mag() * f(deltaT) * 10);
@@ -254,7 +254,5 @@ function keyPressed() {
     setTimeout(() => {
       clearInterval(id99);
     }, 16 * 7);
-
-    console.log("delta", delta, player.pos, player.lastPos);
   }
 }
