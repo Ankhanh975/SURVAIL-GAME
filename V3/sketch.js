@@ -102,7 +102,8 @@ addFunction("draw", () => {
   //   }, 190);
   // }
 
-  if (isPressed && !player.onPunch()) {
+  // if (isPressed && !player.onPunch()) {
+  if (isPressed && frameCount % 3 === 0) {
     player.startPunch();
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
@@ -224,14 +225,14 @@ function keyPressed() {
     let start = millis();
     let delta = p5.Vector.sub(player.pos, player.lastPos);
     let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
-    toLookAt.setMag(20);
+    toLookAt.setMag(17.5);
     // toLookAt.setMag(0);
     // delta.setMag(0);
 
     if (delta.mag() < 5) {
       delta.setMag(0);
     } else {
-      delta.setMag(15);
+      delta.setMag(13);
     }
 
     let id99 = setInterval(() => {
@@ -243,10 +244,10 @@ function keyPressed() {
       // idia: only follow in x-axis or y-axis
       if (abs(d.x) > abs(d.y)) {
         d.y = 0;
-        console.log("set d", d)
+        console.log("set d", d);
       } else {
         d.x = 0;
-        console.log("set d", d)
+        console.log("set d", d);
       }
       player.addPos(d);
     }, 16);
