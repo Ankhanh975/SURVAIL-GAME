@@ -16,8 +16,10 @@ let player;
 let obstacles;
 let frameCount = 0;
 let mouse;
+let queue = new Queue();
+
 var r = Prob.normal(0, 2.8);
-var shake = [0, 0];
+// var shake = [0, 0];
 addFunction("setup", () => {
   // createCanvas(1024, 768, WEBGL);
   createCanvas(1024, 768);
@@ -59,21 +61,48 @@ addFunction("draw", () => {
       obstacles.createObstacle(mouse);
     }
   }
-  translate(...shake);
+  // translate(...shake);
   if (isPressed && !player.onPunch()) {
+    // shake
     setTimeout(() => {
       let id66 = setInterval(() => {
         shake = [+r(), +r()];
-      }, 30);
+        queue.addPro(`
+          translate(...shake)
+        `)
+      }, 25);
       setTimeout(() => {
         clearInterval(id66);
-        shake = [0, 0];
+        // shake = [0, 0];
       }, 16 * 7);
-    }, 196);
+    }, 191);
   }
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
+    setTimeout(() => {
+      queue.addDraw(`
+      push();
+      translate(player.pos.x, player.pos.y);
+      rotate(radians(0 - 90) + player.angle);
+      fill(255, 0, 0, 100);
+      stroke(255, 255, 0, 200);
+      strokeWeight(4);
+
+      arc(
+        0,
+        0,
+        2 * 250,
+        2 * 250,
+        // -(player.angle ) / 2,
+        // +(player.angle ) / 2,
+        -radians(80) / 2,
+        radians(80) / 2,
+        PIE
+      );
+      pop();
+      `);
+    }, 190);
 
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
@@ -96,6 +125,7 @@ addFunction("draw", () => {
             system.remove(e.circle);
             players.AIs.splice(i, 1);
           } else {
+            // Push enemies backwards
             let id2 = setInterval(() => {
               let l = p5.Vector.sub(player.pos, e.pos);
               l.setMag(-max(18888 / l.mag(), 12));
@@ -115,6 +145,7 @@ addFunction("draw", () => {
   }
 
   // Should be in this exact order
+  queue.updatePro()
   players.update(mouse, null);
   system.update();
   obstacles.update();
@@ -145,7 +176,10 @@ addFunction("draw", () => {
       // a.parent.addPos(l);
     }
   });
+});
+addFunction("draw", () => {
   camera.draw_background();
+  queue.updateDraw();
   players.draw();
   obstacles.draw();
   sparks.draw();

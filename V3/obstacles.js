@@ -45,6 +45,8 @@ class Obstacles {
   }
 
   createObstacle(pos, angle = 0) {
+    pos.x -= 52 / 2;
+    pos.y -= 52 / 2;
     if (this.lastCreate) {
       if (this.lastCreate.x === pos.x && this.lastCreate.y === pos.y) {
         return;

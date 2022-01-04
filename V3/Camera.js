@@ -1,3 +1,29 @@
+// Call to translate or draw any shape is not work inside setTimeout(() => {});
+// So we queue the event for the next frame
+class Queue {
+  constructor() {
+    this.queue1 = [];
+    this.queue2 = [];
+  }
+  addDraw(event) {
+    this.queue1.push(event);
+  }
+  addPro(event) {
+    this.queue2.push(event);
+  }
+  updateDraw() {
+    this.queue1.forEach((q) => {
+      eval(q);
+    });
+    this.queue1 = [];
+  }
+  updatePro() {
+    this.queue2.forEach((q) => {
+      eval(q);
+    });
+    this.queue2 = [];
+  }
+}
 class Ground {
   // Set background base on player position
   constructor(img) {
@@ -42,14 +68,13 @@ class Camera {
       loadImage("Resources/BackGround4.png"),
     ]);
     this.transform = [];
-    this.realTransform = []
+    this.realTransform = [];
   }
   follow(playerPos) {
     // Move player to center
-    
+
     translate(-player.pos.x, -player.pos.y);
     this.transform = [-player.pos.x, -player.pos.y];
-    
   }
   draw_background(
     radius = [
@@ -73,9 +98,12 @@ class Camera {
     // console.log("xy", x, y, [x - this.transform[0], y - this.transform[1]]);
     return createVector(x - this.transform[0], y - this.transform[1]);
   }
+  shake(duration = 3, variance = 1.0) {
+    // Start shake camera
+  }
   translate(x, y) {
     // Average out the transformation over few frame
-    translate(x, y)
+    translate(x, y);
     // = stack != null ? stack : [];
   }
   rotate(a) {
@@ -83,15 +111,15 @@ class Camera {
   }
 }
 
-  // if (mouseX < 10) {
-  //   camera.translate(min(10 - mouseX, 10)*10, 0);
-  // }
-  // if (mouseX > width - 10) {
-  //   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
-  // }
-  // if (mouseY < 10) {
-  //   camera.translate(0, min(10 - mouseY, 10)*10);
-  // }
-  // if (mouseY > height - 10) {
-  //   camera.translate(0, max(-mouseY + height - 10, -10)*10);
-  // }
+// if (mouseX < 10) {
+//   camera.translate(min(10 - mouseX, 10)*10, 0);
+// }
+// if (mouseX > width - 10) {
+//   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
+// }
+// if (mouseY < 10) {
+//   camera.translate(0, min(10 - mouseY, 10)*10);
+// }
+// if (mouseY > height - 10) {
+//   camera.translate(0, max(-mouseY + height - 10, -10)*10);
+// }

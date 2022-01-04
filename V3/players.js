@@ -23,13 +23,18 @@ class Players {
     this.AIs = [];
     this.system = system;
 
-    for (let index = 0; index < 50; index++) {
+    for (let index = 0; index < 20; index++) {
       this.createAIPlayer();
     }
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 50) {
-        this.createAIPlayer();
+      if (this.AIs.length < 15) {
+        let pos = p5.Vector.random2D().setMag(random(900, 1000));
+        for (let index = 0; index < 15; index++) {
+          this.createAIPlayer(
+            pos.add(p5.Vector.random2D().setMag(random(0, 75)))
+          );
+        }
       }
     }, 1250);
     // }, 100);
@@ -54,9 +59,10 @@ class Players {
       // player.drawHeiaghtBar();
     });
   }
-  createAIPlayer() {
+  createAIPlayer(pos) {
     // let pos = p5.Vector.random2D().setMag(random(600, 1000));
-    let pos = p5.Vector.random2D().setMag(random(15, 200));
+
+    pos = pos || p5.Vector.random2D().setMag(random(200, 300));
     if (this.players[0]) {
       // pos.add(this.players[0].pos);
       // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
