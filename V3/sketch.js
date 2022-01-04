@@ -103,7 +103,7 @@ addFunction("draw", () => {
   // }
 
   // if (isPressed && !player.onPunch()) {
-  if (isPressed && frameCount % 3 === 0) {
+  if (isPressed && (frameCount % 24 === 0 || !player.onPunch())) {
     player.startPunch();
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
@@ -212,7 +212,7 @@ function mouseClicked(event) {
   return false;
 }
 function keyPressed() {
-  console.log("keyPressed", keyCode);
+  // console.log("keyPressed", keyCode);
   // if pressed Enter
   if (keyCode === 32) {
     function f(x, variance = 2, mu = 0) {
@@ -225,14 +225,14 @@ function keyPressed() {
     let start = millis();
     let delta = p5.Vector.sub(player.pos, player.lastPos);
     let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
-    toLookAt.setMag(17.5);
+    toLookAt.setMag(15);
     // toLookAt.setMag(0);
     // delta.setMag(0);
 
     if (delta.mag() < 5) {
       delta.setMag(0);
     } else {
-      delta.setMag(13);
+      delta.setMag(11);
     }
 
     let id99 = setInterval(() => {
