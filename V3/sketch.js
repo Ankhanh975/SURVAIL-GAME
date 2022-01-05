@@ -31,10 +31,12 @@ setInterval(() => {
     "",
     "",
     "",
+    "",
   ];
   talkative = t[int(random(0, t.length))];
 }, 2000);
 addFunction("setup", () => {
+  // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
   // createCanvas(windowWidth, windowHeight);
   createCanvas(1024, 768);
@@ -123,7 +125,7 @@ addFunction("draw", () => {
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
 
-      players.AIs.forEach((e, i) => {
+      players.players.forEach((e, i) => {
         let hit = collidePointArc(
           e.pos.x,
           e.pos.y,
@@ -139,7 +141,7 @@ addFunction("draw", () => {
           e.getHit();
           if (e.health < 0) {
             system.remove(e.circle);
-            players.AIs.splice(i, 1);
+            players.players.splice(i, 1);
             killCount += 1;
           } else {
             // Push enemies backwards
@@ -148,9 +150,7 @@ addFunction("draw", () => {
               l.setMag(-max(18888 / l.mag(), 12));
 
               // l.scale(1 / mal.len());
-              e.circle.pos.x += l.x;
-              e.circle.pos.y += l.y;
-              e.pos.add(l);
+              e.addPos(l);
             }, 16.6);
             setTimeout(() => {
               clearInterval(id2);
@@ -164,6 +164,7 @@ addFunction("draw", () => {
   // Should be in this exact order
   queue.updatePro();
   players.update(mouse, null);
+  onController(player);
   system.update();
   obstacles.update();
   system.checkAll(({ a, overlapV }) => {
@@ -267,7 +268,7 @@ function keyPressed() {
       d.setMag(d.mag() * f(deltaT) * 10);
       // console.log("d", deltaT, f(deltaT));
       // console.log("d", d.x, d.y);
-      // idia: only follow in x-axis or y-axis
+      // idea: only follow in x-axis or y-axis
       if (abs(d.x) > abs(d.y)) {
         d.y = 0;
         // console.log("set d", d);
@@ -279,7 +280,7 @@ function keyPressed() {
     }, 16);
     setTimeout(() => {
       clearInterval(id99);
-    }, 16 * 7);
+    }, 16 * 5);
 
     // shake
     // let id66 = setInterval(() => {

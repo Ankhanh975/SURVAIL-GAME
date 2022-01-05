@@ -35,8 +35,10 @@ class Obstacles {
     this.system = new DetectCollisions.System();
   }
   update() {
+    // TODO: the global collision detection system may not be updated properly (bounding box)
     this.system.update();
     this.system.separate();
+    this.system.update();
   }
   draw() {
     this.obstacles.forEach((obstacle) => {

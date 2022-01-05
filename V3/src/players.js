@@ -20,24 +20,22 @@ class Players {
     this.img = Players_img;
     this.initAnimation();
     this.players = [];
-    this.AIs = [];
     this.system = system;
 
-    for (let index = 0; index < 20; index++) {
-      this.createAIPlayer();
-    }
+    setTimeout(() => {
+      for (let index = 0; index < 20; index++) {
+        this.createAIPlayer();
+      }
+    }, 1000);
     // gameTick
     setInterval(() => {
-      if (this.AIs.length < 18) {
+      if (this.players.length < 20) {
         // while (this.AIs.length < 35) {
         let pos = p5.Vector.random2D().setMag(random(100, 1000));
-        let color = random(0, 5);
-
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {
           // setTimeout(() => {
           this.createAIPlayer(
-            pos.add(p5.Vector.random2D().setMag(random(0, 100))),
-            color + Prob.normal(0, 100)()
+            pos.add(p5.Vector.random2D().setMag(random(0, 100)))
           );
           // }, Prob.normal(16, 16 * 40)());
         }
@@ -50,35 +48,33 @@ class Players {
     // }, 125);
   }
   update(mouse, grid) {
-    this.AIs.forEach((e) => {
-      e.update(this.AIs, this.players, grid);
-    });
-    this.players.forEach((player) => {
-      player.update(mouse, true);
+    this.players.forEach((e) => {
+      if (e.AIPlayer) {
+        e.update(this.players, grid);
+      } else {
+        e.update(mouse, true);
+      }
     });
   }
   draw() {
-    this.AIs.forEach((e) => {
+    this.players.forEach((e) => {
       e.drawPlayer();
-      //   e.drawNameTag();
       e.drawHeightBar();
-    });
-    this.players.forEach((player) => {
-      player.drawPlayer();
-      player.drawNameTag();
-      // player.drawHeiaghtBar();
+      if (!e.AIPlayer) {
+        e.drawNameTag();
+      }
     });
   }
   createAIPlayer(pos, color) {
     pos = pos || p5.Vector.random2D().setMag(random(300, 500));
-    color = int(((-color % 5) + 5) % 5) || int(random(0, 5));
+    color = int(((color % 5) + 5) % 5) || int(random(0, 5));
 
     if (this.players[0]) {
       // pos.add(this.players[0].pos);
       // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
     }
 
-    this.AIs.push(new AIPlayer(this.img[color], [pos.x, pos.y]));
+    this.players.push(new AIPlayer(this.img[color], [pos.x, pos.y]));
   }
   initAnimation() {
     [

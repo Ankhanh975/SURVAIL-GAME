@@ -1,5 +1,5 @@
-// Call to translate or draw any shape is not work inside setTimeout(() => {});
-// So we queue the event for the next frame
+// Call to translate() or rect() is not work inside setTimeout(() => {});
+// So we queue the event to the next frame
 class Queue {
   constructor() {
     this.queue1 = [];
@@ -108,6 +108,18 @@ class Camera {
   translate(x, y) {
     // Average out the transformation over few frame
     translate(x, y);
+    // if (mouseX < 10) {
+    //   camera.translate(min(10 - mouseX, 10)*10, 0);
+    // }
+    // if (mouseX > width - 10) {
+    //   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
+    // }
+    // if (mouseY < 10) {
+    //   camera.translate(0, min(10 - mouseY, 10)*10);
+    // }
+    // if (mouseY > height - 10) {
+    //   camera.translate(0, max(-mouseY + height - 10, -10)*10);
+    // }
     // = stack != null ? stack : [];
   }
   rotate(a) {
@@ -150,20 +162,20 @@ function HSVtoRGB(h, s, v) {
       (r = v), (g = p), (b = q);
       break;
   }
-  return [Math.round(r * 255),
-    Math.round(g * 255),
-    Math.round(b * 255),]
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
+// Monitor total play time
+// Check Monitor use: localStorage.getItem("playTime");
+setTimeout(() => {
+  let start = frameCount;
+  setInterval(() => {
+    let thisTime = (frameCount - start) / frameRate();
 
-// if (mouseX < 10) {
-//   camera.translate(min(10 - mouseX, 10)*10, 0);
-// }
-// if (mouseX > width - 10) {
-//   camera.translate(max(-mouseX + width - 10, -10)*10, 0);
-// }
-// if (mouseY < 10) {
-//   camera.translate(0, min(10 - mouseY, 10)*10);
-// }
-// if (mouseY > height - 10) {
-//   camera.translate(0, max(-mouseY + height - 10, -10)*10);
-// }
+    let now = localStorage.getItem("playTime");
+    now = JSON.parse(now);
+    if (now === null || now === "undefined") now = 0;
+    else now = now;
+
+    localStorage.setItem("playTime", JSON.stringify(now + thisTime));
+  }, 30 * 1000);
+}, 5000);
