@@ -57,10 +57,10 @@ class Players {
     });
   }
   draw() {
-    this.players.forEach((e) => {
+    this.players.forEach((e, i) => {
       e.drawPlayer();
       e.drawHeightBar();
-      if (!e.AIPlayer) {
+      if (!e.AIPlayer || i === 0) {
         e.drawNameTag();
       }
     });
