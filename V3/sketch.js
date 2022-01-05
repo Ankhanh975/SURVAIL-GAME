@@ -12,11 +12,12 @@ let talkative =
   "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11";
 setInterval(() => {
   let t = [
-    "\n\nStay close to\nthe origin\nto find more\npeople.\n",
-    "\n\nPress F1 if \nyou find out\nthat it \ncramped.\n",
-    "\n\nPress F11 to\nplay in \nfullscreen mode!\n\n",
-    "\n\nYou can now \nplay the game\nin multiplier!\n\n",
-    "\n\nNew to the \ngame? \nRead introduction\nat https://github.com/\nAnkhanh975/SURVAIL-GAME",
+    "\nStay close to\nthe origin\nto find more\npeople.\n",
+    "\nPress F1 if \nyou find out\nthat it \ncramped.\n",
+    "\nPress F11 to\nplay in \nfullscreen mode!\n\n",
+    "\nYou can now \nplay the game\nin multiplier!\n\n",
+    "\nNew to the \ngame? \nRead introduction\nat https://github.com/\nAnkhanh975/SURVAIL-GAME",
+    "\nTry to \nsurvail!",
     "",
     "",
     "",
@@ -190,12 +191,12 @@ Players: ${players.players.length}
 FPS: ${int(frameRate())}
 Kill: ${killCount}
 Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
-
-Game make
-by KHANH.
-
-  `
+` + talkative
   );
+
+  // Game make
+  // by KHANH.
+  
   // menu.display(
   //   `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}` +
   //     talkative
