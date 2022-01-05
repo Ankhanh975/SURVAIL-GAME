@@ -65,11 +65,13 @@ addFunction("setup", () => {
   friend.recovery = 0.001 * friend.health;
   players.players.push(friend);
 });
-
 addFunction("draw", () => {
   translate(width / 2, height / 2);
   if (player.health < 0) {
     scale(0.75);
+  }
+  if (width < 500) {
+    scale(0.5);
   }
   // print("frameRate", round(frameRate()));
   // background(100);
@@ -196,7 +198,7 @@ Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
 
   // Game make
   // by KHANH.
-  
+
   // menu.display(
   //   `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}` +
   //     talkative
