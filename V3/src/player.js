@@ -1,13 +1,4 @@
-function average(angles) {
-  // https://www.youtube.com/watch?v=xHq4UlJiUaE
-  let x = 0;
-  let y = 0;
-  angles.forEach((n) => {
-    x += cos(n - 0);
-    y += sin(n - 0);
-  });
-  return atan2(y, x) + 0;
-}
+
 
 class Player {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
@@ -99,13 +90,14 @@ class Player {
   drawNameTag() {
     push();
     translate(this.pos);
-    translate(0, -18);
+    translate(2, -18);
 
     textFont(myFont);
     textAlign(CENTER);
     textSize(21);
     stroke(0, 0, 0);
-    strokeWeight(1.5);
+    // strokeWeight(1.5);
+    strokeWeight(0);
     fill(255, 255, 255);
     text(this.name, 0, 0);
 

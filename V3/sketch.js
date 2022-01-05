@@ -209,13 +209,6 @@ function keyPressed() {
   // console.log("keyPressed", keyCode);
   // if pressed Enter => jump
   if (keyCode === 32) {
-    function f(x, variance = 2.75, mu = 0) {
-      // follow a normal curve
-      return (
-        Math.exp(-((-x - mu) * (-x - mu)) / (2 * variance * variance)) /
-        (variance * sqrt(2 * Math.PI))
-      );
-    }
     let start = millis();
 
     let id99 = setInterval(() => {
@@ -230,9 +223,9 @@ function keyPressed() {
       } else {
         delta.setMag(25);
       }
-      let deltaT = (millis() - start) / 16 - 3.2;
+      let deltaT = (millis() - start) / 16 - 3.3;
       let d = p5.Vector.add(delta, toLookAt);
-      d.setMag(d.mag() * f(deltaT) * 10);
+      d.setMag(d.mag() * Curve.f(deltaT, 2.75) * 10);
       // console.log("d", deltaT, f(deltaT));
       // console.log("d", d.x, d.y);
       // idea: only follow in x-axis or y-axis
