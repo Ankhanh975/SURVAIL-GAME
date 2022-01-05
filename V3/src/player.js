@@ -104,7 +104,7 @@ class Player {
   drawHeightBar() {
     push();
     translate(this.pos);
-    translate(0, -35);
+    translate(-20, -35);
     strokeWeight(4);
 
     stroke(25, 25, 25);
@@ -139,6 +139,12 @@ class Player {
     // effects to outside
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
+      let hitRange;
+      if (this.AIPlayer) {
+        hitRange = [150, radians(0 - 90) + this.angle, radians(40)];
+      } else {
+        hitRange = [250, radians(0 - 90) + this.angle, radians(80)];
+      }
 
       this.parent.players.forEach((e, i) => {
         let hit = collidePointArc(
@@ -146,9 +152,9 @@ class Player {
           e.pos.y,
           this.pos.x,
           this.pos.y,
-          250,
-          radians(0 - 90) + this.angle,
-          radians(80)
+          hitRange[0],
+          hitRange[1],
+          hitRange[2]
         );
 
         if (hit) {
@@ -166,7 +172,7 @@ class Player {
               let deltaT = (millis() - start) / 16 - 4;
               let d = p5.Vector.sub(this.pos, e.pos);
               d.normalize();
-              console.log("d", deltaT, d);
+              // console.log("d", deltaT, d);
               d.setMag(-d.mag() * Curve.f(deltaT, 4) * 90 * this.damage);
               e.addPos(d);
             }, 16);

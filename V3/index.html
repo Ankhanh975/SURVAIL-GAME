@@ -66,7 +66,22 @@
       } else if (e.code === "F3") {
         toggleF3 = !toggleF3;
       }
-      if (e.code !== "F11" && e.code !== "KeyR" && e.code !== "F12") {
+      if (
+        !["F11",
+          "KeyR",
+          "F12",
+          "F1",
+          "F3",
+          "Digit1",
+          "Digit2",
+          "Digit3",
+          "Digit4",
+          "Digit5",
+          "Digit6",
+          "Digit7",
+          "Digit8",
+          "Digit9"].includes(e.code)
+      ) {
         e.preventDefault();
 
       }

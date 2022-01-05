@@ -56,8 +56,8 @@ addFunction("setup", () => {
   // main player, store in players.player but player is a faster way to access
   players = new Players(system);
   player = new Player(players.img[5], players);
-  player.health = 500;
-  player.totalHealth = 500;
+  player.health = 1000;
+  player.totalHealth = 1000;
   player.damage = 2.75;
   player.recovery = 0.001 * player.health;
   obstacles = new Obstacles();
@@ -77,7 +77,7 @@ addFunction("draw", () => {
 
 addFunction("draw", () => {
   if (isPressed2) {
-    sparks.create_particle([mouse.x, mouse.y], [9, 200, 9]);
+    sparks.create_particle(mouse, [9, 200, 9]);
     if (frameCount % 3 === 0) {
       obstacles.createObstacle(mouse);
     }

@@ -19,7 +19,7 @@ class Spark {
   constructor(loc, angle, speed, color, scale = 1) {
     // console.log("this.color", this.color, color);
 
-    this.loc = loc;
+    this.loc = loc.copy();
     this.angle = angle;
     this.speed = speed;
     this.scale = scale;
@@ -48,8 +48,8 @@ class Spark {
   }
   move(dt) {
     let movement = this.calculate_movement(dt);
-    // this.loc.x += movement[0];
-    // this.loc.y += movement[1];
+    this.loc.x += movement[0];
+    this.loc.y += movement[1];
     
     this.speed -= 0.085 + 0.025 * this.speed;
     this.angle += 0.075;
