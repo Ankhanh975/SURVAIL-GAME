@@ -1,12 +1,3 @@
-var myFont;
-addFunction("preload", () => {
-  // myFont = loadFont("Resources/Steps-Mono.otf");
-  myFont = loadFont("Resources/Minecraft.ttf");
-  // song = loadSound("Resources/C418 - Beginning 2.mp3");
-  // song.play();
-  // img = loadImage(" Zombie.png");
-});
-
 let song;
 let sparks;
 let camera;
@@ -51,17 +42,27 @@ addFunction("setup", () => {
 addFunction("setup", () => {
   system = new DetectCollisions.System();
   // system.result = system.createResult();
-  camera = new Camera();
   sparks = new Sparks();
-  // main player, store in players.player but player is a faster way to access
-  players = new Players(system);
-  player = new Player(players.img[5], players);
-  player.health = 1000;
-  player.totalHealth = 1000;
-  player.damage = 2.75;
-  player.recovery = 0.001 * player.health;
   obstacles = new Obstacles();
+  camera = new Camera();
+  players = new Players(system);
+
+  // main player, store in players.player but player is a faster way to access
+  player = new Player(players.img[5], players);
+  player.health = 500;
+  player.totalHealth = 500;
+  player.damage = 4.5;
+  player.recovery = 0.001 * player.health;
   players.players.push(player);
+
+  let friend = new Player(players.img[5], players);
+  friend.health = 300;
+  friend.totalHealth = 300;
+  friend.name = "friend";
+  friend.damage = 4.5;
+  friend.addPos(createVector(0, 10));
+  friend.recovery = 0.001 * friend.health;
+  players.players.push(friend);
 });
 
 addFunction("draw", () => {
@@ -125,9 +126,10 @@ addFunction("draw", () => {
   //   }, 190);
   // }
 
-  // if (isPressed && !player.onPunch()) {
-  if (isPressed && (frameCount % 24 === 0 || !player.onPunch())) {
+  if (isPressed && !player.onPunch()) {
+    // if (isPressed && (frameCount % 24 === 0 || !player.onPunch())) {
     player.startPunch();
+    sparks.create_particle(player.pos, [255, 0, 0], 3.5);
   }
 
   // Should be in this exact order
@@ -166,7 +168,7 @@ addFunction("draw", () => {
 });
 addFunction("draw", () => {
   push();
-  camera.follow(players.players[0].pos);
+  camera.follow(player.pos);
   camera.draw_background();
   {
     // Draw spawn at position 0, 0
@@ -222,10 +224,13 @@ function keyPressed() {
         delta.setMag(0);
       } else {
         delta.setMag(32.5);
+        for (let i = 0; i < 14; i++) {
+          sparks.create_particle(player.pos, [0, 0, 0], 3.5);
+        }
       }
       let deltaT = (millis() - start) / 16 - 3.3;
       let d = p5.Vector.add(delta, toLookAt);
-      d.setMag(d.mag() * Curve.f(deltaT, 2.75) * 10);
+      d.setMag(d.mag() * Curve.f(deltaT, 3) * 10);
       // console.log("d", deltaT, f(deltaT));
       // console.log("d", d.x, d.y);
       // idea: only follow in x-axis or y-axis

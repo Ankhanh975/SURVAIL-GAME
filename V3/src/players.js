@@ -24,12 +24,14 @@ class Players {
 
     setTimeout(() => {
       for (let index = 0; index < 20; index++) {
-        this.createAIPlayer();
+        setTimeout(() => {
+          this.createAIPlayer();
+        }, Prob.normal(16 * 50, 16 * 100)());
       }
-    }, 1000);
+    }, 100);
     // gameTick
     setInterval(() => {
-      if (this.players.length < 50) {
+      if (this.players.length < 37) {
         // while (this.AIs.length < 35) {
         let pos = p5.Vector.random2D().setMag(random(100, 1000));
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {
@@ -51,8 +53,10 @@ class Players {
     this.players.forEach((e) => {
       if (e.AIPlayer) {
         e.update(grid);
+      } else if (e === player) {
+        e.update(mouse);
       } else {
-        e.update(mouse, true);
+        e.update(p5.Vector.add(e.pos, e.normal));
       }
     });
   }

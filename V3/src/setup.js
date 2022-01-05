@@ -26,3 +26,12 @@ function addFunction(NAME, f) {
     SETUP.push(f);
   }
 }
+
+var myFont;
+addFunction("preload", () => {
+  // myFont = loadFont("Resources/Steps-Mono.otf");
+  myFont = loadFont("Resources/Minecraft.ttf");
+  // song = loadSound("Resources/C418 - Beginning 2.mp3");
+  // song.play();
+  // img = loadImage(" Zombie.png");
+});

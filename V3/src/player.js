@@ -143,7 +143,7 @@ class Player {
       if (this.AIPlayer) {
         hitRange = [150, radians(0 - 90) + this.angle, radians(40)];
       } else {
-        hitRange = [250, radians(0 - 90) + this.angle, radians(80)];
+        hitRange = [280, radians(0 - 90) + this.angle, radians(60)];
       }
 
       this.parent.players.forEach((e, i) => {
@@ -191,12 +191,12 @@ class Player {
     this.health -= 13;
     if (this.health >= 0) {
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle(this.pos, [200, 0, 0], 3.5);
+        sparks.create_particle(this.pos, [200, 50, 50], 3.5);
       }
     } else {
       // Dead
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle(this.pos, [100, 0, 0], 3.5);
+        sparks.create_particle(this.pos, [100, 50, 50], 3.5);
       }
     }
   }
@@ -207,12 +207,14 @@ class AIPlayer extends Player {
     super(animation, parent, "n", pos);
     this.name = generateName.__call();
     this.AIPlayer = true;
+    this.target = int(random(0, 2));
   }
 
   update(grid) {
-    let lookAt, dist, toLookAt;
+    let target = this.parent.players[this.target].pos;
     {
-      lookAt = this.parent.players[0].pos;
+      let lookAt, dist, toLookAt;
+      lookAt = target;
       dist = this.pos.dist(lookAt);
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
