@@ -29,7 +29,7 @@ class Players {
     }, 1000);
     // gameTick
     setInterval(() => {
-      if (this.players.length < 20) {
+      if (this.players.length < 50) {
         // while (this.AIs.length < 35) {
         let pos = p5.Vector.random2D().setMag(random(100, 1000));
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {

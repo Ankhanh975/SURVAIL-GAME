@@ -56,9 +56,10 @@ addFunction("setup", () => {
   // main player, store in players.player but player is a faster way to access
   players = new Players(system);
   player = new Player(players.img[5], players);
-  player.health = 100;
-  player.totalHealth = 100;
-  player.recovery = 0.4;
+  player.health = 500;
+  player.totalHealth = 500;
+  player.damage = 2.75;
+  player.recovery = 0.001 * player.health;
   obstacles = new Obstacles();
   players.players.push(player);
 });
@@ -183,14 +184,13 @@ addFunction("draw", () => {
   pop();
   menu.display(
     `\
-  Players: ${players.players.length}
-  FPS: ${int(frameRate())}
+Players: ${players.players.length}
+FPS: ${int(frameRate())}
+Kill: ${killCount}
+Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
 
-  Kill: ${killCount}
-  Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
-
-  Game make
-  by KHANH.
+Game make
+by KHANH.
 
   `
   );
@@ -221,7 +221,7 @@ function keyPressed() {
       if (delta.mag() < 5) {
         delta.setMag(0);
       } else {
-        delta.setMag(25);
+        delta.setMag(32.5);
       }
       let deltaT = (millis() - start) / 16 - 3.3;
       let d = p5.Vector.add(delta, toLookAt);

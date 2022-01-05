@@ -1,5 +1,3 @@
-
-
 class Player {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
     this.normal = createVector(0, -1);
@@ -15,11 +13,11 @@ class Player {
 
     this.name = name;
     this.punchHand = "right";
-    
+
     this.health = health;
     this.totalHealth = health;
-    this.recovery = 0.04
-    
+    this.recovery = 0.04;
+    this.damage = 1;
     // physics circle for collision detection
     this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 65 / 2);
     this.circle.parent = this;
@@ -162,16 +160,20 @@ class Player {
             killCount += 1;
           } else {
             // Push enemies backwards
-            let id2 = setInterval(() => {
-              let l = p5.Vector.sub(this.pos, e.pos);
-              l.setMag(-max(18888 / l.mag(), 12));
+            let start = millis();
 
-              // l.scale(1 / mal.len());
-              e.addPos(l);
+            let id9 = setInterval(() => {
+              let deltaT = (millis() - start) / 16 - 4;
+              let d = p5.Vector.sub(this.pos, e.pos);
+              d.normalize();
+              console.log("d", deltaT, d);
+              d.setMag(-d.mag() * Curve.f(deltaT, 4) * 90 * this.damage);
+              e.addPos(d);
             }, 16);
+
             setTimeout(() => {
-              clearInterval(id2);
-            }, 16.6 * 2);
+              clearInterval(id9);
+            }, 16 * 5);
           }
         }
       });
