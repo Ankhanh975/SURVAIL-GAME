@@ -10,7 +10,7 @@ function average(angles) {
 }
 
 class Player {
-  constructor(animation, name = "love", pos = [0, 0], health = 42) {
+  constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
     this.normal = createVector(0, -1);
 
     this.pos = createVector(...pos);
@@ -24,11 +24,15 @@ class Player {
 
     this.name = name;
     this.punchHand = "right";
+    
     this.health = health;
-
+    this.totalHealth = health;
+    this.recovery = 0.04
+    
     // physics circle for collision detection
     this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 65 / 2);
     this.circle.parent = this;
+    this.parent = parent;
   }
   setPos(pos) {
     this.pos = pos;
@@ -44,8 +48,8 @@ class Player {
   }
 
   update(lookAt) {
-    if (this.health < 20) {
-      this.health += 0.04;
+    if (this.health < this.totalHealth) {
+      this.health += this.recovery;
     }
 
     this.lastPos = this.pos.copy();
@@ -118,17 +122,17 @@ class Player {
 
     strokeWeight(3);
     stroke(250, 50, 25);
-    rect(0, 0, 55 * (this.health / 42), 1);
+    rect(0, 0, 55 * (this.health / this.totalHealth), 1);
     pop();
   }
   onPunch() {
     return this.animateFrames !== 0;
   }
   startPunch(hand = null) {
-    // if (this.onPunch()) return;
-
+    // print("startPunch", this.animateFrames, this.animation.length);
     {
-      // print("startPunch", this.animateFrames, this.animation.length);
+      // animation
+      this.punchHand = hand || ["left", "right"][int(random(0, 2))];
       this.animateFrames = 1;
 
       let id = setInterval(() => {
@@ -141,11 +145,45 @@ class Player {
         }
       }, 16.6 * 5);
     }
-    if (hand === null) {
-      this.punchHand = ["left", "right"][int(random(0, 2))];
-    } else {
-      this.punchHand = hand;
-    }
+
+    // effects to outside
+    setTimeout(() => {
+      obstacles.obstacles.forEach((e, i) => {});
+
+      this.parent.players.forEach((e, i) => {
+        let hit = collidePointArc(
+          e.pos.x,
+          e.pos.y,
+          this.pos.x,
+          this.pos.y,
+          250,
+          radians(0 - 90) + this.angle,
+          radians(80)
+        );
+
+        if (hit) {
+          // print("Hit players.AIs", i);
+          e.getHit();
+          if (e.health < 0) {
+            system.remove(e.circle);
+            this.parent.players.splice(i, 1);
+            killCount += 1;
+          } else {
+            // Push enemies backwards
+            let id2 = setInterval(() => {
+              let l = p5.Vector.sub(this.pos, e.pos);
+              l.setMag(-max(18888 / l.mag(), 12));
+
+              // l.scale(1 / mal.len());
+              e.addPos(l);
+            }, 16);
+            setTimeout(() => {
+              clearInterval(id2);
+            }, 16.6 * 2);
+          }
+        }
+      });
+    }, 190);
   }
   getHit() {
     // animation
@@ -153,38 +191,38 @@ class Player {
     this.health -= 13;
     if (this.health >= 0) {
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle([this.pos.x, this.pos.y], [200, 0, 0], 3.5);
+        sparks.create_particle(this.pos, [200, 0, 0], 3.5);
       }
     } else {
       // Dead
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle([this.pos.x, this.pos.y], [100, 0, 0], 3.5);
+        sparks.create_particle(this.pos, [100, 0, 0], 3.5);
       }
     }
   }
 }
 
 class AIPlayer extends Player {
-  constructor(animation, pos = [0, 0]) {
-    super(animation, "n", pos);
+  constructor(animation, parent, pos = [0, 0]) {
+    super(animation, parent, "n", pos);
     this.name = generateName.__call();
     this.AIPlayer = true;
   }
 
-  update(players, grid) {
+  update(grid) {
     let lookAt, dist, toLookAt;
     {
-      lookAt = players[0].pos;
+      lookAt = this.parent.players[0].pos;
       dist = this.pos.dist(lookAt);
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
       super.update(lookAt);
-      if (dist < 75) {
+      if (dist < 120) {
         toLookAt.setMag(3.5);
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }
-      if (dist < 125) {
+      if (dist < 150) {
         if (!this.onPunch()) {
           if (random(0, 100) >= 92.5) {
             this.startPunch();

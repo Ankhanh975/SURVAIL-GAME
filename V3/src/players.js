@@ -50,7 +50,7 @@ class Players {
   update(mouse, grid) {
     this.players.forEach((e) => {
       if (e.AIPlayer) {
-        e.update(this.players, grid);
+        e.update(grid);
       } else {
         e.update(mouse, true);
       }
@@ -74,7 +74,7 @@ class Players {
       // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
     }
 
-    this.players.push(new AIPlayer(this.img[color], [pos.x, pos.y]));
+    this.players.push(new AIPlayer(this.img[color], this, [pos.x, pos.y]));
   }
   initAnimation() {
     [

@@ -48,10 +48,11 @@ class Spark {
   }
   move(dt) {
     let movement = this.calculate_movement(dt);
-    this.loc[0] += movement[0];
-    this.loc[1] += movement[1];
+    // this.loc.x += movement[0];
+    // this.loc.y += movement[1];
+    
     this.speed -= 0.085 + 0.025 * this.speed;
-    this.angle += 0.075
+    this.angle += 0.075;
     if (this.speed <= 0) {
       this.alive = false;
     }
@@ -60,24 +61,20 @@ class Spark {
     if (this.alive) {
       let points = [
         [
-          this.loc[0] + cos(this.angle) * this.speed * this.scale,
-          this.loc[1] + sin(this.angle) * this.speed * this.scale,
+          this.loc.x + cos(this.angle) * this.speed * this.scale,
+          this.loc.y + sin(this.angle) * this.speed * this.scale,
         ],
         [
-          this.loc[0] +
-            cos(this.angle + PI / 2) * this.speed * this.scale * 0.3,
-          this.loc[1] +
-            sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
+          this.loc.x + cos(this.angle + PI / 2) * this.speed * this.scale * 0.3,
+          this.loc.y + sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
         ],
         [
-          this.loc[0] - cos(this.angle) * this.speed * this.scale * 3.5,
-          this.loc[1] - sin(this.angle) * this.speed * this.scale * 3.5,
+          this.loc.x - cos(this.angle) * this.speed * this.scale * 3.5,
+          this.loc.y - sin(this.angle) * this.speed * this.scale * 3.5,
         ],
         [
-          this.loc[0] +
-            cos(this.angle - PI / 2) * this.speed * this.scale * 0.3,
-          this.loc[1] -
-            sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
+          this.loc.x + cos(this.angle - PI / 2) * this.speed * this.scale * 0.3,
+          this.loc.y - sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
         ],
       ];
       // console.log("this.color", this.color);

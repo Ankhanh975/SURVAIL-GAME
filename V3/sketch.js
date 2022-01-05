@@ -55,14 +55,19 @@ addFunction("setup", () => {
   sparks = new Sparks();
   // main player, store in players.player but player is a faster way to access
   players = new Players(system);
-  player = new Player(players.img[5]);
+  player = new Player(players.img[5], players);
+  player.health = 100;
+  player.totalHealth = 100;
+  player.recovery = 0.4;
   obstacles = new Obstacles();
   players.players.push(player);
 });
 
 addFunction("draw", () => {
   translate(width / 2, height / 2);
-
+  if (player.health < 0) {
+    scale(0.75);
+  }
   // print("frameRate", round(frameRate()));
   // background(100);
   noSmooth();
@@ -122,43 +127,6 @@ addFunction("draw", () => {
   // if (isPressed && !player.onPunch()) {
   if (isPressed && (frameCount % 24 === 0 || !player.onPunch())) {
     player.startPunch();
-    setTimeout(() => {
-      obstacles.obstacles.forEach((e, i) => {});
-
-      players.players.forEach((e, i) => {
-        let hit = collidePointArc(
-          e.pos.x,
-          e.pos.y,
-          player.pos.x,
-          player.pos.y,
-          250,
-          radians(0 - 90) + player.angle,
-          radians(80)
-        );
-
-        if (hit) {
-          // print("Hit players.AIs", i);
-          e.getHit();
-          if (e.health < 0) {
-            system.remove(e.circle);
-            players.players.splice(i, 1);
-            killCount += 1;
-          } else {
-            // Push enemies backwards
-            let id2 = setInterval(() => {
-              let l = p5.Vector.sub(player.pos, e.pos);
-              l.setMag(-max(18888 / l.mag(), 12));
-
-              // l.scale(1 / mal.len());
-              e.addPos(l);
-            }, 16.6);
-            setTimeout(() => {
-              clearInterval(id2);
-            }, 16.6 * 2);
-          }
-        }
-      });
-    }, 190);
   }
 
   // Should be in this exact order
@@ -197,7 +165,7 @@ addFunction("draw", () => {
 });
 addFunction("draw", () => {
   push();
-  camera.follow(player.pos);
+  camera.follow(players.players[0].pos);
   camera.draw_background();
   {
     // Draw spawn at position 0, 0
@@ -213,24 +181,23 @@ addFunction("draw", () => {
   obstacles.draw();
   sparks.draw();
   pop();
-  //   menu.display(
-  //     `\
-  // Players: ${players.players.length}
-  // AIs: ${players.AIs.length}
-  // FPS: ${int(frameRate())}
-
-  // Kill: ${killCount}
-  // Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
-
-  // Game make
-  // by KHANH.
-
-  // `
-  //   );
   menu.display(
-    `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}` +
-      talkative
+    `\
+  Players: ${players.players.length}
+  FPS: ${int(frameRate())}
+
+  Kill: ${killCount}
+  Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
+
+  Game make
+  by KHANH.
+
+  `
   );
+  // menu.display(
+  //   `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}` +
+  //     talkative
+  // );
   chatbox.draw();
 });
 function mouseClicked(event) {
