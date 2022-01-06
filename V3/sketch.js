@@ -65,6 +65,8 @@ addFunction("setup", () => {
   friend.addPos(createVector(0, 10));
   friend.recovery = 0.0015 * friend.health;
   players.players.push(friend);
+  
+  players.realPlayers = [player, friend];
 });
 addFunction("draw", () => {
   // translate(0.5, 0.5);
@@ -218,7 +220,7 @@ function keyPressed() {
     player.health -= player.totalHealth / 100;
     for (let i = 0; i < 14; i++) {
       let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
-      particle.move(1.5)
+      particle.move(1.5);
     }
     let delta = p5.Vector.sub(player.pos, player.lastPos);
     let toLookAt = p5.Vector.sub(player.lookAt, player.pos);

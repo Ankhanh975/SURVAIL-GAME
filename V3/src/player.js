@@ -1,7 +1,6 @@
 class Player {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
     this.normal = createVector(0, -1);
-
     this.pos = createVector(...pos);
     this.lastPos = createVector(0, 0);
     this.velocity = createVector(0, 0);
@@ -59,16 +58,16 @@ class Player {
         //     degrees(a - angle)
         // );
 
-        if (change < radians(40)) {
+        if (change < radians(25)) {
           this.angle = angle;
         } else {
           if (
             degrees(angle - this.angle) < 0 &&
             degrees(angle - this.angle) > -180
           ) {
-            this.angle -= radians(40);
+            this.angle -= radians(25);
           } else {
-            this.angle += radians(40);
+            this.angle += radians(25);
           }
         }
       }
@@ -221,11 +220,21 @@ class AIPlayer extends Player {
     super(animation, parent, "n", pos);
     this.name = generateName.__call();
     this.AIPlayer = true;
-    this.target = int(random(0, 2));
   }
 
   update(grid) {
-    let target = this.parent.players[this.target].pos;
+    let target;
+    {
+      let targetDis = Infinity;
+      this.parent.realPlayers.forEach((p) => {
+        let d = this.pos.dist(p.pos);
+        console.log("d", d, targetDis);
+        if (d < targetDis) {
+          targetDis = d;
+          target = p.pos;
+        }
+      });
+    }
     {
       let lookAt, dist, toLookAt;
       lookAt = target;
@@ -247,7 +256,7 @@ class AIPlayer extends Player {
       }
 
       if (dist > 150) {
-        toLookAt.setMag(3.5);
+        toLookAt.setMag(3.0);
         this.addPos(toLookAt);
       }
     }

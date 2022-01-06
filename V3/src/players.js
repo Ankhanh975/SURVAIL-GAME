@@ -7,12 +7,12 @@ let Players_img = [
   [0, 0, 0, 0, 0, 0],
 ];
 addFunction("preload", () => {
-  Players_img[0][0] = loadImage("Resources/Animation_0.png");
-  Players_img[0][1] = loadImage("Resources/Animation_1.png");
-  Players_img[0][2] = loadImage("Resources/Animation_2.png");
-  Players_img[0][3] = loadImage("Resources/Animation_3.png");
-  Players_img[0][4] = loadImage("Resources/Animation_4.png");
-  Players_img[0][5] = loadImage("Resources/Animation_5.png");
+  Players_img[0][0] = loadImage("Resources/Animation_0.png")
+  Players_img[0][1] = loadImage("Resources/Animation_1.png")
+  Players_img[0][2] = loadImage("Resources/Animation_2.png")
+  Players_img[0][3] = loadImage("Resources/Animation_3.png")
+  Players_img[0][4] = loadImage("Resources/Animation_4.png")
+  Players_img[0][5] = loadImage("Resources/Animation_5.png")
 });
 
 class Players {
@@ -22,16 +22,17 @@ class Players {
     this.players = [];
     this.system = system;
 
-    setTimeout(() => {
-      for (let index = 0; index < 20; index++) {
-        setTimeout(() => {
-          this.createAIPlayer();
-        }, Prob.normal(16 * 50, 16 * 100)());
-      }
-    }, 100);
+    // setTimeout(() => {
+    //   for (let index = 0; index < 1; index++) {
+    //     setTimeout(() => {
+    //       this.createAIPlayer();
+    //     }, Prob.normal(16 * 50, 16 * 100)());
+    //   }
+    // }, 100);
+    
     // gameTick
     setInterval(() => {
-      if (this.players.length < 37) {
+      if (this.players.length < 20) {
         // while (this.AIs.length < 35) {
         let pos = p5.Vector.random2D().setMag(random(100, 1000));
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {
@@ -43,6 +44,7 @@ class Players {
         }
       }
     }, 2000);
+    
     // setInterval(() => {
     //   this.AIs.shuffle();
     //   this.players.shuffle();
