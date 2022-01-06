@@ -8,6 +8,7 @@ class Player {
 
     this.lookAt = createVector(0, 0);
     this.animation = animation;
+    this.animationLength = this.animation.length
     this.animateFrames = 0;
 
     this.name = name;
@@ -144,16 +145,16 @@ class Player {
 
       let id = setInterval(() => {
         // print("in setInterval", this.animateFrames, this.animation.length);
-        if (this.animateFrames === this.animation.length - 1) {
+        if (this.animateFrames === this.animationLength - 1) {
           this.animateFrames = 0;
           clearInterval(id);
         } else {
           this.animateFrames += 1;
         }
-      }, 16.6 * 5);
+      }, 16 * 5);
     }
-
-    // effects to outside
+    
+    // effects to all players when punch: push them backwards and minus their health
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
       let hitRange;

@@ -6,6 +6,8 @@ done: find font, main character animation, background, suonds
 ~12 2021: fill background image, camera object following player
 done: Add health, particle effects
 05 01 2021: finalizing the player objects and finalizing AI code
+06 01 2021: Fix the player rotation limit speed algorithm
+06 01 2021: Profile the performance
 06 01 2021: Add ellipse collision detection
 
 Explained folder structure:
