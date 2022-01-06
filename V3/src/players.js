@@ -43,7 +43,6 @@ class Players {
         }
       }
     }, 2000);
-    // }, 100);
     // setInterval(() => {
     //   this.AIs.shuffle();
     //   this.players.shuffle();

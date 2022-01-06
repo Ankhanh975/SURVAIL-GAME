@@ -15,12 +15,10 @@ class Obstacle {
   }
   draw() {
     push();
-    strokeWeight(1.5);
     translate(this.circle.pos.x, this.circle.pos.y);
     rotate(this.angle);
-    stroke(0, 0, 0);
     fill(220, 220, 10, map(this.health, 0, 20, 20, 200));
-    translate(+52 / 2, +52 / 2);
+    // translate(+52 / 2, +52 / 2);
     // Draw rect in corner
     rect(0, 0, 52, 52, 3.5);
     pop();
@@ -41,9 +39,14 @@ class Obstacles {
     this.system.update();
   }
   draw() {
+    push();
+    strokeWeight(1.5);
+    stroke(0, 0, 0);
+
     this.obstacles.forEach((obstacle) => {
       obstacle.draw();
     });
+    pop();
   }
 
   createObstacle(pos, angle = 0) {

@@ -17,8 +17,9 @@ setInterval(() => {
     "\nPress F11 to\nplay in \nfullscreen mode!\n\n",
     "\nYou can now \nplay the game\nin multiplier!\n\n",
     "\nNew to the \ngame? \nRead introduction\nat https://github.com/\nAnkhanh975/SURVAIL-GAME",
-    "\nTry to \nsurvail!",
-    "",
+    "\nTry to \n survive!",
+    "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11",
+    "Game make \nby KHANH",
     "",
     "",
     "",
@@ -26,7 +27,7 @@ setInterval(() => {
     "",
   ];
   talkative = t[int(random(0, t.length))];
-}, 2000);
+}, 3000);
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
@@ -52,20 +53,21 @@ addFunction("setup", () => {
   player = new Player(players.img[5], players);
   player.health = 500;
   player.totalHealth = 500;
-  player.damage = 4.5;
-  player.recovery = 0.001 * player.health;
+  player.damage = 2.5;
+  player.recovery = 0.0015 * player.health;
   players.players.push(player);
 
   let friend = new Player(players.img[5], players);
   friend.health = 300;
   friend.totalHealth = 300;
   friend.name = "friend";
-  friend.damage = 4.5;
+  friend.damage = 2.5;
   friend.addPos(createVector(0, 10));
-  friend.recovery = 0.001 * friend.health;
+  friend.recovery = 0.0015 * friend.health;
   players.players.push(friend);
 });
 addFunction("draw", () => {
+  // translate(0.5, 0.5);
   translate(width / 2, height / 2);
   if (player.health < 0) {
     scale(0.75);
@@ -211,40 +213,41 @@ function mouseClicked(event) {
   return false;
 }
 function keyPressed() {
+  let start = millis();
+  let jump = () => {
+    player.health -= player.totalHealth / 100;
+    for (let i = 0; i < 14; i++) {
+      let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
+      particle.move(1.5)
+    }
+    let delta = p5.Vector.sub(player.pos, player.lastPos);
+    let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
+    // toLookAt.setMag(15);
+    toLookAt.setMag(0);
+    // delta.setMag(0);
+
+    if (delta.mag() < 5) {
+      delta.setMag(0);
+    } else {
+      delta.setMag(32.5);
+    }
+    let deltaT = (millis() - start) / 16 / 4;
+    let d = p5.Vector.add(delta, toLookAt);
+    d.setMag(d.mag() * 10 * Curve.f(deltaT, 3, 0.42)); //
+    // console.log("d", deltaT, f(deltaT));
+    // console.log("d", d.x, d.y);
+    // idea: only follow in x-axis or y-axis
+    if (abs(d.x) > abs(d.y)) d.y = 0;
+    else d.x = 0;
+
+    player.addPos(d);
+  };
   // console.log("keyPressed", keyCode);
   // if pressed Enter => jump
   if (keyCode === 32) {
-    let start = millis();
-
+    jump();
     let id99 = setInterval(() => {
-      let delta = p5.Vector.sub(player.pos, player.lastPos);
-      let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
-      // toLookAt.setMag(15);
-      toLookAt.setMag(0);
-      // delta.setMag(0);
-
-      if (delta.mag() < 5) {
-        delta.setMag(0);
-      } else {
-        delta.setMag(32.5);
-        for (let i = 0; i < 14; i++) {
-          sparks.create_particle(player.pos, [0, 0, 0], 3.5);
-        }
-      }
-      let deltaT = (millis() - start) / 16 - 3.3;
-      let d = p5.Vector.add(delta, toLookAt);
-      d.setMag(d.mag() * Curve.f(deltaT, 3) * 10);
-      // console.log("d", deltaT, f(deltaT));
-      // console.log("d", d.x, d.y);
-      // idea: only follow in x-axis or y-axis
-      if (abs(d.x) > abs(d.y)) {
-        d.y = 0;
-        // console.log("set d", d);
-      } else {
-        d.x = 0;
-        // console.log("set d", d);
-      }
-      player.addPos(d);
+      jump();
     }, 16);
     setTimeout(() => {
       clearInterval(id99);

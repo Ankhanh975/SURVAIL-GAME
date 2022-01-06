@@ -2,10 +2,11 @@ let img;
 function preload() {
   img = loadImage("Animation_0.png");
 }
-
+let pg;
+let pg2;
 function checkCollision(dist, ang1, ang2) {
   // draw collision virtually
-  let pg = createGraphics(150, 100);
+  pg = createGraphics(110, 100);
   pg.background(0);
   pg.angleMode(DEGREES);
   pg.imageMode(CENTER);
@@ -17,7 +18,7 @@ function checkCollision(dist, ang1, ang2) {
   pg.pop();
   // image(pg, 100, 100);
 
-  let pg2 = createGraphics(150, 100);
+  pg2 = createGraphics(110, 100);
   pg2.background(0);
   pg2.angleMode(DEGREES);
   pg2.imageMode(CENTER);
@@ -40,12 +41,13 @@ function checkCollision(dist, ang1, ang2) {
     for (let x = 0; x < pg.width; x++) {
       let index = (x + y * pg.width) * 4;
       if (
-        pg.pixels[index] === 255 &&
-        pg.pixels[index + 1] === 255 &&
-        pg.pixels[index + 2] === 255 &&
-        pg2.pixels[index + 2] === 255 &&
-        pg2.pixels[index + 2] === 255 &&
-        pg2.pixels[index + 2] === 255
+        pg.pixels[index] +
+          pg.pixels[index + 1] +
+          pg.pixels[index + 2] +
+          pg2.pixels[index + 2] +
+          pg2.pixels[index + 2] +
+          pg2.pixels[index + 2] ===
+        255 * 6
       ) {
         return true;
       }
@@ -57,22 +59,23 @@ function checkCollision(dist, ang1, ang2) {
 function setup() {
   createCanvas(400, 400);
 }
-let Z = [];
+let Z = "";
 function draw() {
-  console.log("ii", frameCount);
-  if (frameCount % 50 === 0) {
-    download("data.txt", JSON.stringify(Z));
+  console.log("frameCount", frameCount);
+  if (frameCount % 100 === 0) {
+    download("data.txt", Z);
     window.location.reload();
+    Z = "";
   }
   if (frameCount === (360 * 360) / 50) {
     noLoop();
   }
   for (let i = 0; i < 50; i++) {
-    let a = Math.round(random(18, 65));
+    let a = Math.round(random(18, 59 * 2));
     let b = Math.round(random(0, 360));
     let c = Math.round(random(0, 360));
     let x = checkCollision(a, b, c);
-    Z.push([a, b, c, x]);
+    Z = Z + `\n${a}, ${b}, ${c}, ${x}`;
   }
 }
 // 18 < dist < 65

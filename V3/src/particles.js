@@ -50,7 +50,7 @@ class Spark {
     let movement = this.calculate_movement(dt);
     this.loc.x += movement[0];
     this.loc.y += movement[1];
-    
+
     this.speed -= 0.085 + 0.025 * this.speed;
     this.angle += 0.075;
     if (this.speed <= 0) {
@@ -114,6 +114,7 @@ class Sparks {
     }
     let n = new Spark(loc, angle, speed, color, scale);
     this.particles.push(n);
+    return n;
   }
   draw() {
     this.update();

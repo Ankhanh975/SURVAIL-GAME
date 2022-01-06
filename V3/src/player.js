@@ -19,7 +19,7 @@ class Player {
     this.recovery = 0.04;
     this.damage = 1;
     // physics circle for collision detection
-    this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 65 / 2);
+    this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 70 / 2);
     this.circle.parent = this;
     this.parent = parent;
   }
@@ -77,9 +77,9 @@ class Player {
   drawPlayer() {
     push();
     noStroke();
-    translate(this.pos);
+    translate(Math.round(this.pos.x), Math.round(this.pos.y));
     rotate(this.angle);
-    if (this.punchHand === "left") {
+    if (this.punchHand === "left" && this.animateFrames !== 0) {
       scale(-1, 1);
     }
     image(this.animation[this.animateFrames], 0, 0);
@@ -87,7 +87,8 @@ class Player {
   }
   drawNameTag() {
     push();
-    translate(this.pos);
+    translate(Math.round(this.pos.x), Math.round(this.pos.y));
+
     translate(2, -18);
 
     textFont(myFont);
@@ -102,18 +103,21 @@ class Player {
     pop();
   }
   drawHeightBar() {
-    push();
-    translate(this.pos);
-    translate(-20, -35);
-    strokeWeight(4);
+    if (this.health >= 0) {
+      push();
+      translate(Math.round(this.pos.x), Math.round(this.pos.y));
 
-    stroke(25, 25, 25);
-    rect(0, 0, 55, 1);
+      translate(-20, -35);
+      strokeWeight(4);
 
-    strokeWeight(3);
-    stroke(250, 50, 25);
-    rect(0, 0, 55 * (this.health / this.totalHealth), 1);
-    pop();
+      stroke(25, 25, 25);
+      rect(0, 0, 55, 1);
+
+      strokeWeight(3);
+      stroke(250, 50, 25);
+      rect(0, 0, 55 * (this.health / this.totalHealth), 1);
+      pop();
+    }
   }
   onPunch() {
     return this.animateFrames !== 0;
@@ -162,19 +166,29 @@ class Player {
           e.getHit();
           if (e.health < 0) {
             system.remove(e.circle);
+
             this.parent.players.splice(i, 1);
             killCount += 1;
           } else {
             // Push enemies backwards
             let start = millis();
-
-            let id9 = setInterval(() => {
-              let deltaT = (millis() - start) / 16 - 4;
+            let jump = () => {
+              let deltaT = (millis() - start) / 16 / 1.75;
               let d = p5.Vector.sub(this.pos, e.pos);
               d.normalize();
               // console.log("d", deltaT, d);
-              d.setMag(-d.mag() * Curve.f(deltaT, 4) * 90 * this.damage);
+              d.setMag(
+                -d.mag() *
+                  Curve.f2(deltaT, 0.1, 0.6, 0.275) *
+                  35 *
+                  this.damage -
+                  3
+              );
               e.addPos(d);
+            };
+            jump();
+            let id9 = setInterval(() => {
+              jump();
             }, 16);
 
             setTimeout(() => {
@@ -196,7 +210,7 @@ class Player {
     } else {
       // Dead
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle(this.pos, [100, 50, 50], 3.5);
+        sparks.create_particle(this.pos, [0, 0, 0], 3.5);
       }
     }
   }
@@ -246,7 +260,7 @@ class AIPlayer extends Player {
     //     // print("dist", this.pos, a.pos);
     //     // print("dist2", dist);
 
-    //     if (dist < 65) {
+    //     if (dist < 70) {
     //       let l = p5.Vector.sub(a.pos, this.pos);
     //       // l.mult(0.01);
     //       l.setMag(0.02 / mag(l) ** 2);
