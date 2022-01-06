@@ -13,10 +13,10 @@ setInterval(() => {
   let t = [
     "\nStay close to\nthe origin\nto find more\npeople.\n",
     "\nPress F1 if \nyou find out\nthat it \ncramped.\n",
-    "\nPress F11 to\nplay in \nfullscreen mode!\n\n",
+    "\nPress F11 to\nplay in \nfullscreen \nmode!\n",
     // "\nYou can now \nplay the game\nin multiplier!\n\n",
     // "\nYou should now \nset zoom to 100%",
-    "\nNew to the \ngame? \nRead at \nhttps://github.com/\nAnkhanh975/SURVAIL-GAME",
+    "\nNew to \nthe game? Read at \ngithub.com/\nAnkhanh975/\nSURVAIL-GAME",
     "\nTry to \n survive!",
     "\nHow to play?\nPress awsd to move",
     "\nPress space\nor right click\nto use ability!",
@@ -52,19 +52,19 @@ addFunction("setup", () => {
 
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
-  player.health = 500;
-  player.totalHealth = 500;
+  player.health = 300;
+  player.totalHealth = 300;
   player.damage = 2.5;
   player.recovery = 0.0015 * player.health;
   players.players.push(player);
 
   let friend = new Player(players.img[5], players);
-  friend.health = 300;
-  friend.totalHealth = 300;
+  friend.health = 200;
+  friend.totalHealth = 200;
   friend.name = "friend";
   friend.damage = 2.5;
   friend.addPos(createVector(0, 10));
-  friend.recovery = 0.0015 * friend.health;
+  friend.recovery = 0.0012 * friend.health;
   players.players.push(friend);
 
   players.realPlayers = [player, friend];
@@ -218,7 +218,7 @@ function mouseClicked(event) {
 function keyPressed() {
   let start = millis();
   let jump = () => {
-    player.health -= player.totalHealth / 100;
+    player.health -= player.totalHealth / 120;
     for (let i = 0; i < 14; i++) {
       let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
       particle.move(1.5);
