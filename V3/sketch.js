@@ -8,18 +8,19 @@ let obstacles;
 let mouse;
 let queue = new Queue();
 let killCount = 0;
-let talkative =
-  "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11";
+let talkative = "\nGame make \nby KHANH";
 setInterval(() => {
   let t = [
     "\nStay close to\nthe origin\nto find more\npeople.\n",
     "\nPress F1 if \nyou find out\nthat it \ncramped.\n",
     "\nPress F11 to\nplay in \nfullscreen mode!\n\n",
-    "\nYou can now \nplay the game\nin multiplier!\n\n",
-    "\nNew to the \ngame? \nRead introduction\nat https://github.com/\nAnkhanh975/SURVAIL-GAME",
+    // "\nYou can now \nplay the game\nin multiplier!\n\n",
+    // "\nYou should now \nset zoom to 100%",
+    "\nNew to the \ngame? \nRead at \nhttps://github.com/\nAnkhanh975/SURVAIL-GAME",
     "\nTry to \n survive!",
-    "\n\nHow to play?\nPress awsd, \nspace\nAnd L/R Click, \nF1, F11",
-    "Game make \nby KHANH",
+    "\nHow to play?\nPress awsd to move",
+    "\nPress space\nor right click\nto use ability!",
+    "\nGame make \nby KHANH",
     "",
     "",
     "",
@@ -27,7 +28,7 @@ setInterval(() => {
     "",
   ];
   talkative = t[int(random(0, t.length))];
-}, 3000);
+}, 3500);
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
@@ -65,7 +66,7 @@ addFunction("setup", () => {
   friend.addPos(createVector(0, 10));
   friend.recovery = 0.0015 * friend.health;
   players.players.push(friend);
-  
+
   players.realPlayers = [player, friend];
 });
 addFunction("draw", () => {
@@ -194,9 +195,9 @@ addFunction("draw", () => {
   menu.display(
     `\
 Players: ${players.players.length}
-FPS: ${int(frameRate())}
 Kill: ${killCount}
 Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
+FPS: ${int(frameRate())}
 ` + talkative
   );
 
