@@ -8,7 +8,7 @@ import Collisions from "./node_modules/collisions/src/Collisions.mjs";
 // new: https://github.com/Sinova/Collisions
 const system = new Collisions();
 console.log(system);
-// global.DetectCollisions = DetectCollisions;
+global.DetectCollisions = DetectCollisions;
 
 // browserify main.js -o bundle.js
 // to get bundle.js and use that in index.html

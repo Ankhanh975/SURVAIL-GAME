@@ -1,15 +1,14 @@
 let img;
+let pg;
+let pg2;
 function preload() {
   img = loadImage("Animation_0.png");
 }
-let pg;
-let pg2;
+
 function checkCollision(dist, ang1, ang2) {
   // draw collision virtually
-  pg = createGraphics(110, 100);
+
   pg.background(0);
-  pg.angleMode(DEGREES);
-  pg.imageMode(CENTER);
 
   pg.push();
   pg.translate(150 / 8, 100 / 2);
@@ -18,10 +17,7 @@ function checkCollision(dist, ang1, ang2) {
   pg.pop();
   // image(pg, 100, 100);
 
-  pg2 = createGraphics(110, 100);
   pg2.background(0);
-  pg2.angleMode(DEGREES);
-  pg2.imageMode(CENTER);
 
   pg2.push();
   pg2.translate(150 / 8, 100 / 2);
@@ -57,6 +53,12 @@ function checkCollision(dist, ang1, ang2) {
 }
 
 function setup() {
+  pg = createGraphics(110, 100);
+  pg2 = createGraphics(110, 100);
+  pg.angleMode(DEGREES);
+  pg.imageMode(CENTER);
+  pg2.angleMode(DEGREES);
+  pg2.imageMode(CENTER);
   createCanvas(400, 400);
 }
 let Z = "";

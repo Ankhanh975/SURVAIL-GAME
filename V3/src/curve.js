@@ -1,7 +1,7 @@
-// follow a normal curve
 let Curve = {
   f(x, variance = 2.75, mu = 0) {
     // \frac{1}{m\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-s\right)}{m}^{2}}
+    // normal-distribution curve
     return (
       Math.exp(-0.5 * Math.pow((x - mu) / variance, 2)) /
       (variance * sqrt(2 * Math.PI))
@@ -19,6 +19,7 @@ let Curve = {
         (x * s * Math.sqrt(2 * Math.PI))
       );
   },
+  // https://math.stackexchange.com/questions/1114879/detect-if-two-ellipses-intersect
 };
 
 // Use in player.js
@@ -27,8 +28,8 @@ function average(angles) {
   let x = 0;
   let y = 0;
   angles.forEach((n) => {
-    x += cos(n - 0);
-    y += sin(n - 0);
+    x += Math.cos(n - 0);
+    y += Math.sin(n - 0);
   });
-  return atan2(y, x) + 0;
+  return Math.atan2(y, x) + 0;
 }

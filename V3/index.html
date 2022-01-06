@@ -8,13 +8,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5.collide2d"></script>
+  <script src="Lib/Collision/EllipseCollisionTest.js"></script>
   <script src="Lib/easystarjs/easystarjs.js"></script>
   <script src="Lib/noisejs/perlin.js"></script>
   <!-- https://github.com/bramp/prob.js -->
   <script src="Lib/bower_components/random/lib/random.min.js" type="text/javascript"></script>
   <script src="Lib/bower_components/prob.js/dist/prob-min.js" type="text/javascript"></script>
   <script src="Lib/bundle.js"></script>
-  <script src="Lib/jquery/jquery-3.6.0.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
   <link rel="stylesheet" type="text/css" href="style.css">
   <meta charset="utf-8" />
@@ -24,13 +25,13 @@
 <body>
 
   <script src="src/setup.js"></script>
-  <script src="src/Camera.js"></script>
-  <script src="src/players.js"></script>
-  <script src="src/obstacles.js"></script>
-  <script src="src/curve.js"></script>
-  <script src="src/player.js"></script>
   <script src="src/menu.js"></script>
+  <script src="src/camera.js"></script>
   <script src="src/particles.js"></script>
+  <script src="src/obstacles.js"></script>
+  <script src="src/player.js"></script>
+  <script src="src/players.js"></script>
+
   <!-- old  detect-collisions-->
   <!-- <script type="module">
     import Collisions from "./Lib/node_modules/collisions/src/Collisions.mjs";
@@ -38,6 +39,9 @@
     globalThis.DetectCollisions = Collisions;
 
   </script> -->
+  <script src="src/curve.js"></script>
+  <!-- <script src="src/collision.js"></script> -->
+
   <script src="src/generate.js"></script>
   <script src="sketch.js"></script>
   <script>
@@ -122,7 +126,7 @@
     };
 
     function windowResized() {
-      console.log("windowResized", windowWidth, windowHeight, width, height);
+      // console.log("windowResized", windowWidth, windowHeight, width, height);
       resizeCanvas(windowWidth, windowHeight);
       // if (windowHeight >= 1080) {
       // } else {

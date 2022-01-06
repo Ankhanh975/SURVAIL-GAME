@@ -22,19 +22,17 @@ class Players {
     this.players = [];
     this.system = system;
 
-    // setTimeout(() => {
-    //   for (let index = 0; index < 1; index++) {
-    //     setTimeout(() => {
-    //       this.createAIPlayer();
-    //     }, Prob.normal(16 * 50, 16 * 100)());
-    //   }
-    // }, 100);
+    setTimeout(() => {
+      for (let index = 0; index < 10; index++) {
+        this.createAIPlayer();
+      }
+    }, 100);
 
     // gameTick
     setInterval(() => {
       if (this.players.length < 20) {
         // while (this.AIs.length < 35) {
-        let pos = p5.Vector.random2D().setMag(random(100, 1000));
+        let pos = p5.Vector.random2D().setMag(random(300, 1000));
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {
           // setTimeout(() => {
           this.createAIPlayer(
@@ -65,13 +63,13 @@ class Players {
     this.players.forEach((e, i) => {
       e.drawPlayer();
       e.drawHeightBar();
-      if (!e.AIPlayer || i === 0 || i === 1) {
+      if (!e.AIPlayer || i <= 1) {
         e.drawNameTag();
       }
     });
   }
   createAIPlayer(pos, color) {
-    pos = pos || p5.Vector.random2D().setMag(random(300, 500));
+    pos = pos || p5.Vector.random2D().setMag(random(200, 500));
     color = int(((color % 5) + 5) % 5) || int(random(0, 5));
 
     if (this.players[0]) {

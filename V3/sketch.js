@@ -14,7 +14,7 @@ setInterval(() => {
     "\nStay close to\nthe origin\nto find more\npeople.\n",
     "\nPress F1 you \ncan turn off\nthis panel.\n",
     "\nPress F11 to\nplay in \nfullscreen \nmode!\n",
-    "\nHow to play?\nPress awsd to move",
+    "\nHow to play?\nPress awsd \nto move",
     "\nNew to \nthe game? Read \ngithub.com/\nAnkhanh975/\nSURVAIL-GAME",
     // "\nYou can now \nplay the game\nin multiplier!\n\n",
     // "\nYou should now \nset zoom to 100%",
@@ -22,8 +22,8 @@ setInterval(() => {
     "\nTry to \n survive!",
     "\nPress space\nor right click\nto use ability!",
     "\nPress space\nor right click\nto use ability!",
-    "\nGame make \nby KHANH",
-    "\nGame make \nby KHANH",
+    "\nGame make by \nKHANH",
+    "\nGame make by \nKHANH",
     "",
     "",
     "",
@@ -59,7 +59,7 @@ addFunction("setup", () => {
   player.totalHealth = 300;
   player.damage = 2.5;
   player.recovery = 0.0012 * player.health;
-  players.players.push(player);
+  players.players[0] = player;
 
   let friend = new Player(players.img[5], players);
   friend.health = 200;
@@ -68,7 +68,8 @@ addFunction("setup", () => {
   friend.damage = 2.5;
   friend.addPos(createVector(0, 10));
   friend.recovery = 0.0010 * friend.health;
-  players.players.push(friend);
+  players.players[1] = friend;
+  
 
   players.realPlayers = [player, friend];
 });

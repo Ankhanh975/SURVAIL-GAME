@@ -1,7 +1,27 @@
-Objective: 
+Objective:
 Simple, Creative, Infinity, Cooperative, Realistic, and Functional, Interactive
 
-a=createVector(98, 98)
-b=createVector(75, 44)
-c=createVector(69, 47)
-console.log(a.dist(b), a.dist(c))
+finalizing
+done: find font, main character animation, background, suonds
+~12 2021: fill background image, camera object following player
+done: Add health, particle effects
+05 01 2021: finalizing the player objects and finalizing AI code
+06 01 2021: Add ellipse collision detection
+
+Explained folder structure:
+
+"V1", "V2", ...: I make a new copy when a major refactored version happens.
+{
+    "Example": list of examples tutorials / game
+    "src": main source code directory
+    "Lib": 3rd library directory
+    {
+        "bower_components": bower management
+        "node_modules": node management
+        else: manually copy
+    }
+    "Resources": .png & .mp3, font, ...
+    "index.html": main file path to executed
+    "sketch.js": main file path to code
+    "README.md": main file path to documentation
+}

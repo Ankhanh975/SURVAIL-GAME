@@ -42,8 +42,8 @@ class Player {
 
     this.lastPos = this.pos.copy();
     this.lookAt = lookAt;
+    // Limit to max rotate speed of radians(30) per frame
     if (!this.pos.equals(this.lookAt)) {
-      // Limit to max rotate speed of radians(30) per frame
       let mouseVec = p5.Vector.sub(this.lookAt, this.pos);
       let angle = this.normal.angleBetween(mouseVec);
       if (angle !== NaN) {
@@ -58,16 +58,30 @@ class Player {
         //     degrees(a - angle)
         // );
 
+        // TODO: still bugs
         if (change < radians(25)) {
           this.angle = angle;
         } else {
-          if (
-            degrees(angle - this.angle) < 0 &&
-            degrees(angle - this.angle) > -180
-          ) {
+          // check this.angle is on the right of angle or not
+          // https://stackoverflow.com/questions/13221873/determining-if-one-2d-vector-is-to-the-right-or-left-of-another/13221874
+          let v1 = createVector(1, 1);
+          let v2 = createVector(1, 1);
+          v1.setHeading(this.angle - radians(90));
+          v2.setHeading(angle - radians(90));
+          var dot = v1.x * -v2.y + v1.y * v2.x;
+          // console.log("", v1, v2, dot);
+          // throw new Error("Something went badly wrong!");
+
+          if (dot > 0) {
+            // this.angle is on the left of "angle"
             this.angle -= radians(25);
           } else {
             this.angle += radians(25);
+          }
+          if (this.angle < radians(-180)) {
+            this.angle += radians(360);
+          } else if (this.angle > radians(180)) {
+            this.angle -= radians(360);
           }
         }
       }
