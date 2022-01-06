@@ -12,14 +12,17 @@ let talkative = "\nGame make \nby KHANH";
 setInterval(() => {
   let t = [
     "\nStay close to\nthe origin\nto find more\npeople.\n",
-    "\nPress F1 if \nyou find out\nthat it \ncramped.\n",
+    "\nPress F1 you \ncan turn off\nthis panel.\n",
     "\nPress F11 to\nplay in \nfullscreen \nmode!\n",
+    "\nHow to play?\nPress awsd to move",
+    "\nNew to \nthe game? Read \ngithub.com/\nAnkhanh975/\nSURVAIL-GAME",
     // "\nYou can now \nplay the game\nin multiplier!\n\n",
     // "\nYou should now \nset zoom to 100%",
-    "\nNew to \nthe game? Read at \ngithub.com/\nAnkhanh975/\nSURVAIL-GAME",
     "\nTry to \n survive!",
-    "\nHow to play?\nPress awsd to move",
+    "\nTry to \n survive!",
     "\nPress space\nor right click\nto use ability!",
+    "\nPress space\nor right click\nto use ability!",
+    "\nGame make \nby KHANH",
     "\nGame make \nby KHANH",
     "",
     "",
@@ -55,7 +58,7 @@ addFunction("setup", () => {
   player.health = 300;
   player.totalHealth = 300;
   player.damage = 2.5;
-  player.recovery = 0.0015 * player.health;
+  player.recovery = 0.0012 * player.health;
   players.players.push(player);
 
   let friend = new Player(players.img[5], players);
@@ -64,7 +67,7 @@ addFunction("setup", () => {
   friend.name = "friend";
   friend.damage = 2.5;
   friend.addPos(createVector(0, 10));
-  friend.recovery = 0.0012 * friend.health;
+  friend.recovery = 0.0010 * friend.health;
   players.players.push(friend);
 
   players.realPlayers = [player, friend];

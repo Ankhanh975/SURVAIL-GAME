@@ -204,12 +204,12 @@ class Player {
     this.health -= 13;
     if (this.health >= 0) {
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle(this.pos, [200, 50, 50], 3.5);
+        sparks.create_particle(this.pos, [200, 50, 50], 3.6);
       }
     } else {
       // Dead
       for (let i = 0; i < 4; i++) {
-        sparks.create_particle(this.pos, [0, 0, 0], 3.5);
+        sparks.create_particle(this.pos, [0, 0, 0], 3.6);
       }
     }
   }
@@ -220,21 +220,25 @@ class AIPlayer extends Player {
     super(animation, parent, "n", pos);
     this.name = generateName.__call();
     this.AIPlayer = true;
+    this.target = int(random(0, 2));
   }
 
   update(grid) {
-    let target;
-    {
-      let targetDis = Infinity;
-      this.parent.realPlayers.forEach((p) => {
-        let d = this.pos.dist(p.pos);
-        console.log("d", d, targetDis);
-        if (d < targetDis) {
-          targetDis = d;
-          target = p.pos;
-        }
-      });
-    }
+    let target = this.parent.players[this.target].pos;
+
+    // let target;
+    // {
+    //   let targetDis = Infinity;
+    //   this.parent.realPlayers.forEach((p) => {
+    //     let d = this.pos.dist(p.pos);
+    //     console.log("d", d, targetDis);
+    //     if (d < targetDis) {
+    //       targetDis = d;
+    //       target = p.pos;
+    //     }
+    //   });
+    // }
+
     {
       let lookAt, dist, toLookAt;
       lookAt = target;
