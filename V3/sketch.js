@@ -55,22 +55,22 @@ addFunction("setup", () => {
 
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
-  player.health = 300;
-  player.totalHealth = 300;
-  player.damage = 2.5;
-  player.recovery = 0.0012 * player.health;
+  player.health = 1000;
+  player.totalHealth = 1000;
+  player.damage = 5;
+  player.recovery = 0.001 * player.health;
   players.players[0] = player;
+  players.realPlayers = [player];
 
   let friend = new Player(players.img[5], players);
   friend.health = 200;
   friend.totalHealth = 200;
   friend.name = "friend";
   friend.damage = 2.5;
-  friend.addPos(createVector(0, 10));
+  friend.addPos(createVector(100, 0));
   friend.recovery = 0.001 * friend.health;
   players.players[1] = friend;
-
-  players.realPlayers = [player, friend];
+  players.realPlayers.push(friend);
 });
 addFunction("draw", () => {
   // translate(0.5, 0.5);
@@ -143,7 +143,8 @@ addFunction("draw", () => {
     sparks.create_particle(player.pos, [255, 0, 0], 3.5);
   }
 
-  // Should be in this exact order
+  // onController need to after players.update
+
   queue.updatePro();
   players.update(mouse, null);
   onController(player);
@@ -152,13 +153,74 @@ addFunction("draw", () => {
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b;
     if (a.parent instanceof Player && b.parent instanceof Player) {
-      let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
-      // console.log(overlapV);
-      let newMag = 110 / max(l.mag() - 35, 7) ** 2;
-      l.setMag(newMag);
-      // l.setMag(50 / l.mag());
+      // Check that 2 ellipses overlap
 
-      a.parent.addPos(l);
+      let xy0 = a.parent.pos
+        .copy()
+        .add(
+          createVector(-3.5, 0).rotate(a.parent.heading.angle + radians(90))
+        );
+
+      let xy1 = b.parent.pos
+        .copy()
+        .add(
+          createVector(-3.5, 0).rotate(b.parent.heading.angle + radians(90))
+        );
+      let [hw0, hw1] = [46 / 88.0, 46 / 88.0];
+
+      let wxy0 = createVector(0, 88 / 2).rotate(
+        a.parent.heading.angle + radians(90)
+      );
+
+      let wxy1 = createVector(0, 88 / 2).rotate(
+        b.parent.heading.angle + radians(90)
+      );
+      // let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+      // // console.log(overlapV);
+      // let newMag = 110 / max(l.mag() - 35, 7) ** 2;
+      // l.setMag(newMag);
+      // // l.setMag(50 / l.mag());
+
+      // a.parent.addPos(l);
+      // console.log(
+      //   "",
+      //   xy0.x,
+      //   xy0.y,
+      //   wxy0.x,
+      //   wxy0.y,
+      //   hw0,
+      //   xy1.x,
+      //   xy1.y,
+      //   wxy1.x,
+      //   wxy1.y,
+      //   hw1,
+      //   a.parent.heading.angle,
+      //   b.parent.heading.angle,
+      //   a.parent.pos,
+      //   b.parent.pos
+      // );
+
+      if (
+        ellipseCollisionTest.collide(
+          xy0.x,
+          xy0.y,
+          wxy0.x,
+          wxy0.y,
+          hw0,
+          xy1.x,
+          xy1.y,
+          wxy1.x,
+          wxy1.y,
+          hw1
+        )
+      ) {
+        // Push their center from each other.
+        // console.log("overlap");
+        let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
+        a_look_at_b.setMag(1); // + (a_look_at_b.mag() - 10) ** 2 / 3000
+        b.parent.addPos(a_look_at_b);
+        a.parent.addPos(a_look_at_b.rotate(radians(180)));
+      }
     }
   });
   system.checkAll(({ a, overlapV }) => {
@@ -181,25 +243,25 @@ addFunction("draw", () => {
   push();
   camera.follow(player.pos);
   camera.draw_background();
-  {
-    // Draw spawn at position 0, 0
-    push();
-    let c = HSVtoRGB(0.5, 0.5, 1);
-    fill(...c, 125);
-    circle(0, 0, 50);
+  // {
+  //   // Draw spawn at position 0, 0
+  //   push();
+  //   let c = HSVtoRGB(0.5, 0.5, 1);
+  //   fill(...c, 75);
+  //   circle(0, 0, 100);
 
-    pop();
-    for (let i = 0; i < 5; i++) {
-      let particle = tower.create_particle(
-        createVector(0, 0),
-        [128, 255, 255, 200],
-        5
-      );
-      particle.move(2.5);
-    }
-    tower.update();
-    tower.draw();
-  }
+  //   pop();
+  //   for (let i = 0; i < 5; i++) {
+  //     let particle = tower.create_particle(
+  //       createVector(0, 0),
+  //       [128, 255, 255, 200],
+  //       5
+  //     );
+  //     particle.move(2.5);
+  //   }
+  //   tower.update();
+  //   tower.draw();
+  // }
   queue.updateDraw();
   sparks.draw();
   players.draw();
@@ -253,8 +315,8 @@ function keyPressed() {
     // console.log("d", deltaT, f(deltaT));
     // console.log("d", d.x, d.y);
     // idea: only follow in x-axis or y-axis
-    if (abs(d.x) > abs(d.y)) d.y = 0;
-    else d.x = 0;
+    // if (abs(d.x) > abs(d.y)) d.y = 0;
+    // else d.x = 0;
 
     player.addPos(d);
   };

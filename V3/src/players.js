@@ -22,29 +22,28 @@ class Players {
     this.players = [];
     this.system = system;
 
-    // setTimeout(() => {
-    //   for (let index = 0; index < 10; index++) {
-    //     this.createAIPlayer();
-    //   }
-    // }, 100);
+    setTimeout(() => {
+      for (let index = 0; index < 30; index++) {
+        this.createAIPlayer();
+      }
+    }, 150);
 
-    // // gameTick
-    // setInterval(() => {
-    //   if (this.players.length < 20) {
-    //     // while (this.AIs.length < 35) {
-    //     let pos = p5.Vector.random2D().setMag(random(300, 1000));
-    //     for (let index = 0; index < Prob.normal(10, 2)(); index++) {
-    //       // setTimeout(() => {
-    //       this.createAIPlayer(
-    //         pos.add(p5.Vector.random2D().setMag(random(0, 100)))
-    //       );
-    //       // }, Prob.normal(16, 16 * 40)());
-    //     }
-    //   }
-    // }, 2000);
+    // gameTick
+    setInterval(() => {
+      if (this.players.length < 100) {
+        // while (this.AIs.length < 35) {
+        let pos = p5.Vector.random2D().setMag(random(300, 1000));
+        for (let index = 0; index < Prob.normal(10, 2)(); index++) {
+          // setTimeout(() => {
+          this.createAIPlayer(
+            pos.add(p5.Vector.random2D().setMag(random(0, 100)))
+          );
+          // }, Prob.normal(16, 16 * 40)());
+        }
+      }
+    }, 10 * 1000);
 
     // setInterval(() => {
-    //   this.AIs.shuffle();
     //   this.players.shuffle();
     // }, 125);
   }

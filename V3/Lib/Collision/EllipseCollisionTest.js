@@ -89,31 +89,31 @@ class EllipseCollisionTest {
         (hx0 - wx0 - x) * (hx0 - wx0 - x) + (hy0 - wy0 - y) * (hy0 - wy0 - y) <=
         rr
       ) {
-        return iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
+        return this.iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
       } else if (
         (hx0 + wx0 - x) * (hx0 + wx0 - x) + (hy0 + wy0 - y) * (hy0 + wy0 - y) <=
         rr
       ) {
-        return iterate(x, y, wx0, wy0, hx0, hy0, rr);
+        return this.iterate(x, y, wx0, wy0, hx0, hy0, rr);
       } else if (
         (wx0 - hx0 - x) * (wx0 - hx0 - x) + (wy0 - hy0 - y) * (wy0 - hy0 - y) <=
         rr
       ) {
-        return iterate(x, y, -hx0, -hy0, wx0, wy0, rr);
+        return this.iterate(x, y, -hx0, -hy0, wx0, wy0, rr);
       } else if (
         (-wx0 - hx0 - x) * (-wx0 - hx0 - x) +
           (-wy0 - hy0 - y) * (-wy0 - hy0 - y) <=
         rr
       ) {
-        return iterate(x, y, -wx0, -wy0, -hx0, -hy0, rr);
+        return this.iterate(x, y, -wx0, -wy0, -hx0, -hy0, rr);
       } else if (
         wx0 * y - wy0 * x < wx0 * hy0 - wy0 * hx0 &&
-        abs(hx0 * y - hy0 * x) < hy0 * wx0 - hx0 * wy0
+        Math.abs(hx0 * y - hy0 * x) < hy0 * wx0 - hx0 * wy0
       ) {
         if (hx0 * y - hy0 * x > 0) {
-          return iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
+          return this.iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
         }
-        return iterate(x, y, wx0, wy0, hx0, hy0, rr);
+        return this.iterate(x, y, wx0, wy0, hx0, hy0, rr);
       } else if (
         wx0 * x + wy0 * y > wx0 * (hx0 - wx0) + wy0 * (hy0 - wy0) &&
         wx0 * x + wy0 * y < wx0 * (hx0 + wx0) + wy0 * (hy0 + wy0) &&
@@ -122,9 +122,9 @@ class EllipseCollisionTest {
           rr * (wx0 * wx0 + wy0 * wy0)
       ) {
         if (wx0 * x + wy0 * y > wx0 * hx0 + wy0 * hy0) {
-          return iterate(x, y, wx0, wy0, hx0, hy0, rr);
+          return this.iterate(x, y, wx0, wy0, hx0, hy0, rr);
         }
-        return iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
+        return this.iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
       } else {
         if (hx0 * y - hy0 * x < 0) {
           x = -x;
@@ -138,16 +138,16 @@ class EllipseCollisionTest {
             rr * (hx0 * hx0 + hy0 * hy0)
         ) {
           if (hx0 * x + hy0 * y > -hx0 * wx0 - hy0 * wy0) {
-            return iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
+            return this.iterate(x, y, hx0, hy0, -wx0, -wy0, rr);
           }
-          return iterate(x, y, -wx0, -wy0, -hx0, -hy0, rr);
+          return this.iterate(x, y, -wx0, -wy0, -hx0, -hy0, rr);
         }
         return false;
       }
     }
   }
   iterate(x, y, c0x, c0y, c2x, c2y, rr) {
-    for (let t = 1; t <= maxIterations; t++) {
+    for (let t = 1; t <= this.maxIterations; t++) {
       let c1x = (c0x + c2x) * this.innerPolygonCoef[t];
       let c1y = (c0y + c2y) * this.innerPolygonCoef[t];
       let tx = x - c1x;
@@ -177,8 +177,8 @@ class EllipseCollisionTest {
       ) {
         return true;
       }
-      let c3x = (c0x + c1x) * outerPolygonCoef[t];
-      let c3y = (c0y + c1y) * outerPolygonCoef[t];
+      let c3x = (c0x + c1x) * this.outerPolygonCoef[t];
+      let c3y = (c0y + c1y) * this.outerPolygonCoef[t];
       if ((c3x - x) * (c3x - x) + (c3y - y) * (c3y - y) < rr) {
         c2x = c1x;
         c2y = c1y;
@@ -200,7 +200,7 @@ class EllipseCollisionTest {
       ) {
         if (tx * t3x + ty * t3y > 0) {
           if (
-            abs(tx * t3x + ty * t3y) <= t3x * t3x + t3y * t3y ||
+            Math.abs(tx * t3x + ty * t3y) <= t3x * t3x + t3y * t3y ||
             (x - c3x) * (c0x - c3x) + (y - c3y) * (c0y - c3y) >= 0
           ) {
             c2x = c1x;

@@ -4,6 +4,7 @@ class Player {
     this.lastPos = createVector(0, 0);
     this.velocity = createVector(0, 0);
     this.heading = createVector(1, 0);
+    this.heading.angle = 0;
 
     this.lookAt = createVector(0, 0);
     this.animation = animation;
@@ -18,7 +19,7 @@ class Player {
     this.recovery = 0.04;
     this.damage = 1;
     // physics circle for collision detection
-    this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 70 / 2);
+    this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 90);
     this.circle.parent = this;
     this.parent = parent;
   }
@@ -41,18 +42,18 @@ class Player {
       this.health += this.recovery;
     }
     {
-      // Limit max rotate to speed of radians(30) per frame
+      // Limit max rotate to speed of radians(37.5) per frame
       let heading = p5.Vector.sub(lookAt, this.pos).rotate(radians(90));
       let angle = heading.angleBetween(this.heading);
 
       // console.log("angle", degrees(angle));
-      if (abs(angle) < radians(30)) {
+      if (abs(angle) < radians(37.5)) {
         this.heading = heading;
       } else if (angle > 0) {
-        this.heading.rotate(radians(-30));
+        this.heading.rotate(radians(-37.5));
       } else if (isNaN(angle)) {
       } else {
-        this.heading.rotate(radians(30));
+        this.heading.rotate(radians(37.5));
       }
       this.heading.angle = this.heading.heading();
     }
@@ -111,6 +112,7 @@ class Player {
     return this.animateFrames !== 0;
   }
   startPunch(hand = null) {
+    this.health -= 1;
     // print("startPunch", this.animateFrames, this.animation.length);
     {
       // animation
@@ -168,7 +170,7 @@ class Player {
               d.setMag(
                 -d.mag() *
                   Curve.f2(deltaT, 0.1, 0.6, 0.275) *
-                  35 *
+                  15 *
                   this.damage -
                   3
               );
@@ -209,11 +211,12 @@ class AIPlayer extends Player {
     super(animation, parent, "n", pos);
     this.name = generateName.__call();
     this.AIPlayer = true;
-    this.target = int(random(0, 2));
+    // this.target = int(random(0, this.parent.realPlayers.length));
+    this.target = 0
   }
 
   update(grid) {
-    let target = this.parent.players[this.target].pos;
+    let target = this.parent.realPlayers[this.target].pos;
 
     // let target;
     // {
@@ -235,19 +238,19 @@ class AIPlayer extends Player {
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
       super.update(lookAt);
+      // if (dist < 150) {
+      //   if (!this.onPunch()) {
+      //     if (random(0, 100) >= 92.5) {
+      //       this.startPunch();
+      //     }
+      //   }
+      // }
+
       if (dist < 120) {
         toLookAt.setMag(3.5);
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }
-      if (dist < 150) {
-        if (!this.onPunch()) {
-          if (random(0, 100) >= 92.5) {
-            this.startPunch();
-          }
-        }
-      }
-
       if (dist > 150) {
         toLookAt.setMag(3.0);
         this.addPos(toLookAt);
