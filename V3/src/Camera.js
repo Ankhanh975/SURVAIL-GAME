@@ -100,7 +100,8 @@ class Camera {
       [x, y] = pos;
     }
     // console.log("xy", x, y, [x - this.transform[0], y - this.transform[1]]);
-    return createVector(x - this.transform[0], y - this.transform[1]);
+    // return createVector(x - this.transform[0], y - this.transform[1]);
+    return createVector(x + player.pos.x, y + player.pos.y);
   }
   shake(duration = 3, variance = 1.0) {
     // Start shake camera

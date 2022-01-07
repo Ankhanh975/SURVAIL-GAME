@@ -10,6 +10,7 @@ done: Add health, particle effects
 06 01 2021: Fix the player rotation limit speed algorithm
 06 01 2021: Profile the performance
 06 01 2021: Add ellipse collision detection
+Demo: https://youtu.be/NoWH5l08dMM
 
 Explained folder structure:
 

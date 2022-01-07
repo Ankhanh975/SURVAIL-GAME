@@ -46,13 +46,13 @@ class Player {
       let angle = heading.angleBetween(this.heading);
 
       // console.log("angle", degrees(angle));
-      if (abs(angle) < radians(25)) {
+      if (abs(angle) < radians(30)) {
         this.heading = heading;
       } else if (angle > 0) {
-        this.heading.rotate(radians(-25));
+        this.heading.rotate(radians(-30));
       } else if (isNaN(angle)) {
       } else {
-        this.heading.rotate(radians(25));
+        this.heading.rotate(radians(30));
       }
       this.heading.angle = this.heading.heading();
     }
