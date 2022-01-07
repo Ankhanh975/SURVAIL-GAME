@@ -175,13 +175,7 @@ addFunction("draw", () => {
       let wxy1 = createVector(0, 88 / 2).rotate(
         b.parent.heading.angle + radians(90)
       );
-      // let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
-      // // console.log(overlapV);
-      // let newMag = 110 / max(l.mag() - 35, 7) ** 2;
-      // l.setMag(newMag);
-      // // l.setMag(50 / l.mag());
 
-      // a.parent.addPos(l);
       // console.log(
       //   "",
       //   xy0.x,
@@ -215,11 +209,19 @@ addFunction("draw", () => {
         )
       ) {
         // Push their center from each other.
-        // console.log("overlap");
+        console.log("overlap");
+        
         let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
-        a_look_at_b.setMag(1); // + (a_look_at_b.mag() - 10) ** 2 / 3000
-        b.parent.addPos(a_look_at_b);
-        a.parent.addPos(a_look_at_b.rotate(radians(180)));
+        // console.log(overlapV);
+        let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
+        a_look_at_b.setMag(-newMag);
+
+        a.parent.addPos(a_look_at_b);
+        
+        // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
+        // a_look_at_b.setMag(1); // + (a_look_at_b.mag() - 10) ** 2 / 3000
+        // b.parent.addPos(a_look_at_b);
+        // a.parent.addPos(a_look_at_b.rotate(radians(180)));
       }
     }
   });
