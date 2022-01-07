@@ -123,6 +123,7 @@ class Sparks {
     }
   }
 }
+let tower = new Sparks();
 
 // let sparks;
 

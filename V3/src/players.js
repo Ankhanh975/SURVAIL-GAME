@@ -55,7 +55,7 @@ class Players {
       } else if (e === player) {
         e.update(mouse);
       } else {
-        e.update(p5.Vector.add(e.pos, e.normal));
+        e.update(p5.Vector.add(e.pos, createVector(0, -1)));
       }
     });
   }
@@ -89,19 +89,19 @@ class Players {
     ].forEach((color, ii) => {
       for (let i = 0; i < this.img[0].length; i++) {
         this.img[ii + 1][i] = createImage(
-          this.img[0][0].width,
-          this.img[0][0].height
+          this.img[0][i].width,
+          this.img[0][i].height
         );
         this.img[ii + 1][i].copy(
           this.img[0][i],
           0,
           0,
-          this.img[0][0].width,
-          this.img[0][0].height,
+          this.img[0][i].width,
+          this.img[0][i].height,
           0,
           0,
-          this.img[0][0].width,
-          this.img[0][0].height
+          this.img[0][i].width,
+          this.img[0][i].height
         );
         change(this.img[ii + 1][i], [255, 255, 255], color);
       }

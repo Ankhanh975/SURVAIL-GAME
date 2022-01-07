@@ -1,14 +1,13 @@
 class Player {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
-    this.normal = createVector(0, -1);
     this.pos = createVector(...pos);
     this.lastPos = createVector(0, 0);
     this.velocity = createVector(0, 0);
-    this.angle = 0;
+    this.heading = createVector(1, 0);
 
     this.lookAt = createVector(0, 0);
     this.animation = animation;
-    this.animationLength = this.animation.length
+    this.animationLength = this.animation.length;
     this.animateFrames = 0;
 
     this.name = name;
@@ -36,65 +35,40 @@ class Player {
     system.updateBody(this.circle);
   }
 
-  update(lookAt) {
+  update(lookAt, moveTo) {
+    this.lastPos = this.pos.copy();
     if (this.health < this.totalHealth) {
       this.health += this.recovery;
     }
+    {
+      // Limit max rotate to speed of radians(30) per frame
+      let heading = p5.Vector.sub(lookAt, this.pos).rotate(radians(90));
+      let angle = heading.angleBetween(this.heading);
 
-    this.lastPos = this.pos.copy();
-    this.lookAt = lookAt;
-    // Limit to max rotate speed of radians(30) per frame
-    if (!this.pos.equals(this.lookAt)) {
-      let mouseVec = p5.Vector.sub(this.lookAt, this.pos);
-      let angle = this.normal.angleBetween(mouseVec);
-      if (angle !== NaN) {
-        let a = average([this.angle, angle]);
-        let change = min(abs(a - this.angle), abs(a - angle)) * 2;
-        // print(
-
-        //   "angle",
-        //   degrees(a - this.angle),
-        //   degrees(a - angle),
-        //   degrees(a - this.angle) -
-        //     degrees(a - angle)
-        // );
-
-        // TODO: still bugs
-        if (change < radians(25)) {
-          this.angle = angle;
-        } else {
-          // check this.angle is on the right of angle or not
-          // https://stackoverflow.com/questions/13221873/determining-if-one-2d-vector-is-to-the-right-or-left-of-another/13221874
-          let v1 = createVector(1, 1);
-          let v2 = createVector(1, 1);
-          v1.setHeading(this.angle - radians(90));
-          v2.setHeading(angle - radians(90));
-          var dot = v1.x * -v2.y + v1.y * v2.x;
-          // console.log("", v1, v2, dot);
-          // throw new Error("Something went badly wrong!");
-
-          if (dot > 0) {
-            // this.angle is on the left of "angle"
-            this.angle -= radians(25);
-          } else {
-            this.angle += radians(25);
-          }
-          if (this.angle < radians(-180)) {
-            this.angle += radians(360);
-          } else if (this.angle > radians(180)) {
-            this.angle -= radians(360);
-          }
-        }
+      // console.log("angle", degrees(angle));
+      if (abs(angle) < radians(25)) {
+        this.heading = heading;
+      } else if (angle > 0) {
+        this.heading.rotate(radians(-25));
+      } else if (isNaN(angle)) {
+      } else {
+        this.heading.rotate(radians(25));
       }
+      this.heading.angle = this.heading.heading();
+    }
+    if (moveTo) {
+      this.setPos(moveTo);
     }
   }
   drawPlayer() {
     push();
     noStroke();
     translate(Math.round(this.pos.x), Math.round(this.pos.y));
-    rotate(this.angle);
+
+    rotate(this.heading.angle);
     if (this.punchHand === "left" && this.animateFrames !== 0) {
       scale(-1, 1);
+      // translate(-10, 0);
     }
     image(this.animation[this.animateFrames], 0, 0);
     pop();
@@ -153,15 +127,15 @@ class Player {
         }
       }, 16 * 5);
     }
-    
+
     // effects to all players when punch: push them backwards and minus their health
     setTimeout(() => {
       obstacles.obstacles.forEach((e, i) => {});
       let hitRange;
       if (this.AIPlayer) {
-        hitRange = [150, radians(0 - 90) + this.angle, radians(40)];
+        hitRange = [150, radians(0 - 90) + this.heading.angle, radians(40)];
       } else {
-        hitRange = [280, radians(0 - 90) + this.angle, radians(60)];
+        hitRange = [280, radians(0 - 90) + this.heading.angle, radians(60)];
       }
 
       this.parent.players.forEach((e, i) => {

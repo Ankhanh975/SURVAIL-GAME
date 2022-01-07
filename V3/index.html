@@ -51,6 +51,7 @@
     globalThis.isPressed3 = false;
     globalThis.toggleF1 = false;
     globalThis.toggleF3 = false;
+    globalThis.toggleEscape = false;
     document.addEventListener('mousedown', e => {
       // console.log("mousePressed", event.button  )
       if (e.button === 0) isPressed = true;
@@ -69,10 +70,15 @@
         toggleF1 = !toggleF1;
       } else if (e.code === "F3") {
         toggleF3 = !toggleF3;
+      } else if (e.code === "Escape") {
+        toggleEscape = !toggleEscape
       }
+
       if (
         !["F11",
           "KeyR",
+          "KeyH",
+          "KeyJ",
           "F12",
           "F1",
           "F3",

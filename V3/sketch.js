@@ -67,9 +67,8 @@ addFunction("setup", () => {
   friend.name = "friend";
   friend.damage = 2.5;
   friend.addPos(createVector(0, 10));
-  friend.recovery = 0.0010 * friend.health;
+  friend.recovery = 0.001 * friend.health;
   players.players[1] = friend;
-  
 
   players.realPlayers = [player, friend];
 });
@@ -190,11 +189,21 @@ addFunction("draw", () => {
     circle(0, 0, 50);
 
     pop();
+    for (let i = 0; i < 5; i++) {
+      let particle = tower.create_particle(
+        createVector(0, 0),
+        [128, 255, 255, 200],
+        5
+      );
+      particle.move(2.5);
+    }
+    tower.update();
+    tower.draw();
   }
   queue.updateDraw();
+  sparks.draw();
   players.draw();
   obstacles.draw();
-  sparks.draw();
   pop();
   menu.display(
     `\
