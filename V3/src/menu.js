@@ -43,3 +43,27 @@ let menu = new Menu();
 let chatbox = new Chatbox();
 
 
+let talkative = "\nGame make \nby KHANH";
+setInterval(() => {
+  let t = [
+    "\nStay close to\nthe origin\nto find more\npeople.\n",
+    "\nPress F1 you \ncan turn off\nthis panel.\n",
+    "\nPress F11 to\nplay in \nfullscreen \nmode!\n",
+    "\nHow to play?\nPress awsd \nto move",
+    "\nNew to \nthe game? Read \ngithub.com/\nAnkhanh975/\nSURVAIL-GAME",
+    // "\nYou can now \nplay the game\nin multiplier!\n\n",
+    // "\nYou should now \nset zoom to 100%",
+    "\nTry to \n survive!",
+    "\nTry to \n survive!",
+    "\nPress space\nor right click\nto use ability!",
+    "\nPress space\nor right click\nto use ability!",
+    "\nGame make by \nKHANH",
+    "\nGame make by \nKHANH",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ];
+  talkative = t[int(random(0, t.length))];
+}, 3500);

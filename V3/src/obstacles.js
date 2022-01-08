@@ -1,23 +1,13 @@
 class Obstacle {
-  constructor(pos, parent = null, lifeTime = 15 * 1000, angle = 0) {
+  constructor(pos, parent) {
     // parent: the Obstacles object this Obstacle belongs to
-    this.velocity = createVector(0, 0);
-    this.angle = angle;
-
-    this.health = 20;
-    // Remember to manually sync the position of this.circle.pos & this.pos.
-    // this.circle = new DetectCollisions.Box(
-    //   { x: this.pos.x, y: this.pos.y }
-    // );
-    this.size = 52;
-    this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 52, 52);
+    this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 51.9, 51.9);
     this.circle.parent = this;
+    this.parent = parent;
   }
   draw() {
     push();
     translate(this.circle.pos.x, this.circle.pos.y);
-    rotate(this.angle);
-    fill(220, 220, 10, map(this.health, 0, 20, 20, 200));
     // translate(+52 / 2, +52 / 2);
     // Draw rect in corner
     rect(0, 0, 52, 52, 3.5);
@@ -29,29 +19,83 @@ class Obstacle {
 class Obstacles {
   constructor() {
     this.obstacles = [];
-    // Own collision detection use to separate all obstacles out of collision
-    this.system = new DetectCollisions.System();
+
+    // this.grid.data[x][y] == 1 => obstacle is present
+    this.grid = {};
+    // Use as A* pathfinding to guild for AIs
+    this.grid.data = new PF.Grid(100, 100);
+    this.grid.finder = new PF.BiAStarFinder({});
+    this.grid.WorldCoordsToGridCoords = (posx, posy) => {
+      let returnX, returnY;
+      if (posx > 0) returnX = Math.ceil(posx / 52.0) + 49;
+      else if (posx < 0) returnX = Math.floor(posx / 52.0) + 50;
+      else returnX = 51;
+
+      if (posy > 0) returnY = Math.ceil(posy / 52.0) + 49;
+      else if (posy < 0) returnY = Math.floor(posy / 52.0) + 50;
+      else returnY = 51;
+
+      return [returnX, returnY];
+    };
+    this.grid.GridCoordsToWorldCoords = (gridx, gridy) => {
+      return [(gridx - 50) * 52, (gridy - 50) * 52];
+    };
+    this.grid.FindPath = (startx, starty, endx, endy) => {
+      // console.log("What is 'this'", this, this.data)
+      let grid = this.grid.data.clone();
+
+      var path = this.grid.finder.findPath(startx, starty, endx, endy, grid);
+      path = PF.Util.smoothenPath(this.grid.data, path);
+      // path = PF.Util.compressPath(path);
+      return path;
+    };
+    this.grid.set = (x, y, state) => {
+      this.grid.data.setWalkableAt(x, y, state);
+    };
   }
-  update() {
-    // TODO: the global collision detection system may not be updated properly (bounding box)
-    this.system.update();
-    this.system.separate();
-    this.system.update();
+  FindPath(posStart, posEnd) {
+    if (posStart.mag() > 2500 || posEnd.mag() > 2500) {
+      return [];
+    }
+
+    let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
+    let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
+    let path;
+    try {
+      path = obstacles.grid.FindPath(...pGridStart, ...pGridEnd);
+    } catch (TypeError) {
+      return [];
+    }  
+    for (let i = 0; i < path.length; i++) {
+      path[i] = this.grid.GridCoordsToWorldCoords(path[i][0], path[i][1]);
+    }
+
+    // Because a* pathfinding work not on continuous coordinates so have to go to connected points
+    path.unshift([posStart.x, posStart.y]);
+    path.push([posEnd.x, posEnd.y]);
+    // console.log("path", path);
+    // return erg;
+    return path;
   }
+  update() {}
   draw() {
     push();
     strokeWeight(1.5);
     stroke(0, 0, 0);
+    fill(220, 220, 10, 200);
 
     this.obstacles.forEach((obstacle) => {
       obstacle.draw();
     });
+
     pop();
   }
 
-  createObstacle(pos, angle = 0) {
-    pos.x -= 52 / 2;
-    pos.y -= 52 / 2;
+  createObstacle(pos) {
+    // pos.add(createVector(-52 / 2, -52 / 2));
+    [pos.x, pos.y] = this.grid.GridCoordsToWorldCoords(
+      ...this.grid.WorldCoordsToGridCoords(pos.x, pos.y)
+    );
     if (this.lastCreate) {
       if (this.lastCreate.x === pos.x && this.lastCreate.y === pos.y) {
         return;
@@ -60,31 +104,29 @@ class Obstacles {
     // console.log("new", this.lastCreate, pos, this.lastCreate == pos);
 
     this.lastCreate = pos;
-    let ob = new Obstacle(pos, angle);
+    let ob = new Obstacle(pos, this);
     let InsertAble = true;
 
     system.insert(ob.circle);
     system.updateBody(ob.circle);
-    system.checkOne(ob.circle, () => {
-      let b = system.response.b;
-      if (b.parent instanceof Player) {
-        // ob.circle to be inserted is overlap with a player
-        InsertAble = false;
-      }
-    });
+    // system.checkOne(ob.circle, () => {
+    //   // ob.circle to be inserted is overlap with something
+    //   InsertAble = false;
+    // });
     if (InsertAble) {
       this.obstacles.push(ob);
-      this.system.insert(ob.circle);
+      let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
+      console.log("Grid position", gridPos, pos.x, pos.y);
 
-      setTimeout(() => {
-        // Remove the obstacle from the world
-        let x = this.obstacles.shift();
-        system.update(x.circle);
-        this.system.update(x.circle);
+      this.grid.set(gridPos[0], gridPos[1], false);
+      // setTimeout(() => {
+      //   // Remove the obstacle from the world
+      //   let x = this.obstacles.shift();
 
-        system.remove(x.circle);
-        this.system.remove(x.circle);
-      }, 10 * 1000);
+      //   system.remove(x.circle);
+      //   system.update(x.circle);
+      // }, 10 * 1000);
+      return ob;
     } else {
       system.remove(ob.circle);
     }

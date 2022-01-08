@@ -8,38 +8,17 @@ let obstacles;
 let mouse;
 let queue = new Queue();
 let killCount = 0;
-let talkative = "\nGame make \nby KHANH";
-setInterval(() => {
-  let t = [
-    "\nStay close to\nthe origin\nto find more\npeople.\n",
-    "\nPress F1 you \ncan turn off\nthis panel.\n",
-    "\nPress F11 to\nplay in \nfullscreen \nmode!\n",
-    "\nHow to play?\nPress awsd \nto move",
-    "\nNew to \nthe game? Read \ngithub.com/\nAnkhanh975/\nSURVAIL-GAME",
-    // "\nYou can now \nplay the game\nin multiplier!\n\n",
-    // "\nYou should now \nset zoom to 100%",
-    "\nTry to \n survive!",
-    "\nTry to \n survive!",
-    "\nPress space\nor right click\nto use ability!",
-    "\nPress space\nor right click\nto use ability!",
-    "\nGame make by \nKHANH",
-    "\nGame make by \nKHANH",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ];
-  talkative = t[int(random(0, t.length))];
-}, 3500);
+
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
   // createCanvas(windowWidth, windowHeight);
   createCanvas(1024, 768);
   imageMode(CENTER);
+  // TODO
+  // colorMode(HSB, 255);
+
   // rectMode(CENTER);
-  // textureMode(IMAGE);
   // angleMode(DEGREES);
   // textureWrap(REPEAT);
   background(100);
@@ -90,10 +69,26 @@ addFunction("draw", () => {
 addFunction("draw", () => {
   if (isPressed2) {
     sparks.create_particle(mouse, [9, 200, 9]);
-    if (frameCount % 3 === 0) {
-      obstacles.createObstacle(mouse);
+    obstacles.createObstacle(mouse);
+  }
+  let friendPos = players.realPlayers[1].pos;
+  if (friendPos.dist(player.pos) > 100) {
+    let path = obstacles.FindPath(player.pos, friendPos);
+    if (path.length > 0) {
+      let totalMoveLength = 3.5;
+      path.every((each) => {
+        if (totalMoveLength < 0) {
+          return false;
+        }
+        let moveTo = p5.Vector.sub(createVector(...each), friendPos);
+        moveTo.limit(totalMoveLength);
+        totalMoveLength -= moveTo.mag();
+        friendPos.add(moveTo);
+      });
     }
   }
+  // let path = this.grid.FindPath(0, 0, 50, 0);
+  // console.log("grid", this.grid);
   // if (isPressed && !player.onPunch()) {
   //   // shake
   // var r = Prob.normal(0, 2.8);
@@ -176,24 +171,6 @@ addFunction("draw", () => {
         b.parent.heading.angle + radians(90)
       );
 
-      // console.log(
-      //   "",
-      //   xy0.x,
-      //   xy0.y,
-      //   wxy0.x,
-      //   wxy0.y,
-      //   hw0,
-      //   xy1.x,
-      //   xy1.y,
-      //   wxy1.x,
-      //   wxy1.y,
-      //   hw1,
-      //   a.parent.heading.angle,
-      //   b.parent.heading.angle,
-      //   a.parent.pos,
-      //   b.parent.pos
-      // );
-
       if (
         ellipseCollisionTest.collide(
           xy0.x,
@@ -247,12 +224,12 @@ addFunction("draw", () => {
   camera.draw_background();
   // {
   //   // Draw spawn at position 0, 0
-  //   push();
-  //   let c = HSVtoRGB(0.5, 0.5, 1);
-  //   fill(...c, 75);
-  //   circle(0, 0, 100);
+  push();
+  let c = HSVtoRGB((frameCount % 1000) / 1000, 0.9, 0.7);
+  fill(...c, 75);
+  circle(0, 0, 100);
 
-  //   pop();
+  pop();
   //   for (let i = 0; i < 5; i++) {
   //     let particle = tower.create_particle(
   //       createVector(0, 0),
