@@ -71,27 +71,3 @@
   }
   animate();
 }
-{
-  let grid = [
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0],
-  ];
-  var aStar = new EasyStar.js();
-  aStar.setGrid(grid);
-  var instanceId = aStar.findPath(0, 0, 4, 0, function (path) {
-    if (path === null) {
-      alert("Path was not found.");
-    } else {
-      alert(
-        "Path was found. The first Point is " + path[0].x + " " + path[0].y
-      );
-    }
-  });
-  aStar.calculate();
-  aStar.setIterationsPerCalculation(1000);
-  aStar.avoidAdditionalPoint(x, y);
-  // aStar.cancelPath(instanceId);
-}

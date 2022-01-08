@@ -146,7 +146,7 @@ addFunction("draw", () => {
   // onController need to after players.update
 
   queue.updatePro();
-  players.update(mouse, null);
+  players.update(mouse);
   onController(player);
   system.update();
   obstacles.update();
@@ -209,15 +209,15 @@ addFunction("draw", () => {
         )
       ) {
         // Push their center from each other.
-        console.log("overlap");
-        
+        // console.log("overlap");
+
         let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
         // console.log(overlapV);
         let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
         a_look_at_b.setMag(-newMag);
 
         a.parent.addPos(a_look_at_b);
-        
+
         // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
         // a_look_at_b.setMag(1); // + (a_look_at_b.mag() - 10) ** 2 / 3000
         // b.parent.addPos(a_look_at_b);

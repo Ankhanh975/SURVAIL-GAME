@@ -30,7 +30,7 @@ class Players {
 
     // gameTick
     setInterval(() => {
-      if (this.players.length < 100) {
+      if (this.players.length < 40) {
         // while (this.AIs.length < 35) {
         let pos = p5.Vector.random2D().setMag(random(300, 1000));
         for (let index = 0; index < Prob.normal(10, 2)(); index++) {
@@ -47,10 +47,10 @@ class Players {
     //   this.players.shuffle();
     // }, 125);
   }
-  update(mouse, grid) {
+  update(mouse) {
     this.players.forEach((e) => {
       if (e.AIPlayer) {
-        e.update(grid);
+        e.update();
       } else if (e === player) {
         e.update(mouse);
       } else {

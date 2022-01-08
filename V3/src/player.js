@@ -215,7 +215,7 @@ class AIPlayer extends Player {
     this.target = 0
   }
 
-  update(grid) {
+  update() {
     let target = this.parent.realPlayers[this.target].pos;
 
     // let target;
