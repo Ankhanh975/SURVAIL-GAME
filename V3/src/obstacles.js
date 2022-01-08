@@ -24,16 +24,21 @@ class Obstacles {
     this.grid = {};
     // Use as A* pathfinding to guild for AIs
     this.grid.data = new PF.Grid(100, 100);
-    this.grid.finder = new PF.BiAStarFinder({});
+
+    this.grid.finder = new PF.BiAStarFinder({
+      allowDiagonal: true,
+      dontCrossCorners: true,
+    });
     this.grid.WorldCoordsToGridCoords = (posx, posy) => {
       let returnX, returnY;
-      if (posx > 0) returnX = Math.ceil(posx / 52.0) + 49;
-      else if (posx < 0) returnX = Math.floor(posx / 52.0) + 50;
-      else returnX = 51;
-
-      if (posy > 0) returnY = Math.ceil(posy / 52.0) + 49;
-      else if (posy < 0) returnY = Math.floor(posy / 52.0) + 50;
-      else returnY = 51;
+      // if (posx > 0) returnX = Math.ceil(posx / 52.0) + 50;
+      // else if (posx < 0) returnX = Math.floor(posx / 52.0) + 50;
+      // else returnX = 51;
+      // if (posy > 0) returnY = Math.ceil(posy / 52.0) + 50;
+      // else if (posy < 0) returnY = Math.floor(posy / 52.0) + 50;
+      // else returnY = 51;
+      returnX = Math.floor(posx / 52.0) + 50;
+      returnY = Math.floor(posy / 52.0) + 50;
 
       return [returnX, returnY];
     };
@@ -43,7 +48,10 @@ class Obstacles {
     this.grid.FindPath = (startx, starty, endx, endy) => {
       // console.log("What is 'this'", this, this.data)
       let grid = this.grid.data.clone();
-
+      this.grid.finder = new PF.BiAStarFinder({
+        allowDiagonal: true,
+        dontCrossCorners: true,
+      });
       var path = this.grid.finder.findPath(startx, starty, endx, endy, grid);
       path = PF.Util.smoothenPath(this.grid.data, path);
       // path = PF.Util.compressPath(path);
@@ -65,13 +73,14 @@ class Obstacles {
       path = obstacles.grid.FindPath(...pGridStart, ...pGridEnd);
     } catch (TypeError) {
       return [];
-    }  
+    }
+    // console.log("old", path);
     for (let i = 0; i < path.length; i++) {
       path[i] = this.grid.GridCoordsToWorldCoords(path[i][0], path[i][1]);
     }
 
     // Because a* pathfinding work not on continuous coordinates so have to go to connected points
-    path.unshift([posStart.x, posStart.y]);
+    // path.unshift([posStart.x, posStart.y]);
     path.push([posEnd.x, posEnd.y]);
     // console.log("path", path);
     // return erg;

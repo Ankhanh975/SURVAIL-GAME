@@ -66,26 +66,43 @@ addFunction("draw", () => {
   mouse = camera.toWorldCoords();
 });
 
+let path;
+setTimeout(() => {
+  setInterval(() => {
+    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+  }, 2 * 1000);
+}, 500);
 addFunction("draw", () => {
   if (isPressed2) {
     sparks.create_particle(mouse, [9, 200, 9]);
     obstacles.createObstacle(mouse);
   }
+
   let friendPos = players.realPlayers[1].pos;
-  if (friendPos.dist(player.pos) > 100) {
-    let path = obstacles.FindPath(player.pos, friendPos);
+  if (friendPos.dist(player.pos) > 100 && path) {
+    console.log("path", path);
+    // console.log("loop");
     if (path.length > 0) {
-      let totalMoveLength = 3.5;
+      // players.realPlayers[1].setPos(createVector(...path[1]));
+      let totalMoveLength = 100;
       path.every((each) => {
+        // console.log("each", each);
+        // return true;
         if (totalMoveLength < 0) {
+          console.log("totalMoveLength < 0", totalMoveLength);
           return false;
         }
-        let moveTo = p5.Vector.sub(createVector(...each), friendPos);
+        let moveTo = p5.Vector.sub(createVector(each[0], each[1]), friendPos);
         moveTo.limit(totalMoveLength);
+        console.log(moveTo.x, moveTo.y, totalMoveLength);
         totalMoveLength -= moveTo.mag();
-        friendPos.add(moveTo);
+        players.realPlayers[1].addPos(moveTo);
+        // console.log(friendPos, totalMoveLength, moveTo, moveTo.mag(), each);
+
+        return true;
       });
     }
+    // noLoop();
   }
   // let path = this.grid.FindPath(0, 0, 50, 0);
   // console.log("grid", this.grid);
@@ -202,21 +219,21 @@ addFunction("draw", () => {
       }
     }
   });
-  system.checkAll(({ a, overlapV }) => {
-    let b = system.response.b;
-    if (a.parent instanceof Player && b.parent instanceof Obstacle) {
-      // Player inside a obstacle
-      let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+  // system.checkAll(({ a, overlapV }) => {
+  //   let b = system.response.b;
+  //   if (a.parent instanceof Player && b.parent instanceof Obstacle) {
+  //     // Player inside a obstacle
+  //     let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
 
-      a.parent.setPos(a.parent.lastPos.copy());
+  //     a.parent.setPos(a.parent.lastPos.copy());
 
-      let newMag = 110 / max(l.mag() - 35, 7) ** 2;
-      l.setMag(newMag);
-      // l.setMag(50 / l.mag());
+  //     let newMag = 110 / max(l.mag() - 35, 7) ** 2;
+  //     l.setMag(newMag);
+  //     // l.setMag(50 / l.mag());
 
-      // a.parent.addPos(l);
-    }
-  });
+  //     // a.parent.addPos(l);
+  //   }
+  // });
 });
 addFunction("draw", () => {
   push();
