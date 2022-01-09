@@ -203,18 +203,15 @@ addFunction("draw", () => {
   // let path = this.grid.FindPath(0, 0, 50, 0);
   // console.log("grid", this.grid);
   let friendPos = players.realPlayers[1].pos;
-  path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+  // path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
   let totalMoveLength = 3.5;
   // let totalMoveLength = 55;
 
   if (friendPos.dist(player.pos) > 100 && path && path.length > 0) {
-    // console.log("path", JSON.stringify(path));
-    // console.log("loop");
-    // players.realPlayers[1].setPos(createVector(...path[1]));
     path.every((each) => {
       // console.log("each", each);
       // return true;
-      if (totalMoveLength < 0) {
+      if (totalMoveLength < 0.01) {
         // console.log("totalMoveLength < 0", totalMoveLength);
         return false;
       }
@@ -230,11 +227,11 @@ addFunction("draw", () => {
   }
 });
 let path;
-// setTimeout(() => {
-//   setInterval(() => {
-//     path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-//   }, 2 * 1000);
-// }, 500);
+setTimeout(() => {
+  setInterval(() => {
+    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+  }, 2 * 1000);
+}, 500);
 addFunction("draw", () => {
   push();
   camera.follow(player.pos);
@@ -262,12 +259,14 @@ addFunction("draw", () => {
   sparks.draw();
   players.draw();
   obstacles.draw();
-  path.forEach((e, i) => {
-    push();
-    fill(255, 255, 255, 100);
-    circle(e[0], e[1], 40 + i * 6);
-    pop();
-  });
+  if (path) {
+    path.forEach((e, i) => {
+      push();
+      fill(255, 255, 255, 100);
+      circle(e[0], e[1], 40 + i * 6);
+      pop();
+    });
+  }
   pop();
   menu.display(
     `\
