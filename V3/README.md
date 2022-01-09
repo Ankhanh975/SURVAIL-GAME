@@ -45,6 +45,8 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 Feel free to make commits and push requests!
 
 Development
+The first few lines of code is done in 2020 Jan, because I found this game https://github.com/Ankhanh975/SURVAIL-GAME/tree/master/V1/Example/OnlinePuch
+is really cool!
 Layout:
 
 .
