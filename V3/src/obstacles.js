@@ -61,7 +61,8 @@ class Obstacles {
       if (x < 0 || y < 0 || x > 100 || y > 100) {
         return;
       }
-      this.grid.data.setWalkableAt(x, y, state);
+      // state == true means that the point is have obstacles
+      this.grid.data.setWalkableAt(x, y, !state);
     };
   }
   FindPath(posStart, posEnd) {
@@ -131,7 +132,6 @@ class Obstacles {
         return;
       }
     }
-    // console.log("new", this.lastCreate, pos, this.lastCreate == pos);
 
     this.lastCreate = pos;
     let ob = new Obstacle(pos, this);
@@ -139,23 +139,26 @@ class Obstacles {
 
     system.insert(ob.circle);
     system.updateBody(ob.circle);
-    // system.checkOne(ob.circle, () => {
-    //   // ob.circle to be inserted is overlap with something
-    //   InsertAble = false;
-    // });
+    system.checkOne(ob.circle, () => {
+      // ob.circle to be inserted is overlap with something
+      InsertAble = false;
+    });
     if (InsertAble) {
       this.obstacles.push(ob);
       let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
       console.log("Grid position", gridPos, pos.x, pos.y);
 
-      this.grid.set(gridPos[0], gridPos[1], false);
-      // setTimeout(() => {
-      //   // Remove the obstacle from the world
-      //   let x = this.obstacles.shift();
+      this.grid.set(gridPos[0], gridPos[1], true);
+      setTimeout(() => {
+        // Remove the obstacle from the world
+        let x = this.obstacles.shift();
 
-      //   system.remove(x.circle);
-      //   system.update(x.circle);
-      // }, 10 * 1000);
+        system.remove(x.circle);
+        system.update(x.circle);
+        let gridPos = this.grid.WorldCoordsToGridCoords(x.circle.pos.x, x.circle.pos.y);
+        
+        this.grid.set(gridPos[0], gridPos[1], false);
+      }, 10 * 1000);
       return ob;
     } else {
       system.remove(ob.circle);

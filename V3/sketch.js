@@ -12,8 +12,8 @@ let killCount = 0;
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
-  // createCanvas(windowWidth, windowHeight);
-  createCanvas(1024, 768);
+  // createCanvas(1024, 768);
+  createCanvas(windowWidth, windowHeight);
   imageMode(CENTER);
   // TODO
   // colorMode(HSB, 255);
@@ -204,10 +204,17 @@ addFunction("draw", () => {
   // console.log("grid", this.grid);
   let friendPos = players.realPlayers[1].pos;
   // path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  let totalMoveLength = 3.5;
+  let totalMoveLength = 7.5;
   // let totalMoveLength = 55;
-
+  path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
   if (friendPos.dist(player.pos) > 100 && path && path.length > 0) {
+    // console.log(path.length);
+
+    if (friendPos.dist(createVector(path[0][0], path[0][1])) < 7.5) {
+      path.shift();
+    }
+    path.pop();
+    path.push([player.pos.x, player.pos.y]);
     path.every((each) => {
       // console.log("each", each);
       // return true;
@@ -227,11 +234,9 @@ addFunction("draw", () => {
   }
 });
 let path;
-setTimeout(() => {
-  setInterval(() => {
-    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  }, 2 * 1000);
-}, 500);
+setInterval(() => {
+  path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+}, 16 * 15);
 addFunction("draw", () => {
   push();
   camera.follow(player.pos);
@@ -255,18 +260,19 @@ addFunction("draw", () => {
   //   tower.update();
   //   tower.draw();
   // }
+  if (path) {
+    path.forEach((e, i) => {
+      push();
+      fill(255, 255, 255, 90);
+      circle(e[0], e[1], 40 + i * 4);
+      pop();
+    });
+  }
   queue.updateDraw();
   sparks.draw();
   players.draw();
   obstacles.draw();
-  if (path) {
-    path.forEach((e, i) => {
-      push();
-      fill(255, 255, 255, 100);
-      circle(e[0], e[1], 40 + i * 6);
-      pop();
-    });
-  }
+
   pop();
   menu.display(
     `\

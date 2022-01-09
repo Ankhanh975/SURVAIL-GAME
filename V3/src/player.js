@@ -238,13 +238,13 @@ class AIPlayer extends Player {
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
       super.update(lookAt);
-      // if (dist < 150) {
-      //   if (!this.onPunch()) {
-      //     if (random(0, 100) >= 92.5) {
-      //       this.startPunch();
-      //     }
-      //   }
-      // }
+      if (dist < 150) {
+        if (!this.onPunch()) {
+          if (random(0, 100) >= 92.5) {
+            this.startPunch();
+          }
+        }
+      }
 
       if (dist < 120) {
         toLookAt.setMag(3.5);
