@@ -7,8 +7,8 @@ class Obstacle {
   }
   draw() {
     push();
+    // translate(-52 / 2, -52 / 2);
     translate(this.circle.pos.x, this.circle.pos.y);
-    // translate(+52 / 2, +52 / 2);
     // Draw rect in corner
     rect(0, 0, 52, 52, 3.5);
     pop();
@@ -53,7 +53,7 @@ class Obstacles {
         dontCrossCorners: true,
       });
       var path = this.grid.finder.findPath(startx, starty, endx, endy, grid);
-      path = PF.Util.smoothenPath(this.grid.data, path);
+      // path = PF.Util.smoothenPath(this.grid.data, path);
       // path = PF.Util.compressPath(path);
       return path;
     };
@@ -101,7 +101,7 @@ class Obstacles {
   }
 
   createObstacle(pos) {
-    // pos.add(createVector(-52 / 2, -52 / 2));
+    // pos.add(createVector(+52 / 2, +52 / 2));
     [pos.x, pos.y] = this.grid.GridCoordsToWorldCoords(
       ...this.grid.WorldCoordsToGridCoords(pos.x, pos.y)
     );

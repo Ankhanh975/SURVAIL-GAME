@@ -66,48 +66,15 @@ addFunction("draw", () => {
   mouse = camera.toWorldCoords();
 });
 
-let path;
-setTimeout(() => {
-  setInterval(() => {
-    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  }, 2 * 1000);
-}, 500);
 addFunction("draw", () => {
   if (isPressed2) {
     sparks.create_particle(mouse, [9, 200, 9]);
     obstacles.createObstacle(mouse);
   }
 
-  let friendPos = players.realPlayers[1].pos;
-  if (friendPos.dist(player.pos) > 100 && path) {
-    console.log("path", path);
-    // console.log("loop");
-    if (path.length > 0) {
-      // players.realPlayers[1].setPos(createVector(...path[1]));
-      let totalMoveLength = 100;
-      path.every((each) => {
-        // console.log("each", each);
-        // return true;
-        if (totalMoveLength < 0) {
-          console.log("totalMoveLength < 0", totalMoveLength);
-          return false;
-        }
-        let moveTo = p5.Vector.sub(createVector(each[0], each[1]), friendPos);
-        moveTo.limit(totalMoveLength);
-        console.log(moveTo.x, moveTo.y, totalMoveLength);
-        totalMoveLength -= moveTo.mag();
-        players.realPlayers[1].addPos(moveTo);
-        // console.log(friendPos, totalMoveLength, moveTo, moveTo.mag(), each);
-
-        return true;
-      });
-    }
-    // noLoop();
-  }
-  // let path = this.grid.FindPath(0, 0, 50, 0);
-  // console.log("grid", this.grid);
-  // if (isPressed && !player.onPunch()) {
   //   // shake
+  // if (isPressed && !player.onPunch()) {
+
   // var r = Prob.normal(0, 2.8);
   //   setTimeout(() => {
   //     let id66 = setInterval(() => {
@@ -162,79 +129,113 @@ addFunction("draw", () => {
   onController(player);
   system.update();
   obstacles.update();
-  system.checkAll(({ a, overlapV }) => {
-    let b = system.response.b;
-    if (a.parent instanceof Player && b.parent instanceof Player) {
-      // Check that 2 ellipses overlap
-
-      let xy0 = a.parent.pos
-        .copy()
-        .add(
-          createVector(-3.5, 0).rotate(a.parent.heading.angle + radians(90))
-        );
-
-      let xy1 = b.parent.pos
-        .copy()
-        .add(
-          createVector(-3.5, 0).rotate(b.parent.heading.angle + radians(90))
-        );
-      let [hw0, hw1] = [46 / 88.0, 46 / 88.0];
-
-      let wxy0 = createVector(0, 88 / 2).rotate(
-        a.parent.heading.angle + radians(90)
-      );
-
-      let wxy1 = createVector(0, 88 / 2).rotate(
-        b.parent.heading.angle + radians(90)
-      );
-
-      if (
-        ellipseCollisionTest.collide(
-          xy0.x,
-          xy0.y,
-          wxy0.x,
-          wxy0.y,
-          hw0,
-          xy1.x,
-          xy1.y,
-          wxy1.x,
-          wxy1.y,
-          hw1
-        )
-      ) {
-        // Push their center from each other.
-        // console.log("overlap");
-
-        let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
-        // console.log(overlapV);
-        let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
-        a_look_at_b.setMag(-newMag);
-
-        a.parent.addPos(a_look_at_b);
-
-        // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
-        // a_look_at_b.setMag(1); // + (a_look_at_b.mag() - 10) ** 2 / 3000
-        // b.parent.addPos(a_look_at_b);
-        // a.parent.addPos(a_look_at_b.rotate(radians(180)));
-      }
-    }
-  });
   // system.checkAll(({ a, overlapV }) => {
   //   let b = system.response.b;
-  //   if (a.parent instanceof Player && b.parent instanceof Obstacle) {
-  //     // Player inside a obstacle
-  //     let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+  //   if (a.parent instanceof Player && b.parent instanceof Player) {
+  //     // Check that 2 ellipses overlap
 
-  //     a.parent.setPos(a.parent.lastPos.copy());
+  //     let xy0 = a.parent.pos
+  //       .copy()
+  //       .add(
+  //         createVector(-3.5, 0).rotate(a.parent.heading.angle + radians(90))
+  //       );
 
-  //     let newMag = 110 / max(l.mag() - 35, 7) ** 2;
-  //     l.setMag(newMag);
-  //     // l.setMag(50 / l.mag());
+  //     let xy1 = b.parent.pos
+  //       .copy()
+  //       .add(
+  //         createVector(-3.5, 0).rotate(b.parent.heading.angle + radians(90))
+  //       );
+  //     let [hw0, hw1] = [46 / 88.0, 46 / 88.0];
 
-  //     // a.parent.addPos(l);
+  //     let wxy0 = createVector(0, 88 / 2).rotate(
+  //       a.parent.heading.angle + radians(90)
+  //     );
+
+  //     let wxy1 = createVector(0, 88 / 2).rotate(
+  //       b.parent.heading.angle + radians(90)
+  //     );
+
+  //     if (
+  //       ellipseCollisionTest.collide(
+  //         xy0.x,
+  //         xy0.y,
+  //         wxy0.x,
+  //         wxy0.y,
+  //         hw0,
+  //         xy1.x,
+  //         xy1.y,
+  //         wxy1.x,
+  //         wxy1.y,
+  //         hw1
+  //       )
+  //     ) {
+  //       // Push their center from each other.
+  //       // console.log("overlap");
+
+  //       let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
+  //       // console.log(overlapV);
+  //       let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
+  //       a_look_at_b.setMag(-newMag);
+
+  //       a.parent.addPos(a_look_at_b);
+
+  //       // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
+  //       // a_look_at_b.setMag(1); // + (a_look_at_b.mag() - 10) ** 2 / 3000
+  //       // b.parent.addPos(a_look_at_b);
+  //       // a.parent.addPos(a_look_at_b.rotate(radians(180)));
+  //     }
   //   }
   // });
+  system.checkAll(({ a, overlapV }) => {
+    let b = system.response.b;
+    if (a.parent instanceof Player && b.parent instanceof Obstacle) {
+      // Player inside a obstacle
+      let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+
+      a.parent.setPos(a.parent.lastPos.copy());
+
+      let newMag = 110 / max(l.mag() - 35, 7) ** 2;
+      l.setMag(newMag);
+      // l.setMag(50 / l.mag());
+
+      // a.parent.addPos(l);
+    }
+  });
+
+  // let path = this.grid.FindPath(0, 0, 50, 0);
+  // console.log("grid", this.grid);
+  let friendPos = players.realPlayers[1].pos;
+  path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+  let totalMoveLength = 100;
+
+  if (friendPos.dist(player.pos) > 100 && path && path.length > 0) {
+    console.log("path", JSON.stringify(path));
+    // console.log("loop");
+    // players.realPlayers[1].setPos(createVector(...path[1]));
+    path.every((each) => {
+      // console.log("each", each);
+      // return true;
+      if (totalMoveLength < 0) {
+        // console.log("totalMoveLength < 0", totalMoveLength);
+        return false;
+      }
+      let moveTo = p5.Vector.sub(createVector(each[0], each[1]), friendPos);
+      moveTo.limit(totalMoveLength);
+      // console.log(moveTo.x, moveTo.y, totalMoveLength);
+      totalMoveLength -= moveTo.mag();
+      players.realPlayers[1].addPos(moveTo);
+      // console.log(friendPos, totalMoveLength, moveTo, moveTo.mag(), each);
+
+      return true;
+    });
+  }
 });
+let path;
+// setTimeout(() => {
+//   setInterval(() => {
+//     path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+//   }, 2 * 1000);
+// }, 500);
 addFunction("draw", () => {
   push();
   camera.follow(player.pos);
@@ -262,6 +263,12 @@ addFunction("draw", () => {
   sparks.draw();
   players.draw();
   obstacles.draw();
+  path.forEach((e, i) => {
+    push();
+    fill(255, 255, 255, 100);
+    circle(e[0], e[1], 40 + i * 6);
+    pop();
+  });
   pop();
   menu.display(
     `\

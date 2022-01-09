@@ -43,3 +43,18 @@ https://p5js.org/reference/#/p5.Vector
 https://p5js.org/reference/
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift
 Feel free to make commits and push requests!
+
+Development
+Layout:
+
+.
+|-- setup.js        # helper function
+|-- menu.js         # responding for menu selection
+|-- Camera.js       # responding of following player, blur effect, ...
+|-- particles.js    # particles effects
+|-- obstacles.js    # the yellow obstacles 
+|-- player.js       # The code for a player object or AIs behaviour
+|-- players.js      # Group 
+|-- curve.js"       # curve use for animation
+|-- generate.js     # Generate fake data.
+|-- sketch.js"      # Main flow
