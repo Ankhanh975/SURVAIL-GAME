@@ -58,13 +58,14 @@ class Obstacles {
       return path;
     };
     this.grid.set = (x, y, state) => {
-      if (x < 0 || y < 0 || x > 100 || y > 100) {
-        return;
-      }
       this.grid.data.setWalkableAt(x, y, state);
     };
   }
   FindPath(posStart, posEnd) {
+    if (posStart.mag() > 2500 || posEnd.mag() > 2500) {
+      return [];
+    }
+
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
     let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
     let path;

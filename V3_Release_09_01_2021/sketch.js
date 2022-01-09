@@ -71,48 +71,50 @@ addFunction("draw", () => {
     sparks.create_particle(mouse, [9, 200, 9]);
     obstacles.createObstacle(mouse);
   }
-  {
-    //   // shake
-    // if (isPressed && !player.onPunch()) {
-    // var r = Prob.normal(0, 2.8);
-    //   setTimeout(() => {
-    //     let id66 = setInterval(() => {
-    //       shake = [r(), r()];
-    //       queue.addPro(`
-    //         translate(${r()}, ${r()})
-    //       `);
-    //     }, 16);
-    //     setTimeout(() => {
-    //       clearInterval(id66);
-    //     }, 16 * 5.5);
-    //   }, 191);
-    // }
-    // if (isPressed && !player.onPunch()) {
-    //
-    //   setTimeout(() => {
-    //     queue.addDraw(`
-    //     push();
-    //     translate(player.pos.x, player.pos.y);
-    //     rotate(radians(0 - 90) + player.angle);
-    //     fill(255, 0, 0, 100);
-    //     stroke(255, 255, 0, 200);
-    //     strokeWeight(4);
-    //     arc(
-    //       0,
-    //       0,
-    //       2 * 250,
-    //       2 * 250,
-    //       // -(player.angle ) / 2,
-    //       // +(player.angle ) / 2,
-    //       -radians(80) / 2,
-    //       radians(80) / 2,
-    //       PIE
-    //     );
-    //     pop();
-    //     `);
-    //   }, 190);
-    // }
-  }
+
+  //   // shake
+  // if (isPressed && !player.onPunch()) {
+
+  // var r = Prob.normal(0, 2.8);
+  //   setTimeout(() => {
+  //     let id66 = setInterval(() => {
+  //       shake = [r(), r()];
+  //       queue.addPro(`
+  //         translate(${r()}, ${r()})
+  //       `);
+  //     }, 16);
+  //     setTimeout(() => {
+  //       clearInterval(id66);
+  //     }, 16 * 5.5);
+  //   }, 191);
+  // }
+
+  // if (isPressed && !player.onPunch()) {
+  //
+  //   setTimeout(() => {
+  //     queue.addDraw(`
+  //     push();
+  //     translate(player.pos.x, player.pos.y);
+  //     rotate(radians(0 - 90) + player.angle);
+  //     fill(255, 0, 0, 100);
+  //     stroke(255, 255, 0, 200);
+  //     strokeWeight(4);
+
+  //     arc(
+  //       0,
+  //       0,
+  //       2 * 250,
+  //       2 * 250,
+  //       // -(player.angle ) / 2,
+  //       // +(player.angle ) / 2,
+  //       -radians(80) / 2,
+  //       radians(80) / 2,
+  //       PIE
+  //     );
+  //     pop();
+  //     `);
+  //   }, 190);
+  // }
 
   if (isPressed && !player.onPunch()) {
     // if (isPressed && (frameCount % 24 === 0 || !player.onPunch())) {
