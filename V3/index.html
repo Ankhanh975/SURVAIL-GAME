@@ -25,7 +25,19 @@
 </head>
 
 <body>
+    <script>
+    // https://developer.mozilla.org/en-US/docs/Web/API/setInterval
+    // Enable the passage of the 'this' object through the JavaScript timers
 
+    var __nativeST__ = window.setTimeout, __nativeSI__ = window.setInterval;
+
+    window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
+      var oThis = this, aArgs = Array.prototype.slice.call(arguments, 2);
+      return __nativeST__(vCallback instanceof Function ? function () {
+        vCallback.apply(oThis, aArgs);
+      } : vCallback, nDelay);
+    };
+  </script>
   <script src="src/setup.js"></script>
   <script src="src/menu.js"></script>
   <script src="src/Camera.js"></script>
@@ -102,6 +114,13 @@
   </script>
 
   <script>
+   
+    window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
+      var oThis = this, aArgs = Array.prototype.slice.call(arguments, 2);
+      return __nativeSI__(vCallback instanceof Function ? function () {
+        vCallback.apply(oThis, aArgs);
+      } : vCallback, nDelay);
+    };
     // https://stackoverflow.com/questions/27321672/listen-for-all-events-in-javascript/27322253
     // let P5canvas = document.getElementById(".canvas")
     // let P5canvas = window
