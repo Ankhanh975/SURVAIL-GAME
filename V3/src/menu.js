@@ -27,7 +27,7 @@ class Menu {
   }
 }
 class Chatbox {
-  constructor(chatbox) {
+  constructor() {
     this.message = [];
   }
   sayMessage(txt) {

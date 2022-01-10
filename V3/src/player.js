@@ -5,7 +5,7 @@ class Player {
     this.velocity = createVector(0, 0);
     this.heading = createVector(1, 0);
     this.heading.angle = 0;
-
+    this.walkable = true;
     this.lookAt = createVector(0, 0);
     this.animation = animation;
     this.animationLength = this.animation.length;
@@ -24,12 +24,14 @@ class Player {
     this.parent = parent;
   }
   setPos(pos) {
+    if (this.walkable === false) return;
     this.pos = pos;
     this.circle.pos.x = this.pos.x;
     this.circle.pos.y = this.pos.y;
     system.updateBody(this.circle);
   }
   addPos(pos) {
+    if (this.walkable === false) return;
     this.pos.add(pos);
     this.circle.pos.x = this.pos.x;
     this.circle.pos.y = this.pos.y;
@@ -154,6 +156,7 @@ class Player {
         if (hit) {
           // print("Hit players.AIs", i);
           e.getHit();
+
           if (e.health < 0) {
             system.remove(e.circle);
 
@@ -213,6 +216,7 @@ class AIPlayer extends Player {
     this.AIPlayer = true;
     // this.target = int(random(0, this.parent.realPlayers.length));
     this.target = 0;
+    this.path = [];
   }
 
   update() {
@@ -251,30 +255,67 @@ class AIPlayer extends Player {
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }
-      if (dist > 150) {
-        toLookAt.setMag(3.0);
-        this.addPos(toLookAt);
+      // if (dist > 150) {
+      //   toLookAt.setMag(3.0);
+      //   this.addPos(toLookAt);
+      // }
+    }
+    {
+      let totalMoveLength = 4.0;
+
+      if (this.path.length < 3) {
+        this.path = obstacles.FindPath(this.pos, target);
+      } else if (
+        abs(
+          this.path[this.path.length - 2][0] -
+            this.path[this.path.length - 1][0]
+        ) > 200 ||
+        abs(
+          this.path[this.path.length - 2][1] -
+            this.path[this.path.length - 1][1]
+        ) > 200
+      ) {
+        // If last node is too far away from the this.path
+        // So: run pathfinding
+        this.path = obstacles.FindPath(this.pos, target);
+      }
+
+      // If path is not valid then recalculate
+      let isValid = true;
+      if (this.path.length >= 4) {
+        [0, 1, 2, 3].forEach((i) => {
+          let pos = obstacles.grid.WorldCoordsToGridCoords(...this.path[i]);
+          if (obstacles.grid.get(...pos) === true) {
+            isValid = false;
+          }
+        });
+      }
+
+      if (isValid === false) {
+        this.path = obstacles.FindPath(this.pos, target);
+      }
+      if (target.dist(player.pos) > 100 && this.path.length > 0) {
+        this.path.pop();
+        this.path.push([target[0], target[1]]);
+        this.path.every((each) => {
+          if (totalMoveLength < 0.01) {
+            if (
+              this.pos.dist(createVector(this.path[0][0], this.path[0][1])) <
+              4.0 + 0.1
+            ) {
+              this.path.shift();
+            }
+            return false;
+          }
+          let moveTo = p5.Vector.sub(createVector(each[0], each[1]), this.pos);
+          moveTo.limit(totalMoveLength);
+          totalMoveLength -= moveTo.mag();
+          this.addPos(moveTo);
+
+          return true;
+        });
       }
     }
-    // {
-    //   allyls.forEach((a) => {
-    //     if (a === this) {
-    //       return;
-    //     }
-    //     dist = this.pos.dist(a.pos);
-    //     // print("dist", this.pos, a.pos);
-    //     // print("dist2", dist);
-
-    //     if (dist < 70) {
-    //       let l = p5.Vector.sub(a.pos, this.pos);
-    //       // l.mult(0.01);
-    //       l.setMag(0.02 / mag(l) ** 2);
-    //       a.pos.add(l);
-    //       l.rotate(radians(180));
-    //       this.pos.add(l);
-    //     }
-    //   });
-    // }
   }
 }
 

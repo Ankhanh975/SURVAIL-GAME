@@ -211,7 +211,6 @@ addFunction("draw", () => {
   if (isValid === false) {
     path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
   }
-  obstacles.grid.get();
   if (path && friendPos.dist(player.pos) > 100 && path.length > 0) {
     path.pop();
     path.push([player.pos.x, player.pos.y]);
