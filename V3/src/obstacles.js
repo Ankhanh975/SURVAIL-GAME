@@ -3,14 +3,22 @@ class Obstacle {
     // parent: the Obstacles object this Obstacle belongs to
     this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 51.9, 51.9);
     this.circle.parent = this;
+    this.color = [220, 220, 10, 200];
     this.parent = parent;
+    this.size = 51.9;
+    // this.size = 30;
+    // anime({
+    //   targets: this,
+    //   translateX: 270,
+    //   size: 51.9,
+    // });
   }
   draw() {
     push();
-    // translate(-52 / 2, -52 / 2);
+    // translate(-this.size / 2, -this.size / 2);
     translate(this.circle.pos.x, this.circle.pos.y);
     // Draw rect in corner
-    rect(0, 0, 52, 52, 3.5);
+    rect(0, 0, this.size, this.size, 3.5);
     pop();
   }
   update() {}
@@ -138,6 +146,7 @@ class Obstacles {
 
   createObstacle(pos) {
     // pos.add(createVector(+52 / 2, +52 / 2));
+    pos = pos.copy();
     [pos.x, pos.y] = this.grid.GridCoordsToWorldCoords(
       ...this.grid.WorldCoordsToGridCoords(pos.x, pos.y)
     );

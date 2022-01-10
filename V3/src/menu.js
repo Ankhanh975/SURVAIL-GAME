@@ -4,7 +4,7 @@ class Menu {
     if (toggleF1 === true) {
       return;
     }
-   
+
     push();
     // translate(310, -160);
     translate(width / 2 - 205, height / 4 - 400);
@@ -39,12 +39,13 @@ class Chatbox {
     pop();
   }
 }
-var fpsMeter = new FPSMeter(document.getElementById("target"), {
+var fpsMeter = new FPSMeter(null, {
   graph: 1,
   // interval: 1000,
   decimals: 0,
   heat: 1,
-  theme:"transparent",
+  smoothing: 1,
+  // theme:"transparent",
   // Meter position
   position: "absolute", // Meter position.
   zIndex: 10, // Meter Z index.
@@ -56,7 +57,6 @@ var fpsMeter = new FPSMeter(document.getElementById("target"), {
 });
 let menu = new Menu();
 let chatbox = new Chatbox();
-
 
 let talkative = "\nGame make \nby KHANH";
 setInterval(() => {

@@ -290,10 +290,6 @@ Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
   // Game make
   // by KHANH.
 
-  // menu.display(
-  //   `Kill: ${killCount}\nPos: ${int(player.pos.x)}, ${int(player.pos.y)}` +
-  //     talkative
-  // );
   chatbox.draw();
 });
 function mouseClicked(event) {
