@@ -56,10 +56,15 @@ class Obstacles {
     };
     this.grid.set = (x, y, state) => {
       if (x < 0 || y < 0 || x > 100 || y > 100) {
+        console.log("out of bounds", x, y, state);
         return;
       }
       // state == true means that the point is have obstacles
       this.grid.data.setWalkableAt(x, y, !state);
+    };
+    this.grid.get = (x, y) => {
+      // return !this.grid.data.nodes[x][y].walkable;
+      return !this.grid.data.isWalkableAt(x, y);
     };
   }
   FindPath(posStart, posEnd) {
@@ -106,14 +111,16 @@ class Obstacles {
     return path;
   }
   isValidPath(path) {
-    isValid = false;
+    let isValid = true;
     path.forEach((each) => {
-      let pos = this.grid.GridCoordsToWorldCoords(each);
-      if (this.grid.data[pos[0]][pos[1]] === true) {
-        return false;
+      let pos = this.grid.WorldCoordsToGridCoords(...each);
+      // console.log("path", each, pos, this.grid.get(...pos))
+      if (this.grid.get(...pos) === true) {
+        isValid = false;
       }
     });
-    return true;
+    // noLoop()
+    return isValid;
   }
   update() {}
   draw() {
@@ -153,7 +160,7 @@ class Obstacles {
     if (InsertAble) {
       this.obstacles.push(ob);
       let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
-      // console.log("Grid position", gridPos, pos.x, pos.y);
+      console.log("Grid position", gridPos, pos.x, pos.y);
 
       this.grid.set(gridPos[0], gridPos[1], true);
       setTimeout(() => {

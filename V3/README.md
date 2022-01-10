@@ -60,3 +60,20 @@
 - |-- curve.js"       # curve use for animation
 - |-- generate.js     # Generate fake data.
 - |-- sketch.js"      # Main flow
+
+Libraries
+two.js
+paper.js
+anime.js
+particles.js
+pts.js
+p5.js
+three.js
+
+FPSMeter (http://darsa.in/fpsmeter/)
+https://ncase.me/sight-and-light/
+
+https://github.com/hiiambradkim/sketches/tree/master/geometry
+https://github.com/Bastl34/pixi-websocket-webpack-boilerplate
+mainloop.js
+victor

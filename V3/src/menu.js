@@ -39,6 +39,21 @@ class Chatbox {
     pop();
   }
 }
+var fpsMeter = new FPSMeter(document.getElementById("target"), {
+  graph: 1,
+  // interval: 1000,
+  decimals: 0,
+  heat: 1,
+  theme:"transparent",
+  // Meter position
+  position: "absolute", // Meter position.
+  zIndex: 10, // Meter Z index.
+  left: "17px", // Meter left offset.
+  top: "8px", // Meter top offset.
+  right: "auto", // Meter right offset.
+  bottom: "auto", // Meter bottom offset.
+  margin: "0 0 0 0", // Meter margin. Helps with centering the counter when left: 50%;
+});
 let menu = new Menu();
 let chatbox = new Chatbox();
 

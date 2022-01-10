@@ -197,14 +197,34 @@ addFunction("draw", () => {
   });
 
   let friendPos = players.realPlayers[1].pos;
-  let totalMoveLength = 4;
-  // path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  if (path && friendPos.dist(player.pos) > 100) {
+  let totalMoveLength = 4.0;
+  if (
+    !path ||
+    path.length < 3
+    // || frameCount - lastLoop > 60
+  ) {
+    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+    lastLoop = frameCount;
+  } else if (obstacles.isValidPath(path) === false) {
+    // If path is not valid then recalculate
+    path = [];
+    // setTimeout(() => {
+    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+    // }, 100);
+  } else if (
+    path.length < 3 ||
+    abs(path[path.length - 2][0] - path[path.length - 1][0]) > 200 ||
+    abs(path[path.length - 2][1] - path[path.length - 1][1]) > 200
+  ) {
+    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
+  }
+  // console.log("path: ", obstacles.isValidPath(path));
+  if (path && friendPos.dist(player.pos) > 100 && path.length > 0) {
     path.pop();
     path.push([player.pos.x, player.pos.y]);
     path.every((each) => {
       if (totalMoveLength < 0.01) {
-        if (friendPos.dist(createVector(path[0][0], path[0][1])) < 7.5) {
+        if (friendPos.dist(createVector(path[0][0], path[0][1])) < 4.0 + 0.1) {
           path.shift();
         }
         return false;
@@ -219,9 +239,8 @@ addFunction("draw", () => {
   }
 });
 let path;
-setInterval(() => {
-  path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-}, 16 * 15);
+let lastLoop = 0;
+
 addFunction("draw", () => {
   push();
   camera.follow(player.pos);
@@ -248,8 +267,8 @@ addFunction("draw", () => {
   if (path) {
     path.forEach((e, i) => {
       push();
-      fill(255, 255, 255, 90);
-      circle(e[0], e[1], 40 + i * 4);
+      fill(0, 0, 255, 90);
+      circle(e[0], e[1], 40 + i * 3);
       pop();
     });
   }
@@ -259,12 +278,12 @@ addFunction("draw", () => {
   obstacles.draw();
 
   pop();
+  fpsMeter.tick();
   menu.display(
     `\
 Players: ${players.players.length}
 Kill: ${killCount}
 Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
-FPS: ${int(frameRate())}
 ` + talkative
   );
 

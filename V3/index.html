@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5.collide2d"></script>
   <script src="Lib/Collision/EllipseCollisionTest.js"></script>
+  <script src="Lib/Fps/fps.min.js"></script>
   <script src="Lib/animejs/anime.min.js"></script>
   <script src="Lib/bower_components/pathfinding/pathfinding-browser.min.js"></script>
   <script src="Lib/noisejs/perlin.js"></script>
@@ -101,13 +102,6 @@
   </script>
 
   <script>
-   
-    window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
-      var oThis = this, aArgs = Array.prototype.slice.call(arguments, 2);
-      return __nativeSI__(vCallback instanceof Function ? function () {
-        vCallback.apply(oThis, aArgs);
-      } : vCallback, nDelay);
-    };
     // https://stackoverflow.com/questions/27321672/listen-for-all-events-in-javascript/27322253
     // let P5canvas = document.getElementById(".canvas")
     // let P5canvas = window
