@@ -17,7 +17,6 @@ class Menu {
 
     translate(20, 45);
     textFont(myFont);
-    
     textSize(25);
     strokeWeight(0);
     fill(0, 0, 0, 255);

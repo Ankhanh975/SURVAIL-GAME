@@ -12,6 +12,7 @@
 - 06 01 2022: Fix the player rotation limit speed algorithm
 - 06 01 2022: Profile the performance
 - 06 01 2022: Add ellipse collision detection
+- 11 01 2022: Use font from google fonts
 - Demo: https://youtu.be/NoWH5l08dMM
 - TODO: pathfinding: https://github.com/qiao/PathFinding.js
 - TODO: More particles effects
