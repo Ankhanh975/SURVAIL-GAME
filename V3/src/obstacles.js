@@ -37,6 +37,11 @@ class Obstacles {
       allowDiagonal: true,
       dontCrossCorners: true,
     });
+    // this.grid.finder = new PF.BestFirstFinder({
+    //   allowDiagonal: true,
+    //   dontCrossCorners: true,
+    //   heuristic: PF.Heuristic.chebyshev
+    // });
     this.grid.WorldCoordsToGridCoords = (posx, posy) => {
       let returnX, returnY;
       // if (posx > 0) returnX = Math.ceil(posx / 52.0) + 50;

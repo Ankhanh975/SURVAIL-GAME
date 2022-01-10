@@ -1,4 +1,3 @@
-let song;
 let sparks;
 let camera;
 let players;
@@ -51,22 +50,9 @@ addFunction("setup", () => {
   players.players[1] = friend;
   players.realPlayers.push(friend);
 });
-addFunction("draw", () => {
-  // translate(0.5, 0.5);
-  translate(width / 2, height / 2);
-  if (player.health < 0) {
-    scale(0.75);
-  }
-  if (width < 500) {
-    scale(0.5);
-  }
-  // print("frameRate", round(frameRate()));
-  // background(100);
-  noSmooth();
-  mouse = camera.toWorldCoords();
-});
 
 addFunction("draw", () => {
+  mouse = camera.toWorldCoords();
   if (isPressed2) {
     sparks.create_particle(mouse, [9, 200, 9]);
     obstacles.createObstacle(mouse);
@@ -198,13 +184,8 @@ addFunction("draw", () => {
 
   let friendPos = players.realPlayers[1].pos;
   let totalMoveLength = 4.0;
-  if (
-    !path ||
-    path.length < 3
-    // || frameCount - lastLoop > 60
-  ) {
+  if (!path || path.length < 3) {
     path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-    lastLoop = frameCount;
   } else if (obstacles.isValidPath(path) === false) {
     // If path is not valid then recalculate
     path = [];
@@ -239,8 +220,19 @@ addFunction("draw", () => {
   }
 });
 let path;
-let lastLoop = 0;
 
+addFunction("draw", () => {
+  // translate(0.5, 0.5);
+  translate(width / 2, height / 2);
+  if (player.health < 0) {
+    scale(0.75);
+  }
+  if (width < 500) {
+    scale(0.5);
+  }
+  // background(100);
+  noSmooth();
+});
 addFunction("draw", () => {
   push();
   camera.follow(player.pos);
@@ -298,41 +290,30 @@ function mouseClicked(event) {
   return false;
 }
 function keyPressed() {
-  let start = millis();
-  let jump = () => {
+  let jump = (value) => {
     player.health -= player.totalHealth / 120;
     for (let i = 0; i < 14; i++) {
       let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
       particle.move(1.5);
     }
     let delta = p5.Vector.sub(player.pos, player.lastPos);
-    let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
-    // toLookAt.setMag(15);
-    toLookAt.setMag(0);
-    // delta.setMag(0);
-
     if (delta.mag() < 5) {
-      delta.setMag(0);
+      return;
     } else {
-      delta.setMag(32.5);
+      delta.setMag(value);
+      player.addPos(delta);
     }
-    let deltaT = (millis() - start) / 16 / 4;
-    let d = p5.Vector.add(delta, toLookAt);
-    d.setMag(d.mag() * 10 * Curve.f(deltaT, 3, 0.42)); //
-    // console.log("d", deltaT, f(deltaT));
-    // console.log("d", d.x, d.y);
-    // idea: only follow in x-axis or y-axis
-    // if (abs(d.x) > abs(d.y)) d.y = 0;
-    // else d.x = 0;
-
-    player.addPos(d);
   };
   // console.log("keyPressed", keyCode);
   // if pressed Enter => jump
   if (keyCode === 32) {
-    jump();
+    let l = [42.8, 43.19, 43.19, 42.92, 42.32, 41.5];
+
+    let value = l.shift();
+    jump(value);
     let id99 = setInterval(() => {
-      jump();
+      let value = l.shift();
+      jump(value);
     }, 16);
     setTimeout(() => {
       clearInterval(id99);

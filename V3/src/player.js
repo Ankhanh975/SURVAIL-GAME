@@ -161,33 +161,23 @@ class Player {
             killCount += 1;
           } else {
             // Push enemies backwards
-            let start = millis();
-            let jump = () => {
-              let deltaT = (millis() - start) / 16 / 1.75;
+            // Idea: Punch player pushback animation is following a lognormal curve
+            let l = [20.0, 45, 25, 13.28, 8.544, 5.373, 0];
+
+            let id = setInterval(() => {
+              let value = l.shift();
               let d = p5.Vector.sub(this.pos, e.pos);
-              d.normalize();
-              // console.log("d", deltaT, d);
-              d.setMag(
-                -d.mag() *
-                  Curve.f2(deltaT, 0.1, 0.6, 0.275) *
-                  15 *
-                  this.damage -
-                  3
-              );
+              d.setMag(-value);
               e.addPos(d);
-            };
-            jump();
-            let id9 = setInterval(() => {
-              jump();
             }, 16);
 
             setTimeout(() => {
-              clearInterval(id9);
+              clearInterval(id);
             }, 16 * 5);
           }
         }
       });
-    }, 190);
+    }, 200);
   }
   getHit() {
     // animation
@@ -212,7 +202,7 @@ class AIPlayer extends Player {
     this.name = generateName.__call();
     this.AIPlayer = true;
     // this.target = int(random(0, this.parent.realPlayers.length));
-    this.target = 0
+    this.target = 0;
   }
 
   update() {
