@@ -48,10 +48,7 @@ class Obstacles {
     this.grid.FindPath = (startx, starty, endx, endy) => {
       // console.log("What is 'this'", this, this.data)
       let grid = this.grid.data.clone();
-      this.grid.finder = new PF.BiAStarFinder({
-        allowDiagonal: true,
-        dontCrossCorners: true,
-      });
+
       var path = this.grid.finder.findPath(startx, starty, endx, endy, grid);
       // path = PF.Util.smoothenPath(this.grid.data, path);
       // path = PF.Util.compressPath(path);
@@ -108,6 +105,16 @@ class Obstacles {
     }
     return path;
   }
+  isValidPath(path) {
+    isValid = false;
+    path.forEach((each) => {
+      let pos = this.grid.GridCoordsToWorldCoords(each);
+      if (this.grid.data[pos[0]][pos[1]] === true) {
+        return false;
+      }
+    });
+    return true;
+  }
   update() {}
   draw() {
     push();
@@ -146,7 +153,7 @@ class Obstacles {
     if (InsertAble) {
       this.obstacles.push(ob);
       let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
-      console.log("Grid position", gridPos, pos.x, pos.y);
+      // console.log("Grid position", gridPos, pos.x, pos.y);
 
       this.grid.set(gridPos[0], gridPos[1], true);
       setTimeout(() => {
@@ -155,8 +162,11 @@ class Obstacles {
 
         system.remove(x.circle);
         system.update(x.circle);
-        let gridPos = this.grid.WorldCoordsToGridCoords(x.circle.pos.x, x.circle.pos.y);
-        
+        let gridPos = this.grid.WorldCoordsToGridCoords(
+          x.circle.pos.x,
+          x.circle.pos.y
+        );
+
         this.grid.set(gridPos[0], gridPos[1], false);
       }, 10 * 1000);
       return ob;

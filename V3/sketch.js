@@ -188,46 +188,31 @@ addFunction("draw", () => {
     let b = system.response.b;
     if (a.parent instanceof Player && b.parent instanceof Obstacle) {
       // Player inside a obstacle
-      let l = createVector(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
-
+      let l = p5.Vector.sub(a.parent.pos, b.parent.pos);
       a.parent.setPos(a.parent.lastPos.copy());
 
       let newMag = 110 / max(l.mag() - 35, 7) ** 2;
       l.setMag(newMag);
-      // l.setMag(50 / l.mag());
-
-      // a.parent.addPos(l);
     }
   });
 
-  // let path = this.grid.FindPath(0, 0, 50, 0);
-  // console.log("grid", this.grid);
   let friendPos = players.realPlayers[1].pos;
+  let totalMoveLength = 4;
   // path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  let totalMoveLength = 7.5;
-  // let totalMoveLength = 55;
-  path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  if (friendPos.dist(player.pos) > 100 && path && path.length > 0) {
-    // console.log(path.length);
-
-    if (friendPos.dist(createVector(path[0][0], path[0][1])) < 7.5) {
-      path.shift();
-    }
+  if (path && friendPos.dist(player.pos) > 100) {
     path.pop();
     path.push([player.pos.x, player.pos.y]);
     path.every((each) => {
-      // console.log("each", each);
-      // return true;
       if (totalMoveLength < 0.01) {
-        // console.log("totalMoveLength < 0", totalMoveLength);
+        if (friendPos.dist(createVector(path[0][0], path[0][1])) < 7.5) {
+          path.shift();
+        }
         return false;
       }
       let moveTo = p5.Vector.sub(createVector(each[0], each[1]), friendPos);
       moveTo.limit(totalMoveLength);
-      // console.log(moveTo.x, moveTo.y, totalMoveLength);
       totalMoveLength -= moveTo.mag();
       players.realPlayers[1].addPos(moveTo);
-      // console.log(friendPos, totalMoveLength, moveTo, moveTo.mag(), each);
 
       return true;
     });
