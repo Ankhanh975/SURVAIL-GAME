@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "detect-collisions": "^3.2.1"
+  }
+}
