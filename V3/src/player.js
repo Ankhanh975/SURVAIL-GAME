@@ -36,11 +36,11 @@ class Player {
         let y = -overlapV.y;
         const pushOut = createVector(x, y);
         pushOut.limit(5);
-        pushOut.setMag(pushOut.mag() * 0.75);
+        pushOut.setMag(pushOut.mag() * 0.60);
 
         const pushOut2 = createVector(x, y);
         pushOut2.limit(5);
-        pushOut2.setMag(pushOut2.mag() * -0.25);
+        pushOut2.setMag(pushOut2.mag() * -0.40);
         this.pos.add(pushOut);
         this.circle.setPosition(this.pos.x, this.pos.y);
         try {
@@ -275,7 +275,7 @@ class AIPlayer extends Player {
       }
 
       if (dist < 130) {
-        toLookAt.setMag(3.5);
+        toLookAt.setMag(4.5);
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }

@@ -20,26 +20,32 @@ class Players {
     this.img = Players_img;
     this.initAnimation();
     this.players = [];
-    setTimeout(() => {
-      for (let index = 0; index < 100; index++) {
-        this.createAIPlayer();
+    while (this.players.length < 50) {
+      // while (this.AIs.length < 35) {
+      let pos = p5.Vector.random2D().setMag(random(950, 1100));
+      for (let index = 0; index < Prob.normal(10, 2)(); index++) {
+        // setTimeout(() => {
+        this.createAIPlayer(
+          pos.add(p5.Vector.random2D().setMag(random(0, 100)))
+        );
+        // }, Prob.normal(16, 16 * 40)());
       }
-    }, 150);
+    }
 
     // gameTick
-    // setInterval(() => {
-    //   if (this.players.length < 50) {
-    //     // while (this.AIs.length < 35) {
-    //     let pos = p5.Vector.random2D().setMag(random(300, 1000));
-    //     for (let index = 0; index < Prob.normal(10, 2)(); index++) {
-    //       // setTimeout(() => {
-    //       this.createAIPlayer(
-    //         pos.add(p5.Vector.random2D().setMag(random(0, 100)))
-    //       );
-    //       // }, Prob.normal(16, 16 * 40)());
-    //     }
-    //   }
-    // }, 5 * 1000);
+    setInterval(() => {
+      if (this.players.length < 50) {
+        // while (this.AIs.length < 35) {
+        let pos = p5.Vector.random2D().setMag(random(300, 1000));
+        for (let index = 0; index < Prob.normal(10, 2)(); index++) {
+          // setTimeout(() => {
+          this.createAIPlayer(
+            pos.add(p5.Vector.random2D().setMag(random(0, 100)))
+          );
+          // }, Prob.normal(16, 16 * 40)());
+        }
+      }
+    }, 5 * 1000);
 
     // // setInterval(() => {
     // // this.players.shuffle();

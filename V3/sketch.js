@@ -122,7 +122,6 @@ addFunction("draw", () => {
       }
     });
   });
-
 });
 
 addFunction("draw", () => {
@@ -199,30 +198,32 @@ function mouseClicked(event) {
 function keyPressed() {
   let start = millis();
   let jump = () => {
-    player.health -= player.totalHealth / 175;
+    player.health -= player.totalHealth / 200;
     for (let i = 0; i < 14; i++) {
       let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
       particle.move(1.5);
     }
-    let delta = p5.Vector.sub(player.pos, player.lastPos);
-    let toLookAt = p5.Vector.sub(player.lookAt, player.pos);
-    // toLookAt.setMag(15);
-    toLookAt.setMag(0);
-    // delta.setMag(0);
-
-    if (delta.mag() < 5) {
-      delta.setMag(0);
-    } else {
-      delta.setMag(32.5);
+    let delta = createVector(0, 0);
+    if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+      delta.add(createVector(-32.5, 0));
     }
+    if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+      delta.add(createVector(32.5, 0));
+    }
+    if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+      delta.add(createVector(0, -32.5));
+    }
+    if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+      delta.add(createVector(0, 32.5));
+    }
+    delta.limit(32.5);
+
     let deltaT = (millis() - start) / 25 - 0.175;
     let d = p5.Vector.add(delta, toLookAt);
-    d.setMag(175 * Curve.f(deltaT) + 5); //
-
-    // console.log("d", d.mag(), deltaT);
+    d.setMag(175 * Curve.f(deltaT) + 5);
+    
     player.addPos(d);
   };
-  // console.log("keyPressed", keyCode);
   // if pressed Enter => jump
   if (keyCode === 32) {
     jump();
@@ -232,16 +233,6 @@ function keyPressed() {
     setTimeout(() => {
       clearInterval(id99);
     }, 16 * 8);
-
-    // shake
-    // let id66 = setInterval(() => {
-    //   queue.addPro(`
-    //         translate(${Prob.normal(0, 2)()}, ${Prob.normal(0, 2)()})
-    //       `);
-    // }, 16);
-    // setTimeout(() => {
-    //   clearInterval(id66);
-    // }, 16 * 5.5);
   }
 }
 //   // shake

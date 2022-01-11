@@ -1,5 +1,5 @@
 - Objective:
-- Simple, Creative, Infinity, Cooperative, Realistic, and Functional, Interactive
+- Simple, Complex, Creative, Infinity, Cooperative, Realistic, and Functional, Interactive
 - 
 - finalizing
 - done: find font, main character animation, background, suonds
@@ -13,6 +13,9 @@
 - 06 01 2022: Profile the performance
 - 06 01 2022: Add ellipse collision detection
 - 11 01 2022: Use font from google fonts
+- 11 01 2022: Proper jump dicection detection 
+- 11 01 2022: Proper collision detection handling!
+ 
 - Demo: https://youtu.be/NoWH5l08dMM
 - TODO: pathfinding: https://github.com/qiao/PathFinding.js
 - TODO: More particles effects
