@@ -22,7 +22,7 @@ class Players {
     this.players = [];
     this.system = system;
     setTimeout(() => {
-      for (let index = 0; index < 1; index++) {
+      for (let index = 0; index < 15; index++) {
         this.createAIPlayer();
       }
     }, 150);

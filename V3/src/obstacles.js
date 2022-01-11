@@ -68,8 +68,8 @@ class Obstacles {
       return path;
     };
     this.grid.set = (x, y, state) => {
-      if (x < 0 || y < 0 || x > 100 || y > 100) {
-        console.log("out of bounds", x, y, state);
+      if (x < 0 || y < 0 || x >= 100 || y >= 100) {
+        // console.log("out of bounds", x, y, state);
         return;
       }
       // state == true means that the point is have obstacles
@@ -160,7 +160,7 @@ class Obstacles {
     if (InsertAble) {
       this.obstacles.push(ob);
       let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
-      console.log("Grid position", gridPos, pos.x, pos.y);
+      // console.log("Grid position", gridPos, pos.x, pos.y);
 
       this.grid.set(gridPos[0], gridPos[1], true);
       setTimeout(() => {
@@ -175,7 +175,7 @@ class Obstacles {
         );
 
         this.grid.set(gridPos[0], gridPos[1], false);
-      }, 10 * 1000);
+      }, 17.5 * 1000);
       return ob;
     } else {
       system.remove(ob.circle);

@@ -119,17 +119,24 @@ class Player {
     {
       // animation
       this.punchHand = hand || ["left", "right"][int(random(0, 2))];
+      
       this.animateFrames = 1;
 
-      let id = setInterval(() => {
-        // print("in setInterval", this.animateFrames, this.animation.length);
-        if (this.animateFrames === this.animationLength - 1) {
-          this.animateFrames = 0;
-          clearInterval(id);
-        } else {
-          this.animateFrames += 1;
-        }
-      }, 16 * 5);
+      setTimeout(() => {
+        this.animateFrames = 2;
+      }, 16 * 5 * 1);
+      setTimeout(() => {
+        this.animateFrames = 3;
+      }, 16 * 5 * 2);
+      setTimeout(() => {
+        this.animateFrames = 4;
+      }, 16 * 5 * 3);
+      setTimeout(() => {
+        this.animateFrames = 5;
+      }, 16 * 5 * 4);
+      setTimeout(() => {
+        this.animateFrames = 0;
+      }, 16 * 5 * 5);
     }
 
     // effects to all players when punch: push them backwards and minus their health
@@ -217,6 +224,7 @@ class AIPlayer extends Player {
     // this.target = int(random(0, this.parent.realPlayers.length));
     this.target = 0;
     this.path = [];
+    this.lastPathFinding = frameCount - 999;
   }
 
   update() {
@@ -242,13 +250,13 @@ class AIPlayer extends Player {
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
       super.update(lookAt);
-      if (dist < 150) {
-        if (!this.onPunch()) {
-          if (random(0, 100) >= 92.5) {
-            this.startPunch();
-          }
-        }
-      }
+      // if (dist < 150) {
+      //   if (!this.onPunch()) {
+      //     if (random(0, 100) >= 92.5) {
+      //       this.startPunch();
+      //     }
+      //   }
+      // }
 
       if (dist < 120) {
         toLookAt.setMag(3.5);
@@ -262,39 +270,43 @@ class AIPlayer extends Player {
     }
     {
       let totalMoveLength = 4.0;
-
-      if (this.path.length < 3) {
+      // console.log("path", this.path, this.lastPathFinding - frameCount)
+      if (this.path.length < 3 && frameCount - this.lastPathFinding > 10) {
         this.path = obstacles.FindPath(this.pos, target);
-      } else if (
-        abs(
-          this.path[this.path.length - 2][0] -
-            this.path[this.path.length - 1][0]
-        ) > 200 ||
-        abs(
-          this.path[this.path.length - 2][1] -
-            this.path[this.path.length - 1][1]
-        ) > 200
-      ) {
-        // If last node is too far away from the this.path
-        // So: run pathfinding
-        this.path = obstacles.FindPath(this.pos, target);
+        this.lastPathFinding = frameCount;
+      }
+      if (this.path.length >= 2) {
+        if (
+          abs(
+            this.path[this.path.length - 2][0] -
+              this.path[this.path.length - 1][0]
+          ) > 52 ||
+          abs(
+            this.path[this.path.length - 2][1] -
+              this.path[this.path.length - 1][1]
+          ) > 52
+        ) {
+          // If last node is too far away from the this.path
+          // So: run pathfinding
+          this.path = obstacles.FindPath(this.pos, target);
+          this.lastPathFinding = frameCount;
+        }
       }
 
       // If path is not valid then recalculate
       let isValid = true;
-      if (this.path.length >= 4) {
-        [0, 1, 2, 3].forEach((i) => {
-          let pos = obstacles.grid.WorldCoordsToGridCoords(...this.path[i]);
-          if (obstacles.grid.get(...pos) === true) {
-            isValid = false;
-          }
-        });
-      }
+      [...Array(min(this.path.length, 5)).keys()].forEach((i) => {
+        let pos = obstacles.grid.WorldCoordsToGridCoords(...this.path[i]);
+        if (obstacles.grid.get(...pos) === true) {
+          isValid = false;
+        }
+      });
 
       if (isValid === false) {
         this.path = obstacles.FindPath(this.pos, target);
+        this.lastPathFinding = frameCount;
       }
-      if (target.dist(player.pos) > 100 && this.path.length > 0) {
+      if (target.dist(this.pos) > 100 && this.path.length > 0) {
         this.path.pop();
         this.path.push([target[0], target[1]]);
         this.path.every((each) => {

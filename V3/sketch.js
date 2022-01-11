@@ -170,67 +170,18 @@ addFunction("draw", () => {
       }
     }
   });
-  system.checkAll(({ a, overlapV }) => {
-    let b = system.response.b;
-    if (a.parent instanceof Player && b.parent instanceof Obstacle) {
-      // Player inside a obstacle
-      let l = p5.Vector.sub(a.parent.pos, b.parent.pos);
-      a.parent.setPos(a.parent.lastPos.copy());
+  // system.checkAll(({ a, overlapV }) => {
+  //   let b = system.response.b;
+  //   if (a.parent instanceof Player && b.parent instanceof Obstacle) {
+  //     // Player inside a obstacle
+  //     let l = p5.Vector.sub(a.parent.pos, b.parent.pos);
+  //     a.parent.setPos(a.parent.lastPos.copy());
 
-      let newMag = 110 / max(l.mag() - 35, 7) ** 2;
-      l.setMag(newMag);
-    }
-  });
-
-  let friendPos = players.realPlayers[1].pos;
-  let totalMoveLength = 4.0;
-
-  if (!path || path.length < 3) {
-    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  } else if (
-    path.length < 3 ||
-    abs(path[path.length - 2][0] - path[path.length - 1][0]) > 200 ||
-    abs(path[path.length - 2][1] - path[path.length - 1][1]) > 200
-  ) {
-    // If last node is too far away from the path
-    // So: run pathfinding
-    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  }
-
-  // If path is not valid then recalculate
-  let isValid = true;
-  if (path.length > 4) {
-    [0, 1, 2, 3].forEach((i) => {
-      let pos = obstacles.grid.WorldCoordsToGridCoords(...path[i]);
-      if (obstacles.grid.get(...pos) === true) {
-        isValid = false;
-      }
-    });
-  }
-
-  if (isValid === false) {
-    path = obstacles.FindPath(players.realPlayers[1].pos, player.pos);
-  }
-  if (path && friendPos.dist(player.pos) > 100 && path.length > 0) {
-    path.pop();
-    path.push([player.pos.x, player.pos.y]);
-    path.every((each) => {
-      if (totalMoveLength < 0.01) {
-        if (friendPos.dist(createVector(path[0][0], path[0][1])) < 4.0 + 0.1) {
-          path.shift();
-        }
-        return false;
-      }
-      let moveTo = p5.Vector.sub(createVector(each[0], each[1]), friendPos);
-      moveTo.limit(totalMoveLength);
-      totalMoveLength -= moveTo.mag();
-      players.realPlayers[1].addPos(moveTo);
-
-      return true;
-    });
-  }
+  //     let newMag = 110 / max(l.mag() - 35, 7) ** 2;
+  //     l.setMag(newMag);
+  //   }
+  // });
 });
-let path;
 
 addFunction("draw", () => {
   // translate(0.5, 0.5);
@@ -267,7 +218,9 @@ addFunction("draw", () => {
   //   tower.update();
   //   tower.draw();
   // }
-  if (path) {
+
+  if (players.players[3]) {
+    let path = players.players[3].path;
     path.forEach((e, i) => {
       push();
       fill(0, 0, 255, 90);
@@ -275,6 +228,7 @@ addFunction("draw", () => {
       pop();
     });
   }
+
   queue.updateDraw();
   sparks.draw();
   players.draw();
