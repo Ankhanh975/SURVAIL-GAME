@@ -16,11 +16,10 @@ addFunction("preload", () => {
 });
 
 class Players {
-  constructor(system) {
+  constructor() {
     this.img = Players_img;
     this.initAnimation();
     this.players = [];
-    this.system = system;
     setTimeout(() => {
       for (let index = 0; index < 20; index++) {
         this.createAIPlayer();

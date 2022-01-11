@@ -1,7 +1,7 @@
 class Obstacle {
   constructor(pos, parent) {
     // parent: the Obstacles object this Obstacle belongs to
-    this.circle = new DetectCollisions.Box({ x: pos.x, y: pos.y }, 51.9, 51.9);
+    this.circle =  system.createBox({ x: pos.x, y: pos.y }, 51.9, 51.9);
     this.circle.parent = this;
     this.color = [220, 220, 10, 200];
     this.parent = parent;
@@ -181,7 +181,11 @@ class Obstacles {
       system.remove(ob.circle);
     }
   }
-  update() {}
+  update() {
+    this.obstacles.forEach((obstacle) => {
+      obstacle.update();
+    });
+  }
   draw() {
     push();
     strokeWeight(1.5);

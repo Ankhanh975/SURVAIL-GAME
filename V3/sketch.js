@@ -24,12 +24,11 @@ addFunction("setup", () => {
 });
 
 addFunction("setup", () => {
-  system = new DetectCollisions.System();
-  // system.result = system.createResult();
+  system = new Collisions();
   sparks = new Sparks();
   obstacles = new Obstacles();
   camera = new Camera();
-  players = new Players(system);
+  players = new Players();
 
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
@@ -53,26 +52,8 @@ addFunction("setup", () => {
 
 addFunction("draw", () => {
   mouse = camera.toWorldCoords();
-  if (isPressed2) {
-    sparks.create_particle(mouse, [9, 200, 9]);
-    obstacles.createObstacle(mouse);
-  }
+
   {
-    //   // shake
-    // if (isPressed && !player.onPunch()) {
-    // var r = Prob.normal(0, 2.8);
-    //   setTimeout(() => {
-    //     let id66 = setInterval(() => {
-    //       shake = [r(), r()];
-    //       queue.addPro(`
-    //         translate(${r()}, ${r()})
-    //       `);
-    //     }, 16);
-    //     setTimeout(() => {
-    //       clearInterval(id66);
-    //     }, 16 * 5.5);
-    //   }, 191);
-    // }
     // if (isPressed && !player.onPunch()) {
     //
     //   setTimeout(() => {
@@ -105,27 +86,28 @@ addFunction("draw", () => {
     player.startPunch();
     sparks.create_particle(player.pos, [255, 0, 0], 3.5);
   }
-
+  if (isPressed2) {
+    sparks.create_particle(mouse, [9, 200, 9]);
+    obstacles.createObstacle(mouse);
+  }
   // onController need to after players.update
 
   queue.updatePro();
   players.update(mouse);
   onController(player);
-  system.update();
   obstacles.update();
+  system.update();
   system.checkAll(({ a, overlapV }) => {
     let b = system.response.b;
     if (a.parent instanceof Player && b.parent instanceof Player) {
       // Check that 2 ellipses overlap
       // Push their center from each other.
-      
       // a.parent.addPos(createVector(-overlapV.x, -overlapV.y));
       // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
       // // console.log(overlapV);
       // let newMag = 110 / max(a_look_at_b.mag() - 35, 7) ** 2;
       // // let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
       // a_look_at_b.setMag(-newMag);
-
       // a.parent.addPos(a_look_at_b);
     }
   });
@@ -261,3 +243,18 @@ function keyPressed() {
     // }, 16 * 5.5);
   }
 }
+//   // shake
+// if (isPressed && !player.onPunch()) {
+// var r = Prob.normal(0, 2.8);
+//   setTimeout(() => {
+//     let id66 = setInterval(() => {
+//       shake = [r(), r()];
+//       queue.addPro(`
+//         translate(${r()}, ${r()})
+//       `);
+//     }, 16);
+//     setTimeout(() => {
+//       clearInterval(id66);
+//     }, 16 * 5.5);
+//   }, 191);
+// }

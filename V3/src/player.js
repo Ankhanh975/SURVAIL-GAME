@@ -5,7 +5,6 @@ class Player {
     this.velocity = createVector(0, 0);
     this.heading = createVector(1, 0);
     this.heading.angle = 0;
-    this.walkable = true;
     this.lookAt = createVector(0, 0);
     this.animation = animation;
     this.animationLength = this.animation.length;
@@ -25,18 +24,23 @@ class Player {
     this.parent = parent;
   }
   setPos(pos) {
-    if (this.walkable === false) return;
     this.pos = pos;
-    this.circle.pos.x = this.pos.x;
-    this.circle.pos.y = this.pos.y;
-    system.updateBody(this.circle);
+    this.circle.setPosition(this.pos.x, this.pos.y);
+
+    system.getPotentials(this.circle).forEach((collider) => {
+      if (system.checkCollision(this.circle, collider)) {
+        const { overlapV } = system.response;
+
+        let x = this.circle.pos.x - overlapV.x;
+        let y = this.circle.pos.y - overlapV.y;
+        this.circle.setPosition(x, y);
+        this.pos.x = x;
+        this.pos.y = y;
+      }
+    });
   }
   addPos(pos) {
-    if (this.walkable === false) return;
-    this.pos.add(pos);
-    this.circle.pos.x = this.pos.x;
-    this.circle.pos.y = this.pos.y;
-    system.updateBody(this.circle);
+    this.setPos(this.pos.add(pos));
   }
 
   update(lookAt, moveTo) {
@@ -120,7 +124,7 @@ class Player {
     {
       // animation
       this.punchHand = hand || ["left", "right"][int(random(0, 2))];
-      
+
       this.animateFrames = 1;
 
       setTimeout(() => {
