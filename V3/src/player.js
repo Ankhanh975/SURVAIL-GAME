@@ -19,7 +19,8 @@ class Player {
     this.recovery = 0.04;
     this.damage = 1;
     // physics circle for collision detection
-    this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 90);
+    // TODO: this.circle should be a polygon
+    this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 65 / 2);
     this.circle.parent = this;
     this.parent = parent;
   }
@@ -263,71 +264,71 @@ class AIPlayer extends Player {
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }
-      // if (dist > 150) {
-      //   toLookAt.setMag(3.0);
-      //   this.addPos(toLookAt);
-      // }
-    }
-    {
-      let totalMoveLength = 4.0;
-      // console.log("path", this.path, this.lastPathFinding - frameCount)
-      if (this.path.length < 3 && frameCount - this.lastPathFinding > 10) {
-        this.path = obstacles.FindPath(this.pos, target);
-        this.lastPathFinding = frameCount;
-      }
-      if (this.path.length >= 2) {
-        if (
-          abs(
-            this.path[this.path.length - 2][0] -
-              this.path[this.path.length - 1][0]
-          ) > 52 ||
-          abs(
-            this.path[this.path.length - 2][1] -
-              this.path[this.path.length - 1][1]
-          ) > 52
-        ) {
-          // If last node is too far away from the this.path
-          // So: run pathfinding
-          this.path = obstacles.FindPath(this.pos, target);
-          this.lastPathFinding = frameCount;
-        }
-      }
-
-      // If path is not valid then recalculate
-      let isValid = true;
-      [...Array(min(this.path.length, 5)).keys()].forEach((i) => {
-        let pos = obstacles.grid.WorldCoordsToGridCoords(...this.path[i]);
-        if (obstacles.grid.get(...pos) === true) {
-          isValid = false;
-        }
-      });
-
-      if (isValid === false) {
-        this.path = obstacles.FindPath(this.pos, target);
-        this.lastPathFinding = frameCount;
-      }
-      if (target.dist(this.pos) > 100 && this.path.length > 0) {
-        this.path.pop();
-        this.path.push([target[0], target[1]]);
-        this.path.every((each) => {
-          if (totalMoveLength < 0.01) {
-            if (
-              this.pos.dist(createVector(this.path[0][0], this.path[0][1])) <
-              4.0 + 0.1
-            ) {
-              this.path.shift();
-            }
-            return false;
-          }
-          let moveTo = p5.Vector.sub(createVector(each[0], each[1]), this.pos);
-          moveTo.limit(totalMoveLength);
-          totalMoveLength -= moveTo.mag();
-          this.addPos(moveTo);
-
-          return true;
-        });
+      if (dist > 150) {
+        toLookAt.setMag(3.0);
+        this.addPos(toLookAt);
       }
     }
+    // {
+    //   let totalMoveLength = 4.0;
+    //   // console.log("path", this.path, this.lastPathFinding - frameCount)
+    //   if (this.path.length < 3 && frameCount - this.lastPathFinding > 10) {
+    //     this.path = obstacles.FindPath(this.pos, target);
+    //     this.lastPathFinding = frameCount;
+    //   }
+    //   if (this.path.length >= 2) {
+    //     if (
+    //       abs(
+    //         this.path[this.path.length - 2][0] -
+    //           this.path[this.path.length - 1][0]
+    //       ) > 52 ||
+    //       abs(
+    //         this.path[this.path.length - 2][1] -
+    //           this.path[this.path.length - 1][1]
+    //       ) > 52
+    //     ) {
+    //       // If last node is too far away from the this.path
+    //       // So: run pathfinding
+    //       this.path = obstacles.FindPath(this.pos, target);
+    //       this.lastPathFinding = frameCount;
+    //     }
+    //   }
+
+    //   // If path is not valid then recalculate
+    //   let isValid = true;
+    //   [...Array(min(this.path.length, 5)).keys()].forEach((i) => {
+    //     let pos = obstacles.grid.WorldCoordsToGridCoords(...this.path[i]);
+    //     if (obstacles.grid.get(...pos) === true) {
+    //       isValid = false;
+    //     }
+    //   });
+
+    //   if (isValid === false) {
+    //     this.path = obstacles.FindPath(this.pos, target);
+    //     this.lastPathFinding = frameCount;
+    //   }
+    //   if (target.dist(this.pos) > 100 && this.path.length > 0) {
+    //     this.path.pop();
+    //     this.path.push([target[0], target[1]]);
+    //     this.path.every((each) => {
+    //       if (totalMoveLength < 0.01) {
+    //         if (
+    //           this.pos.dist(createVector(this.path[0][0], this.path[0][1])) <
+    //           4.0 + 0.1
+    //         ) {
+    //           this.path.shift();
+    //         }
+    //         return false;
+    //       }
+    //       let moveTo = p5.Vector.sub(createVector(each[0], each[1]), this.pos);
+    //       moveTo.limit(totalMoveLength);
+    //       totalMoveLength -= moveTo.mag();
+    //       this.addPos(moveTo);
+
+    //       return true;
+    //     });
+    //   }
+    // }
   }
 }
 

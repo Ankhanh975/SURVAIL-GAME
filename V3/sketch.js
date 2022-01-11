@@ -117,57 +117,16 @@ addFunction("draw", () => {
     let b = system.response.b;
     if (a.parent instanceof Player && b.parent instanceof Player) {
       // Check that 2 ellipses overlap
+      // Push their center from each other.
+      
+      // a.parent.addPos(createVector(-overlapV.x, -overlapV.y));
+      // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
+      // // console.log(overlapV);
+      // let newMag = 110 / max(a_look_at_b.mag() - 35, 7) ** 2;
+      // // let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
+      // a_look_at_b.setMag(-newMag);
 
-      let xy0 = a.parent.pos
-        .copy()
-        .add(
-          createVector(-3.5, 0).rotate(a.parent.heading.angle + radians(90))
-        );
-
-      let xy1 = b.parent.pos
-        .copy()
-        .add(
-          createVector(-3.5, 0).rotate(b.parent.heading.angle + radians(90))
-        );
-      let [hw0, hw1] = [46 / 88.0, 46 / 88.0];
-
-      let wxy0 = createVector(0, 88 / 2).rotate(
-        a.parent.heading.angle + radians(90)
-      );
-
-      let wxy1 = createVector(0, 88 / 2).rotate(
-        b.parent.heading.angle + radians(90)
-      );
-
-      if (
-        ellipseCollisionTest.collide(
-          xy0.x,
-          xy0.y,
-          wxy0.x,
-          wxy0.y,
-          hw0,
-          xy1.x,
-          xy1.y,
-          wxy1.x,
-          wxy1.y,
-          hw1
-        )
-      ) {
-        // Push their center from each other.
-        // console.log("overlap");
-
-        let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
-        // console.log(overlapV);
-        let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
-        a_look_at_b.setMag(-newMag);
-
-        a.parent.addPos(a_look_at_b);
-
-        // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
-        // a_look_at_b.setMag(1); // + (a_look_at_b.mag() - 10) ** 2 / 3000
-        // b.parent.addPos(a_look_at_b);
-        // a.parent.addPos(a_look_at_b.rotate(radians(180)));
-      }
+      // a.parent.addPos(a_look_at_b);
     }
   });
   // system.checkAll(({ a, overlapV }) => {
