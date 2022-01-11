@@ -45,7 +45,7 @@ class Players {
           // }, Prob.normal(16, 16 * 40)());
         }
       }
-    }, 5 * 1000);
+    }, 3 * 1000);
 
     // // setInterval(() => {
     // // this.players.shuffle();

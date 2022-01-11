@@ -203,25 +203,26 @@ function keyPressed() {
       let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
       particle.move(1.5);
     }
-    let delta = createVector(0, 0);
+    let d = createVector(0, 0);
     if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      delta.add(createVector(-32.5, 0));
+      d.add(createVector(-32.5, 0));
     }
     if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      delta.add(createVector(32.5, 0));
+      d.add(createVector(32.5, 0));
     }
     if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      delta.add(createVector(0, -32.5));
+      d.add(createVector(0, -32.5));
     }
     if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      delta.add(createVector(0, 32.5));
+      d.add(createVector(0, 32.5));
     }
-    delta.limit(32.5);
+    let delta = p5.Vector.sub(player.pos, player.lastPos);
+    if (delta.mag() < 1) return
+
 
     let deltaT = (millis() - start) / 25 - 0.175;
-    let d = p5.Vector.add(delta, toLookAt);
-    d.setMag(175 * Curve.f(deltaT) + 5);
-    
+    d.setMag(150 * Curve.f(deltaT) + 3);
+
     player.addPos(d);
   };
   // if pressed Enter => jump
