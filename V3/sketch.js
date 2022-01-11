@@ -32,20 +32,20 @@ addFunction("setup", () => {
 
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
-  player.health = 1000;
-  player.totalHealth = 1000;
+  player.health = 1500;
+  player.totalHealth = 1500;
   player.damage = 5;
-  player.recovery = 0.001 * player.health;
+  player.recovery = 0.00175 * player.health;
   players.players[0] = player;
   players.realPlayers = [player];
 
   let friend = new Player(players.img[5], players);
-  friend.health = 200;
-  friend.totalHealth = 200;
+  friend.health = 400;
+  friend.totalHealth = 400;
   friend.name = "friend";
   friend.damage = 2.5;
   friend.addPos(createVector(100, 0));
-  friend.recovery = 0.001 * friend.health;
+  friend.recovery = 0.00175 * friend.health;
   players.players[1] = friend;
   players.realPlayers.push(friend);
 });
@@ -96,32 +96,33 @@ addFunction("draw", () => {
   players.update(mouse);
   onController(player);
   obstacles.update();
-  system.update();
-  system.checkAll(({ a, overlapV }) => {
-    let b = system.response.b;
-    if (a.parent instanceof Player && b.parent instanceof Player) {
-      // Check that 2 ellipses overlap
-      // Push their center from each other.
-      // a.parent.addPos(createVector(-overlapV.x, -overlapV.y));
-      // let a_look_at_b = p5.Vector.sub(b.parent.pos, a.parent.pos);
-      // // console.log(overlapV);
-      // let newMag = 110 / max(a_look_at_b.mag() - 35, 7) ** 2;
-      // // let newMag = 150 / max(min(a_look_at_b.mag() - 35, 1), 7) ** 2;
-      // a_look_at_b.setMag(-newMag);
-      // a.parent.addPos(a_look_at_b);
-    }
-  });
-  // system.checkAll(({ a, overlapV }) => {
-  //   let b = system.response.b;
-  //   if (a.parent instanceof Player && b.parent instanceof Obstacle) {
-  //     // Player inside a obstacle
-  //     let l = p5.Vector.sub(a.parent.pos, b.parent.pos);
-  //     a.parent.setPos(a.parent.lastPos.copy());
+  // system.update();
 
-  //     let newMag = 110 / max(l.mag() - 35, 7) ** 2;
-  //     l.setMag(newMag);
-  //   }
-  // });
+  players.players.forEach((player) => {
+    system.getPotentials(player.circle).forEach((collider) => {
+      if (system.checkCollision(player.circle, collider)) {
+        const { overlapV } = system.response;
+        const b = system.response.b.parent;
+
+        let x = -overlapV.x;
+        let y = -overlapV.y;
+        const pushOut = createVector(x, y);
+        pushOut.setMag(pushOut.mag() * 0.75);
+        pushOut.limit(5);
+
+        const pushOut2 = createVector(x, y);
+        pushOut2.setMag(pushOut2.mag() * -0.25);
+        pushOut2.limit(5);
+        player.pos.add(pushOut);
+        player.circle.setPosition(player.pos.x, player.pos.y);
+        try {
+          b.pos.add(pushOut2);
+          b.circle.setPosition(b.pos.x, b.pos.y);
+        } catch (TypeError) {}
+      }
+    });
+  });
+
 });
 
 addFunction("draw", () => {
@@ -151,7 +152,7 @@ addFunction("draw", () => {
   //   for (let i = 0; i < 5; i++) {
   //     let particle = tower.create_particle(
   //       createVector(0, 0),
-  //       [128, 255, 255, 200],
+  //       [1758, 255, 255, 200],
   //       5
   //     );
   //     particle.move(2.5);
@@ -198,7 +199,7 @@ function mouseClicked(event) {
 function keyPressed() {
   let start = millis();
   let jump = () => {
-    player.health -= player.totalHealth / 120;
+    player.health -= player.totalHealth / 175;
     for (let i = 0; i < 14; i++) {
       let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
       particle.move(1.5);
@@ -216,7 +217,7 @@ function keyPressed() {
     }
     let deltaT = (millis() - start) / 25 - 0.175;
     let d = p5.Vector.add(delta, toLookAt);
-    d.setMag(135 * Curve.f(deltaT)); //
+    d.setMag(175 * Curve.f(deltaT) + 5); //
 
     // console.log("d", d.mag(), deltaT);
     player.addPos(d);

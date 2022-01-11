@@ -30,12 +30,23 @@ class Player {
     system.getPotentials(this.circle).forEach((collider) => {
       if (system.checkCollision(this.circle, collider)) {
         const { overlapV } = system.response;
+        const b = system.response.b.parent;
 
-        let x = this.circle.pos.x - overlapV.x;
-        let y = this.circle.pos.y - overlapV.y;
-        this.circle.setPosition(x, y);
-        this.pos.x = x;
-        this.pos.y = y;
+        let x = -overlapV.x;
+        let y = -overlapV.y;
+        const pushOut = createVector(x, y);
+        pushOut.limit(5);
+        pushOut.setMag(pushOut.mag() * 0.75);
+
+        const pushOut2 = createVector(x, y);
+        pushOut2.limit(5);
+        pushOut2.setMag(pushOut2.mag() * -0.25);
+        this.pos.add(pushOut);
+        this.circle.setPosition(this.pos.x, this.pos.y);
+        try {
+          b.pos.add(pushOut2);
+          b.circle.setPosition(b.pos.x, b.pos.y);
+        } catch (TypeError) {}
       }
     });
   }
@@ -185,7 +196,7 @@ class Player {
               d.setMag(
                 -d.mag() *
                   Curve.f2(deltaT, 0.1, 0.6, 0.275) *
-                  15 *
+                  21 *
                   this.damage -
                   3
               );
@@ -255,20 +266,20 @@ class AIPlayer extends Player {
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
       super.update(lookAt);
-      // if (dist < 150) {
-      //   if (!this.onPunch()) {
-      //     if (random(0, 100) >= 92.5) {
-      //       this.startPunch();
-      //     }
-      //   }
-      // }
+      if (dist < 150) {
+        if (!this.onPunch()) {
+          if (random(0, 100) >= 93.5) {
+            this.startPunch();
+          }
+        }
+      }
 
-      if (dist < 120) {
+      if (dist < 130) {
         toLookAt.setMag(3.5);
         toLookAt.rotate(radians(180));
         this.addPos(toLookAt);
       }
-      if (dist > 150) {
+      if (dist > 175) {
         toLookAt.setMag(3.0);
         this.addPos(toLookAt);
       }

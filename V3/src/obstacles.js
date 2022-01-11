@@ -1,9 +1,9 @@
 class Obstacle {
   constructor(pos, parent) {
     // parent: the Obstacles object this Obstacle belongs to
-    this.circle =  system.createBox({ x: pos.x, y: pos.y }, 51.9, 51.9);
+    this.circle = system.createBox({ x: pos.x, y: pos.y }, 51.9, 51.9);
     this.circle.parent = this;
-    this.color = [220, 220, 10, 200];
+    this.color = [256, 256, 0, 220];
     this.parent = parent;
     this.size = 51.9;
     // this.size = 30;
@@ -163,19 +163,19 @@ class Obstacles {
       // console.log("Grid position", gridPos, pos.x, pos.y);
 
       this.grid.set(gridPos[0], gridPos[1], true);
-      setTimeout(() => {
-        // Remove the obstacle from the world
-        let x = this.obstacles.shift();
+      // setTimeout(() => {
+      //   // Remove the obstacle from the world
+      //   let x = this.obstacles.shift();
 
-        system.remove(x.circle);
-        system.update(x.circle);
-        let gridPos = this.grid.WorldCoordsToGridCoords(
-          x.circle.pos.x,
-          x.circle.pos.y
-        );
+      //   system.remove(x.circle);
+      //   system.update(x.circle);
+      //   let gridPos = this.grid.WorldCoordsToGridCoords(
+      //     x.circle.pos.x,
+      //     x.circle.pos.y
+      //   );
 
-        this.grid.set(gridPos[0], gridPos[1], false);
-      }, 17.5 * 1000);
+      //   this.grid.set(gridPos[0], gridPos[1], false);
+      // }, 17.5 * 1000);
       return ob;
     } else {
       system.remove(ob.circle);
