@@ -7,5 +7,8 @@ SURVAIL-GAME
 - https://ankhanh975.github.io/SURVAIL-GAME/V3_Release_05_01_2022/
 - https://ankhanh975.github.io/SURVAIL-GAME/V3_Release_09_01_2022/
 - https://ankhanh975.github.io/SURVAIL-GAME/V3
-- 
-- https://github.com/Prozi/detect-collisions
+
+Soucre code: 
+https://github.com/Ankhanh975/SURVAIL-GAME
+
+<!-- - https://github.com/Prozi/detect-collisions -->
