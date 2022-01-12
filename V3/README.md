@@ -16,7 +16,7 @@
 - 11/01/2022: Use font from google fonts
 - 11/01/2022: Proper jump dicection detection 
 - 11/01/2022: Proper collision detection handling!
- 
+- 12/01/2022: Add continuous handling for box placement (before when fast movement is may miss )
 # Demo: https://youtu.be/NoWH5l08dMM
 - TODO: pathfinding: https://github.com/qiao/PathFinding.js
 - TODO: More particles effects

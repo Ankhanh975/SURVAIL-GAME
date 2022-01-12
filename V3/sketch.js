@@ -7,7 +7,7 @@ let obstacles;
 let mouse;
 let queue = new Queue();
 let killCount = 0;
-
+let mousePos = [];
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
@@ -86,8 +86,23 @@ addFunction("draw", () => {
     sparks.create_particle(player.pos, [255, 0, 0], 3.5);
   }
   if (isPressed2) {
-    sparks.create_particle(mouse, [9, 200, 9]);
+    // let line = lineBresenham_1(
+    //   mouse.x,
+    //   mouse.y,
+    //   mousePos[mousePos.length - 1][0],
+    //   mousePos[mousePos.length - 1][1]
+    // );
+    // console.log(line);
+    // line.forEach((point) => {
+    //   obstacles.createObstacle({ x: point[0], y: point[1] });
+    // });
     obstacles.createObstacle(mouse);
+    sparks.create_particle(mouse, [9, 200, 9]);
+  }
+  mousePos.push([mouse.x, mouse.y]);
+
+  if (mousePos.length > 30) {
+    mousePos.shift();
   }
   // onController need to after players.update
 
