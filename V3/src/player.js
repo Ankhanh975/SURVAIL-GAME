@@ -16,7 +16,7 @@ class Player {
     this.health = health;
     this.totalHealth = health;
     this.recovery = 0.04;
-    this.damage = 1;
+    this.damage = 0.75;
     // physics circle for collision detection
     // TODO: this.circle should be a polygon
     this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 65 / 2);

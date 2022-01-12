@@ -149,7 +149,12 @@ class Obstacles {
       // This cell is already in the grid
       return;
     }
-
+    this.lastCreate = [pos.x, pos.y];
+    if (this.lastCreate) {
+      if (this.lastCreate.x === pos.x && this.lastCreate.y === pos.y) {
+        return;
+      }
+    }
     let ob = new Obstacle(pos, this);
     const potentials = system.getPotentials(ob.circle);
     const collided = potentials.some((body) => {
