@@ -21,32 +21,34 @@ class Player {
     // TODO: this.circle should be a polygon
     this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 65 / 2);
     this.circle.parent = this;
+    system.updateBody(this.circle)
     this.parent = parent;
+    
   }
   setPos(pos) {
     this.pos = pos;
     this.circle.setPosition(this.pos.x, this.pos.y);
 
-    system.getPotentials(this.circle).forEach((collider) => {
-      if (system.checkCollision(this.circle, collider)) {
-        const { overlapV } = system.response;
-        const b = system.response.b.parent;
-
-        let x = -overlapV.x;
-        let y = -overlapV.y;
-        const pushOut = createVector(x, y);
-        pushOut.limit(5);
-        pushOut.setMag(pushOut.mag() * 0.60);
-
+    system.checkOne(this.circle, (response) => {
+      const x = -response.overlapV.x;
+      const y = -response.overlapV.y;
+      const b = response.b.parent;
+      const pushOut = createVector(x, y);
+      if (response.b.parent instanceof Player) {
         const pushOut2 = createVector(x, y);
+        pushOut.limit(5);
         pushOut2.limit(5);
-        pushOut2.setMag(pushOut2.mag() * -0.40);
+
+        pushOut.setMag(pushOut.mag() * 0.6);
+        pushOut2.setMag(pushOut2.mag() * -0.4);
+
         this.pos.add(pushOut);
         this.circle.setPosition(this.pos.x, this.pos.y);
-        try {
-          b.pos.add(pushOut2);
-          b.circle.setPosition(b.pos.x, b.pos.y);
-        } catch (TypeError) {}
+        b.pos.add(pushOut2);
+        b.circle.setPosition(b.pos.x, b.pos.y);
+      } else if (response.b.parent instanceof Obstacle) {
+        this.pos.add(pushOut);
+        this.circle.setPosition(this.pos.x, this.pos.y);
       }
     });
   }
@@ -344,21 +346,5 @@ class AIPlayer extends Player {
     //     });
     //   }
     // }
-  }
-}
-
-function onController(player) {
-  // The awsd response
-  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-    player.addPos(createVector(-7, 0));
-  }
-  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-    player.addPos(createVector(7, 0));
-  }
-  if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-    player.addPos(createVector(0, -7));
-  }
-  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-    player.addPos(createVector(0, 7));
   }
 }

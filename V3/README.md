@@ -66,7 +66,8 @@
 |-- players.js      # Group 
 |-- curve.js"       # curve use for animation
 |-- generate.js     # Generate fake data.
-|-- sketch.js"      # Main flow
+|-- sketch.js       # Main flow
+|-- onControl.js    # Attack keyboard & move event movement to some variable.
 ```js
 
 Libraries

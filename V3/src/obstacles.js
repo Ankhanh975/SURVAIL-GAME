@@ -3,6 +3,8 @@ class Obstacle {
     // parent: the Obstacles object this Obstacle belongs to
     this.circle = system.createBox({ x: pos.x, y: pos.y }, 51.9, 51.9);
     this.circle.parent = this;
+    system.updateBody(this.circle);
+
     this.color = [256, 256, 0, 220];
     this.parent = parent;
     this.size = 51.9;
@@ -141,44 +143,44 @@ class Obstacles {
     [pos.x, pos.y] = this.grid.GridCoordsToWorldCoords(
       ...this.grid.WorldCoordsToGridCoords(pos.x, pos.y)
     );
-    if (this.lastCreate) {
-      if (this.lastCreate.x === pos.x && this.lastCreate.y === pos.y) {
-        return;
-      }
+    // ob.circle maybe inserted is overlap with something
+    let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
+    if (this.grid.get(gridPos[0], gridPos[1]) === true) {
+      // This cell is already in the grid
+      return;
     }
 
-    this.lastCreate = pos;
     let ob = new Obstacle(pos, this);
-    let InsertAble = true;
-
-    system.insert(ob.circle);
-    system.updateBody(ob.circle);
-    system.checkOne(ob.circle, () => {
-      // ob.circle to be inserted is overlap with something
-      InsertAble = false;
+    const potentials = system.getPotentials(ob.circle);
+    const collided = potentials.some((body) => {
+      if (system.checkCollision(ob.circle, body)) {
+        return true;
+      }
     });
-    if (InsertAble) {
+
+    if (collided) {
+      system.remove(ob.circle);
+      this.obstacles.shift();
+      this.grid.set(gridPos[0], gridPos[1], false);
+    }
+
+    if (!collided) {
       this.obstacles.push(ob);
-      let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
-      // console.log("Grid position", gridPos, pos.x, pos.y);
 
       this.grid.set(gridPos[0], gridPos[1], true);
-      // setTimeout(() => {
-      //   // Remove the obstacle from the world
-      //   let x = this.obstacles.shift();
+      setTimeout(() => {
+        // Remove the obstacle from the world
+        let x = this.obstacles.shift();
 
-      //   system.remove(x.circle);
-      //   system.update(x.circle);
-      //   let gridPos = this.grid.WorldCoordsToGridCoords(
-      //     x.circle.pos.x,
-      //     x.circle.pos.y
-      //   );
+        system.remove(x.circle);
+        let gridPos = this.grid.WorldCoordsToGridCoords(
+          x.circle.pos.x,
+          x.circle.pos.y
+        );
 
-      //   this.grid.set(gridPos[0], gridPos[1], false);
-      // }, 17.5 * 1000);
+        this.grid.set(gridPos[0], gridPos[1], false);
+      }, 17.5 * 1000);
       return ob;
-    } else {
-      system.remove(ob.circle);
     }
   }
   update() {

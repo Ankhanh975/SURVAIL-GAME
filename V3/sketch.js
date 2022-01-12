@@ -32,10 +32,10 @@ addFunction("setup", () => {
 
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
-  player.health = 1500;
-  player.totalHealth = 1500;
-  player.damage = 5;
-  player.recovery = 0.00175 * player.health;
+  player.health = 1000;
+  player.totalHealth = 1000;
+  player.damage = 4.5;
+  player.recovery = 0.001 * player.health;
   players.players[0] = player;
   players.realPlayers = [player];
 
@@ -45,7 +45,7 @@ addFunction("setup", () => {
   friend.name = "friend";
   friend.damage = 2.5;
   friend.addPos(createVector(100, 0));
-  friend.recovery = 0.00175 * friend.health;
+  friend.recovery = 0.001 * friend.health;
   players.players[1] = friend;
   players.realPlayers.push(friend);
 });
@@ -82,7 +82,6 @@ addFunction("draw", () => {
   }
 
   if (isPressed && !player.onPunch()) {
-    // if (isPressed && (frameCount % 24 === 0 || !player.onPunch())) {
     player.startPunch();
     sparks.create_particle(player.pos, [255, 0, 0], 3.5);
   }
@@ -190,52 +189,7 @@ Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
 
   chatbox.draw();
 });
-function mouseClicked(event) {
-  // console.log("mouseClicked", event.button  )
-  // player.startPunch();
-  return false;
-}
-function keyPressed() {
-  let start = millis();
-  let jump = () => {
-    player.health -= player.totalHealth / 200;
-    for (let i = 0; i < 14; i++) {
-      let particle = sparks.create_particle(player.pos, [0, 0, 0], 3.5);
-      particle.move(1.5);
-    }
-    let d = createVector(0, 0);
-    if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      d.add(createVector(-32.5, 0));
-    }
-    if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      d.add(createVector(32.5, 0));
-    }
-    if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      d.add(createVector(0, -32.5));
-    }
-    if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      d.add(createVector(0, 32.5));
-    }
-    let delta = p5.Vector.sub(player.pos, player.lastPos);
-    if (delta.mag() < 1) return
 
-
-    let deltaT = (millis() - start) / 25 - 0.175;
-    d.setMag(150 * Curve.f(deltaT) + 3);
-
-    player.addPos(d);
-  };
-  // if pressed Enter => jump
-  if (keyCode === 32) {
-    jump();
-    let id99 = setInterval(() => {
-      jump();
-    }, 16);
-    setTimeout(() => {
-      clearInterval(id99);
-    }, 16 * 8);
-  }
-}
 //   // shake
 // if (isPressed && !player.onPunch()) {
 // var r = Prob.normal(0, 2.8);
