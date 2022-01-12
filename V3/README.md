@@ -84,3 +84,5 @@ https://ncase.me/sight-and-light/
 
 https://github.com/hiiambradkim/sketches/tree/master/geometry
 https://github.com/Bastl34/pixi-websocket-webpack-boilerplate
+
+// "You probably wealthier than a king 200 years ago!" ~Economics Explained

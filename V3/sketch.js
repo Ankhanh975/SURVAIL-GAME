@@ -196,6 +196,7 @@ addFunction("draw", () => {
 Players: ${players.players.length}
 Kill: ${killCount}
 Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
+Window Size: \n${width}, ${height}
 ` + talkative
   );
 
