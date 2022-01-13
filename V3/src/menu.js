@@ -17,7 +17,7 @@ class Menu {
 
     translate(20, 45);
     textFont(myFont);
-    
+
     textSize(25);
     strokeWeight(0);
     fill(0, 0, 0, 255);
@@ -26,20 +26,7 @@ class Menu {
     pop();
   }
 }
-class Chatbox {
-  constructor() {
-    this.message = [];
-  }
-  sayMessage(txt) {
-    this.message.push("You: " + txt);
-    console.log("this.message", this.message);
-  }
-  draw() {
-    push();
-
-    pop();
-  }
-}
+let menu = new Menu();
 var fpsMeter = new FPSMeter(null, {
   graph: 1,
   // interval: 1000,
@@ -56,30 +43,55 @@ var fpsMeter = new FPSMeter(null, {
   bottom: "auto", // Meter bottom offset.
   margin: "0 0 0 0", // Meter margin. Helps with centering the counter when left: 50%;
 });
-let menu = new Menu();
-let chatbox = new Chatbox();
 
-let talkative = "\nGame make \nby KHANH";
+var cnsl = new Console({
+  autoComplete: customeAutoComplete,
+  // caseSensitive: false,
+});
+cnsl.register("/help", (input) => {
+  return "/help";
+});
+cnsl.register("/setname", (input) => {
+  return "/setname";
+});
+cnsl.register((input) => {
+  return `You: ${input}`;
+});
+
+function customeAutoComplete(inputString) {
+  const availableCommands = Object.keys(cnsl.handlers);
+  cnsl.log(availableCommands.join(" "));
+
+  return inputString;
+}
+
+cnsl.log("Welcome! Use /l <password> to start the game");
 setInterval(() => {
   let t = [
-    "\nStay close to\nthe origin\nto find more\npeople.\n",
-    "\nPress F1 you \ncan turn off\nthis panel.\n",
-    "\nPress F11 to\nplay in \nfullscreen \nmode!\n",
-    "\nHow to play?\nPress awsd \nto move",
-    "\nNew to \nthe game? Read \ngithub.com/\nAnkhanh975/\nSURVAIL-GAME",
-    // "\nYou can now \nplay the game\nin multiplier!\n\n",
-    // "\nYou should now \nset zoom to 100%",
-    "\nTry to \n survive!",
-    "\nTry to \n survive!",
-    "\nPress space\nor right click\nto use ability!",
-    "\nPress space\nor right click\nto use ability!",
-    "\nGame make by \nKHANH",
-    "\nGame make by \nKHANH",
-    "",
-    "",
-    "",
-    "",
-    "",
+    "HOW TO PLAY? Stay close to the origin to find more people. ",
+    "HOW TO PLAY? Press F1 you can turn off this panel. ",
+    "HOW TO PLAY? Press F11 to play in fullscreen  mode! ",
+    "HOW TO PLAY? How to play? Press awsd  to move",
+    "HOW TO PLAY? New to  the game? Read  github.com/ Ankhanh975/ SURVAIL-GAME",
+    "HOW TO PLAY? You can now  play the game in multiplier! ",
+    "HOW TO PLAY? You should set zoom to default 100%",
+    "HOW TO PLAY? Try to survive!",
+    "HOW TO PLAY? Try to survive!",
+    "HOW TO PLAY? Press space or right click to use ability!",
+    "HOW TO PLAY? Press space or right click to use ability!",
+    "HOW TO PLAY? Game make byKHANH",
+    "HOW TO PLAY? Game make by KHANH",
   ];
-  talkative = t[int(random(0, t.length))];
-}, 3500);
+  let talkative = t[int(random(0, t.length))];
+  cnsl.log(talkative);
+}, 4000);
+
+// setTimeout(() => {
+//   if (keyIsDown(65)) {
+//     console.log("toggle on");
+//     cnsl.toggle("on");
+//   } else {
+//     console.log("toggle off");
+//     cnsl.toggle("off");
+//   }
+// }, 1000);
