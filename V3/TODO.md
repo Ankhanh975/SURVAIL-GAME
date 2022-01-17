@@ -12,4 +12,7 @@ https://github.com/aferriss/p5jsShaderExamples
 
 https://github.com/amio/console.js
 
-Assets
+
+.editorconfig
+Learn Bootstrap in less than 20 minutes - Responsive Website Tutorial
+https://github.com/cwilso/WebAudio/blob/master/js/main.js
