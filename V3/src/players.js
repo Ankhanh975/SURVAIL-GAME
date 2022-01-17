@@ -7,12 +7,23 @@ let Players_img = [
   [0, 0, 0, 0, 0, 0],
 ];
 addFunction("preload", () => {
-  Players_img[0][0] = loadImage("Resources/Animation_0.png");
-  Players_img[0][1] = loadImage("Resources/Animation_1.png");
-  Players_img[0][2] = loadImage("Resources/Animation_2.png");
-  Players_img[0][3] = loadImage("Resources/Animation_3.png");
-  Players_img[0][4] = loadImage("Resources/Animation_4.png");
-  Players_img[0][5] = loadImage("Resources/Animation_5.png");
+  Players_img[0][0] = loadImage("Assets/Animation_0.png");
+  Players_img[0][1] = loadImage("Assets/Animation_1.png");
+  Players_img[0][2] = loadImage("Assets/Animation_2.png");
+  Players_img[0][3] = loadImage("Assets/Animation_3.png");
+  Players_img[0][4] = loadImage("Assets/Animation_4.png");
+  Players_img[0][5] = loadImage("Assets/Animation_5.png");
+  
+  Players_img[0][6] = loadImage("Assets/Demo/Die0.png");
+  Players_img[0][7] = loadImage("Assets/Demo/Die1.png");
+  Players_img[0][8] = loadImage("Assets/Demo/Die2.png");
+  Players_img[0][9] = loadImage("Assets/Demo/Die3.png");
+  Players_img[0][10] = loadImage("Assets/Demo/Die4.png");
+  Players_img[0][11] = loadImage("Assets/Demo/Die5.png");
+  Players_img[0][12] = loadImage("Assets/Demo/Die6.png");
+  Players_img[0][13] = loadImage("Assets/Demo/Die7.png");
+  Players_img[0][14] = loadImage("Assets/Demo/Die8.png");
+
 });
 
 class Players {

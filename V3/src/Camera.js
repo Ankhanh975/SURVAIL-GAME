@@ -63,10 +63,10 @@ class Camera {
   // transform world coordinates to screen coordinates
   constructor() {
     this.ground = new Ground([
-      loadImage("Resources/BackGround1.png"),
-      loadImage("Resources/BackGround2.png"),
-      loadImage("Resources/BackGround3.png"),
-      loadImage("Resources/BackGround4.png"),
+      loadImage("Assets/BackGround1.png"),
+      loadImage("Assets/BackGround2.png"),
+      loadImage("Assets/BackGround3.png"),
+      loadImage("Assets/BackGround4.png"),
     ]);
     this.transform = [];
     this.realTransform = [];

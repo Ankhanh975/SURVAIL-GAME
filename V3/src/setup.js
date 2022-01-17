@@ -29,9 +29,9 @@ function addFunction(NAME, f) {
 
 var myFont;
 addFunction("preload", () => {
-  // myFont = loadFont("Resources/Steps-Mono.otf");
-  myFont = loadFont("Resources/Minecraft.ttf");
-  // song = loadSound("Resources/C418 - Beginning 2.mp3");
+  // myFont = loadFont("Assets/Steps-Mono.otf");
+  myFont = loadFont("Assets/Minecraft.ttf");
+  // song = loadSound("Assets/C418 - Beginning 2.mp3");
   // song.play();
-  // img = loadImage(" Zombie.png");
+  // img = loadImage("Assets/Zombie.png");
 });

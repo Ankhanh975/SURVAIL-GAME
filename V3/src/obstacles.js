@@ -70,10 +70,10 @@ class Obstacles {
       return path;
     };
     this.grid.set = (x, y, state) => {
-      if (x < 0 || y < 0 || x >= 100 || y >= 100) {
-        // console.log("out of bounds", x, y, state);
-        return;
-      }
+      // if (x < 0 || y < 0 || x >= 100 || y >= 100) {
+      //   // console.log("out of bounds", x, y, state);
+      //   return;
+      // }
       // state == true means that the point is have obstacles
       this.grid.data.setWalkableAt(x, y, !state);
     };
