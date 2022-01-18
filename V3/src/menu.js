@@ -46,6 +46,8 @@ var fpsMeter = new FPSMeter(null, {
 
 var cnsl = new Console({
   autoComplete: customeAutoComplete,
+  hotkey: 27, // <kbd>ESC</kbd>
+  
   // caseSensitive: false,
 });
 cnsl.register("/help", (input) => {

@@ -1,9 +1,9 @@
 class Obstacle {
   constructor(pos, parent) {
     // parent: the Obstacles object this Obstacle belongs to
-    this.circle = system.createBox({ x: pos.x, y: pos.y }, 51.9, 51.9);
+    this.circle = collisions.createBox({ x: pos.x, y: pos.y }, 51.9, 51.9);
     this.circle.parent = this;
-    system.updateBody(this.circle);
+    collisions.updateBody(this.circle);
 
     this.color = [256, 256, 0, 220];
     this.parent = parent;
@@ -156,15 +156,15 @@ class Obstacles {
       }
     }
     let ob = new Obstacle(pos, this);
-    const potentials = system.getPotentials(ob.circle);
+    const potentials = collisions.getPotentials(ob.circle);
     const collided = potentials.some((body) => {
-      if (system.checkCollision(ob.circle, body)) {
+      if (collisions.checkCollision(ob.circle, body)) {
         return true;
       }
     });
 
     if (collided) {
-      system.remove(ob.circle);
+      collisions.remove(ob.circle);
       this.obstacles.shift();
       this.grid.set(gridPos[0], gridPos[1], false);
     }
@@ -177,7 +177,7 @@ class Obstacles {
         // Remove the obstacle from the world
         let x = this.obstacles.shift();
 
-        system.remove(x.circle);
+        collisions.remove(x.circle);
         let gridPos = this.grid.WorldCoordsToGridCoords(
           x.circle.pos.x,
           x.circle.pos.y

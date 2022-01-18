@@ -13,7 +13,7 @@ addFunction("preload", () => {
   Players_img[0][3] = loadImage("Assets/Animation_3.png");
   Players_img[0][4] = loadImage("Assets/Animation_4.png");
   Players_img[0][5] = loadImage("Assets/Animation_5.png");
-  
+
   // Players_img[0][6] = loadImage("Assets/Demo/Die0.png");
   // Players_img[0][7] = loadImage("Assets/Demo/Die1.png");
   // Players_img[0][8] = loadImage("Assets/Demo/Die2.png");
@@ -23,7 +23,6 @@ addFunction("preload", () => {
   // Players_img[0][12] = loadImage("Assets/Demo/Die6.png");
   // Players_img[0][13] = loadImage("Assets/Demo/Die7.png");
   // Players_img[0][14] = loadImage("Assets/Demo/Die8.png");
-
 });
 
 class Players {
@@ -75,11 +74,8 @@ class Players {
   }
   draw() {
     this.players.forEach((e, i) => {
-      e.drawPlayer();
-      e.drawHeightBar();
-      if (!e.AIPlayer || i <= 1) {
-        e.drawNameTag();
-      }
+      e.draw({ healthBar: true, nameTag: !e.AIPlayer || i <= 1, body: true });
+
     });
   }
   createAIPlayer(pos, color) {

@@ -1,7 +1,7 @@
 let sparks;
 let camera;
 let players;
-let system;
+let collisions;
 let player;
 let obstacles;
 let mouse;
@@ -24,7 +24,7 @@ addFunction("setup", () => {
 });
 
 addFunction("setup", () => {
-  system = new Collisions();
+  collisions = new Collisions();
   sparks = new Sparks();
   obstacles = new Obstacles();
   camera = new Camera();
@@ -110,11 +110,11 @@ addFunction("draw", () => {
   players.update(mouse);
   onController(player);
   obstacles.update();
-  system.update();
+  collisions.update();
 
   players.players.forEach((player) => {
 
-    system.checkOne(player.circle, (response) => {
+    collisions.checkOne(player.circle, (response) => {
       const x = -response.overlapV.x;
       const y = -response.overlapV.y;
       const b = response.b.parent;
