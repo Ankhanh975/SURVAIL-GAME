@@ -21,9 +21,8 @@ class Player {
     // TODO: this.circle should be a polygon
     this.circle = system.createCircle({ x: this.pos.x, y: this.pos.y }, 65 / 2);
     this.circle.parent = this;
-    system.updateBody(this.circle)
+    system.updateBody(this.circle);
     this.parent = parent;
-    
   }
   setPos(pos) {
     this.pos = pos;
@@ -266,25 +265,26 @@ class AIPlayer extends Player {
       lookAt = target;
       dist = this.pos.dist(lookAt);
       toLookAt = p5.Vector.sub(lookAt, this.pos);
-
       super.update(lookAt);
-      if (dist < 150) {
-        if (!this.onPunch()) {
-          if (random(0, 100) >= 93.5) {
-            this.startPunch();
-          }
-        }
-      }
 
-      if (dist < 130) {
-        toLookAt.setMag(4.5);
-        toLookAt.rotate(radians(180));
-        this.addPos(toLookAt);
-      }
-      if (dist > 175) {
-        toLookAt.setMag(3.0);
-        this.addPos(toLookAt);
-      }
+      super.update(createVector(0, 0));
+      // if (dist < 150) {
+      //   if (!this.onPunch()) {
+      //     if (random(0, 100) >= 93.5) {
+      //       this.startPunch();
+      //     }
+      //   }
+      // }
+
+      // if (dist < 130) {
+      //   toLookAt.setMag(4.5);
+      //   toLookAt.rotate(radians(180));
+      //   this.addPos(toLookAt);
+      // }
+      // if (dist > 175) {
+      //   toLookAt.setMag(3.0);
+      //   this.addPos(toLookAt);
+      // }
     }
     // {
     //   let totalMoveLength = 4.0;

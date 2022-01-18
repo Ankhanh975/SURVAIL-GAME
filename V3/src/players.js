@@ -31,7 +31,7 @@ class Players {
     this.img = Players_img;
     this.initAnimation();
     this.players = [];
-    while (this.players.length < 25) {
+    while (this.players.length < 200) {
       // while (this.AIs.length < 35) {
       let pos = p5.Vector.random2D().setMag(random(950, 1100));
       for (let index = 0; index < Prob.normal(10, 2)(); index++) {

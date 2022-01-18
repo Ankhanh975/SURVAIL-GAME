@@ -1,4 +1,4 @@
-- Fullscreen on mobile devices
+- FullScreen on mobile devices
 - Joystick on mobile devices
 
 Acknowledgements

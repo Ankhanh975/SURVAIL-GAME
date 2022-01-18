@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Try to survive!</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5.collide2d"></script>
+  <script src="Lib/easystarjs/easystarjs.js"></script>
+  <script src="Lib/noisejs/perlin.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="utf-8" />
+
+</head>
+
+<body>
+  <script src="particles/particle.js"></script>
+  <script src="particles/particle_system.js"></script>
+  <script src="particles/Spark.js"></script>
+
+  <script src="sketch.js"></script>
+  <script>
+    // https://stackoverflow.com/questions/27321672/listen-for-all-events-in-javascript/27322253
+    // let P5canvas = document.getElementById(".canvas")
+    let P5canvas = window
+    // Object.keys(P5canvas).forEach(key => {
+    //   // console.log("key", key)
+    //   if (/(key)/.test(key)) {
+    //     console.log("key", key)
+    //     // if (!/(key|mouse)/.test(key)) {
+    //     window.addEventListener(key.slice(2), event => {
+    //       // console.log("h", event, key.slice(2));
+    //       event.preventDefault()
+    //     });
+    //   }
+    // });
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+  </script>
+</body>
+
+
+</html>
