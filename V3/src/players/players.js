@@ -29,33 +29,37 @@ class Players {
   constructor() {
     this.img = Players_img;
     this.initAnimation();
+    this.parent = globalThis
     this.players = [];
-    while (this.players.length < 200) {
-      // while (this.AIs.length < 35) {
-      let pos = p5.Vector.random2D().setMag(random(950, 1100));
-      for (let index = 0; index < Prob.normal(10, 2)(); index++) {
-        // setTimeout(() => {
-        this.createAIPlayer(
-          pos.add(p5.Vector.random2D().setMag(random(0, 100)))
-        );
-        // }, Prob.normal(16, 16 * 40)());
+      for (let index = 0; index < 100; index++) {
+        this.createAIPlayer();
+        
       }
-    }
+    // while (this.players.length < 1) {
+    //   let pos = p5.Vector.random2D().setMag(random(950, 1100));
+    //   for (let index = 0; index < Prob.normal(10, 2)(); index++) {
+    //     // setTimeout(() => {
+    //     this.createAIPlayer(
+    //       pos.add(p5.Vector.random2D().setMag(random(0, 100)))
+    //     );
+    //     // }, Prob.normal(16, 16 * 40)());
+    //   }
+    // }
 
     // gameTick
-    setInterval(() => {
-      if (this.players.length < 25) {
-        // while (this.AIs.length < 35) {
-        let pos = p5.Vector.random2D().setMag(random(300, 1000));
-        for (let index = 0; index < Prob.normal(10, 2)(); index++) {
-          // setTimeout(() => {
-          this.createAIPlayer(
-            pos.add(p5.Vector.random2D().setMag(random(0, 100)))
-          );
-          // }, Prob.normal(16, 16 * 40)());
-        }
-      }
-    }, 3 * 1000);
+    // setInterval(() => {
+    //   if (this.players.length < 25) {
+    //     // while (this.AIs.length < 35) {
+    //     let pos = p5.Vector.random2D().setMag(random(300, 1000));
+    //     for (let index = 0; index < Prob.normal(10, 2)(); index++) {
+    //       // setTimeout(() => {
+    //       this.createAIPlayer(
+    //         pos.add(p5.Vector.random2D().setMag(random(0, 100)))
+    //       );
+    //       // }, Prob.normal(16, 16 * 40)());
+    //     }
+    //   }
+    // }, 3 * 1000);
 
     // // setInterval(() => {
     // // this.players.shuffle();
@@ -66,7 +70,7 @@ class Players {
       if (e.AIPlayer) {
         e.update();
       } else if (e === player) {
-        e.update(mouse);
+        e.update();
       } else {
         e.update(p5.Vector.add(e.pos, createVector(0, -1)));
       }
@@ -75,7 +79,6 @@ class Players {
   draw() {
     this.players.forEach((e, i) => {
       e.draw({ healthBar: true, nameTag: !e.AIPlayer || i <= 1, body: true });
-
     });
   }
   createAIPlayer(pos, color) {

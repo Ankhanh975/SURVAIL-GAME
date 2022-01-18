@@ -46,11 +46,11 @@ class Player extends Base {
     });
   }
 
-  update(lookAt, moveTo) {
+  update() {
     super.update();
     {
       // Limit max rotate to speed of radians(37.5) per frame
-      let heading = p5.Vector.sub(lookAt, this.pos).rotate(radians(90));
+      let heading = p5.Vector.sub(this.lookAt, this.pos).rotate(radians(90));
       let angle = heading.angleBetween(this.heading);
 
       // console.log("angle", degrees(angle));
@@ -64,9 +64,10 @@ class Player extends Base {
       }
       this.heading.angle = this.heading.heading();
     }
-    if (moveTo) {
-      this.setPos(moveTo);
-    }
+  }
+  LookAt(lookAt) {
+    // To lookAt some point on the map
+    this.lookAt = lookAt;
   }
   draw(options) {
     push();
@@ -150,7 +151,7 @@ class Player extends Base {
       if (this.AIPlayer) {
         hitRange = [150, radians(0 - 90) + this.heading.angle, radians(40)];
       } else {
-        hitRange = [280, radians(0 - 90) + this.heading.angle, radians(40)];
+        hitRange = [280, radians(0 - 90) + this.heading.angle, radians(60)];
       }
 
       this.parent.players.forEach((e, i) => {

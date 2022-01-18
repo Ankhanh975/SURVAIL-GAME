@@ -5,9 +5,11 @@ class Base {
 
     this.velocity = createVector(0, 0);
     this.acceleration = createVector(0, 0);
-    this.heading = createVector(1, 0);
+    this.heading = createVector(100, 0);
     this.heading.angle = 0;
-
+    // this.lookAt may be different from this.heading 
+    // because the heading have limited change in speed when this.lookAt is not
+    this.lookAt = createVector(100, 0);
     this.parent = parent;
 
     this.name = name;
@@ -31,7 +33,8 @@ class Base {
   }
   update() {
     this.health += this.recovery;
-    this.health = max(this.health, this.totalHealth);
+    this.health = min(this.health, this.totalHealth);
+    this.health = max(this.health, 0);
     this.lastPos = this.pos.copy();
   }
 }

@@ -29,16 +29,16 @@ function keyPressed() {
     }
     let d = createVector(0, 0);
     if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      d.add(createVector(-32.5, 0));
+      d.add(createVector(-30, 0));
     }
     if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      d.add(createVector(32.5, 0));
+      d.add(createVector(30, 0));
     }
     if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      d.add(createVector(0, -32.5));
+      d.add(createVector(0, -30));
     }
     if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      d.add(createVector(0, 32.5));
+      d.add(createVector(0, 30));
     }
     let delta = p5.Vector.sub(player.pos, player.lastPos);
     if (delta.mag() < 1) return;

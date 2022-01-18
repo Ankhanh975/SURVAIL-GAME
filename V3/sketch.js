@@ -55,12 +55,12 @@ addFunction("draw", () => {
 
   {
     // if (isPressed && !player.onPunch()) {
-    //
+    
     //   setTimeout(() => {
     //     queue.addDraw(`
     //     push();
     //     translate(player.pos.x, player.pos.y);
-    //     rotate(radians(0 - 90) + player.angle);
+    //     rotate(radians(0 - 90) + player.heading.angle);
     //     fill(255, 0, 0, 100);
     //     stroke(255, 255, 0, 200);
     //     strokeWeight(4);
@@ -71,8 +71,8 @@ addFunction("draw", () => {
     //       2 * 250,
     //       // -(player.angle ) / 2,
     //       // +(player.angle ) / 2,
-    //       -radians(80) / 2,
-    //       radians(80) / 2,
+    //       -radians(40) / 2,
+    //       radians(40) / 2,
     //       PIE
     //     );
     //     pop();
@@ -107,7 +107,8 @@ addFunction("draw", () => {
   // onController need to after players.update
 
   queue.updatePro();
-  players.update(mouse);
+  player.LookAt(mouse)
+  players.update();
   onController(player);
   obstacles.update();
   collisions.update();

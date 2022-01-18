@@ -125,6 +125,25 @@ class Obstacles {
     }
     return path;
   }
+  FindStraightPath(posStart, posEnd) {
+    let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
+    let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
+    let path = lineBresenham_1(...pGridStart, ...pGridEnd);
+    
+    // Find path not valid
+    for (let i = 0; i < path.length; i++) {
+      if (this.get.path[i]) {
+        
+      }
+      
+    }
+    for (let i = 0; i < path.length; i++) {
+      path[i] = this.grid.GridCoordsToWorldCoords(path[i][0], path[i][1]);
+      path[i] = [path[i][0] + 52 / 2, path[i][1] + 52 / 2];
+    }
+
+    return path;
+  }
   isValidPath(path) {
     let isValid = true;
     path.forEach((each) => {
