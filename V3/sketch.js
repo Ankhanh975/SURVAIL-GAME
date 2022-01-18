@@ -110,29 +110,30 @@ addFunction("draw", () => {
   players.update(mouse);
   onController(player);
   obstacles.update();
-  // system.update();
+  system.update();
 
   players.players.forEach((player) => {
-    system.getPotentials(player.circle).forEach((collider) => {
-      if (system.checkCollision(player.circle, collider)) {
-        const { overlapV } = system.response;
-        const b = system.response.b.parent;
 
-        let x = -overlapV.x;
-        let y = -overlapV.y;
-        const pushOut = createVector(x, y);
-        pushOut.setMag(pushOut.mag() * 0.75);
-        pushOut.limit(5);
-
+    system.checkOne(player.circle, (response) => {
+      const x = -response.overlapV.x;
+      const y = -response.overlapV.y;
+      const b = response.b.parent;
+      const pushOut = createVector(x, y);
+      if (response.b.parent instanceof Player) {
         const pushOut2 = createVector(x, y);
-        pushOut2.setMag(pushOut2.mag() * -0.25);
+        pushOut.limit(5);
         pushOut2.limit(5);
+
+        pushOut.setMag(pushOut.mag() * 0.6);
+        pushOut2.setMag(pushOut2.mag() * -0.4);
+
         player.pos.add(pushOut);
         player.circle.setPosition(player.pos.x, player.pos.y);
-        try {
-          b.pos.add(pushOut2);
-          b.circle.setPosition(b.pos.x, b.pos.y);
-        } catch (TypeError) {}
+        b.pos.add(pushOut2);
+        b.circle.setPosition(b.pos.x, b.pos.y);
+      } else if (response.b.parent instanceof Obstacle) {
+        player.pos.add(pushOut);
+        player.circle.setPosition(player.pos.x, player.pos.y);
       }
     });
   });
@@ -202,7 +203,6 @@ Window Size: \n${width}, ${height}
 
   // Game make
   // by KHANH.
-
 });
 
 //   // shake

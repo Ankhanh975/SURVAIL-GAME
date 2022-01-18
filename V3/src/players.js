@@ -14,15 +14,15 @@ addFunction("preload", () => {
   Players_img[0][4] = loadImage("Assets/Animation_4.png");
   Players_img[0][5] = loadImage("Assets/Animation_5.png");
   
-  Players_img[0][6] = loadImage("Assets/Demo/Die0.png");
-  Players_img[0][7] = loadImage("Assets/Demo/Die1.png");
-  Players_img[0][8] = loadImage("Assets/Demo/Die2.png");
-  Players_img[0][9] = loadImage("Assets/Demo/Die3.png");
-  Players_img[0][10] = loadImage("Assets/Demo/Die4.png");
-  Players_img[0][11] = loadImage("Assets/Demo/Die5.png");
-  Players_img[0][12] = loadImage("Assets/Demo/Die6.png");
-  Players_img[0][13] = loadImage("Assets/Demo/Die7.png");
-  Players_img[0][14] = loadImage("Assets/Demo/Die8.png");
+  // Players_img[0][6] = loadImage("Assets/Demo/Die0.png");
+  // Players_img[0][7] = loadImage("Assets/Demo/Die1.png");
+  // Players_img[0][8] = loadImage("Assets/Demo/Die2.png");
+  // Players_img[0][9] = loadImage("Assets/Demo/Die3.png");
+  // Players_img[0][10] = loadImage("Assets/Demo/Die4.png");
+  // Players_img[0][11] = loadImage("Assets/Demo/Die5.png");
+  // Players_img[0][12] = loadImage("Assets/Demo/Die6.png");
+  // Players_img[0][13] = loadImage("Assets/Demo/Die7.png");
+  // Players_img[0][14] = loadImage("Assets/Demo/Die8.png");
 
 });
 
