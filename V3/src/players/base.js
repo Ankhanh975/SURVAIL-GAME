@@ -37,4 +37,8 @@ class Base {
     this.health = max(this.health, 0);
     this.lastPos = this.pos.copy();
   }
+  getNear(maxDist) {
+    // Get near object next to this.pos
+    
+  }
 }

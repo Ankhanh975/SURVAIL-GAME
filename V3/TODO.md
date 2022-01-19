@@ -14,5 +14,14 @@ https://github.com/amio/console.js
 
 
 .editorconfig
-Learn Bootstrap in less than 20 minutes - Responsive Website Tutorial
+Bootstrap js
+popper js
+url js
+highcharts js
+chance js
+fabric js
+bootbox js
+
 https://github.com/cwilso/WebAudio/blob/master/js/main.js
+
+https://js13kgames.github.io/resources/

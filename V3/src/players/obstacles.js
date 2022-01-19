@@ -95,10 +95,13 @@ class Obstacles {
       return [];
     }
     // console.log("old", path);
-    for (let i = 0; i < path.length; i++) {
-      path[i] = this.grid.GridCoordsToWorldCoords(path[i][0], path[i][1]);
-      path[i] = [path[i][0] + 52 / 2, path[i][1] + 52 / 2];
-    }
+    path = path.map((each) => {
+      each = this.grid.GridCoordsToWorldCoords(...each);
+      each[0] += 52 / 2;
+      each[1] += 52 / 2;
+      return each;
+    });
+
     // console.log("path", path);
 
     // Because a* pathfinding work not on continuous coordinates so have to go to connected points
@@ -129,20 +132,27 @@ class Obstacles {
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
     let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
     let path = lineBresenham_1(...pGridStart, ...pGridEnd);
-    
-    // Find path not valid
-    for (let i = 0; i < path.length; i++) {
-      if (this.get.path[i]) {
-        
-      }
-      
-    }
-    for (let i = 0; i < path.length; i++) {
-      path[i] = this.grid.GridCoordsToWorldCoords(path[i][0], path[i][1]);
-      path[i] = [path[i][0] + 52 / 2, path[i][1] + 52 / 2];
-    }
+    // console.log("path", path);
 
-    return path;
+    // Check path valid or invalid
+    let isValid = !path.some((each) => {
+      return this.grid.get(...each);
+    });
+    if (isValid) {
+      return [
+        [posStart.x, posStart.y],
+        [posEnd.x, posEnd.y],
+      ];
+      path = path.map((each) => {
+        each = this.grid.GridCoordsToWorldCoords(...each);
+        each[0] += 52 / 2;
+        each[1] += 52 / 2;
+        return each;
+      });
+      return path;
+    } else {
+      return [];
+    }
   }
   isValidPath(path) {
     let isValid = true;

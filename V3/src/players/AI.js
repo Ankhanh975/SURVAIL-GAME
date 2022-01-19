@@ -8,7 +8,7 @@ class AIPlayer extends Player {
     this.path = [];
     this.lastPathFinding = frameCount - 999;
     setInterval(() => {
-    //   console.log("update target");
+      //   console.log("update target");
       let target;
       let targetDis = Infinity;
       this.parent.realPlayers.forEach((p) => {
@@ -41,23 +41,26 @@ class AIPlayer extends Player {
           }
         }
       }
-
-      if (dist < 130) {
-        toLookAt.setMag(4.5);
-        toLookAt.rotate(radians(180));
-        this.addPos(toLookAt);
-      }
-      if (dist > 175) {
-        toLookAt.setMag(3.0);
-        this.addPos(toLookAt);
+      if (obstacles.FindStraightPath(this.pos, this.target.pos).length > 0) {
+        if (dist < 1100) {
+          if (dist < 130) {
+            toLookAt.setMag(4.5);
+            toLookAt.rotate(radians(180));
+            this.addPos(toLookAt);
+          }
+          if (dist > 175) {
+            toLookAt.setMag(3.0);
+            this.addPos(toLookAt);
+          }
+        }
       }
     }
     //   a* pathfinding
-    // {
+    // if (this.target) {
     //   let totalMoveLength = 4.0;
     //   // console.log("path", this.path, this.lastPathFinding - frameCount)
     //   if (this.path.length < 3 && frameCount - this.lastPathFinding > 10) {
-    //     this.path = obstacles.FindPath(this.pos, target);
+    //     this.path = obstacles.FindPath(this.pos, this.target.pos);
     //     this.lastPathFinding = frameCount;
     //   }
     //   if (this.path.length >= 2) {
@@ -73,7 +76,7 @@ class AIPlayer extends Player {
     //     ) {
     //       // If last node is too far away from the this.path
     //       // So: run pathfinding
-    //       this.path = obstacles.FindPath(this.pos, target);
+    //       this.path = obstacles.FindPath(this.pos, this.target.pos);
     //       this.lastPathFinding = frameCount;
     //     }
     //   }
@@ -88,12 +91,12 @@ class AIPlayer extends Player {
     //   });
 
     //   if (isValid === false) {
-    //     this.path = obstacles.FindPath(this.pos, target);
+    //     this.path = obstacles.FindPath(this.pos, this.target.pos);
     //     this.lastPathFinding = frameCount;
     //   }
-    //   if (target.dist(this.pos) > 100 && this.path.length > 0) {
+    //   if (this.target.pos.dist(this.pos) > 100 && this.path.length > 0) {
     //     this.path.pop();
-    //     this.path.push([target[0], target[1]]);
+    //     this.path.push([this.target.pos.x, this.target.pos.y]);
     //     this.path.every((each) => {
     //       if (totalMoveLength < 0.01) {
     //         if (
@@ -111,6 +114,7 @@ class AIPlayer extends Player {
 
     //       return true;
     //     });
+
     //   }
     // }
   }

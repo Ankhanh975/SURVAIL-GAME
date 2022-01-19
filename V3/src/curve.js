@@ -23,6 +23,13 @@ let Curve = {
 };
 
 function lineBresenham_1(x1, y1, x2, y2) {
+  if (x1 === NaN || y1 === NaN || x2 === NaN || y2 === NaN) {
+    return [];
+  }
+  x1 = Math.floor(x1);
+  y1 = Math.floor(y1);
+  x2 = Math.floor(x2);
+  y2 = Math.floor(y2);
   // Draw line between two points
   let pixels = [];
   let c2, c, Dx, Dy, x, y;

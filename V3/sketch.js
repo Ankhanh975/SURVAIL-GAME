@@ -39,15 +39,15 @@ addFunction("setup", () => {
   players.players[0] = player;
   players.realPlayers = [player];
 
-  let friend = new Player(players.img[5], players);
-  friend.health = 400;
-  friend.totalHealth = 400;
-  friend.name = "friend";
-  friend.damage = 2.5;
-  friend.addPos(createVector(100, 0));
-  friend.recovery = 0.001 * friend.health;
-  players.players[1] = friend;
-  players.realPlayers.push(friend);
+  // let friend = new Player(players.img[5], players);
+  // friend.health = 400;
+  // friend.totalHealth = 400;
+  // friend.name = "friend";
+  // friend.damage = 2.5;
+  // friend.addPos(createVector(100, 0));
+  // friend.recovery = 0.001 * friend.health;
+  // players.players[1] = friend;
+  // players.realPlayers.push(friend);
 });
 
 addFunction("draw", () => {
@@ -176,15 +176,15 @@ addFunction("draw", () => {
   //   tower.draw();
   // }
 
-  if (players.players[3]) {
-    let path = players.players[3].path;
-    path.forEach((e, i) => {
-      push();
-      fill(0, 0, 255, 90);
-      circle(e[0], e[1], 40 + i * 3);
-      pop();
-    });
-  }
+  // if (players.players[1]) {
+  //   let path = players.players[1].path;
+  //   path.forEach((e, i) => {
+  //     push();
+  //     fill(0, 0, 255, 90);
+  //     circle(e[0], e[1], 40 + i * 3);
+  //     pop();
+  //   });
+  // }
 
   queue.updateDraw();
   sparks.draw();
