@@ -16,15 +16,19 @@
 - 11/01/2022: Use font from google fonts
 - 11/01/2022: Proper jump dicection detection 
 - 11/01/2022: Proper collision detection handling!
-- 12/01/2022: Add continuous handling for box placement (before when fast movement is may miss )
-# Demo: https://youtu.be/NoWH5l08dMM
+TODO: this check is every move => slow
+
+- 19/01/2022: reFerter code
+- 19/01/2022: Add continuous handling for box placement (before when fast movement is may miss )
 - TODO: pathfinding: https://github.com/qiao/PathFinding.js
 - TODO: More particles effects
 - TODO: Sound
 - TODO: Preset obstacles as topographic (simplex2 noise)
+- TODO: Đặt obstacles vào thành 1 convex polygons 
+- Zomble behaviour: Following it friend, wander
 - 
 - 
-- 
+Demo: https://youtu.be/NoWH5l08dMM
 # Explained folder structure:
 ```
 "V1", "V2", V3: I make a new copy when a major refactored version happens.

@@ -55,7 +55,6 @@ addFunction("draw", () => {
 
   {
     // if (isPressed && !player.onPunch()) {
-    
     //   setTimeout(() => {
     //     queue.addDraw(`
     //     push();
@@ -86,16 +85,22 @@ addFunction("draw", () => {
     sparks.create_particle(player.pos, [255, 0, 0], 3.5);
   }
   if (isPressed2) {
-    // let line = lineBresenham_1(
-    //   mouse.x,
-    //   mouse.y,
-    //   mousePos[mousePos.length - 1][0],
-    //   mousePos[mousePos.length - 1][1]
-    // );
-    // console.log(line);
-    // line.forEach((point) => {
-    //   obstacles.createObstacle({ x: point[0], y: point[1] });
-    // });
+    let pGridStart = obstacles.grid.WorldCoordsToGridCoords(mouse.x, mouse.y);
+    let pGridEnd = obstacles.grid.WorldCoordsToGridCoords(
+      mousePos[mousePos.length - 1][0],
+      mousePos[mousePos.length - 1][1]
+    );
+    let path = lineBresenham_1(...pGridStart, ...pGridEnd);
+    path = path.map((each) => {
+      each = obstacles.grid.GridCoordsToWorldCoords(...each);
+      each[0] += 52 / 2;
+      each[1] += 52 / 2;
+      return each;
+    });
+    console.log(path);
+    path.forEach((point) => {
+      obstacles.createObstacle(createVector(point[0], point[1]));
+    });
     obstacles.createObstacle(mouse);
     sparks.create_particle(mouse, [9, 200, 9]);
   }
@@ -107,14 +112,13 @@ addFunction("draw", () => {
   // onController need to after players.update
 
   queue.updatePro();
-  player.LookAt(mouse)
+  player.LookAt(mouse);
   players.update();
   onController(player);
   obstacles.update();
   collisions.update();
 
   players.players.forEach((player) => {
-
     collisions.checkOne(player.circle, (response) => {
       const x = -response.overlapV.x;
       const y = -response.overlapV.y;
@@ -196,6 +200,7 @@ addFunction("draw", () => {
   menu.display(
     `\
 Players: ${players.players.length}
+Obstacles: ${obstacles.obstacles.length}
 Kill: ${killCount}
 Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
 Window Size: \n${width}, ${height}
