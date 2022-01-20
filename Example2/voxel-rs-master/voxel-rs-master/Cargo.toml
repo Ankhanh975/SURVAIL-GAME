@@ -1,0 +1,6 @@
+[workspace]
+members = ["client", "common", "network", "quint", "server"]
+
+[profile.release]
+debug = true
+opt-level = 3

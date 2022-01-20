@@ -1,0 +1,6 @@
+target
+**/*.rs.bk
+/config
+/.idea
+atlas.png
+*.swp

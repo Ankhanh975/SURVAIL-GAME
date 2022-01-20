@@ -1,0 +1,3 @@
+NormalCube(
+    face_textures: ["grass_top", "grass_top", "grass_top", "dirt", "grass_top", "grass_top"],
+)
