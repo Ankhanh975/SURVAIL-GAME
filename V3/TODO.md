@@ -25,3 +25,10 @@ bootbox js
 https://github.com/cwilso/WebAudio/blob/master/js/main.js
 
     https://js13kgames.github.io/resources/
+    
+    https://discord.gg/NjjQ3BU
+    https://discord.gg/UwqG75R
+    https://discord.gg/eHjUVrm
+    https://discord.gg/patchquest
+    https://discord.gg/Ye6zzfQ
+    https://discord.com/invite/dRDqVEA
