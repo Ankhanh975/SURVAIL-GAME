@@ -31,7 +31,7 @@ class Players {
     this.initAnimation();
     this.parent = globalThis
     this.players = [];
-      for (let index = 0; index < 2; index++) {
+      for (let index = 0; index < 100; index++) {
         this.createAIPlayer();
         
       }

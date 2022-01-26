@@ -1,29 +1,6 @@
 // Call to translate() or rect() is not work inside setTimeout(() => {});
 // So we queue the event to the next frame
-class Queue {
-  constructor() {
-    this.queue1 = [];
-    this.queue2 = [];
-  }
-  addDraw(event) {
-    this.queue1.push(event);
-  }
-  addPro(event) {
-    this.queue2.push(event);
-  }
-  updateDraw() {
-    this.queue1.forEach((q) => {
-      eval(q);
-    });
-    this.queue1 = [];
-  }
-  updatePro() {
-    this.queue2.forEach((q) => {
-      eval(q);
-    });
-    this.queue2 = [];
-  }
-}
+
 class Ground {
   // Set background base on player position
   constructor(img) {

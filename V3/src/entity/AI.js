@@ -32,8 +32,7 @@ class AIPlayer extends Player {
       lookAt = this.target.pos;
       dist = this.pos.dist(lookAt);
       toLookAt = p5.Vector.sub(lookAt, this.pos);
-      super.setRotation(lookAt);
-      //   this.setRotation(createVector(0, 0));
+      this.setAngle(toLookAt.heading());
       if (dist < 150) {
         if (!this.onPunch()) {
           if (random(0, 100) >= 93.5) {

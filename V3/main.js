@@ -11,7 +11,6 @@ let mousePos = [];
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
-  // createCanvas(1024, 768);
   createCanvas(windowWidth, windowHeight);
   imageMode(CENTER);
   // TODO
@@ -20,7 +19,7 @@ addFunction("setup", () => {
   // rectMode(CENTER);
   // angleMode(DEGREES);
   // textureWrap(REPEAT);
-  background(100);
+  // background(100);
 });
 
 addFunction("setup", () => {
@@ -33,6 +32,7 @@ addFunction("setup", () => {
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
   player.addComponent(component.onController)
+  player.addComponent(component.jump)
   player.health = 1000;
   player.totalHealth = 1000;
   player.damage = 4.5;
@@ -113,9 +113,8 @@ addFunction("draw", () => {
   // onController need to after players.update
 
   queue.updatePro();
-  player.setRotation(mouse);
+  player.setAngle(p5.Vector.sub(mouse, player.pos).heading());
   players.update();
-  onController(player);
   obstacles.update();
   collisions.update();
 
@@ -223,3 +222,9 @@ Window Size: \n${width}, ${height}
 //     }, 16 * 5.5);
 //   }, 191);
 // }
+function keyPressed() {
+  // if pressed Enter => jump
+  if (keyCode === 32) {
+    player.jump();
+  }
+}

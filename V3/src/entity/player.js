@@ -1,8 +1,44 @@
-class Player extends Base {
+class PlayerBase extends Base {
+  constructor(parent, pos = [0, 0], name = "", health) {
+    super();
+    this.pos = createVector(...pos);
+    this.lastPos = createVector(0, 0);
+
+    this.velocity = createVector(0, 0);
+    this.acceleration = createVector(0, 0);
+    this.parent = parent;
+
+    this.name = name;
+
+    this.health = health;
+    this.totalHealth = health;
+    this.recovery = 0.0;
+    this.damage = 1;
+
+    // physics in collision detection system
+    this.circle = null;
+  }
+  setPos(pos) {
+    this.pos = pos;
+    this.circle.setPosition(this.pos.x, this.pos.y);
+  }
+
+  addPos(pos) {
+    // pos: p5js vector add to this.pos
+    this.setPos(this.pos.add(pos));
+  }
+  update() {
+    super.update()
+    this.health += this.recovery;
+    this.health = constrain(this.health, 0, this.totalHealth);
+    this.lastPos = this.pos.copy();
+  }
+  
+}
+class Player extends PlayerBase {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
     super(parent, pos, name, health);
-    this.addComponent(component.rotation)
-    
+
     this.animation = animation;
     this.animationLength = this.animation.length;
     this.animateFrames = 0;
@@ -20,6 +56,7 @@ class Player extends Base {
     );
     this.circle.parent = this;
     collisions.updateBody(this.circle);
+    this.addComponent(component.rotation);
   }
   setPos(pos) {
     super.setPos(pos);
@@ -56,7 +93,7 @@ class Player extends Base {
     translate(Math.round(this.pos.x), Math.round(this.pos.y));
     if (options.body) {
       push();
-      rotate(this.rotation.getAngle());
+      rotate(this.getAngle());
       if (this.punchHand === "left" && this.animateFrames !== 0) {
         scale(-1, 1);
         // translate(-10, 0);
@@ -131,9 +168,9 @@ class Player extends Base {
       obstacles.obstacles.forEach((e, i) => {});
       let hitRange;
       if (this.AIPlayer) {
-        hitRange = [150, radians(0 - 90) + this.getRotation(), radians(40)];
+        hitRange = [150, radians(0 - 90) + this.getAngle(), radians(40)];
       } else {
-        hitRange = [280, radians(0 - 90) + this.getRotation(), radians(60)];
+        hitRange = [280, radians(0 - 90) + this.getAngle(), radians(60)];
       }
 
       this.parent.players.forEach((e, i) => {

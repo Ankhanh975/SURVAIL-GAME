@@ -42,3 +42,28 @@ addFunction("draw", () => {
   // background(100);
   noSmooth();
 });
+
+class Queue {
+  constructor() {
+    this.queue1 = [];
+    this.queue2 = [];
+  }
+  addDraw(event) {
+    this.queue1.push(event);
+  }
+  addPro(event) {
+    this.queue2.push(event);
+  }
+  updateDraw() {
+    this.queue1.forEach((q) => {
+      eval(q);
+    });
+    this.queue1 = [];
+  }
+  updatePro() {
+    this.queue2.forEach((q) => {
+      eval(q);
+    });
+    this.queue2 = [];
+  }
+}
