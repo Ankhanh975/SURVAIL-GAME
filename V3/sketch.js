@@ -32,6 +32,7 @@ addFunction("setup", () => {
 
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
+  player.addComponent(component.onController)
   player.health = 1000;
   player.totalHealth = 1000;
   player.damage = 4.5;
@@ -112,7 +113,7 @@ addFunction("draw", () => {
   // onController need to after players.update
 
   queue.updatePro();
-  player.LookAt(mouse);
+  player.setRotation(mouse);
   players.update();
   onController(player);
   obstacles.update();
@@ -145,16 +146,12 @@ addFunction("draw", () => {
 });
 
 addFunction("draw", () => {
-  // translate(0.5, 0.5);
-  translate(width / 2, height / 2);
   if (player.health < 0) {
     scale(0.75);
   }
   if (width < 500) {
     scale(0.5);
   }
-  // background(100);
-  noSmooth();
 });
 addFunction("draw", () => {
   push();

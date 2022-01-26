@@ -35,3 +35,10 @@ addFunction("preload", () => {
   // song.play();
   // img = loadImage("Assets/Zombie.png");
 });
+
+addFunction("draw", () => {
+  // translate(0.5, 0.5);
+  translate(width / 2, height / 2);
+  // background(100);
+  noSmooth();
+});

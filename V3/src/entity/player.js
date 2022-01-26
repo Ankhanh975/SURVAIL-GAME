@@ -1,6 +1,8 @@
 class Player extends Base {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
     super(parent, pos, name, health);
+    this.addComponent(component.rotation)
+    
     this.animation = animation;
     this.animationLength = this.animation.length;
     this.animateFrames = 0;
@@ -48,33 +50,13 @@ class Player extends Base {
 
   update() {
     super.update();
-    {
-      // Limit max rotate to speed of radians(37.5) per frame
-      let heading = p5.Vector.sub(this.lookAt, this.pos).rotate(radians(90));
-      let angle = heading.angleBetween(this.heading);
-
-      // console.log("angle", degrees(angle));
-      if (abs(angle) < radians(37.5)) {
-        this.heading = heading;
-      } else if (angle > 0) {
-        this.heading.rotate(radians(-37.5));
-      } else if (isNaN(angle)) {
-      } else {
-        this.heading.rotate(radians(37.5));
-      }
-      this.heading.angle = this.heading.heading();
-    }
-  }
-  LookAt(lookAt) {
-    // To lookAt some point on the map
-    this.lookAt = lookAt;
   }
   draw(options) {
     push();
     translate(Math.round(this.pos.x), Math.round(this.pos.y));
     if (options.body) {
       push();
-      rotate(this.heading.angle);
+      rotate(this.rotation.getAngle());
       if (this.punchHand === "left" && this.animateFrames !== 0) {
         scale(-1, 1);
         // translate(-10, 0);
@@ -149,9 +131,9 @@ class Player extends Base {
       obstacles.obstacles.forEach((e, i) => {});
       let hitRange;
       if (this.AIPlayer) {
-        hitRange = [150, radians(0 - 90) + this.heading.angle, radians(40)];
+        hitRange = [150, radians(0 - 90) + this.getRotation(), radians(40)];
       } else {
-        hitRange = [280, radians(0 - 90) + this.heading.angle, radians(60)];
+        hitRange = [280, radians(0 - 90) + this.getRotation(), radians(60)];
       }
 
       this.parent.players.forEach((e, i) => {
