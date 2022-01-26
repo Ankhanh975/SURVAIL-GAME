@@ -1,4 +1,3 @@
-
 class Base {
   constructor(parent, pos = [0, 0], name = "", health) {
     this.updates = [];
