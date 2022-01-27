@@ -70,28 +70,28 @@ class Player extends PlayerBase {
   setPos(pos) {
     super.setPos(pos);
 
-    collisions.checkOne(this.circle, (response) => {
-      const x = -response.overlapV.x;
-      const y = -response.overlapV.y;
-      const b = response.b.parent;
-      const pushOut = createVector(x, y);
-      if (response.b.parent instanceof Player) {
-        const pushOut2 = createVector(x, y);
-        pushOut.limit(5);
-        pushOut2.limit(5);
+    // collisions.checkOne(this.circle, (response) => {
+    //   const x = -response.overlapV.x;
+    //   const y = -response.overlapV.y;
+    //   const b = response.b.parent;
+    //   const pushOut = createVector(x, y);
+    //   if (response.b.parent instanceof Player) {
+    //     const pushOut2 = createVector(x, y);
+    //     pushOut.limit(5);
+    //     pushOut2.limit(5);
 
-        pushOut.setMag(pushOut.mag() * 0.6);
-        pushOut2.setMag(pushOut2.mag() * -0.4);
+    //     pushOut.setMag(pushOut.mag() * 0.6);
+    //     pushOut2.setMag(pushOut2.mag() * -0.4);
 
-        this.pos.add(pushOut);
-        this.circle.setPosition(this.pos.x, this.pos.y);
-        b.pos.add(pushOut2);
-        b.circle.setPosition(b.pos.x, b.pos.y);
-      } else if (response.b.parent instanceof Obstacle) {
-        this.pos.add(pushOut);
-        this.circle.setPosition(this.pos.x, this.pos.y);
-      }
-    });
+    //     this.pos.add(pushOut);
+    //     this.circle.setPosition(this.pos.x, this.pos.y);
+    //     b.pos.add(pushOut2);
+    //     b.circle.setPosition(b.pos.x, b.pos.y);
+    //   } else if (response.b.parent instanceof Obstacle) {
+    //     this.pos.add(pushOut);
+    //     this.circle.setPosition(this.pos.x, this.pos.y);
+    //   }
+    // });
   }
 
   update() {
@@ -146,7 +146,7 @@ class Player extends PlayerBase {
   onPunch() {
     return this.animateFrames !== 0;
   }
-  startPunch(hand = null) {
+  startPunch(hand, target) {
     this.health -= 1;
     // print("startPunch", this.animateFrames, this.animation.length);
     {
@@ -173,29 +173,30 @@ class Player extends PlayerBase {
     }
 
     // effects to all players when punch: push them backwards and minus their health
+    target = target || collisions.getPunchAble(this);
     setTimeout(() => {
-      collisions.getPunchAble().forEach((e) => {
-        if (!e instanceof Player) {
+      target.forEach((entity) => {
+        if (!entity instanceof Player) {
           return;
         }
         // print("Hit players.AIs", i);
-        e = e.parent;
-        e.getHit();
 
-        if (e.health < 0) {
-          e.die();
+        entity.getHit();
+
+        if (entity.health < 0) {
+          entity.die();
           return;
         }
         // Push enemies backwards
         let start = millis();
         let jump = () => {
           let deltaT = (millis() - start) / 16 / 1.75;
-          let d = p5.Vector.sub(this.pos, e.pos);
+          let d = p5.Vector.sub(this.pos, entity.pos);
           d.normalize();
           d.setMag(
             -d.mag() * Curve.f2(deltaT, 0.1, 0.6, 0.275) * 21 * this.damage - 3
           );
-          e.addPos(d);
+          entity.addPos(d);
         };
         jump();
         let id9 = setInterval(() => {

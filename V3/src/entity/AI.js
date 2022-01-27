@@ -36,11 +36,11 @@ class AIPlayer extends Player {
       if (dist < 150) {
         if (!this.onPunch()) {
           if (random(0, 100) >= 93.5) {
-            this.startPunch();
+            this.startPunch(null, [this.target]);
           }
         }
       }
-      if (obstacles.FindStraightPath(this.pos, this.target.pos).length > 0) {
+      // if (obstacles.FindStraightPath(this.pos, this.target.pos).length > 0) {
         if (dist < 1100) {
           if (dist < 130) {
             toLookAt.setMag(4.5);
@@ -52,7 +52,7 @@ class AIPlayer extends Player {
             this.addPos(toLookAt);
           }
         }
-      }
+      // }
     }
     //   a* pathfinding
     // if (this.target) {

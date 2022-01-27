@@ -11,30 +11,28 @@ class Collisions2 extends Collisions {
     this.remove(collider);
     return all;
   }
-  getPunchAble(player) {
-    return [];
-    player.pos.x;
-    player.pos.y;
-    player.getAngle();
+  getPunchAble(p, callback) {
+    //   From p to anther close player
+    let all = [];
+    let angle = p.getAngle();
+    angle = createVector(0, -1).rotate(angle).rotate(-radians(90)).heading();
+    console.log(angle, degrees(angle));
 
-    let hitRange;
-    if (this.AIPlayer) {
-      hitRange = [150, radians(0 - 90) + this.getAngle(), radians(40)];
-    } else {
-      hitRange = [280, radians(0 - 90) + this.getAngle(), radians(60)];
-    }
+    const collider = this.createPolygon({ x: p.pos.x, y: p.pos.y }, [
+      { x: -152, y: 310 },
+      { x: 152, y: 310 },
+      { x: -0, y: -10 },
+    ]);
 
-    this.parent.players.forEach((e, i) => {
-      let hit = collidePointArc(
-        e.pos.x,
-        e.pos.y,
-        this.pos.x,
-        this.pos.y,
-        hitRange[0],
-        hitRange[1],
-        hitRange[2]
-      );
+    collider.rotate(angle);
+    this.updateBody(collider);
+    this.checkOne(collider, (response) => {
+      if (response.b.parent !== p) {
+        all.push(response.b.parent);
+      }
     });
+    this.remove(collider);
+    return all;
   }
   isFree(entity, newPos) {
     // Check if entity place in new position is in possible slot

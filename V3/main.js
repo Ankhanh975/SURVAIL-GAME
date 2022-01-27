@@ -57,33 +57,6 @@ addFunction("setup", () => {
 addFunction("draw", () => {
   mouse = camera.toWorldCoords();
 
-  {
-    // if (isPressed && !player.onPunch()) {
-    //   setTimeout(() => {
-    //     queue.addDraw(`
-    //     push();
-    //     translate(player.pos.x, player.pos.y);
-    //     rotate(radians(0 - 90) + player.heading.angle);
-    //     fill(255, 0, 0, 100);
-    //     stroke(255, 255, 0, 200);
-    //     strokeWeight(4);
-    //     arc(
-    //       0,
-    //       0,
-    //       2 * 250,
-    //       2 * 250,
-    //       // -(player.angle ) / 2,
-    //       // +(player.angle ) / 2,
-    //       -radians(40) / 2,
-    //       radians(40) / 2,
-    //       PIE
-    //     );
-    //     pop();
-    //     `);
-    //   }, 190);
-    // }
-  }
-
   if (isPressed && !player.onPunch()) {
     player.startPunch();
     sparks.create_particle(player.pos, [255, 0, 0], 3.5);
@@ -110,8 +83,56 @@ addFunction("draw", () => {
       const pushOut = createVector(x, y);
       if (response.b.parent instanceof Player) {
         const pushOut2 = createVector(x, y);
+
+        pushOut.setMag(pushOut.mag() * 0.6);
+        pushOut2.setMag(pushOut2.mag() * -0.4);
         pushOut.limit(5);
         pushOut2.limit(5);
+        
+        player.pos.add(pushOut);
+        player.circle.setPosition(player.pos.x, player.pos.y);
+        b.pos.add(pushOut2);
+        b.circle.setPosition(b.pos.x, b.pos.y);
+      } else if (response.b.parent instanceof Obstacle) {
+        player.pos.add(pushOut);
+        player.circle.setPosition(player.pos.x, player.pos.y);
+      }
+    });
+  });
+  players.players.forEach((player) => {
+    collisions.checkOne(player.circle, (response) => {
+      const x = -response.overlapV.x;
+      const y = -response.overlapV.y;
+      const b = response.b.parent;
+      const pushOut = createVector(x, y);
+      if (response.b.parent instanceof Player) {
+        const pushOut2 = createVector(x, y);
+        pushOut.limit(10);
+        pushOut2.limit(10);
+
+        pushOut.setMag(pushOut.mag() * 0.6);
+        pushOut2.setMag(pushOut2.mag() * -0.4);
+
+        player.pos.add(pushOut);
+        player.circle.setPosition(player.pos.x, player.pos.y);
+        b.pos.add(pushOut2);
+        b.circle.setPosition(b.pos.x, b.pos.y);
+      } else if (response.b.parent instanceof Obstacle) {
+        player.pos.add(pushOut);
+        player.circle.setPosition(player.pos.x, player.pos.y);
+      }
+    });
+  });
+  players.players.forEach((player) => {
+    collisions.checkOne(player.circle, (response) => {
+      const x = -response.overlapV.x;
+      const y = -response.overlapV.y;
+      const b = response.b.parent;
+      const pushOut = createVector(x, y);
+      if (response.b.parent instanceof Player) {
+        const pushOut2 = createVector(x, y);
+        pushOut.limit(15);
+        pushOut2.limit(15);
 
         pushOut.setMag(pushOut.mag() * 0.6);
         pushOut2.setMag(pushOut2.mag() * -0.4);
@@ -143,22 +164,11 @@ addFunction("draw", () => {
   // {
   //   // Draw spawn at position 0, 0
   push();
-  let c = HSVtoRGB((frameCount % 1000) / 1000, 0.9, 0.7);
+  let c = HSVtoRGB((frameCount % 750) / 750, 0.9, 0.7);
   fill(...c, 75);
   circle(0, 0, 100);
 
   pop();
-  //   for (let i = 0; i < 5; i++) {
-  //     let particle = tower.create_particle(
-  //       createVector(0, 0),
-  //       [1758, 255, 255, 200],
-  //       5
-  //     );
-  //     particle.move(2.5);
-  //   }
-  //   tower.update();
-  //   tower.draw();
-  // }
 
   // if (players.players[1]) {
   //   let path = players.players[1].path;
@@ -169,7 +179,24 @@ addFunction("draw", () => {
   //     pop();
   //   });
   // }
-
+  if (isPressed) {
+    push();
+    translate(player.pos.x, player.pos.y);
+    rotate(radians(0 - 90) + player.getAngle());
+    fill(255, 0, 0, 90);
+    stroke(255, 255, 0, 180);
+    strokeWeight(4);
+    arc(
+      -10,
+      0,
+      2 * 300,
+      2 * 300,
+      -radians(40) / 2,
+      radians(40) / 2,
+      PIE
+    );
+    pop();
+  }
   queue.updateDraw();
   sparks.draw();
   players.draw();

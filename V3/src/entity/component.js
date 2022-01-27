@@ -99,15 +99,16 @@ component.jump = class {
 component.placeObstacle = class {
   // TODO: if move mouse to fast path will not be filled in
   constructor() {
+    this.mouse = createVector(0, 0);
     canvas = document.querySelector("#defaultCanvas0");
     canvas.addEventListener("mousemove", (event) => {
+      this.mouse = camera.toWorldCoords([event.clientX, event.clientY]);
       if (!isPressed2) {
         return;
       }
-      // console.log(event.clientX, event.clientY);
+      // sparks.create_particle(this.mouse, [9, 200, 9]);
+      obstacles.createObstacle(this.mouse);
 
-      const mouse = camera.toWorldCoords([event.clientX, event.clientY]);
-      obstacles.createObstacle(mouse);
       // let pGridStart = obstacles.grid.WorldCoordsToGridCoords(mouse.x, mouse.y);
       // let pGridEnd = obstacles.grid.WorldCoordsToGridCoords(
       //   mousePos[mousePos.length - 1][0],
@@ -125,7 +126,14 @@ component.placeObstacle = class {
       //   obstacles.createObstacle(createVector(point[0], point[1]));
       // });
       // obstacles.createObstacle(mouse);
-      sparks.create_particle(mouse, [9, 200, 9]);
     });
+    // canvas.addEventListener("mousemove", (event) => {});
   }
+  update = () => {
+    if (!isPressed2) {
+      return;
+    }
+    sparks.create_particle(this.mouse, [9, 200, 9]);
+    obstacles.createObstacle(this.mouse);
+  };
 };
