@@ -1,7 +1,6 @@
 let sparks;
 let camera;
 let players;
-let collisions;
 let player;
 let obstacles;
 let mouse;
@@ -23,7 +22,6 @@ addFunction("setup", () => {
 });
 
 addFunction("setup", () => {
-  collisions = new Collisions();
   sparks = new Sparks();
   obstacles = new Obstacles();
   camera = new Camera();
@@ -31,12 +29,14 @@ addFunction("setup", () => {
 
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
-  player.addComponent(component.onController)
-  player.addComponent(component.jump)
+  player.addComponent(component.onController);
+  player.addComponent(component.jump);
+  player.addComponent(component.placeObstacle);
   player.health = 1000;
   player.totalHealth = 1000;
   player.damage = 4.5;
   player.recovery = 0.001 * player.health;
+
   players.players[0] = player;
   players.realPlayers = [player];
 
@@ -49,6 +49,9 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
+  for (let index = 0; index < 1; index++) {
+    players.createAIPlayer();
+  }
 });
 
 addFunction("draw", () => {
@@ -85,26 +88,7 @@ addFunction("draw", () => {
     player.startPunch();
     sparks.create_particle(player.pos, [255, 0, 0], 3.5);
   }
-  if (isPressed2) {
-    let pGridStart = obstacles.grid.WorldCoordsToGridCoords(mouse.x, mouse.y);
-    let pGridEnd = obstacles.grid.WorldCoordsToGridCoords(
-      mousePos[mousePos.length - 1][0],
-      mousePos[mousePos.length - 1][1]
-    );
-    let path = lineBresenham_1(...pGridStart, ...pGridEnd);
-    path = path.map((each) => {
-      each = obstacles.grid.GridCoordsToWorldCoords(...each);
-      each[0] += 52 / 2;
-      each[1] += 52 / 2;
-      return each;
-    });
-    console.log(path);
-    path.forEach((point) => {
-      obstacles.createObstacle(createVector(point[0], point[1]));
-    });
-    obstacles.createObstacle(mouse);
-    sparks.create_particle(mouse, [9, 200, 9]);
-  }
+
   mousePos.push([mouse.x, mouse.y]);
 
   if (mousePos.length > 30) {

@@ -1,4 +1,14 @@
 const component = {};
+component.base = class {
+  name = "base";
+  constructor() {
+    this.x = 0;
+  }
+  update = () => {};
+  getX = () => {
+    return this.x;
+  };
+};
 
 component.rotation = class {
   // limit rotation speed
@@ -76,7 +86,7 @@ component.jump = class {
 
       this.parent.addPos(d);
     };
-    console.log(this, start, _jump);
+    // console.log(this, start, _jump);
 
     _jump();
     for (let i = 1; i <= 8; i++) {
@@ -85,4 +95,37 @@ component.jump = class {
       }, 16 * i);
     }
   };
+};
+component.placeObstacle = class {
+  // TODO: if move mouse to fast path will not be filled in
+  constructor() {
+    canvas = document.querySelector("#defaultCanvas0");
+    canvas.addEventListener("mousemove", (event) => {
+      if (!isPressed2) {
+        return;
+      }
+      // console.log(event.clientX, event.clientY);
+
+      const mouse = camera.toWorldCoords([event.clientX, event.clientY]);
+      obstacles.createObstacle(mouse);
+      // let pGridStart = obstacles.grid.WorldCoordsToGridCoords(mouse.x, mouse.y);
+      // let pGridEnd = obstacles.grid.WorldCoordsToGridCoords(
+      //   mousePos[mousePos.length - 1][0],
+      //   mousePos[mousePos.length - 1][1]
+      // );
+      // let path = lineBresenham_1(...pGridStart, ...pGridEnd);
+      // path = path.map((each) => {
+      //   each = obstacles.grid.GridCoordsToWorldCoords(...each);
+      //   each[0] += 52 / 2;
+      //   each[1] += 52 / 2;
+      //   return each;
+      // });
+      // console.log(path);
+      // path.forEach((point) => {
+      //   obstacles.createObstacle(createVector(point[0], point[1]));
+      // });
+      // obstacles.createObstacle(mouse);
+      sparks.create_particle(mouse, [9, 200, 9]);
+    });
+  }
 };

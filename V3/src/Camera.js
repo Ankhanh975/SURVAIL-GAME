@@ -66,15 +66,16 @@ class Camera {
     // Draw background behind everything (close to player for speed)
     this.ground.draw([-this.transform[0], -this.transform[1]], radius);
   }
-  toWorldCoords(pos = null) {
+  toWorldCoords(pos) {
     // Transform screen coordinates to world coordinates
     // Default: return position of the mouse
     let x, y;
-    if (pos === null) {
+    if (pos) {
+      x = pos[0] - width / 2;
+      y = pos[1] - height / 2;
+    } else {
       x = mouseX - width / 2;
       y = mouseY - height / 2;
-    } else {
-      [x, y] = pos;
     }
     // console.log("xy", x, y, [x - this.transform[0], y - this.transform[1]]);
     // return createVector(x - this.transform[0], y - this.transform[1]);

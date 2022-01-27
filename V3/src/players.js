@@ -31,10 +31,7 @@ class Players {
     this.initAnimation();
     this.parent = globalThis
     this.players = [];
-      for (let index = 0; index < 100; index++) {
-        this.createAIPlayer();
-        
-      }
+
     // while (this.players.length < 1) {
     //   let pos = p5.Vector.random2D().setMag(random(950, 1100));
     //   for (let index = 0; index < Prob.normal(10, 2)(); index++) {
@@ -72,7 +69,8 @@ class Players {
       } else if (e === player) {
         e.update();
       } else {
-        e.update(p5.Vector.add(e.pos, createVector(0, -1)));
+        // e.update(p5.Vector.add(e.pos, createVector(0, -1)));
+        e.update();
       }
     });
   }

@@ -28,12 +28,21 @@ class PlayerBase extends Base {
     this.setPos(this.pos.add(pos));
   }
   update() {
-    super.update()
+    super.update();
     this.health += this.recovery;
     this.health = constrain(this.health, 0, this.totalHealth);
     this.lastPos = this.pos.copy();
   }
-  
+  die() {
+    collisions.remove(this.circle);
+
+    const index = this.parent.players.indexOf(this);
+    if (index > -1) {
+      this.parent.players.splice(index, 1);
+    }
+    this._die = true;
+    killCount += 1;
+  }
 }
 class Player extends PlayerBase {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
@@ -165,61 +174,37 @@ class Player extends PlayerBase {
 
     // effects to all players when punch: push them backwards and minus their health
     setTimeout(() => {
-      obstacles.obstacles.forEach((e, i) => {});
-      let hitRange;
-      if (this.AIPlayer) {
-        hitRange = [150, radians(0 - 90) + this.getAngle(), radians(40)];
-      } else {
-        hitRange = [280, radians(0 - 90) + this.getAngle(), radians(60)];
-      }
-
-      this.parent.players.forEach((e, i) => {
-        let hit = collidePointArc(
-          e.pos.x,
-          e.pos.y,
-          this.pos.x,
-          this.pos.y,
-          hitRange[0],
-          hitRange[1],
-          hitRange[2]
-        );
-
-        if (hit) {
-          // print("Hit players.AIs", i);
-          e.getHit();
-
-          if (e.health < 0) {
-            collisions.remove(e.circle);
-
-            this.parent.players.splice(i, 1);
-            killCount += 1;
-          } else {
-            // Push enemies backwards
-            let start = millis();
-            let jump = () => {
-              let deltaT = (millis() - start) / 16 / 1.75;
-              let d = p5.Vector.sub(this.pos, e.pos);
-              d.normalize();
-              // console.log("d", deltaT, d);
-              d.setMag(
-                -d.mag() *
-                  Curve.f2(deltaT, 0.1, 0.6, 0.275) *
-                  21 *
-                  this.damage -
-                  3
-              );
-              e.addPos(d);
-            };
-            jump();
-            let id9 = setInterval(() => {
-              jump();
-            }, 16);
-
-            setTimeout(() => {
-              clearInterval(id9);
-            }, 16 * 5);
-          }
+      collisions.getPunchAble().forEach((e) => {
+        if (!e instanceof Player) {
+          return;
         }
+        // print("Hit players.AIs", i);
+        e = e.parent;
+        e.getHit();
+
+        if (e.health < 0) {
+          e.die();
+          return;
+        }
+        // Push enemies backwards
+        let start = millis();
+        let jump = () => {
+          let deltaT = (millis() - start) / 16 / 1.75;
+          let d = p5.Vector.sub(this.pos, e.pos);
+          d.normalize();
+          d.setMag(
+            -d.mag() * Curve.f2(deltaT, 0.1, 0.6, 0.275) * 21 * this.damage - 3
+          );
+          e.addPos(d);
+        };
+        jump();
+        let id9 = setInterval(() => {
+          jump();
+        }, 16);
+
+        setTimeout(() => {
+          clearInterval(id9);
+        }, 16 * 5);
       });
     }, 190);
   }
