@@ -1,7 +1,5 @@
-
-
 class Tower {
-  constructor(size = 200) {
+  constructor(size = 2000) {
     this.size = size;
     this.pg = createGraphics(this.size, this.size);
     this.pg.background(0, 0);
@@ -47,18 +45,4 @@ class Tower {
     image(this.pg, 0, 0);
     pop();
   }
-}
-let pg;
-function setup() {
-  createCanvas(400, 400);
-  pg = new Tower();
-  background(51);
-  rectMode(CENTER);
-}
-
-function draw() {
-  background(51, 50);
-  pg.update();
-  pg.draw();
-  
 }

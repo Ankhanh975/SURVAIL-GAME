@@ -19,7 +19,7 @@ class Spark {
   constructor(loc, angle, speed, color, scale = 1) {
     // console.log("this.color", this.color, color);
 
-    this.loc = loc.copy();
+    this.loc = {x: loc.x, y: loc.y}
     this.angle = angle;
     this.speed = speed;
     this.scale = scale;
@@ -123,7 +123,7 @@ class Sparks {
     }
   }
 }
-let tower = new Sparks();
+// let tower = new Sparks();
 
 // let sparks;
 

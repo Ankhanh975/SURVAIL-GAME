@@ -99,41 +99,105 @@ component.jump = class {
 component.placeObstacle = class {
   // TODO: if move mouse to fast path will not be filled in
   constructor() {
-    this.mouse = createVector(0, 0);
+    this.mousePos = createVector(0, 0);
+    this.mouseDown = false;
+    this.mousePosHistory = [];
+    this.getRealPos = (x, y) => {
+      x = x - width / 2 + this.parent.pos.x;
+      y = y - height / 2 + this.parent.pos.y;
+      // [x, y] = obstacles.grid.GridCoordsToWorldCoords(
+      //   ...obstacles.grid.WorldCoordsToGridCoords(x, y)
+      // );
+      // [x, y] = [x + 52 / 2, y + 52 / 2];
+      return { x: x, y: y };
+    };
     canvas = document.querySelector("#defaultCanvas0");
+
+    document.addEventListener("mousedown", (event) => {
+      if (event.button === 2) {
+        this.mouseDown = true;
+        this.mousePos = this.getRealPos(event.clientX, event.clientY);
+        this.mousePosHistory.push(this.mousePos);
+      }
+    });
+    document.addEventListener("mouseup", (event) => {
+      if (event.button === 2) {
+        this.mouseDown = false;
+        this.mousePosHistory = [];
+      }
+    });
     canvas.addEventListener("mousemove", (event) => {
-      this.mouse = camera.toWorldCoords([event.clientX, event.clientY]);
-      if (!isPressed2) {
+      this.mousePos = this.getRealPos(event.clientX, event.clientY);
+
+      if (!this.mouseDown) {
         return;
       }
-      // sparks.create_particle(this.mouse, [9, 200, 9]);
-      obstacles.createObstacle(this.mouse);
+      this.mousePosHistory.push(this.mousePos);
 
-      // let pGridStart = obstacles.grid.WorldCoordsToGridCoords(mouse.x, mouse.y);
-      // let pGridEnd = obstacles.grid.WorldCoordsToGridCoords(
-      //   mousePos[mousePos.length - 1][0],
-      //   mousePos[mousePos.length - 1][1]
-      // );
-      // let path = lineBresenham_1(...pGridStart, ...pGridEnd);
-      // path = path.map((each) => {
-      //   each = obstacles.grid.GridCoordsToWorldCoords(...each);
-      //   each[0] += 52 / 2;
-      //   each[1] += 52 / 2;
-      //   return each;
-      // });
-      // console.log(path);
-      // path.forEach((point) => {
-      //   obstacles.createObstacle(createVector(point[0], point[1]));
-      // });
-      // obstacles.createObstacle(mouse);
+      if (this.mousePosHistory.length > 2) {
+        this.mousePosHistory.shift();
+      }
     });
-    // canvas.addEventListener("mousemove", (event) => {});
   }
   update = () => {
-    if (!isPressed2) {
+    // Fill all positions from current mouse position and last mouse position
+    // console.log(this.mouseDown, this.mousePos);
+    if (!this.mouseDown) {
       return;
     }
-    sparks.create_particle(this.mouse, [9, 200, 9]);
-    obstacles.createObstacle(this.mouse);
+    let path;
+
+    if (this.mousePosHistory.length === 1) {
+      path = [this.mousePosHistory[0]];
+    } else if (this.mousePosHistory.length === 2) {
+      let pGridStart = obstacles.grid.WorldCoordsToGridCoords(
+        this.mousePosHistory[0].x,
+        this.mousePosHistory[0].y
+      );
+      let pGridEnd = obstacles.grid.WorldCoordsToGridCoords(
+        this.mousePosHistory[1].x,
+        this.mousePosHistory[1].y
+      );
+      path = lineBresenham_1(...pGridStart, ...pGridEnd);
+      path = path.map((each) => {
+        each = obstacles.grid.GridCoordsToWorldCoords(...each);
+        each[0] += 52 / 2;
+        each[1] += 52 / 2;
+        each = { x: each[0], y: each[1] };
+        return each;
+      });
+      path = lineBresenham_1(
+        this.mousePosHistory[this.mousePosHistory.length - 1].x,
+        this.mousePosHistory[this.mousePosHistory.length - 1].y,
+        this.mousePosHistory[this.mousePosHistory.length - 2].x,
+        this.mousePosHistory[this.mousePosHistory.length - 2].y
+      );
+      path = path.map((each) => {
+        each = { x: each[0], y: each[1] };
+        return each;
+      });
+    } else if (this.mousePosHistory.length >= 3) {
+      // path = bezierCurve(
+      //   this.mousePosHistory[this.mousePosHistory.length - 1].x,
+      //   this.mousePosHistory[this.mousePosHistory.length - 1].y,
+      //   this.mousePosHistory[this.mousePosHistory.length - 2].x,
+      //   this.mousePosHistory[this.mousePosHistory.length - 2].y,
+      //   this.mousePosHistory[this.mousePosHistory.length - 3].x,
+      //   this.mousePosHistory[this.mousePosHistory.length - 3].y
+      // );
+
+      // path = [
+      //   { x: 0, y: 0 },
+      //   { x: 100, y: 100 },
+      //   { x: 200, y: 200 },
+      //   { x: 300, y: 300 },
+      // ];
+    }
+    sparks.create_particle(this.mousePos, [9, 200, 9]);
+    // obstacles.createObstacle(this.mousePos);
+    console.log(path.length, JSON.stringify(path));
+    path.forEach((point) => {
+      obstacles.createObstacle(point);
+    });
   };
 };

@@ -176,7 +176,8 @@ class Player extends PlayerBase {
     target = target || collisions.getPunchAble(this);
     setTimeout(() => {
       target.forEach((entity) => {
-        if (!entity instanceof Player) {
+        console.log(entity);
+        if (!(entity instanceof Player)) {
           return;
         }
         // print("Hit players.AIs", i);

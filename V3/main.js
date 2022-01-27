@@ -7,6 +7,7 @@ let mouse;
 let queue = new Queue();
 let killCount = 0;
 let mousePos = [];
+
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);

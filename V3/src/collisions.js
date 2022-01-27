@@ -16,7 +16,7 @@ class Collisions2 extends Collisions {
     let all = [];
     let angle = p.getAngle();
     angle = createVector(0, -1).rotate(angle).rotate(-radians(90)).heading();
-    console.log(angle, degrees(angle));
+    // console.log(angle, degrees(angle));
 
     const collider = this.createPolygon({ x: p.pos.x, y: p.pos.y }, [
       { x: -152, y: 310 },

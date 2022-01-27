@@ -168,7 +168,8 @@ class Obstacles {
   }
   createObstacle(pos) {
     // pos.add(createVector(+52 / 2, +52 / 2));
-    pos = pos.copy();
+    pos = createVector(pos.x, pos.y);
+  
     [pos.x, pos.y] = this.grid.GridCoordsToWorldCoords(
       ...this.grid.WorldCoordsToGridCoords(pos.x, pos.y)
     );
@@ -194,8 +195,6 @@ class Obstacles {
 
     if (collided) {
       collisions.remove(ob.circle);
-      this.obstacles.shift();
-      this.grid.set(gridPos[0], gridPos[1], false);
     }
 
     if (!collided) {

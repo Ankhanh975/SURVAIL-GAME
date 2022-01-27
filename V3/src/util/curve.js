@@ -75,3 +75,24 @@ function lineBresenham_1(x1, y1, x2, y2) {
   }
   return pixels;
 }
+// C program to implement
+// Cubic Bezier Curve
+
+/* Function that take input as Control Point x_coordinates and
+Control Point y_coordinates and draw bezier curve */
+function bezierCurve(x1, y1, x2, y2, x3, y3, return_point = 10) {
+  // x: array, y: array
+  // point: number of points to return
+  let all = [];
+  for (let t = 0; t <= 1; t += 1 / return_point) {
+    let t2 = t * t;
+
+    let A = 2 * t - 2 * t2;
+    let B = t2 - 2 * t + 1;
+
+    let x = t2 * x3 + A * x2 + B * x1;
+    let y = t2 * y3 + A * y2 + B * y1;
+    all.push([x, y]);
+  }
+  return all;
+}

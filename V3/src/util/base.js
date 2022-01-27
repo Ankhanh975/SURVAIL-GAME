@@ -16,7 +16,7 @@ class Base {
         func();
       } else if (func.name === "update") {
         this.updates.push(func);
-      } else {
+      } else if (func.name) {
         eval(`this.${func.name}=func`);
       }
     });
