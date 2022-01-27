@@ -36,7 +36,10 @@ addFunction("setup", () => {
   player.totalHealth = 1000;
   player.damage = 4.5;
   player.recovery = 0.001 * player.health;
-
+  for (let i = 0; i < 14 * 4; i++) {
+    let particle = sparks.create_particle(player.pos, [0, 0, 0], 5);
+    particle.move(i / 12);
+  }
   players.players[0] = player;
   players.realPlayers = [player];
 
@@ -59,7 +62,10 @@ addFunction("draw", () => {
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
-    sparks.create_particle(player.pos, [255, 0, 0], 3.5);
+    for (let i = 0; i < 3; i++) {
+      let particle = sparks.create_particle(player.pos, [255, 0, 0], 4);
+      particle.move(1);
+    }
   }
 
   mousePos.push([mouse.x, mouse.y]);
@@ -88,7 +94,7 @@ addFunction("draw", () => {
         pushOut2.setMag(pushOut2.mag() * -0.4);
         pushOut.limit(5);
         pushOut2.limit(5);
-        
+
         player.pos.add(pushOut);
         player.circle.setPosition(player.pos.x, player.pos.y);
         b.pos.add(pushOut2);
@@ -186,15 +192,7 @@ addFunction("draw", () => {
     fill(255, 0, 0, 90);
     stroke(255, 255, 0, 180);
     strokeWeight(4);
-    arc(
-      -10,
-      0,
-      2 * 300,
-      2 * 300,
-      -radians(40) / 2,
-      radians(40) / 2,
-      PIE
-    );
+    arc(-10, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
     pop();
   }
   queue.updateDraw();
