@@ -31,6 +31,7 @@ class Players {
     this.initAnimation();
     this.parent = globalThis
     this.players = [];
+    this.realPlayers = [];
 
     // while (this.players.length < 1) {
     //   let pos = p5.Vector.random2D().setMag(random(950, 1100));

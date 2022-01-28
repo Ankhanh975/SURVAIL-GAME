@@ -238,23 +238,25 @@ component.placeObstacle = class {
         ob.circle.pos.x,
         ob.circle.pos.y
       );
-      if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1] - 1)) {
-        this.to_fill.push([ob_pos[0] - 1, ob_pos[1] - 1]);
-      } else if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1])) {
-        this.to_fill.push([ob_pos[0] - 1, ob_pos[1]]);
-      } else if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1] + 1)) {
-        this.to_fill.push([ob_pos[0] - 1, ob_pos[1] + 1]);
-      } else if (obstacles.grid.isInIsolate(ob_pos[0], ob_pos[1] - 1)) {
-        this.to_fill.push([ob_pos[0], ob_pos[1] - 1]);
-      } else if (obstacles.grid.isInIsolate(ob_pos[0], ob_pos[1] + 1)) {
-        this.to_fill.push([ob_pos[0], ob_pos[1] + 1]);
-      } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1] - 1)) {
-        this.to_fill.push([ob_pos[0] + 1, ob_pos[1] - 1]);
-      } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1])) {
-        this.to_fill.push([ob_pos[0] + 1, ob_pos[1]]);
-      } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1] + 1)) {
-        this.to_fill.push([ob_pos[0] + 1, ob_pos[1] + 1]);
-      }
+      setTimeout(() => {
+        if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1] - 1)) {
+          this.to_fill.push([ob_pos[0] - 1, ob_pos[1] - 1]);
+        } else if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1])) {
+          this.to_fill.push([ob_pos[0] - 1, ob_pos[1]]);
+        } else if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1] + 1)) {
+          this.to_fill.push([ob_pos[0] - 1, ob_pos[1] + 1]);
+        } else if (obstacles.grid.isInIsolate(ob_pos[0], ob_pos[1] - 1)) {
+          this.to_fill.push([ob_pos[0], ob_pos[1] - 1]);
+        } else if (obstacles.grid.isInIsolate(ob_pos[0], ob_pos[1] + 1)) {
+          this.to_fill.push([ob_pos[0], ob_pos[1] + 1]);
+        } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1] - 1)) {
+          this.to_fill.push([ob_pos[0] + 1, ob_pos[1] - 1]);
+        } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1])) {
+          this.to_fill.push([ob_pos[0] + 1, ob_pos[1]]);
+        } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1] + 1)) {
+          this.to_fill.push([ob_pos[0] + 1, ob_pos[1] + 1]);
+        }
+      }, 20);
     });
   };
 };

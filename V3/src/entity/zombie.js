@@ -3,30 +3,40 @@ class AIPlayer extends Player {
     super(animation, parent, "n", pos);
     this.name = generateName.__call();
     this.AIPlayer = true;
+    // TODO: pick target
+    this.target = null;
+    this.target = this.parent.realPlayers[0];
     // this.target = int(random(0, this.parent.realPlayers.length));
-    this.target = 0;
-    this.path = [];
-    this.lastPathFinding = frameCount - 999;
-    setInterval(() => {
-      //   console.log("update target");
-      let target;
-      let targetDis = Infinity;
-      this.parent.realPlayers.forEach((p) => {
-        let d = this.pos.dist(p.pos);
-        // console.log("d", d, targetDis);
-        if (d < targetDis) {
-          targetDis = d;
-          target = p;
-        }
-      });
-      this.target = target;
-    }, 250);
-  }
+    // this.path = [];
+    // this.lastPathFinding = frameCount - 999;
 
+    // update the target
+    // setInterval(() => {
+    //   //   console.log("update target");
+    //   let target;
+    //   let targetDis = Infinity;
+    //   this.parent.realPlayers.forEach((p) => {
+    //     let d = this.pos.dist(p.pos);
+    //     // console.log("d", d, targetDis);
+    //     if (d < targetDis) {
+    //       targetDis = d;
+    //       target = p;
+    //     }
+    //   });
+    //   this.target = target;
+    // }, 250);
+  }
+  startPunch(hand, target) {
+    console.log("start punch");
+    super.startPunch(hand, target);
+    const p = new SmileParticles(this.pos, "attack_attention", 40);
+    field.particles.push(p);
+  }
   update() {
     super.update();
     // let target = this.parent.realPlayers[this.target].pos;
-
+    field.tick(this);
+    console.log("update target");
     if (this.target) {
       let lookAt, dist, toLookAt;
       lookAt = this.target.pos;
@@ -41,17 +51,17 @@ class AIPlayer extends Player {
         }
       }
       // if (obstacles.FindStraightPath(this.pos, this.target.pos).length > 0) {
-      if (dist < 1100) {
-        if (dist < 130) {
-          toLookAt.setMag(4.5);
-          toLookAt.rotate(radians(180));
-          this.addPos(toLookAt);
-        }
-        if (dist > 175) {
-          toLookAt.setMag(3.0);
-          this.addPos(toLookAt);
-        }
-      }
+      // if (dist < 1100) {
+      //   if (dist < 130) {
+      //     toLookAt.setMag(4.5);
+      //     toLookAt.rotate(radians(180));
+      //     this.addPos(toLookAt);
+      //   }
+      //   if (dist > 175) {
+      //     toLookAt.setMag(3.0);
+      //     this.addPos(toLookAt);
+      //   }
+      // }
     }
   }
 }

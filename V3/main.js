@@ -43,7 +43,7 @@ addFunction("setup", () => {
     particle.move(i / 12);
   }
   players.players[0] = player;
-  players.realPlayers = [player];
+  players.realPlayers.push(player);
 
   // let friend = new Player(players.img[5], players);
   // friend.health = 400;
@@ -54,7 +54,7 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
-  for (let index = 0; index < 10; index++) {
+  for (let index = 0; index < 1; index++) {
     players.createAIPlayer();
   }
 });
@@ -82,6 +82,7 @@ addFunction("draw", () => {
   players.update();
   obstacles.update();
   collisions.update();
+  field.update()
   for (let i = 0; i < 4; i++) {
     players.players.forEach((player) => {
       collisions.checkOne(player.circle, (response) => {
@@ -149,6 +150,7 @@ addFunction("draw", () => {
   }
   queue.updateDraw();
   sparks.draw();
+  field.draw()
   players.draw();
   obstacles.draw();
 

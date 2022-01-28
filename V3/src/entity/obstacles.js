@@ -16,7 +16,10 @@ class Obstacle {
     this.surface = this.parent.obstacles_surface;
     setTimeout(() => {
       // Remove the obstacle from the world
-      obstacles.obstacles.shift();
+      const index = obstacles.obstacles.indexOf(this);
+      if (index > -1) {
+        obstacles.obstacles.splice(index, 1);
+      }
 
       collisions.remove(this.circle);
       let gridPos = obstacles.grid.WorldCoordsToGridCoords(
@@ -27,7 +30,7 @@ class Obstacle {
       obstacles.grid.set(gridPos[0], gridPos[1], false);
     }, 16 * 1000);
     setTimeout(() => {
-      this.color[3] = 100;
+      this.surface = this.parent.obstacles_surface2;
     }, 15.1 * 1000);
 
     // anime({
@@ -63,10 +66,19 @@ class Obstacles {
 
     this.obstacles_surface.push();
     this.obstacles_surface.strokeWeight(1.5);
-    this.obstacles_surface.stroke(0, 0, 0);
+    this.obstacles_surface.stroke(0, 0, 0, 240);
     this.obstacles_surface.fill([220, 220, 10, 200]);
     this.obstacles_surface.rect(0, 0, 52, 52, 3.5);
     this.obstacles_surface.pop();
+
+    this.obstacles_surface2 = createGraphics(52, 52);
+
+    this.obstacles_surface2.push();
+    this.obstacles_surface2.strokeWeight(1.5);
+    this.obstacles_surface2.stroke(0, 0, 0, 240);
+    this.obstacles_surface2.fill([220, 220, 10, 100]);
+    this.obstacles_surface2.rect(0, 0, 52, 52, 3.5);
+    this.obstacles_surface2.pop();
   }
   FindPath(posStart, posEnd) {
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
