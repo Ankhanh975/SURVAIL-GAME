@@ -35,6 +35,8 @@ class Field {
     });
     // console.log(smell, toLookAt);
     if (toLookAt) {
+      // TODO: tell other to attack_attention
+      // TODO: wandering when dont see anything
       toLookAt.limit(3.0);
       zombie.addPos(toLookAt);
     }
@@ -78,11 +80,11 @@ class SmileParticles {
     push();
     noStroke();
     if (this.name == "enemy_smell") {
-      fill(255, 0, 0, 25);
+      fill(100, 255, 0, 25);
     } else if (this.name == "friend_smell") {
       fill(255, 255, 255, 25);
     } else if (this.name == "attack_attention") {
-      fill(0, 0, 0, 25);
+      fill(100, 0, 0, 25);
     } else if (this.name == "retreat_attention") {
       fill(128, 255, 128, 25);
     }
