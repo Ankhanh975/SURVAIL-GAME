@@ -29,71 +29,13 @@ class Obstacle {
 class Obstacles {
   constructor() {
     this.obstacles = [];
-
-    // this.grid.data[x][y] == 1 => obstacle is present
-    this.grid = {};
-    // Use as A* pathfinding to guild for AIs
-    this.grid.data = new PF.Grid(100, 100);
-
-    this.grid.finder = new PF.BiAStarFinder({
-      allowDiagonal: true,
-      dontCrossCorners: true,
-    });
-    // this.grid.finder = new PF.BestFirstFinder({
-    //   allowDiagonal: true,
-    //   dontCrossCorners: true,
-    //   heuristic: PF.Heuristic.chebyshev
-    // });
-    this.grid.WorldCoordsToGridCoords = (posx, posy) => {
-      let returnX, returnY;
-      // if (posx > 0) returnX = Math.ceil(posx / 52.0) + 50;
-      // else if (posx < 0) returnX = Math.floor(posx / 52.0) + 50;
-      // else returnX = 51;
-      // if (posy > 0) returnY = Math.ceil(posy / 52.0) + 50;
-      // else if (posy < 0) returnY = Math.floor(posy / 52.0) + 50;
-      // else returnY = 51;
-      returnX = Math.floor(posx / 52.0) + 50;
-      returnY = Math.floor(posy / 52.0) + 50;
-
-      return [returnX, returnY];
-    };
-    this.grid.GridCoordsToWorldCoords = (gridx, gridy) => {
-      return [(gridx - 50) * 52, (gridy - 50) * 52];
-    };
-    this.grid.FindPath = (startx, starty, endx, endy) => {
-      // console.log("What is 'this'", this, this.data)
-      let grid = this.grid.data.clone();
-
-      var path = this.grid.finder.findPath(startx, starty, endx, endy, grid);
-      // path = PF.Util.smoothenPath(this.grid.data, path);
-      // path = PF.Util.compressPath(path);
-      return path;
-    };
-    this.grid.set = (x, y, state) => {
-      // if (x < 0 || y < 0 || x >= 100 || y >= 100) {
-      //   // console.log("out of bounds", x, y, state);
-      //   return;
-      // }
-      // state == true means that the point is have obstacles
-      this.grid.data.setWalkableAt(x, y, !state);
-    };
-    this.grid.get = (x, y) => {
-      // return !this.grid.data.nodes[x][y].walkable;
-      return !this.grid.data.isWalkableAt(x, y);
-    };
+    this.grid = new Grid();
   }
   FindPath(posStart, posEnd) {
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
     let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
-    let path;
-    try {
-      path = obstacles.grid.FindPath(...pGridStart, ...pGridEnd);
-      if (path.length === 0) {
-        return [];
-      }
-    } catch (TypeError) {
-      return [];
-    }
+    let path = obstacles.grid.FindPath(...pGridStart, ...pGridEnd);
+
     // console.log("old", path);
     path = path.map((each) => {
       each = this.grid.GridCoordsToWorldCoords(...each);
@@ -107,12 +49,6 @@ class Obstacles {
     // Because a* pathfinding work not on continuous coordinates so have to go to connected points
     path.unshift([posStart.x, posStart.y]);
     path.push([posEnd.x, posEnd.y]);
-    // console.log(
-    //   path[0][0] - path[1][0] < 0 && path[0][0] - path[2][0] > 0,
-    //   path[0][1] - path[1][1] < 0 && path[0][1] - path[2][1] > 0,
-    //   path[0][0] - path[1][0] > 0 && path[0][0] - path[2][0] < 0,
-    //   path[0][1] - path[1][1] > 0 && path[0][1] - path[2][1] < 0
-    // );
     if (
       (path[0][0] - path[1][0] < 0 && path[0][0] - path[2][0] > 0) ||
       (path[0][1] - path[1][1] < 0 && path[0][1] - path[2][1] > 0) ||
@@ -154,22 +90,12 @@ class Obstacles {
       return [];
     }
   }
-  isValidPath(path) {
-    let isValid = true;
-    path.forEach((each) => {
-      let pos = this.grid.WorldCoordsToGridCoords(...each);
-      // console.log("path", each, pos, this.grid.get(...pos))
-      if (this.grid.get(...pos) === true) {
-        isValid = false;
-      }
-    });
-    // noLoop()
-    return isValid;
-  }
+
   createObstacle(pos) {
+    // console.log(pos);
     // pos.add(createVector(+52 / 2, +52 / 2));
     pos = createVector(pos.x, pos.y);
-  
+
     [pos.x, pos.y] = this.grid.GridCoordsToWorldCoords(
       ...this.grid.WorldCoordsToGridCoords(pos.x, pos.y)
     );
@@ -212,7 +138,7 @@ class Obstacles {
         );
 
         this.grid.set(gridPos[0], gridPos[1], false);
-      }, 17.5 * 1000);
+      }, 12.5 * 1000);
       return ob;
     }
   }
@@ -234,3 +160,133 @@ class Obstacles {
     pop();
   }
 }
+class Grid {
+  constructor() {
+    // this.data[x][y] == 1 => obstacle is present
+    // Use as A* pathfinding to guild for AIs
+    this.data = new PF.Grid(100, 100);
+
+    this.finder = new PF.BiAStarFinder({
+      allowDiagonal: true,
+      dontCrossCorners: true,
+    });
+    this.finder2 = new PF.BestFirstFinder({
+      allowDiagonal: true,
+      dontCrossCorners: true,
+      heuristic: PF.Heuristic.chebyshev,
+    });
+  }
+  WorldCoordsToGridCoords(posx, posy) {
+    let returnX, returnY;
+    // if (posx > 0) returnX = Math.ceil(posx / 52.0) + 50;
+    // else if (posx < 0) returnX = Math.floor(posx / 52.0) + 50;
+    // else returnX = 51;
+    // if (posy > 0) returnY = Math.ceil(posy / 52.0) + 50;
+    // else if (posy < 0) returnY = Math.floor(posy / 52.0) + 50;
+    // else returnY = 51;
+    returnX = Math.floor(posx / 52.0) + 50;
+    returnY = Math.floor(posy / 52.0) + 50;
+
+    return [returnX, returnY];
+  }
+  GridCoordsToWorldCoords(gridx, gridy) {
+    return [(gridx - 50) * 52, (gridy - 50) * 52];
+  }
+  FindPath(startx, starty, endx, endy) {
+    // console.log("What is 'this'", this, this.data)
+    let grid = this.data.clone();
+    var path;
+    try {
+      path = this.finder.findPath(startx, starty, endx, endy, grid);
+    } catch (TypeError) {
+      return [];
+    }
+    // path = PF.Util.smoothenPath(this.data, path);
+    // path = PF.Util.compressPath(path);
+    return path;
+  }
+  set(x, y, state) {
+    // if (x < 0 || y < 0 || x >= 100 || y >= 100) {
+    //   // console.log("out of bounds", x, y, state);
+    //   return;
+    // }
+    // state == true means that the point is have obstacles
+    this.data.setWalkableAt(x, y, !state);
+  }
+  FindPathFast(startx, starty, endx, endy) {
+    // console.log("What is 'this'", this, this.data)
+    let grid = this.data.clone();
+    var path;
+    try {
+      path = this.finder2.findPath(startx, starty, endx, endy, grid);
+    } catch (TypeError) {
+      return [];
+    }
+    return path;
+  }
+  set(x, y, state) {
+    // if (x < 0 || y < 0 || x >= 100 || y >= 100) {
+    //   // console.log("out of bounds", x, y, state);
+    //   return;
+    // }
+    // state == true means that the point is have obstacles
+    this.data.setWalkableAt(x, y, !state);
+  }
+  get(x, y) {
+    // return !this.data.nodes[x][y].walkable;
+    return !this.data.isWalkableAt(x, y);
+  }
+  isInIsolate(gridX, gridY) {
+    if (this.get(gridX, gridY) === true) {
+      return false;
+    }
+    // A region is isolated from every other region when
+    // 1. Pathfinding can't find path to player
+    // 2. Every Player can find path to infinite
+    if (this.FindPathFast(gridX, gridY, ...playerInGridCoords).length > 0) {
+      return false;
+    }
+    
+    let playerInGridCoords = this.WorldCoordsToGridCoords(
+      player.pos.x,
+      player.pos.y
+    );
+    // console.log(
+    //   playerInGridCoords,
+    //   gridX,
+    //   gridY,
+    //   this.FindPath(gridX, gridY, ...playerInGridCoords).length === 0,
+    //   this.FindPath(...playerInGridCoords, 0, 0).length !== 0
+    // );
+    if (this.FindPathFast(...playerInGridCoords, 0, 0).length !== 0) {
+      return true;
+    }
+    return false;
+  }
+  isValidPath(path) {
+    let isValid = path.some((each) => {
+      if (this.grid.get(...each) === true) {
+        return false;
+      }
+    });
+    return isValid;
+  }
+}
+// isInIsolate(gridX, gridY) {
+//   if (this.get(gridX, gridY) === true) {
+//     return false;
+//   }
+//   // A region is isolated from every other region when
+//   // 1. Pathfinding can't find path to any player
+//   // 2. any  Player can find path to infinite
+
+//   let isInIsolate = !players.players.some((p) => {
+//     let pInGridCoords = this.WorldCoordsToGridCoords(p.pos.x, p.pos.y);
+//     if (this.FindPathFast(...pInGridCoords, 0, 0).length !== 0) {
+//       if (this.FindPathFast(gridX, gridY, ...pInGridCoords).length > 0) {
+//         return true;
+//       }
+//     }
+//   });
+//   return isInIsolate;
+// }

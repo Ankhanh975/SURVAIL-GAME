@@ -63,7 +63,7 @@ addFunction("draw", () => {
 
   if (isPressed && !player.onPunch()) {
     player.startPunch();
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 1; i++) {
       let particle = sparks.create_particle(player.pos, [255, 0, 0], 4);
       particle.move(1);
     }
