@@ -143,10 +143,13 @@ component.placeObstacle = class {
   update = () => {
     // Fill all positions from current mouse position and last mouse position
     // console.log(this.mouseDown, this.mousePos);
-    console.log(this.to_fill.length);
+    // console.log(this.to_fill.length);
     let solve = 0;
+    if (this.to_fill.length > 300) {
+      this.to_fill = [];
+    }
     for (let i = 0; i < this.to_fill.length; i++) {
-      if (solve >= 4) {
+      if (solve >= 2) {
         break;
       }
       let pos = this.to_fill.shift();

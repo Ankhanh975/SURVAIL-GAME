@@ -105,7 +105,7 @@ class Player extends PlayerBase {
       rotate(this.getAngle());
       if (this.punchHand === "left" && this.animateFrames !== 0) {
         scale(-1, 1);
-        // translate(-10, 0);
+        translate(-10, 0);
       }
       image(this.animation[this.animateFrames], 0, 0);
       pop();

@@ -3,6 +3,7 @@ let camera;
 let players;
 let player;
 let obstacles;
+let canvas;
 let mouse;
 let queue = new Queue();
 let killCount = 0;
@@ -11,7 +12,7 @@ let mousePos = [];
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
-  createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(windowWidth, windowHeight);
   imageMode(CENTER);
   // TODO
   // colorMode(HSB, 255);
