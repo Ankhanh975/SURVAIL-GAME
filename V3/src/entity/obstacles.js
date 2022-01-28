@@ -1,13 +1,18 @@
 class Obstacle {
   constructor(pos, parent) {
     // parent: the Obstacles object this Obstacle belongs to
-    this.circle = collisions.createBox({ x: pos.x, y: pos.y }, 51.9, 51.9);
-    this.circle.parent = this;
-    collisions.updateBody(this.circle);
-
-    this.color = [256, 256, 0, 220];
-    this.parent = parent;
     this.size = 51.9;
+    this.circle = collisions.createPolygon({ x: pos.x, y: pos.y }, [
+      { x: this.size, y: this.size },
+      { x: 0, y: this.size },
+      { x: 0, y: 0 },
+      { x: this.size, y: 0 },
+    ]);
+
+    this.circle.parent = this;
+    this.color = [220, 220, 10, 200];
+    this.parent = parent;
+
     // this.size = 30;
     // anime({
     //   targets: this,
@@ -19,6 +24,7 @@ class Obstacle {
     push();
     // translate(-this.size / 2, -this.size / 2);
     translate(this.circle.pos.x, this.circle.pos.y);
+    fill(...this.color);
     // Draw rect in corner
     rect(0, 0, this.size, this.size, 3.5);
     pop();
@@ -103,12 +109,12 @@ class Obstacles {
     let gridPos = this.grid.WorldCoordsToGridCoords(pos.x, pos.y);
     if (this.grid.get(gridPos[0], gridPos[1]) === true) {
       // This cell is already in the grid
-      return;
+      return null;
     }
     this.lastCreate = [pos.x, pos.y];
     if (this.lastCreate) {
       if (this.lastCreate.x === pos.x && this.lastCreate.y === pos.y) {
-        return;
+        return null;
       }
     }
     let ob = new Obstacle(pos, this);
@@ -121,6 +127,7 @@ class Obstacles {
 
     if (collided) {
       collisions.remove(ob.circle);
+      return null;
     }
 
     if (!collided) {
@@ -138,7 +145,10 @@ class Obstacles {
         );
 
         this.grid.set(gridPos[0], gridPos[1], false);
-      }, 12.5 * 1000);
+      }, 16 * 1000);
+      setTimeout(() => {
+        ob.color[3] = 100;
+      }, 15.2 * 1000);
       return ob;
     }
   }
@@ -151,7 +161,6 @@ class Obstacles {
     push();
     strokeWeight(1.5);
     stroke(0, 0, 0);
-    fill(220, 220, 10, 200);
 
     this.obstacles.forEach((obstacle) => {
       obstacle.draw();
@@ -237,20 +246,25 @@ class Grid {
     return !this.data.isWalkableAt(x, y);
   }
   isInIsolate(gridX, gridY) {
-    if (this.get(gridX, gridY) === true) {
-      return false;
-    }
     // A region is isolated from every other region when
     // 1. Pathfinding can't find path to player
     // 2. Every Player can find path to infinite
-    if (this.FindPathFast(gridX, gridY, ...playerInGridCoords).length > 0) {
+    if (this.get(gridX, gridY) === true) {
       return false;
     }
-    
+    if (this.FindPathFast(gridX, gridY, 0, 0).length === 0) {
+      return true;
+    }
+    return false;
+
     let playerInGridCoords = this.WorldCoordsToGridCoords(
       player.pos.x,
       player.pos.y
     );
+    if (this.FindPathFast(gridX, gridY, ...playerInGridCoords).length > 0) {
+      return false;
+    }
+
     // console.log(
     //   playerInGridCoords,
     //   gridX,

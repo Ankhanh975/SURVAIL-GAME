@@ -53,7 +53,7 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
-  for (let index = 0; index < 1; index++) {
+  for (let index = 0; index < 10; index++) {
     players.createAIPlayer();
   }
 });
@@ -81,79 +81,29 @@ addFunction("draw", () => {
   players.update();
   obstacles.update();
   collisions.update();
-
-  players.players.forEach((player) => {
-    collisions.checkOne(player.circle, (response) => {
-      const x = -response.overlapV.x;
-      const y = -response.overlapV.y;
-      const b = response.b.parent;
-      const pushOut = createVector(x, y);
-      if (response.b.parent instanceof Player) {
-        const pushOut2 = createVector(x, y);
-
-        pushOut.setMag(pushOut.mag() * 0.6);
-        pushOut2.setMag(pushOut2.mag() * -0.4);
-        pushOut.limit(5);
-        pushOut2.limit(5);
-
-        player.pos.add(pushOut);
-        player.circle.setPosition(player.pos.x, player.pos.y);
-        b.pos.add(pushOut2);
-        b.circle.setPosition(b.pos.x, b.pos.y);
-      } else if (response.b.parent instanceof Obstacle) {
-        player.pos.add(pushOut);
-        player.circle.setPosition(player.pos.x, player.pos.y);
-      }
+  for (let i = 0; i < 4; i++) {
+    players.players.forEach((player) => {
+      collisions.checkOne(player.circle, (response) => {
+        let x = -response.overlapV.x;
+        let y = -response.overlapV.y;
+        const b = response.b.parent;
+        x = min(x, 20);
+        y = min(y, 20);
+        if (response.b.parent instanceof Player) {
+          player.pos.x += x * 0.6;
+          player.pos.y += y * 0.6;
+          player.circle.setPosition(player.pos.x, player.pos.y);
+          b.pos.x -= x * 0.4;
+          b.pos.y -= y * 0.4;
+          b.circle.setPosition(b.pos.x, b.pos.y);
+        } else if (response.b.parent instanceof Obstacle) {
+          player.pos.x += x;
+          player.pos.y += y;
+          player.circle.setPosition(player.pos.x, player.pos.y);
+        }
+      });
     });
-  });
-  players.players.forEach((player) => {
-    collisions.checkOne(player.circle, (response) => {
-      const x = -response.overlapV.x;
-      const y = -response.overlapV.y;
-      const b = response.b.parent;
-      const pushOut = createVector(x, y);
-      if (response.b.parent instanceof Player) {
-        const pushOut2 = createVector(x, y);
-        pushOut.limit(10);
-        pushOut2.limit(10);
-
-        pushOut.setMag(pushOut.mag() * 0.6);
-        pushOut2.setMag(pushOut2.mag() * -0.4);
-
-        player.pos.add(pushOut);
-        player.circle.setPosition(player.pos.x, player.pos.y);
-        b.pos.add(pushOut2);
-        b.circle.setPosition(b.pos.x, b.pos.y);
-      } else if (response.b.parent instanceof Obstacle) {
-        player.pos.add(pushOut);
-        player.circle.setPosition(player.pos.x, player.pos.y);
-      }
-    });
-  });
-  players.players.forEach((player) => {
-    collisions.checkOne(player.circle, (response) => {
-      const x = -response.overlapV.x;
-      const y = -response.overlapV.y;
-      const b = response.b.parent;
-      const pushOut = createVector(x, y);
-      if (response.b.parent instanceof Player) {
-        const pushOut2 = createVector(x, y);
-        pushOut.limit(15);
-        pushOut2.limit(15);
-
-        pushOut.setMag(pushOut.mag() * 0.6);
-        pushOut2.setMag(pushOut2.mag() * -0.4);
-
-        player.pos.add(pushOut);
-        player.circle.setPosition(player.pos.x, player.pos.y);
-        b.pos.add(pushOut2);
-        b.circle.setPosition(b.pos.x, b.pos.y);
-      } else if (response.b.parent instanceof Obstacle) {
-        player.pos.add(pushOut);
-        player.circle.setPosition(player.pos.x, player.pos.y);
-      }
-    });
-  });
+  }
 });
 
 addFunction("draw", () => {
@@ -188,7 +138,7 @@ addFunction("draw", () => {
   // }
   if (isPressed) {
     push();
-    translate(player.pos.x, player.pos.y);
+    translate(player.pos);
     rotate(radians(0 - 90) + player.getAngle());
     fill(255, 0, 0, 90);
     stroke(255, 255, 0, 180);
@@ -208,7 +158,7 @@ addFunction("draw", () => {
 Players: ${players.players.length}
 Obstacles: ${obstacles.obstacles.length}
 Kill: ${killCount}
-Pos: ${int(player.pos.x)}, ${int(player.pos.y)}
+Pos: ${Math.round(player.pos.x)}, ${Math.round(player.pos.y)}
 Window Size: \n${width}, ${height}
 `
   );

@@ -150,17 +150,25 @@ component.placeObstacle = class {
         break;
       }
       let pos = this.to_fill.shift();
-      if (obstacles.grid.isInIsolate(pos[0], pos[1])) {
-        console.log(pos);
-        obstacles.createObstacle({
-          x: obstacles.grid.GridCoordsToWorldCoords(...pos)[0],
-          y: obstacles.grid.GridCoordsToWorldCoords(...pos)[1],
-        });
+      // console.log(pos);
+      let ob = obstacles.createObstacle({
+        x: obstacles.grid.GridCoordsToWorldCoords(...pos)[0],
+        y: obstacles.grid.GridCoordsToWorldCoords(...pos)[1],
+      });
+      if (ob) {
         solve += 1;
-        this.to_fill.push([pos[0] - 1, pos[1]]);
-        this.to_fill.push([pos[0], pos[1] - 1]);
-        this.to_fill.push([pos[0], pos[1] + 1]);
-        this.to_fill.push([pos[0] + 1, pos[1]]);
+        if (obstacles.grid.get(pos[0] - 1, pos[1]) === false) {
+          this.to_fill.push([pos[0] - 1, pos[1]]);
+        }
+        if (obstacles.grid.get(pos[0], pos[1] - 1) === false) {
+          this.to_fill.push([pos[0], pos[1] - 1]);
+        }
+        if (obstacles.grid.get(pos[0], pos[1] + 1) === false) {
+          this.to_fill.push([pos[0], pos[1] + 1]);
+        }
+        if (obstacles.grid.get(pos[0] + 1, pos[1]) === false) {
+          this.to_fill.push([pos[0] + 1, pos[1]]);
+        }
       }
     }
 
@@ -227,15 +235,23 @@ component.placeObstacle = class {
         ob.circle.pos.x,
         ob.circle.pos.y
       );
-
-      this.to_fill.push([ob_pos[0] - 1, ob_pos[1] - 1]);
-      this.to_fill.push([ob_pos[0] - 1, ob_pos[1]]);
-      this.to_fill.push([ob_pos[0] - 1, ob_pos[1] + 1]);
-      this.to_fill.push([ob_pos[0], ob_pos[1] - 1]);
-      this.to_fill.push([ob_pos[0], ob_pos[1] + 1]);
-      this.to_fill.push([ob_pos[0] + 1, ob_pos[1] - 1]);
-      this.to_fill.push([ob_pos[0] + 1, ob_pos[1]]);
-      this.to_fill.push([ob_pos[0] + 1, ob_pos[1] + 1]);
+      if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1] - 1)) {
+        this.to_fill.push([ob_pos[0] - 1, ob_pos[1] - 1]);
+      } else if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1])) {
+        this.to_fill.push([ob_pos[0] - 1, ob_pos[1]]);
+      } else if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1] + 1)) {
+        this.to_fill.push([ob_pos[0] - 1, ob_pos[1] + 1]);
+      } else if (obstacles.grid.isInIsolate(ob_pos[0], ob_pos[1] - 1)) {
+        this.to_fill.push([ob_pos[0], ob_pos[1] - 1]);
+      } else if (obstacles.grid.isInIsolate(ob_pos[0], ob_pos[1] + 1)) {
+        this.to_fill.push([ob_pos[0], ob_pos[1] + 1]);
+      } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1] - 1)) {
+        this.to_fill.push([ob_pos[0] + 1, ob_pos[1] - 1]);
+      } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1])) {
+        this.to_fill.push([ob_pos[0] + 1, ob_pos[1]]);
+      } else if (obstacles.grid.isInIsolate(ob_pos[0] + 1, ob_pos[1] + 1)) {
+        this.to_fill.push([ob_pos[0] + 1, ob_pos[1] + 1]);
+      }
     });
   };
 };

@@ -61,7 +61,7 @@ class Player extends PlayerBase {
     // TODO: this.circle should be a polygon
     this.circle = collisions.createCircle(
       { x: this.pos.x, y: this.pos.y },
-      65 / 2
+      60 / 2
     );
     this.circle.parent = this;
     collisions.updateBody(this.circle);
@@ -99,7 +99,7 @@ class Player extends PlayerBase {
   }
   draw(options) {
     push();
-    translate(Math.round(this.pos.x), Math.round(this.pos.y));
+    translate(this.pos);
     if (options.body) {
       push();
       rotate(this.getAngle());
