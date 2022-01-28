@@ -88,8 +88,8 @@ addFunction("draw", () => {
         let x = -response.overlapV.x;
         let y = -response.overlapV.y;
         const b = response.b.parent;
-        x = min(x, 20);
-        y = min(y, 20);
+        x = min(x, 15);
+        y = min(y, 15);
         if (response.b.parent instanceof Player) {
           player.pos.x += x * 0.6;
           player.pos.y += y * 0.6;

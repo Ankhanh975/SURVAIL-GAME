@@ -13,15 +13,15 @@ class Obstacle {
     this.color = [220, 220, 10, 200];
     this.parent = parent;
     this.life = 60 * 16; //(frame)
-    
+    this.surface = this.parent.obstacles_surface;
     setTimeout(() => {
       // Remove the obstacle from the world
-      let x = obstacles.obstacles.shift();
+      obstacles.obstacles.shift();
 
-      collisions.remove(x.circle);
+      collisions.remove(this.circle);
       let gridPos = obstacles.grid.WorldCoordsToGridCoords(
-        x.circle.pos.x,
-        x.circle.pos.y
+        this.circle.pos.x,
+        this.circle.pos.y
       );
 
       obstacles.grid.set(gridPos[0], gridPos[1], false);
@@ -38,11 +38,14 @@ class Obstacle {
   }
   draw() {
     push();
-    // translate(-this.size / 2, -this.size / 2);
     translate(this.circle.pos.x, this.circle.pos.y);
-    fill(...this.color);
-    // Draw rect in corner
-    rect(0, 0, this.size, this.size, 3.5);
+    translate(this.size / 2, this.size / 2);
+
+    image(this.surface, 0, 0);
+    // strokeWeight(1.5);
+    // stroke(0, 0, 0);
+    // fill(...this.color);
+    // rect(0, 0, this.size, this.size, 3.5);
     pop();
   }
   update() {
@@ -57,6 +60,13 @@ class Obstacles {
     this.obstacles = [];
     this.grid = new Grid();
     this.obstacles_surface = createGraphics(52, 52);
+
+    this.obstacles_surface.push();
+    this.obstacles_surface.strokeWeight(1.5);
+    this.obstacles_surface.stroke(0, 0, 0);
+    this.obstacles_surface.fill([220, 220, 10, 200]);
+    this.obstacles_surface.rect(0, 0, 52, 52, 3.5);
+    this.obstacles_surface.pop();
   }
   FindPath(posStart, posEnd) {
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
@@ -161,9 +171,6 @@ class Obstacles {
   }
   draw() {
     push();
-    strokeWeight(1.5);
-    stroke(0, 0, 0);
-
     this.obstacles.forEach((obstacle) => {
       obstacle.draw();
     });
