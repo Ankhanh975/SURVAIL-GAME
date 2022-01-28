@@ -29,14 +29,13 @@ class AIPlayer extends Player {
   startPunch(hand, target) {
     console.log("start punch");
     super.startPunch(hand, target);
-    const p = new SmileParticles(this.pos, "attack_attention", 40);
+    const p = new SmileParticles(this.pos, "attack_attention", 250, null, true);
     field.particles.push(p);
   }
   update() {
     super.update();
     // let target = this.parent.realPlayers[this.target].pos;
     field.tick(this);
-    console.log("update target");
     if (this.target) {
       let lookAt, dist, toLookAt;
       lookAt = this.target.pos;

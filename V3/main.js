@@ -54,7 +54,7 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
-  for (let index = 0; index < 1; index++) {
+  for (let index = 0; index < 100; index++) {
     players.createAIPlayer();
   }
 });
@@ -83,7 +83,7 @@ addFunction("draw", () => {
   obstacles.update();
   collisions.update();
   field.update()
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 5; i++) {
     players.players.forEach((player) => {
       collisions.checkOne(player.circle, (response) => {
         let x = -response.overlapV.x;
@@ -150,8 +150,8 @@ addFunction("draw", () => {
   }
   queue.updateDraw();
   sparks.draw();
-  field.draw()
   players.draw();
+  field.draw()
   obstacles.draw();
 
   pop();

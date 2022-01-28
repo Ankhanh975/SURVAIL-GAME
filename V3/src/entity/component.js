@@ -145,7 +145,7 @@ component.placeObstacle = class {
     // console.log(this.mouseDown, this.mousePos);
     // console.log(this.to_fill.length);
     let solve = 0;
-    if (this.to_fill.length > 300) {
+    if (this.to_fill.length > 100) {
       this.to_fill = [];
     }
     for (let i = 0; i < this.to_fill.length; i++) {

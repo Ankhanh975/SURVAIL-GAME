@@ -6,7 +6,7 @@ class Field {
   }
   update() {
     players.realPlayers.forEach((each) => {
-      const p = new SmileParticles(each.pos, "enemy_smell", 50);
+      const p = new SmileParticles(each.pos, "enemy_smell", 75, 60);
       this.particles.push(p);
     });
     this.particles.forEach((each) => each.update());
@@ -22,27 +22,34 @@ class Field {
     let smell = this.particles.filter((each) => {
       return each.pos.dist(zombie.pos) < each.smellRadius;
     });
-    let lookAt, dist, toLookAt;
+    let lookAt,
+      dist,
+      toLookAt = createVector(0, 0);
 
     smell.some((each) => {
       if (each.name == "enemy_smell" || each.name == "attack_attention") {
         lookAt = each.pos;
         dist = each.size * each.pos.dist(zombie.pos);
-          toLookAt = p5.Vector.sub(lookAt, zombie.pos);
-          return true
+        toLookAt.add(p5.Vector.sub(lookAt, zombie.pos));
       }
     });
-      console.log(toLookAt);
-    toLookAt.setMag(3.0);
-    zombie.addPos(toLookAt);
+    // console.log(smell, toLookAt);
+    if (toLookAt) {
+      toLookAt.limit(3.0);
+      zombie.addPos(toLookAt);
+    }
   }
   create_particle;
 }
 
 class SmileParticles {
-  constructor(pos, name, size, lifeTime) {
+  constructor(pos, name, size, lifeTime, _pos = false) {
     this.name = name;
-    this.pos = createVector(pos.x, pos.y);
+    if (_pos) {
+      this.pos = pos;
+    } else {
+      this.pos = createVector(pos.x, pos.y);
+    }
     this.size = size;
     this.totalSize = size;
     this.lifeTime = lifeTime || 100;
