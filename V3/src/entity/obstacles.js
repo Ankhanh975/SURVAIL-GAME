@@ -114,29 +114,34 @@ class Obstacles {
     return path;
   }
   FindStraightPath(posStart, posEnd) {
-    let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
-    let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
-    let path = lineBresenham_1(...pGridStart, ...pGridEnd);
-    // console.log("path", path);
-
-    // Check path valid or invalid
-    let isValid = !path.some((each) => {
-      return this.grid.get(...each);
-    });
-    if (isValid) {
-      return [
-        [posStart.x, posStart.y],
-        [posEnd.x, posEnd.y],
-      ];
-      path = path.map((each) => {
-        each = this.grid.GridCoordsToWorldCoords(...each);
-        each[0] += 52 / 2;
-        each[1] += 52 / 2;
-        return each;
+    {
+      // TODO
+      // return
+    }
+    {
+      let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
+      let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
+      let path = lineBresenham_1(...pGridStart, ...pGridEnd);
+      // console.log("path", path);
+      // Check path valid or invalid
+      let isValid = !path.some((each) => {
+        return this.grid.get(...each);
       });
-      return path;
-    } else {
-      return [];
+      if (isValid) {
+        return [
+          [posStart.x, posStart.y],
+          [posEnd.x, posEnd.y],
+        ];
+        path = path.map((each) => {
+          each = this.grid.GridCoordsToWorldCoords(...each);
+          each[0] += 52 / 2;
+          each[1] += 52 / 2;
+          return each;
+        });
+        return path;
+      } else {
+        return [];
+      }
     }
   }
   createObstacle(pos) {
@@ -151,12 +156,6 @@ class Obstacles {
       // This cell is already in the grid
       return null;
     }
-    this.lastCreate = [pos.x, pos.y];
-    if (this.lastCreate) {
-      if (this.lastCreate.x === pos.x && this.lastCreate.y === pos.y) {
-        return null;
-      }
-    }
     let ob = new Obstacle(pos, this);
     const potentials = collisions.getPotentials(ob.circle);
     const collided = potentials.some((body) => {
@@ -168,9 +167,7 @@ class Obstacles {
     if (collided) {
       collisions.remove(ob.circle);
       return null;
-    }
-
-    if (!collided) {
+    } else {
       this.obstacles.push(ob);
       this.grid.set(gridPos[0], gridPos[1], true);
       return ob;

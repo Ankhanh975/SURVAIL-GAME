@@ -8,7 +8,7 @@ let mouse;
 let queue = new Queue();
 let killCount = 0;
 let mousePos = [];
-
+let field
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
@@ -28,7 +28,7 @@ addFunction("setup", () => {
   obstacles = new Obstacles();
   camera = new Camera();
   players = new Players();
-
+  field = new Field();
   // main player, store in players.player but player is a faster way to access
   player = new Player(players.img[5], players);
   player.addComponent(component.onController);
@@ -54,7 +54,7 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
-  for (let index = 0; index < 100; index++) {
+  for (let index = 0; index < 10; index++) {
     players.createAIPlayer();
   }
 });
@@ -149,8 +149,8 @@ addFunction("draw", () => {
     pop();
   }
   queue.updateDraw();
-  sparks.draw();
-  players.draw();
+  // sparks.draw();
+  // players.draw();
   field.draw()
   obstacles.draw();
 

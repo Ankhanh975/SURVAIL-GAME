@@ -3,11 +3,21 @@
 class Field {
   constructor() {
     this.particles = [];
+    // this.collisions = new Collisions2();
+    setTimeout(() => {
+      players.players.forEach((each) => {
+        if (each.AIPlayer) {
+          this.createParticle(each.pos, "friend_smell", 70, 10 ** 10, true);
+        }
+      });
+    }, 100);
   }
   update() {
-    players.realPlayers.forEach((each) => {
-      const p = new SmileParticles(each.pos, "enemy_smell", 75, 60);
-      this.particles.push(p);
+    players.players.forEach((each) => {
+      if (each.AIPlayer) {
+      } else {
+        this.createParticle(each.pos, "enemy_smell", 75, 60);
+      }
     });
     this.particles.forEach((each) => each.update());
     this.particles = this.particles.filter((each) => each.lifeTime > 1);
@@ -25,12 +35,13 @@ class Field {
     let lookAt,
       dist,
       toLookAt = createVector(0, 0);
-
-    smell.some((each) => {
+    smell.forEach((each) => {
       if (each.name == "enemy_smell" || each.name == "attack_attention") {
         lookAt = each.pos;
         dist = each.size * each.pos.dist(zombie.pos);
         toLookAt.add(p5.Vector.sub(lookAt, zombie.pos));
+          this.createParticle(zombie.pos, "detect_enemy", 100, 3);
+      } else if (this.name == "detect_enemy") {
       }
     });
     // console.log(smell, toLookAt);
@@ -41,7 +52,10 @@ class Field {
       zombie.addPos(toLookAt);
     }
   }
-  create_particle;
+  createParticle() {
+    const p = new SmileParticles(...arguments);
+    this.particles.push(p);
+  }
 }
 
 class SmileParticles {
@@ -62,13 +76,15 @@ class SmileParticles {
     // this.name == attack_attention: zombie follow this particle aggressive attack
     // this.name == retreat_attention
     if (this.name == "enemy_smell") {
-      this.smellRadius = 1000;
+      this.smellRadius = 300;
     } else if (this.name == "friend_smell") {
-      this.smellRadius = 1000;
+      this.smellRadius = 300;
     } else if (this.name == "attack_attention") {
-      this.smellRadius = 1000;
+      this.smellRadius = 300;
     } else if (this.name == "retreat_attention") {
-      this.smellRadius = 1000;
+      this.smellRadius = 300;
+    } else if (this.name == "detect_enemy") {
+      this.smellRadius = 300;
     }
   }
   update() {
@@ -87,9 +103,10 @@ class SmileParticles {
       fill(100, 0, 0, 25);
     } else if (this.name == "retreat_attention") {
       fill(128, 255, 128, 25);
+    } else if (this.name == "detect_enemy") {
+      fill(100, 255, 0, 25);
     }
     circle(this.pos.x, this.pos.y, this.size);
     pop();
   }
 }
-let field = new Field();

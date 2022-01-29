@@ -34,7 +34,7 @@ class Collisions2 extends Collisions {
     this.remove(collider);
     return all;
   }
-  isFree(entity, newPos) {
+  isFreeSlot(entity, newPos) {
     // Check if entity place in new position is in possible slot
     // entity = entity.circle;
     newPos = newPos || entity;
@@ -50,6 +50,19 @@ class Collisions2 extends Collisions {
     });
     entity.setPosition(...oldPos);
     console.log(entity, collided);
+    return !collided;
+  }
+  isFreeLine(startX, startY, endX, endY) {
+    const line = this.createPolygon({ x: startX, y: startY }, [
+      { x: 0, y: 0 },
+      { x: endX, y: endY },
+    ]);
+    const potentials = this.getPotentials(line);
+    const collided = potentials.some((body) => {
+      if (this.checkCollision(line, body)) {
+        return true;
+      }
+    });
     return !collided;
   }
 }

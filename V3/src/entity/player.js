@@ -46,6 +46,7 @@ class PlayerBase extends Base {
 }
 class Player extends PlayerBase {
   constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
+    health = 1000
     super(parent, pos, name, health);
 
     this.animation = animation;
@@ -58,11 +59,18 @@ class Player extends PlayerBase {
     this.damage = 0.75;
 
     // physics circle for collision detection
-    // TODO: this.circle should be a polygon
-    this.circle = collisions.createCircle(
-      { x: this.pos.x, y: this.pos.y },
-      60 / 2
-    );
+    // DONE: this.circle should be a polygon
+    // this.circle = collisions.createCircle(
+    //   { x: this.pos.x, y: this.pos.y },
+    //   60 / 2
+    // );
+    this.circle = collisions.createPolygon({ x: this.pos.x, y: this.pos.y }, [
+      { x: 75 / 2, y: 33 / 2 },
+      { x: -75 / 2, y: 33 / 2 },
+      { x: -70 / 2, y: -50 / 2 },
+      { x: 70 / 2, y: -50 / 2 },
+    ]);
+
     this.circle.parent = this;
     collisions.updateBody(this.circle);
     this.addComponent(component.rotation);
@@ -93,9 +101,9 @@ class Player extends PlayerBase {
     //   }
     // });
   }
-
   update() {
     super.update();
+    this.circle.setAngle(this.getAngle());
   }
   draw(options) {
     push();
