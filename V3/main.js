@@ -30,7 +30,7 @@ addFunction("setup", () => {
   players = new Players();
   field = new Field();
   // main player, store in players.player but player is a faster way to access
-  player = new Player(players.img[5], players);
+  player = new Player(5, players);
   player.addComponent(component.onController);
   player.addComponent(component.jump);
   player.addComponent(component.placeObstacle);
@@ -45,7 +45,7 @@ addFunction("setup", () => {
   players.players[0] = player;
   players.realPlayers.push(player);
 
-  // let friend = new Player(players.img[5], players);
+  // let friend = new Player(5, players);
   // friend.health = 400;
   // friend.totalHealth = 400;
   // friend.name = "friend";

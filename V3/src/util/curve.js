@@ -96,3 +96,32 @@ function bezierCurve(x1, y1, x2, y2, x3, y3, return_point = 10) {
   }
   return all;
 }
+
+function drawCircle(xc, yc, r) {
+  function put8pixel(xc, yc, x, y) {
+    allPoints.push(x + xc, y + yc);
+    allPoints.push(-x + xc, y + yc);
+    allPoints.push(x + xc, -y + yc);
+    allPoints.push(-x + xc, -y + yc);
+    allPoints.push(y + xc, x + yc);
+    allPoints.push(-y + xc, x + yc);
+    allPoints.push(y + xc, -x + yc);
+    allPoints.push(-y + xc, -x + yc);
+  }
+  let allPoints = [];
+  x = 0;
+  let y = r;
+  let f = 1 - r;
+  put8pixel(xc, yc, x, y);
+  while (x < y) {
+    if (f < 0) {
+      f += (x << 1) + 3;
+    } else {
+      y--;
+      f += ((x - y) << 1) + 5;
+    }
+    x++;
+    put8pixel(xc, yc, x, y);
+  }
+  return allPoints;
+}

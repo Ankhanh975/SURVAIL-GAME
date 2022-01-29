@@ -9,8 +9,8 @@ class Base {
     allFunctions = allFunctions.map((key) => component[key]);
     allFunctions = allFunctions.filter((key) => typeof key === "function");
 
-    console.log(allFunctions);
-
+    // console.log(allFunctions);
+    component.parent = this;
     allFunctions.forEach((func) => {
       if (func.name === "constructor") {
         func();
@@ -23,12 +23,11 @@ class Base {
     if (component.name) {
       eval(`this.${component.name}=component`);
     }
-    component.parent = this;
   }
   update() {
-    this.updates.forEach((each) => {
+    for (const each of this.updates) {
       each();
-    });
+    }
   }
 }
 // let base = new Base();

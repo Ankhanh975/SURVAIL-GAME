@@ -22,7 +22,6 @@ class PlayerBase extends Base {
     this.pos = pos;
     this.circle.setPosition(this.pos.x, this.pos.y);
   }
-
   addPos(pos) {
     // pos: p5js vector add to this.pos
     this.setPos(this.pos.add(pos));
@@ -45,14 +44,17 @@ class PlayerBase extends Base {
   }
 }
 class Player extends PlayerBase {
-  constructor(animation, parent, name = "love", pos = [0, 0], health = 42) {
-    health = 1000
+  constructor(color, parent, name = "love", pos = [0, 0], health = 42) {
+    // color=0: [255, 255, 255],
+    // color=1: [255, 255, 0],
+    // color=2: [0, 0, 255],
+    // color=3: [248, 147, 29],
+    // color=4: [0, 255, 0],
+    // color=5: [255, 0, 0],
     super(parent, pos, name, health);
-
-    this.animation = animation;
-    this.animationLength = this.animation.length;
-    this.animateFrames = 0;
-
+    this.color = color;
+    this.addComponent(component.animation);
+    this.addComponent(component.rotation);
     this.punchHand = "right";
 
     this.recovery = 0.04;
@@ -73,7 +75,6 @@ class Player extends PlayerBase {
 
     this.circle.parent = this;
     collisions.updateBody(this.circle);
-    this.addComponent(component.rotation);
   }
   setPos(pos) {
     super.setPos(pos);
@@ -115,7 +116,7 @@ class Player extends PlayerBase {
         scale(-1, 1);
         translate(-10, 0);
       }
-      image(this.animation[this.animateFrames], 0, 0);
+      image(this.animation.getFrames(), 0, 0);
       pop();
     }
     if (options.healthBar) {
@@ -152,34 +153,14 @@ class Player extends PlayerBase {
   }
 
   onPunch() {
-    return this.animateFrames !== 0;
+    return this.animation.onPunch();
   }
   startPunch(hand, target) {
     this.health -= 1;
-    // print("startPunch", this.animateFrames, this.animation.length);
-    {
-      // animation
-      this.punchHand = hand || ["left", "right"][int(random(0, 2))];
-
-      this.animateFrames = 1;
-
-      setTimeout(() => {
-        this.animateFrames = 2;
-      }, 16 * 5 * 1);
-      setTimeout(() => {
-        this.animateFrames = 3;
-      }, 16 * 5 * 2);
-      setTimeout(() => {
-        this.animateFrames = 4;
-      }, 16 * 5 * 3);
-      setTimeout(() => {
-        this.animateFrames = 5;
-      }, 16 * 5 * 4);
-      setTimeout(() => {
-        this.animateFrames = 0;
-      }, 16 * 5 * 5);
-    }
-
+    // animation
+    this.animation.start();
+    this.punchHand = hand || ["left", "right"][int(random(0, 2))];
+    
     // effects to all players when punch: push them backwards and minus their health
     target = target || collisions.getPunchAble(this);
     setTimeout(() => {
