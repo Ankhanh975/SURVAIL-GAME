@@ -60,16 +60,16 @@ class Player extends PlayerBase {
 
     // physics circle for collision detection
     // DONE: this.circle should be a polygon
-    // this.circle = collisions.createCircle(
-    //   { x: this.pos.x, y: this.pos.y },
-    //   60 / 2
-    // );
-    this.circle = collisions.createPolygon({ x: this.pos.x, y: this.pos.y }, [
-      { x: 75 / 2, y: 33 / 2 },
-      { x: -75 / 2, y: 33 / 2 },
-      { x: -70 / 2, y: -50 / 2 },
-      { x: 70 / 2, y: -50 / 2 },
-    ]);
+    this.circle = collisions.createCircle(
+      { x: this.pos.x, y: this.pos.y },
+      60 / 2
+    );
+    // this.circle = collisions.createPolygon({ x: this.pos.x, y: this.pos.y }, [
+    //   { x: 75 / 2, y: 33 / 2 },
+    //   { x: -75 / 2, y: 33 / 2 },
+    //   { x: -70 / 2, y: -50 / 2 },
+    //   { x: 70 / 2, y: -50 / 2 },
+    // ]);
 
     this.circle.parent = this;
     collisions.updateBody(this.circle);
@@ -103,7 +103,7 @@ class Player extends PlayerBase {
   }
   update() {
     super.update();
-    this.circle.setAngle(this.getAngle());
+    // this.circle.setAngle(this.getAngle());
   }
   draw(options) {
     push();

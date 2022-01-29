@@ -8,7 +8,7 @@ let mouse;
 let queue = new Queue();
 let killCount = 0;
 let mousePos = [];
-let field
+let field;
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
@@ -54,7 +54,7 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
-  for (let index = 0; index < 10; index++) {
+  for (let index = 0; index < 50; index++) {
     players.createAIPlayer();
   }
 });
@@ -82,7 +82,7 @@ addFunction("draw", () => {
   players.update();
   obstacles.update();
   collisions.update();
-  field.update()
+  field.update();
   for (let i = 0; i < 5; i++) {
     players.players.forEach((player) => {
       collisions.checkOne(player.circle, (response) => {
@@ -98,7 +98,8 @@ addFunction("draw", () => {
           b.pos.x -= x * 0.4;
           b.pos.y -= y * 0.4;
           b.circle.setPosition(b.pos.x, b.pos.y);
-        } else if (response.b.parent instanceof Obstacle) {
+          // } else if (response.b.parent instanceof Obstacle) {
+        } else {
           player.pos.x += x;
           player.pos.y += y;
           player.circle.setPosition(player.pos.x, player.pos.y);
@@ -145,13 +146,13 @@ addFunction("draw", () => {
     fill(255, 0, 0, 90);
     stroke(255, 255, 0, 180);
     strokeWeight(4);
-    arc(-10, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
+    arc(-0, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
     pop();
   }
   queue.updateDraw();
-  // sparks.draw();
-  // players.draw();
-  field.draw()
+  sparks.draw();
+  players.draw();
+  // field.draw();
   obstacles.draw();
 
   pop();

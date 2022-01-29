@@ -27,14 +27,21 @@ class AIPlayer extends Player {
     // }, 250);
   }
   startPunch(hand, target) {
-    console.log("start punch");
     super.startPunch(hand, target);
-    field.createParticle(this.pos, "attack_attention", 250, null)
+    field.createParticle(
+      {
+        x: (this.pos.x + this.target.pos.x) / 2,
+        y: (this.pos.y + this.target.pos.y) / 2,
+      },
+      "attack_attention",
+      70,
+      7,
+      null
+    );
   }
   update() {
     super.update();
     // let target = this.parent.realPlayers[this.target].pos;
-    field.tick(this);
     if (this.target) {
       let lookAt, dist, toLookAt;
       lookAt = this.target.pos;
@@ -48,18 +55,20 @@ class AIPlayer extends Player {
           }
         }
       }
+      // field.tick(this);
+
       // if (obstacles.FindStraightPath(this.pos, this.target.pos).length > 0) {
-        // if (dist < 1100) {
-        //   if (dist < 130) {
-        //     toLookAt.setMag(4.5);
-        //     toLookAt.rotate(radians(180));
-        //     this.addPos(toLookAt);
-        //   }
-        //   if (dist > 175) {
-        //     toLookAt.setMag(3.0);
-        //     this.addPos(toLookAt);
-        //   }
-        // }
+      if (dist < 1100) {
+        if (dist < 130) {
+          toLookAt.setMag(4.5);
+          toLookAt.rotate(radians(180));
+          this.addPos(toLookAt);
+        }
+        if (dist > 175) {
+          toLookAt.setMag(3.0);
+          this.addPos(toLookAt);
+        }
+      }
       // }
     }
   }

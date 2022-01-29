@@ -16,7 +16,7 @@
 - 11/01/2022: Use font from google fonts
 - 11/01/2022: Proper jump dicection detection 
 - 11/01/2022: Proper collision detection handling!
-TODO: this check is every move => slow
+Done: this check is every move => slow
 
 - 19/01/2022: reFerter code
 - 19/01/2022: Add continuous handling for box placement (before when fast movement is may miss )
@@ -24,9 +24,10 @@ TODO: this check is every move => slow
 - TODO: More particles effects
 - TODO: Sound
 - TODO: Preset obstacles as topographic (simplex2 noise)
-- TODO: Đặt obstacles vào thành 1 convex polygons 
-- Zomble behaviour: Following it friend, wander
-- 
+<!-- - TODO: Đặt obstacles vào thành 1 convex polygons  -->
+- Zombie behavior: Following it friend, wander
+- 29/01/2022: TODO: freeze on push back
+- 29/01/2022: TODO: on push back: push back on the path back.
 - 
 Demo: https://youtu.be/NoWH5l08dMM
 # Explained folder structure:
