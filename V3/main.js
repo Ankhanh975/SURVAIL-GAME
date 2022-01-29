@@ -91,6 +91,15 @@ addFunction("draw", () => {
         const b = response.b.parent;
         x = min(x, 15);
         y = min(y, 15);
+        // if (response.a.parent instanceof Player && response.a.parent.AIPlayer) {
+        //   player.pos.x += x * 0.5;
+        //   player.pos.y += y * 0.5;
+        //   player.circle.setPosition(player.pos.x, player.pos.y);
+        //   b.pos.x -= x * 0.5;
+        //   b.pos.y -= y * 0.5;
+        //   b.circle.setPosition(b.pos.x, b.pos.y);
+        //   // } else if (response.b.parent instanceof Obstacle) {
+        // }
         if (response.b.parent instanceof Player) {
           player.pos.x += x * 0.6;
           player.pos.y += y * 0.6;
