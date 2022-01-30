@@ -42,13 +42,15 @@ class Obstacle {
     // });
   }
   draw() {
-    // if (
-    //   player.pos.x - this.circle.pos.x > 1000 &&
-    //   player.pos.y - this.circle.pos.y > 1000
-    // ) {
-    //   console.log("too far");
-    //   return;
-    // }
+    if (
+      player.pos.x - this.circle.pos.x > 1000 ||
+      player.pos.x - this.circle.pos.x < -1000 ||
+      player.pos.y - this.circle.pos.y > 600 ||
+      player.pos.y - this.circle.pos.y < -600
+    ) {
+      // console.log("too far");
+      return;
+    }
     push();
     translate(this.circle.pos.x, this.circle.pos.y);
     translate(this.size / 2, this.size / 2);
@@ -61,9 +63,9 @@ class Obstacle {
     pop();
   }
   update() {
-    this.life -= 1;
-    if (this.life <= 0) {
-    }
+    // this.life -= 1;
+    // if (this.life <= 0) {
+    // }
   }
   getHit() {}
 }
@@ -191,7 +193,7 @@ class Obstacles {
     for (const obstacle of this.obstacles) {
       obstacle.update();
     }
-    console.log(pixelDensity());
+    // console.log(pixelDensity());
   }
   draw() {
     push();
@@ -203,16 +205,16 @@ class Obstacles {
   initObstacles() {
     let chunkX = 0;
     let chunkY = 0;
-    // for (let x = 0; x < 100; x++) {
-      // for (let y = 0; y < 100; y++) {
-        for (let x = 30; x < 70; x++) {
-          for (let y = 30; y < 70; y++) {
+    for (let x = 0; x < 100; x++) {
+      for (let y = 0; y < 100; y++) {
+        // for (let x = 30; x < 70; x++) {
+        // for (let y = 30; y < 70; y++) {
         let value = noisejs.simplex2(
-          x / 10 + (chunkX * 100) / 10,
-          y / 10 + (chunkY * 100) / 10
+          x / 15 + (chunkX * 100) / 15,
+          y / 15 + (chunkY * 100) / 15
         );
         // chunk[x][y] += noisejs.simplex2(x / 5, y / 5) / 20;
-        if (value > 0.35) {
+        if (value > 0.35 && value < 0.7) {
           const pos = this.grid.GridCoordsToWorldCoords(x, y);
           this.createObstacle({ x: pos[0], y: pos[1] }, false);
         }

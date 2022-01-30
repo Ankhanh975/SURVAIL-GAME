@@ -110,3 +110,15 @@
     }
   };
 })();
+function clear_surface(canvas, startX, startY, endX, endY) {
+  canvas.loadPixels();
+  const width = canvas.width;
+  for (var x = startX; x < endX; x++) {
+    for (let y = startY; y < endY; y++) {
+      // loop over
+      const index = 4 * (y * width + x);
+      canvas.pixels[index + 3] = 0;
+    }
+  }
+  canvas.updatePixels();
+}

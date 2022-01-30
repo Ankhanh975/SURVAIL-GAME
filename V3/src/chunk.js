@@ -2,6 +2,13 @@ class chunk {
     constructor() {
       this.chunk = [];
   }
-  update() {}
+  update() {
+    players.players.forEach((each) => {
+      
+    })
+    obstacles.obstacles.forEach((each) => {
+      
+    })
+  }
 }
 

@@ -25,10 +25,10 @@ Done: this check is every move => slow
 - TODO: Sound
 - TODO: Preset obstacles as topographic (simplex2 noise)
 <!-- - TODO: Đặt obstacles vào thành 1 convex polygons  -->
+- 30/01/2022: TODO: a surface obstacles.surface for static obstacles 
 - Zombie behavior: Following it friend, wander
 - 29/01/2022: TODO: freeze on push back
 - 29/01/2022: TODO: on push back: push back on the path back.
-- 
 Demo: https://youtu.be/NoWH5l08dMM
 # Explained folder structure:
 ```

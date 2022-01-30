@@ -9,12 +9,16 @@ let queue = new Queue();
 let killCount = 0;
 let mousePos = [];
 let field;
+var ctx;
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
-  canvas = createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight);
+  setTimeout(() => {
+    ctx = canvas.getContext("2d");
+  }, 10);
   // TODO
-  // pixelDensity(1)
+  // pixelDensity(1.0);
   imageMode(CENTER);
   // colorMode(HSB, 255);
 
@@ -55,7 +59,7 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 4; i++) {
     players.createAIPlayer();
   }
 });
@@ -83,7 +87,7 @@ addFunction("draw", () => {
   players.update();
   obstacles.update();
   collisions.update();
-  field.update();
+  // field.update();
   for (let i = 0; i < 5; i++) {
     players.players.forEach((player) => {
       collisions.checkOne(player.circle, (response) => {
