@@ -19,7 +19,7 @@ class Spark {
   constructor(loc, angle, speed, color, scale = 1) {
     // console.log("this.color", this.color, color);
 
-    this.loc = {x: loc.x, y: loc.y}
+    this.pos = { x: loc.x, y: loc.y };
     this.angle = angle;
     this.speed = speed;
     this.scale = scale;
@@ -48,8 +48,8 @@ class Spark {
   }
   move(dt) {
     let movement = this.calculate_movement(dt);
-    this.loc.x += movement[0];
-    this.loc.y += movement[1];
+    this.pos.x += movement[0];
+    this.pos.y += movement[1];
 
     this.speed -= 0.085 + 0.025 * this.speed;
     this.angle += 0.075;
@@ -61,20 +61,24 @@ class Spark {
     if (this.alive) {
       let points = [
         [
-          this.loc.x + Math.cos(this.angle) * this.speed * this.scale,
-          this.loc.y + Math.sin(this.angle) * this.speed * this.scale,
+          this.pos.x + Math.cos(this.angle) * this.speed * this.scale,
+          this.pos.y + Math.sin(this.angle) * this.speed * this.scale,
         ],
         [
-          this.loc.x + Math.cos(this.angle + PI / 2) * this.speed * this.scale * 0.3,
-          this.loc.y + Math.sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
+          this.pos.x +
+            Math.cos(this.angle + PI / 2) * this.speed * this.scale * 0.3,
+          this.pos.y +
+            Math.sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
         ],
         [
-          this.loc.x - Math.cos(this.angle) * this.speed * this.scale * 3.5,
-          this.loc.y - Math.sin(this.angle) * this.speed * this.scale * 3.5,
+          this.pos.x - Math.cos(this.angle) * this.speed * this.scale * 3.5,
+          this.pos.y - Math.sin(this.angle) * this.speed * this.scale * 3.5,
         ],
         [
-          this.loc.x + Math.cos(this.angle - PI / 2) * this.speed * this.scale * 0.3,
-          this.loc.y - Math.sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
+          this.pos.x +
+            Math.cos(this.angle - PI / 2) * this.speed * this.scale * 0.3,
+          this.pos.y -
+            Math.sin(this.angle + PI / 2) * this.speed * this.scale * 0.3,
         ],
       ];
       // console.log("this.color", this.color);
@@ -116,8 +120,8 @@ class Sparks {
     this.particles.push(n);
     return n;
   }
+  
   draw() {
-    this.update();
     for (let spark of this.particles) {
       spark.draw();
     }

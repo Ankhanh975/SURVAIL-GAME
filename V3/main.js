@@ -10,6 +10,7 @@ let killCount = 0;
 let mousePos = [];
 let field;
 var ctx;
+let chunks;
 addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
@@ -34,6 +35,7 @@ addFunction("setup", () => {
   camera = new Camera();
   players = new Players();
   field = new Field();
+  chunks = new Chunks();
   // main player, store in players.player but player is a faster way to access
   player = new Player(5, players);
   player.addComponent(component.onController);
@@ -82,12 +84,16 @@ addFunction("draw", () => {
   }
   // onController need to after players.update
 
-  queue.updatePro();
+  
+  // sparks.update();
   player.setAngle(p5.Vector.sub(mouse, player.pos).heading());
-  players.update();
-  obstacles.update();
-  collisions.update();
+  // players.update();
+  // obstacles.update();
   // field.update();
+  chunks.update();
+  collisions.update();
+  
+
   for (let i = 0; i < 5; i++) {
     players.players.forEach((player) => {
       collisions.checkOne(player.circle, (response) => {
@@ -144,15 +150,6 @@ addFunction("draw", () => {
 
   pop();
 
-  // if (players.players[1]) {
-  //   let path = players.players[1].path;
-  //   path.forEach((e, i) => {
-  //     push();
-  //     fill(0, 0, 255, 90);
-  //     circle(e[0], e[1], 40 + i * 3);
-  //     pop();
-  //   });
-  // }
   if (isPressed) {
     push();
     translate(player.pos);
@@ -163,12 +160,41 @@ addFunction("draw", () => {
     arc(-0, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
     pop();
   }
-  queue.updateDraw();
-  sparks.draw();
-  players.draw();
-  // field.draw();
-  obstacles.draw();
+  queue.update();
+  const objects = chunks.getNear(...player.chunkPos, [11, 6]);
+  objects
+    .filter((object) => object instanceof Spark)
+    .forEach((object) => object.draw());
+  
+  objects
+    .filter((object) => object instanceof Player)
+    .forEach((object) => {
+      object.draw({
+        healthBar: true,
+        nameTag: !object.AIPlayer,
+        body: true,
+      });
+    });
+  objects
+    .filter((object) => object instanceof Obstacle)
+    .forEach((object) => object.draw());
+    
+  
 
+  // sparks.draw();
+  // players.draw();
+  // obstacles.draw();
+  // field.draw();
+
+  // if (players.players[1]) {
+  //   let path = players.players[1].path;
+  //   path.forEach((e, i) => {
+  //     push();
+  //     fill(0, 0, 255, 90);
+  //     circle(e[0], e[1], 40 + i * 3);
+  //     pop();
+  //   });
+  // }
   pop();
   fpsMeter.tick();
   menu.display(

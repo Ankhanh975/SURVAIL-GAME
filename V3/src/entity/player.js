@@ -20,7 +20,9 @@ class PlayerBase extends Base {
   }
   setPos(pos) {
     this.pos = pos;
-    this.circle.setPosition(this.pos.x, this.pos.y);
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
+    // this.circle.setPosition(this.pos.x, this.pos.y);
   }
   addPos(pos) {
     // pos: p5js vector add to this.pos
@@ -106,7 +108,7 @@ class Player extends PlayerBase {
     super.update();
     // this.circle.setAngle(this.getAngle());
   }
-  draw(options) {
+  draw(options = {}) {
     push();
     translate(this.pos);
     if (options.body) {
@@ -160,7 +162,7 @@ class Player extends PlayerBase {
     // animation
     this.animation.start();
     this.punchHand = hand || ["left", "right"][int(random(0, 2))];
-    
+
     // effects to all players when punch: push them backwards and minus their health
     target = target || collisions.getPunchAble(this);
     setTimeout(() => {

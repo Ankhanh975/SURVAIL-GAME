@@ -54,7 +54,7 @@ class Queue {
   addPro(event) {
     this.queue2.push(event);
   }
-  updateDraw() {
+  update() {
     this.queue1.forEach((q) => {
       eval(q);
     });

@@ -42,15 +42,6 @@ class Obstacle {
     // });
   }
   draw() {
-    if (
-      player.pos.x - this.circle.pos.x > 1000 ||
-      player.pos.x - this.circle.pos.x < -1000 ||
-      player.pos.y - this.circle.pos.y > 600 ||
-      player.pos.y - this.circle.pos.y < -600
-    ) {
-      // console.log("too far");
-      return;
-    }
     push();
     translate(this.circle.pos.x, this.circle.pos.y);
     translate(this.size / 2, this.size / 2);
@@ -198,6 +189,15 @@ class Obstacles {
   draw() {
     push();
     for (const obstacle of this.obstacles) {
+      if (
+        player.pos.x - obstacle.circle.pos.x > 1000 ||
+        player.pos.x - obstacle.circle.pos.x < -1000 ||
+        player.pos.y - obstacle.circle.pos.y > 600 ||
+        player.pos.y - obstacle.circle.pos.y < -600
+      ) {
+        // console.log("too far");
+        return;
+      }
       obstacle.draw();
     }
     pop();

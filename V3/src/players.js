@@ -36,13 +36,14 @@ class Players {
   }
   update() {
     for (const e of this.players) {
-      if (e.AIPlayer) {
-        e.update();
-      } else if (e === player) {
-        e.update();
-      } else {
-        e.update();
-      }
+      e.update();
+      // if (e.AIPlayer) {
+        // e.update();
+      // } else if (e === player) {
+        // e.update();
+      // } else {
+        // e.update();
+      // }
     }
   }
   draw() {
