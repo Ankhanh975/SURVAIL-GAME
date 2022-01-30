@@ -16,16 +16,14 @@
 - 11/01/2022: Use font from google fonts
 - 11/01/2022: Proper jump dicection detection 
 - 11/01/2022: Proper collision detection handling!
-Done: this check is every move => slow
-
 - 19/01/2022: reFerter code
 - 19/01/2022: Add continuous handling for box placement (before when fast movement is may miss )
 - TODO: pathfinding: https://github.com/qiao/PathFinding.js
 - TODO: More particles effects
 - TODO: Sound
-- TODO: Preset obstacles as topographic (simplex2 noise)
+-  30/01/2022: Preset obstacles as topographic (simplex2 noise)
 <!-- - TODO: Đặt obstacles vào thành 1 convex polygons  -->
-- 30/01/2022: TODO: a surface obstacles.surface for static obstacles 
+- 30/01/2022: a surface obstacles.surface for static obstacles 
 - Zombie behavior: Following it friend, wander
 - 29/01/2022: TODO: freeze on push back
 - 29/01/2022: TODO: on push back: push back on the path back.

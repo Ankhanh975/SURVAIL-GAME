@@ -12,7 +12,7 @@ let field;
 var ctx;
 let chunks;
 addFunction("setup", () => {
-  // frameRate(15);
+  // frameRate(150);
   // createCanvas(1024, 768, WEBGL);
   createCanvas(windowWidth, windowHeight);
   setTimeout(() => {
@@ -30,6 +30,7 @@ addFunction("setup", () => {
 });
 
 addFunction("setup", () => {
+  noisejs.seed(Math.random());
   sparks = new Sparks();
   obstacles = new Obstacles();
   camera = new Camera();
@@ -52,16 +53,16 @@ addFunction("setup", () => {
   players.players[0] = player;
   players.realPlayers.push(player);
 
-  // let friend = new Player(5, players);
-  // friend.health = 400;
-  // friend.totalHealth = 400;
-  // friend.name = "friend";
-  // friend.damage = 2.5;
-  // friend.addPos(createVector(100, 0));
-  // friend.recovery = 0.001 * friend.health;
-  // players.players[1] = friend;
-  // players.realPlayers.push(friend);
-  for (let i = 0; i < 4; i++) {
+  let friend = new Player(5, players);
+  friend.health = 400;
+  friend.totalHealth = 400;
+  friend.name = "friend";
+  friend.damage = 2.5;
+  friend.addPos(createVector(100, 0));
+  friend.recovery = 0.001 * friend.health;
+  players.players[1] = friend;
+  players.realPlayers.push(friend);
+  for (let i = 0; i < 0; i++) {
     players.createAIPlayer();
   }
 });
@@ -84,15 +85,25 @@ addFunction("draw", () => {
   }
   // onController need to after players.update
 
-  
-  // sparks.update();
   player.setAngle(p5.Vector.sub(mouse, player.pos).heading());
-  // players.update();
-  // obstacles.update();
-  // field.update();
   chunks.update();
+  {
+    sparks.update();
+    players.update();
+    obstacles.update();
+    field.update();
+  }
+
+  // for (const object in this.chunk) {
+  //   const chunk = this.chunk[object];
+  //   if (chunk) {
+  //     chunk.forEach((each) => {
+  //       console.log(each);
+  //       each.update();
+  //     });
+  //   }
+  // }
   collisions.update();
-  
 
   for (let i = 0; i < 5; i++) {
     players.players.forEach((player) => {
@@ -161,28 +172,23 @@ addFunction("draw", () => {
     pop();
   }
   queue.update();
+  sparks.draw();
   const objects = chunks.getNear(...player.chunkPos, [11, 6]);
-  objects
-    .filter((object) => object instanceof Spark)
-    .forEach((object) => object.draw());
-  
-  objects
-    .filter((object) => object instanceof Player)
-    .forEach((object) => {
-      object.draw({
-        healthBar: true,
-        nameTag: !object.AIPlayer,
-        body: true,
-      });
-    });
+
+  // objects
+  //   .filter((object) => object instanceof Player)
+  //   .forEach((object) => {
+  //     object.draw({
+  //       healthBar: true,
+  //       nameTag: !object.AIPlayer,
+  //       body: true,
+  //     });
+  //   });
+  players.draw();
   objects
     .filter((object) => object instanceof Obstacle)
     .forEach((object) => object.draw());
-    
-  
 
-  // sparks.draw();
-  // players.draw();
   // obstacles.draw();
   // field.draw();
 

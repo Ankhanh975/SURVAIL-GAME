@@ -47,29 +47,40 @@ class AIPlayer extends Player {
       lookAt = this.target.pos;
       dist = this.pos.dist(lookAt);
       toLookAt = p5.Vector.sub(lookAt, this.pos);
-      this.setAngle(toLookAt.heading());
-      if (dist < 150) {
-        if (!this.onPunch()) {
-          if (random(0, 100) >= 93.5) {
-            this.startPunch(null, [this.target]);
-          }
-        }
-      }
+
       // field.tick(this);
 
-      // if (obstacles.FindStraightPath(this.pos, this.target.pos).length > 0) {
-      if (dist < 1100) {
+      if (
+        collisions.isFreeLine(
+          this.pos.x,
+          this.pos.y,
+          this.target.pos.x,
+          this.target.pos.y,
+          [this, this.target]
+        )
+      ) {
+        if (dist < 150) {
+          if (!this.onPunch()) {
+            if (random(0, 100) >= 93.5) {
+              this.startPunch(null, [this.target]);
+            }
+          }
+        }
+        this.setAngle(toLookAt.heading());
+        // if (dist < 1100) {
         if (dist < 130) {
-          toLookAt.setMag(4.5);
+          toLookAt.setMag(3.0);
           toLookAt.rotate(radians(180));
           this.addPos(toLookAt);
         }
-        if (dist > 175) {
+        if (dist > 150) {
           toLookAt.setMag(3.0);
           this.addPos(toLookAt);
         }
+        // }
+      } else {
+        this.setAngle(radians(-90));
       }
-      // }
     }
   }
 }

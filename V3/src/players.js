@@ -16,19 +16,19 @@ class Players {
     // }
 
     // gameTick
-    // setInterval(() => {
-    //   if (this.players.length < 100) {
-    //     // while (this.AIs.length < 35) {
-    //     let pos = p5.Vector.random2D().setMag(random(300, 1000));
-    //     for (let index = 0; index < Prob.normal(10, 2)(); index++) {
-    //       // setTimeout(() => {
-    //       this.createAIPlayer(
-    //         pos.add(p5.Vector.random2D().setMag(random(0, 100)))
-    //       );
-    //       // }, Prob.normal(16, 16 * 40)());
-    //     }
-    //   }
-    // }, 3 * 1000);
+    setInterval(() => {
+      if (this.players.length < 100) {
+        // while (this.AIs.length < 35) {
+        let pos = p5.Vector.random2D().setMag(random(300, 1000));
+        for (let index = 0; index < Prob.normal(10, 2)(); index++) {
+          // setTimeout(() => {
+          this.createAIPlayer(
+            pos.add(p5.Vector.random2D().setMag(random(0, 100)))
+          );
+          // }, Prob.normal(16, 16 * 40)());
+        }
+      }
+    }, 3 * 1000);
 
     // // setInterval(() => {
     // // this.players.shuffle();
@@ -38,16 +38,25 @@ class Players {
     for (const e of this.players) {
       e.update();
       // if (e.AIPlayer) {
-        // e.update();
+      // e.update();
       // } else if (e === player) {
-        // e.update();
+      // e.update();
       // } else {
-        // e.update();
+      // e.update();
       // }
     }
   }
   draw() {
     this.players.forEach((e, i) => {
+      if (
+        player.pos.x - e.pos.x > 1000 ||
+        player.pos.x - e.pos.x < -1000 ||
+        player.pos.y - e.pos.y > 600 ||
+        player.pos.y - e.pos.y < -600
+      ) {
+        // console.log("too far");
+        return;
+      }
       e.draw({ healthBar: true, nameTag: !e.AIPlayer || i <= 1, body: true });
     });
   }

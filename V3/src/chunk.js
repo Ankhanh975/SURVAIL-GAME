@@ -9,15 +9,16 @@ class Chunk {
 
 class Chunks {
   constructor() {
-    this.chunk = {};
+    this.activeChunks = {};
     this.allChunks = {};
   }
   update() {
-    this.chunk = {};
-    players.players
+    this.activeChunks = {};
+    []
+      .concat(players.players)
       .concat(obstacles.obstacles)
-      .concat(field.particles)
-      .concat(sparks.particles)
+      // .concat(field.particles)
+      // .concat(sparks.particles)
       .forEach((each) => {
         const worldCoords = each.pos || each.circle.pos;
         const chunkPos = this.WorldCoordsToChunkCoords(
@@ -26,18 +27,13 @@ class Chunks {
         );
         each.chunkPos = chunkPos;
         const chunkIndex = `${chunkPos[0]}, ${chunkPos[1]}`;
-        if (!this.chunk[chunkIndex]) {
-          this.chunk[chunkIndex] = [];
+        if (this.activeChunks[chunkIndex]) {
+          this.activeChunks[chunkIndex].push(each);
+        } else {
+          this.activeChunks[chunkIndex] = [each];
         }
-        this.chunk[chunkIndex].push(each);
       });
-    // console.log(this.chunk);
-    for (const object in this.chunk) {
-      const chunk = this.chunk[object];
-      chunk.forEach((object) => {
-        object.update();
-      });
-    }
+    // console.log(this.activeChunks);
   }
   getNear(chunkX, chunkY, radius) {
     // console.log(radius, radius instanceof Number, radius.constructor === Array);
@@ -58,9 +54,9 @@ class Chunks {
     for (let x = upLeft; x < upRight; x++) {
       for (let y = bottomLeft; y < bottomRight; y++) {
         const chunkIndex = `${x}, ${y}`;
-        const chunk = this.chunk[chunkIndex];
-        if (chunk) {
-          all = all.concat(chunk);
+        const activeChunks = this.activeChunks[chunkIndex];
+        if (activeChunks) {
+          all = all.concat(activeChunks);
         }
       }
     }

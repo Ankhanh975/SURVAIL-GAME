@@ -82,6 +82,10 @@ class Obstacles {
     this.obstacles_surface2.rect(0, 0, 52, 52, 3.5);
     this.obstacles_surface2.pop();
 
+    // TODO: why 2000 obstacles is slow?
+    // 1. Collisions check
+    // 2. Loop through obstacles.update();
+    // ...
     this.initObstacles();
   }
   FindPath(posStart, posEnd) {
@@ -116,40 +120,6 @@ class Obstacles {
       // console.log("r", JSON.stringify(r));
     }
     return path;
-  }
-  FindStraightPath(posStart, posEnd) {
-    {
-      // TODO
-      // return
-    }
-    {
-      let pGridStart = this.grid.WorldCoordsToGridCoords(
-        posStart.x,
-        posStart.y
-      );
-      let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
-      let path = lineBresenham_1(...pGridStart, ...pGridEnd);
-      // console.log("path", path);
-      // Check path valid or invalid
-      let isValid = !path.some((each) => {
-        return this.grid.get(...each);
-      });
-      if (isValid) {
-        return [
-          [posStart.x, posStart.y],
-          [posEnd.x, posEnd.y],
-        ];
-        path = path.map((each) => {
-          each = this.grid.GridCoordsToWorldCoords(...each);
-          each[0] += 52 / 2;
-          each[1] += 52 / 2;
-          return each;
-        });
-        return path;
-      } else {
-        return [];
-      }
-    }
   }
   createObstacle(pos, lifeTime = true) {
     pos = createVector(pos.x, pos.y);
@@ -189,26 +159,18 @@ class Obstacles {
   draw() {
     push();
     for (const obstacle of this.obstacles) {
-      if (
-        player.pos.x - obstacle.circle.pos.x > 1000 ||
-        player.pos.x - obstacle.circle.pos.x < -1000 ||
-        player.pos.y - obstacle.circle.pos.y > 600 ||
-        player.pos.y - obstacle.circle.pos.y < -600
-      ) {
-        // console.log("too far");
-        return;
-      }
       obstacle.draw();
     }
     pop();
   }
   initObstacles() {
+   
     let chunkX = 0;
     let chunkY = 0;
-    for (let x = 0; x < 100; x++) {
-      for (let y = 0; y < 100; y++) {
-        // for (let x = 30; x < 70; x++) {
-        // for (let y = 30; y < 70; y++) {
+    // for (let x = 0; x < 100; x++) {
+    // for (let y = 0; y < 100; y++) {
+    for (let x = 20; x < 80; x++) {
+      for (let y = 20; y < 80; y++) {
         let value = noisejs.simplex2(
           x / 15 + (chunkX * 100) / 15,
           y / 15 + (chunkY * 100) / 15
@@ -336,3 +298,32 @@ class Obstacles {
     }
   }
 }
+
+// {
+//   let pGridStart = this.grid.WorldCoordsToGridCoords(
+//     posStart.x,
+//     posStart.y
+//   );
+//   let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);
+//   let path = lineBresenham_1(...pGridStart, ...pGridEnd);
+//   // console.log("path", path);
+//   // Check path valid or invalid
+//   let isValid = !path.some((each) => {
+//     return this.grid.get(...each);
+//   });
+//   if (isValid) {
+//     return [
+//       [posStart.x, posStart.y],
+//       [posEnd.x, posEnd.y],
+//     ];
+//     path = path.map((each) => {
+//       each = this.grid.GridCoordsToWorldCoords(...each);
+//       each[0] += 52 / 2;
+//       each[1] += 52 / 2;
+//       return each;
+//     });
+//     return path;
+//   } else {
+//     return [];
+//   }
+// }

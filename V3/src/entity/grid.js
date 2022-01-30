@@ -76,8 +76,9 @@ class Grid {
     }
     isInIsolate(gridX, gridY) {
       // A region is isolated from every other region when
-      // 1. Pathfinding can't find path to player
+      // 1. Pathfinding can't find path to any player
       // 2. Every Player can find path to infinite
+      
       if (this.get(gridX, gridY) === true) {
         return false;
       }
@@ -93,14 +94,6 @@ class Grid {
       if (this.FindPathFast(gridX, gridY, ...playerInGridCoords).length > 0) {
         return false;
       }
-  
-      // console.log(
-      //   playerInGridCoords,
-      //   gridX,
-      //   gridY,
-      //   this.FindPath(gridX, gridY, ...playerInGridCoords).length === 0,
-      //   this.FindPath(...playerInGridCoords, 0, 0).length !== 0
-      // );
       if (this.FindPathFast(...playerInGridCoords, 0, 0).length !== 0) {
         return true;
       }
@@ -115,21 +108,3 @@ class Grid {
       return isValid;
     }
   }
-  // isInIsolate(gridX, gridY) {
-  //   if (this.get(gridX, gridY) === true) {
-  //     return false;
-  //   }
-  //   // A region is isolated from every other region when
-  //   // 1. Pathfinding can't find path to any player
-  //   // 2. any  Player can find path to infinite
-  
-  //   let isInIsolate = !players.players.some((p) => {
-  //     let pInGridCoords = this.WorldCoordsToGridCoords(p.pos.x, p.pos.y);
-  //     if (this.FindPathFast(...pInGridCoords, 0, 0).length !== 0) {
-  //       if (this.FindPathFast(gridX, gridY, ...pInGridCoords).length > 0) {
-  //         return true;
-  //       }
-  //     }
-  //   });
-  //   return isInIsolate;
-  // }

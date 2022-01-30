@@ -52,17 +52,29 @@ class Collisions2 extends Collisions {
     console.log(entity, collided);
     return !collided;
   }
-  isFreeLine(startX, startY, endX, endY) {
+  isFreeLine(startX, startY, endX, endY, ignore = []) {
     const line = this.createPolygon({ x: startX, y: startY }, [
       { x: 0, y: 0 },
-      { x: endX, y: endY },
+      { x: endX - startX, y: endY - startY },
     ]);
+    // this.updateBody(line);
     const potentials = this.getPotentials(line);
     const collided = potentials.some((body) => {
+      for (const each of ignore) {
+        if (body.parent === each) {
+          return false;
+        }
+      }
+      if (!(body.parent instanceof Obstacle)) {
+        return false;
+      }
+
       if (this.checkCollision(line, body)) {
+        // console.log("Collision detected", body);
         return true;
       }
     });
+    this.remove(line);
     return !collided;
   }
 }
