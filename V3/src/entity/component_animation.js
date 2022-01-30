@@ -76,7 +76,6 @@
   component.animation = class {
     name = "animation";
     constructor() {
-      console.log(this.parent);
       // this.color = this.parent.color;
       // this.animation = Players_img[color];
       // this.animationLength = this.animation.length;

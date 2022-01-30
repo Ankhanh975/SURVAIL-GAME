@@ -13,8 +13,9 @@ addFunction("setup", () => {
   // frameRate(15);
   // createCanvas(1024, 768, WEBGL);
   canvas = createCanvas(windowWidth, windowHeight);
-  imageMode(CENTER);
   // TODO
+  // pixelDensity(1)
+  imageMode(CENTER);
   // colorMode(HSB, 255);
 
   // rectMode(CENTER);
@@ -54,7 +55,7 @@ addFunction("setup", () => {
   // friend.recovery = 0.001 * friend.health;
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
-  for (let index = 0; index < 50; index++) {
+  for (let i = 0; i < 1; i++) {
     players.createAIPlayer();
   }
 });

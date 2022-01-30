@@ -1,6 +1,6 @@
 class Players {
   constructor() {
-    this.parent = globalThis
+    this.parent = globalThis;
     this.players = [];
     this.realPlayers = [];
 
@@ -35,16 +35,15 @@ class Players {
     // // }, 125);
   }
   update() {
-    this.players.forEach((e) => {
+    for (const e of this.players) {
       if (e.AIPlayer) {
         e.update();
       } else if (e === player) {
         e.update();
       } else {
-        // e.update(p5.Vector.add(e.pos, createVector(0, -1)));
         e.update();
       }
-    });
+    }
   }
   draw() {
     this.players.forEach((e, i) => {
@@ -62,5 +61,4 @@ class Players {
 
     this.players.push(new AIPlayer(color, this, [pos.x, pos.y]));
   }
- 
 }
