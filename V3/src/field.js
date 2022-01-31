@@ -91,21 +91,23 @@ class Field {
     // if (count.detect_enemy + count.detect_enemy2 > 70) {
     // If 7 zombie players will be attack
 
-    // const smell = chunks.getNear(...zombie.chunkPos, 10).filter((object) => object instanceof SmileParticles);
+    // const smell = chunks
+      // .getNear(...zombie.chunkPos, 10)
+      // .filter((object) => object instanceof SmileParticles)
     const smell = this.particles
       .filter((each) => {
         return each.pos.dist(zombie.pos) < each.smellRadius;
       })
-      .filter((each) => {
-        const free = collisions.isFreeLine(
-          each.pos.x,
-          each.pos.y,
-          zombie.pos.x,
-          zombie.pos.y,
-          [zombie]
-        );
-        return free;
-      });
+      // .filter((each) => {
+      //   const free = collisions.isFreeLine(
+      //     each.pos.x,
+      //     each.pos.y,
+      //     zombie.pos.x,
+      //     zombie.pos.y,
+      //     [zombie]
+      //   );
+      //   return free;
+      // });
 
     const count = this.countType(smell);
 
@@ -152,7 +154,12 @@ class Field {
 
     // TODO: tell other to attack_attention
     // TODO: wandering when dont see anything
+    else {
+      let toLookAt = p5.Vector.random2D();
+      zombie.addPos(toLookAt);
+    }
   }
+
   createParticle() {
     if (this.particles.length < 10000) {
       const p = new SmileParticles(...arguments);

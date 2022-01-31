@@ -11,8 +11,12 @@ class Chunks {
   constructor() {
     this.activeChunks = {};
     this.allChunks = {};
+    this.update();
   }
   update() {
+    // if (frameCount % 5 !== 0 && frameCount > 100) {
+      // return;
+    // }
     this.activeChunks = {};
     []
       .concat(players.players)
