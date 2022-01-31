@@ -91,10 +91,10 @@ class Field {
     // if (count.detect_enemy + count.detect_enemy2 > 70) {
     // If 7 zombie players will be attack
 
-    // const smell = chunks
-      // .getNear(...zombie.chunkPos, 10)
-      // .filter((object) => object instanceof SmileParticles)
-    const smell = this.particles
+    const smell = chunks
+      .getNear(...zombie.chunkPos, 10)
+      .filter((object) => object instanceof SmileParticles)
+    // const smell = this.particles
       .filter((each) => {
         return each.pos.dist(zombie.pos) < each.smellRadius;
       })

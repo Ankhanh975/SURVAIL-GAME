@@ -9,18 +9,20 @@ class Chunk {
 
 class Chunks {
   constructor() {
-    this.activeChunks = {};
+    this.activeChunks = new Map();
+
     this.allChunks = {};
+    this.cache = [];
+    this.cache_value = [];
     this.update();
   }
   update() {
-    // if (frameCount % 5 !== 0 && frameCount > 100) {
-    // return;
-    // }
     // this.activeChunks = {};
-    Object.keys(this.activeChunks).forEach((name) => {
-      this.activeChunks[name] = [];
-    });
+    this.activeChunks.clear();
+    // Object.keys(this.activeChunks).forEach((name) => {
+    //   this.activeChunks[name] = [];
+    // });
+
     []
       .concat(players.players)
       .concat(obstacles.obstacles)
@@ -33,16 +35,26 @@ class Chunks {
           worldCoords.y
         );
         each.chunkPos = chunkPos;
-        const chunkIndex = `${chunkPos[0]}, ${chunkPos[1]}`;
-        if (this.activeChunks.hasOwnProperty(chunkIndex)) {
-          this.activeChunks[chunkIndex].push(each);
+        const chunkIndex = `${chunkPos[0]},${chunkPos[1]}`;
+        if (this.activeChunks.has(chunkIndex)) {
+          const list = this.activeChunks.get(chunkIndex);
+          list.push(each);
         } else {
-          this.activeChunks[chunkIndex] = [each];
+          this.activeChunks.set(chunkIndex, [each]);
         }
       });
+    this.cache = [];
+    this.cache_value = [];
   }
   getNear(chunkX, chunkY, radius) {
     // console.log(radius, radius instanceof Number, radius.constructor === Array);
+    let index = -1;
+    for (const cache of this.cache) {
+      index += 1;
+      if (cache[0] === chunkX && cache[1] === chunkY && cache[2] === radius) {
+        return this.cache_value[index];
+      }
+    }
     let upLeft, upRight, bottomLeft, bottomRight;
     let all = [];
     if (radius.constructor === Array) {
@@ -59,13 +71,16 @@ class Chunks {
     // console.log(upLeft, upRight, bottomLeft, bottomRight);
     for (let x = upLeft; x < upRight; x++) {
       for (let y = bottomLeft; y < bottomRight; y++) {
-        const chunkIndex = `${x}, ${y}`;
-        const activeChunks = this.activeChunks[chunkIndex];
-        if (activeChunks) {
-          all = all.concat(activeChunks);
+        // const chunkIndex = { x: x, y: y };
+        const chunkIndex = `${x},${y}`;
+        if (this.activeChunks.has(chunkIndex)) {
+          const list = this.activeChunks.get(chunkIndex);
+          all.push(...list);
         }
       }
     }
+    this.cache.push([chunkX, chunkY, radius]);
+    this.cache_value.push(all);
     return all;
   }
   WorldCoordsToChunkCoords(posx, posy) {
