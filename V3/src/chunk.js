@@ -17,7 +17,7 @@ class Chunks {
     []
       .concat(players.players)
       .concat(obstacles.obstacles)
-      // .concat(field.particles)
+      .concat(field.particles)
       // .concat(sparks.particles)
       .forEach((each) => {
         const worldCoords = each.pos || each.circle.pos;

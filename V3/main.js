@@ -13,6 +13,7 @@ var ctx;
 let chunks;
 addFunction("setup", () => {
   // frameRate(150);
+  frameRate(60);
   // createCanvas(1024, 768, WEBGL);
   createCanvas(windowWidth, windowHeight);
   setTimeout(() => {
@@ -63,7 +64,7 @@ addFunction("setup", () => {
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
   
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10; i++) {
     players.createAIPlayer();
   }
   // TODO: why 2000 obstacles is slow?
@@ -178,7 +179,7 @@ addFunction("draw", () => {
     pop();
   }
   queue.update();
-  sparks.draw();
+  // sparks.draw();
   const objects = chunks.getNear(...player.chunkPos, [11, 6]);
 
   // objects
@@ -190,13 +191,13 @@ addFunction("draw", () => {
   //       body: true,
   //     });
   //   });
-  players.draw();
+  // players.draw();
   objects
     .filter((object) => object instanceof Obstacle)
     .forEach((object) => object.draw());
 
   // obstacles.draw();
-  // field.draw();
+  field.draw();
 
   // if (players.players[1]) {
   //   let path = players.players[1].path;

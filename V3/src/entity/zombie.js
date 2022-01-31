@@ -29,14 +29,14 @@ class AIPlayer extends Player {
   startPunch(hand, target) {
     super.startPunch(hand, target);
     field.createParticle(
-      {
-        x: (this.pos.x + this.target.pos.x) / 2,
-        y: (this.pos.y + this.target.pos.y) / 2,
-      },
+      createVector(
+        (this.pos.x + this.target.pos.x) / 2,
+        (this.pos.y + this.target.pos.y) / 2
+      ),
       "attack_attention",
       70,
       7,
-      null
+      { syncPos: true }
     );
   }
   update() {
@@ -48,7 +48,7 @@ class AIPlayer extends Player {
       dist = this.pos.dist(lookAt);
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
-      // field.tick(this);
+      field.tick(this);
 
       if (
         collisions.isFreeLine(
@@ -68,15 +68,15 @@ class AIPlayer extends Player {
         }
         this.setAngle(toLookAt.heading());
         // if (dist < 1100) {
-        if (dist < 130) {
-          toLookAt.setMag(3.0);
-          toLookAt.rotate(radians(180));
-          this.addPos(toLookAt);
-        }
-        if (dist > 150) {
-          toLookAt.setMag(3.0);
-          this.addPos(toLookAt);
-        }
+        // if (dist < 130) {
+        //   toLookAt.setMag(3.0);
+        //   toLookAt.rotate(radians(180));
+        //   this.addPos(toLookAt);
+        // }
+        // if (dist > 150) {
+        //   toLookAt.setMag(3.0);
+        //   this.addPos(toLookAt);
+        // }
         // }
       } else {
         this.setAngle(radians(-90));

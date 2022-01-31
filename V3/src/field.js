@@ -7,27 +7,37 @@ class Field {
     setTimeout(() => {
       players.players.forEach((each) => {
         if (each.AIPlayer) {
-          this.createParticle(each.pos, "friend_smell", 7, 10 ** 10, true);
+          this.createParticle(each.pos, "friend_smell", 7, 10 ** 10, {
+            syncPos: true,
+          });
         } else {
-          this.createParticle(each.pos, "enemy_smell", 70, 10 ** 10, true);
+          // this.create  Particle(each.pos, "enemy_smell", 70, 10 ** 10,  {syncPos: true});
         }
       });
     }, 100);
   }
   update() {
-    // players.players.forEach((each) => {
-    // if (each.AIPlayer) {
-    // } else {
-    // this.createParticle(each.pos, "enemy_smell", 75, 60);
-    // }
-    // });
+    players.realPlayers
+
+      // players.players.filter((player) => !player.AIPlayer)
+      .forEach((player) => {
+        const smell = this.particles
+          .filter((e) => e.name === "enemy_smell")
+          .filter((e) => {
+            return e.pos.dist(player.pos) < 6;
+          });
+        if (smell.length < 1) {
+          this.createParticle(player.pos, "enemy_smell", 75, 150);
+        } else {
+          const chosen = smell[0];
+          chosen.lifeTime = chosen.totalLifeTime;
+          chosen.pos.x = player.pos.x;
+          console.log(chosen);
+          chosen.pos.y = player.pos.y;
+        }
+      });
     this.particles.forEach((each) => each.update());
     this.particles = this.particles.filter((each) => each.lifeTime > 0);
-  }
-  draw() {
-    this.particles.forEach((each) => {
-      each.draw();
-    });
   }
   countType(list) {
     let enemy_smell_count = 0;
@@ -61,78 +71,118 @@ class Field {
       detect_enemy2: detect_enemy2_count,
     };
   }
+  getStrongest(list, name = "enemy_smell") {
+    let strongestSmell;
+    list
+      .filter((each) => each.name === name)
+      .forEach((each) => {
+        if (!strongestSmell) {
+          strongestSmell = each;
+        } else if (each.size > strongestSmell.size) {
+          strongestSmell = each;
+        }
+      });
+    return strongestSmell;
+  }
+
   tick(zombie) {
     // The brain of the zombie
-    let smell = this.particles.filter((each) => {
-      return each.pos.dist(zombie.pos) < each.smellRadius;
-    });
+    // if (count.detect_enemy + count.detect_enemy2 > 70) {
+    // If 7 zombie players will be attack
+
+    // const smell = chunks.getNear(...zombie.chunkPos, 10).filter((object) => object instanceof SmileParticles);
+    const smell = this.particles
+      .filter((each) => {
+        return each.pos.dist(zombie.pos) < each.smellRadius;
+      })
+      .filter((each) => {
+        const free = collisions.isFreeLine(
+          each.pos.x,
+          each.pos.y,
+          zombie.pos.x,
+          zombie.pos.y,
+          [zombie]
+        );
+        return free;
+      });
+
     const count = this.countType(smell);
-    let toLookAt = createVector(0, 0);
+
     if (count.enemy_smell !== 0) {
-      this.createParticle(zombie.pos, "detect_enemy", 100, 2);
-      // if (count.detect_enemy + count.detect_enemy2 > 70) {
-      // If 7 zombie players will be attack
-      smell
-        .filter((each) => each.name === "enemy_smell")
-        .forEach((each) => {
-          const lookAt = each.pos;
-          const dist = each.size * (1 / each.pos.dist(zombie.pos));
-          toLookAt.add(p5.Vector.sub(lookAt, zombie.pos).mult(each.size));
-        });
-      // }
-    } else if (count.detect_enemy !== 0) {
-      smell
-        .filter((each) => each.name === "detect_enemy")
-        .filter((each) => each.pos.dist(zombie.pos) > 100)
-        .forEach((each) => {
-          const lookAt = each.pos;
-          toLookAt.add(p5.Vector.sub(lookAt, zombie.pos));
-        });
-      smell
-        .filter((each) => each.name === "detect_enemy")
-        .filter((each) => each.pos.dist(zombie.pos) < 100)
-        .some((each) => {
-          this.createParticle(zombie.pos, "detect_enemy2", 100, 2);
-          return true;
-        });
-    } else if (count.detect_enemy2 !== 0) {
-      smell
-        .filter((each) => each.name === "detect_enemy2")
-        .filter((each) => each.pos.dist(zombie.pos) > 100)
-        .forEach((each) => {
-          const lookAt = each.pos;
-          const dist = each.size * each.pos.dist(zombie.pos);
-          toLookAt.add(p5.Vector.sub(lookAt, zombie.pos));
-        });
+      this.createParticle(zombie.pos, "detect_enemy", 100, 2, {
+        heading: null,
+      });
+      const heading = this.getStrongest(smell, "enemy_smell");
+      if (heading) {
+        let toLookAt = p5.Vector.sub(heading.pos, zombie.pos);
+        // .mult(heading.size);
+
+        toLookAt.limit(3.0);
+        zombie.addPos(toLookAt);
+      }
+      return;
     }
+    // else if (count.detect_enemy !== 0) {
+    //   smell
+    //     .filter((each) => each.name === "detect_enemy")
+    //     .filter((each) => each.pos.dist(zombie.pos) > 100)
+    //     .forEach((each) => {
+    //       const lookAt = each.pos;
+    //       toLookAt.add(p5.Vector.sub(lookAt, zombie.pos));
+    //     });
+    //   smell
+    //     .filter((each) => each.name === "detect_enemy")
+    //     .filter((each) => each.pos.dist(zombie.pos) < 100)
+    //     .some((each) => {
+    //       this.createParticle(zombie.pos, "detect_enemy2", 100, 2);
+    //       return true;
+    //     });
+    // }
+    // else if (count.detect_enemy2 !== 0) {
+    //   smell
+    //     .filter((each) => each.name === "detect_enemy2")
+    //     .filter((each) => each.pos.dist(zombie.pos) > 100)
+    //     .forEach((each) => {
+    //       const lookAt = each.pos;
+    //       const dist = each.size * each.pos.dist(zombie.pos);
+    //       toLookAt.add(p5.Vector.sub(lookAt, zombie.pos));
+    //     });
+    // }
 
     // TODO: tell other to attack_attention
     // TODO: wandering when dont see anything
-    if (toLookAt) {
-      toLookAt.limit(3.0);
-      zombie.addPos(toLookAt);
-    }
   }
   createParticle() {
     if (this.particles.length < 10000) {
-        const p = new SmileParticles(...arguments);
-        this.particles.push(p);
+      const p = new SmileParticles(...arguments);
+      this.particles.push(p);
     }
+  }
+
+  draw() {
+    this.particles.forEach((each) => {
+      each.draw();
+    });
   }
 }
 
 class SmileParticles {
-  constructor(pos, name, size, lifeTime, _pos = false) {
+  constructor(pos, name, size, lifeTime, settings) {
+    this.pos = createVector(pos.x, pos.y);
     this.name = name;
-    if (_pos) {
-      this.pos = pos;
-    } else {
-      this.pos = createVector(pos.x, pos.y);
-    }
     this.size = size;
     this.totalSize = size;
     this.lifeTime = lifeTime || 100;
     this.totalLifeTime = lifeTime || 100;
+
+    if (settings) {
+      if (settings.syncPos) {
+        this.pos = pos;
+      }
+      if (settings.heading) {
+        this.heading = settings.heading;
+      }
+    }
 
     // this.name == enemy_smell: zombie follow and keep distance to enemy
     // this.name == friend_smell: zombie follow friend group
@@ -162,7 +212,7 @@ class SmileParticles {
     push();
     noStroke();
     if (this.name == "enemy_smell") {
-      fill(100, 255, 0, 25);
+      fill(100, 255, 0, (this.lifeTime / this.totalLifeTime) * 75);
     } else if (this.name == "friend_smell") {
       fill(255, 255, 255, 25);
     } else if (this.name == "attack_attention") {
@@ -172,7 +222,16 @@ class SmileParticles {
     } else if (this.name == "detect_enemy") {
       fill(100, 0, 0, 25);
     }
-    circle(this.pos.x, this.pos.y, 70);
+    translate(this.pos.x, this.pos.y);
+    circle(0, 0, 70);
+    if (this.heading) {
+      stroke(255, 255, 255, 255);
+      strokeWeight(4);
+      line(0, 0, this.heading.x, this.heading.y);
+    }
+    fill(255, 255, 255, 2);
+    circle(0, 0, this.smellRadius * (this.lifeTime / this.totalLifeTime));
+
     pop();
   }
 }

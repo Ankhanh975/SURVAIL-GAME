@@ -47,6 +47,7 @@ class PlayerBase extends Base {
 }
 class Player extends PlayerBase {
   constructor(color, parent, name = "love", pos = [0, 0], health = 42) {
+    health = 10000;
     // color=0: [255, 255, 255],
     // color=1: [255, 255, 0],
     // color=2: [0, 0, 255],
