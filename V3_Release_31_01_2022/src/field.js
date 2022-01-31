@@ -24,16 +24,15 @@ class Field {
         const smell = this.particles
           .filter((e) => e.name === "enemy_smell")
           .filter((e) => {
-            return player.pos.dist(e.pos) < 40;
+            return e.pos.dist(player.pos) < 6;
           });
-        // console.log(smell.length);
-        if (smell.length < 2) {
+        if (smell.length < 1) {
           this.createParticle(player.pos, "enemy_smell", 75, 150);
         } else {
           const chosen = smell[0];
           chosen.lifeTime = chosen.totalLifeTime;
           chosen.pos.x = player.pos.x;
-          // console.log(chosen);
+          console.log(chosen);
           chosen.pos.y = player.pos.y;
         }
       });
@@ -159,6 +158,7 @@ class Field {
       this.particles.push(p);
     }
   }
+
   draw() {
     this.particles.forEach((each) => {
       each.draw();
@@ -186,7 +186,7 @@ class SmileParticles {
 
     // this.name == enemy_smell: zombie follow and keep distance to enemy
     // this.name == friend_smell: zombie follow friend group
-    // this.name == attack_attention: zombie follow this particle and aggressive attack
+    // this.name == attack_attention: zombie follow this particle aggressive attack
     // this.name == retreat_attention
     if (this.name == "enemy_smell") {
       this.smellRadius = 700;

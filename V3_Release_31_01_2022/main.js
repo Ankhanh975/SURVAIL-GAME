@@ -71,7 +71,7 @@ addFunction("setup", () => {
   // 1. Collisions check
   // 2. Loop through obstacles.update();
   // ...
-  obstacles.initObstacles();
+  // obstacles.initObstacles();
 });
 
 addFunction("draw", () => {
@@ -179,8 +179,8 @@ addFunction("draw", () => {
     pop();
   }
   queue.update();
-  sparks.draw();
-  const objects = chunks.getNear(...player.chunkPos, [11, 7]);
+  // sparks.draw();
+  const objects = chunks.getNear(...player.chunkPos, [11, 6]);
 
   // objects
   //   .filter((object) => object instanceof Player)
@@ -191,13 +191,13 @@ addFunction("draw", () => {
   //       body: true,
   //     });
   //   });
-  players.draw();
+  // players.draw();
   objects
     .filter((object) => object instanceof Obstacle)
     .forEach((object) => object.draw());
 
   // obstacles.draw();
-  // field.draw();
+  field.draw();
 
   // if (players.players[1]) {
   //   let path = players.players[1].path;
