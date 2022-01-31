@@ -167,11 +167,11 @@ class Obstacles {
     for (let x = 20; x < 80; x++) {
       for (let y = 20; y < 80; y++) {
         let value = noisejs.simplex2(
-          x / 15 + (chunkX * 100) / 15,
-          y / 15 + (chunkY * 100) / 15
+          x / 20 + (chunkX * 100) / 20,
+          y / 20 + (chunkY * 100) / 20
         );
         // chunk[x][y] += noisejs.simplex2(x / 5, y / 5) / 20;
-        if (value > 0.35 && value < 0.6) {
+        if (value > 0.30 && value < 0.7) {
           const pos = this.grid.GridCoordsToWorldCoords(x, y);
           this.createObstacle({ x: pos[0], y: pos[1] }, false);
         }

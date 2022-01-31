@@ -165,8 +165,8 @@ class Player extends PlayerBase {
     this.punchHand = hand || ["left", "right"][int(random(0, 2))];
 
     // effects to all players when punch: push them backwards and minus their health
-    target = target || collisions.getPunchAble(this);
     setTimeout(() => {
+      target = target || collisions.getPunchAble(this);
       target.forEach((entity) => {
         // console.log(entity);
         if (!(entity instanceof Player)) {

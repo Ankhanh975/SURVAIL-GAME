@@ -28,7 +28,18 @@ class Collisions2 extends Collisions {
     this.updateBody(collider);
     this.checkOne(collider, (response) => {
       if (response.b.parent !== p) {
-        all.push(response.b.parent);
+        if (
+          response.b.parent.pos &&
+          this.isFreeLine(
+            response.b.parent.pos.x,
+            response.b.parent.pos.y,
+            p.pos.x,
+            p.pos.y,
+            [p, response.b.parent]
+          )
+        ) {
+          all.push(response.b.parent);
+        }
       }
     });
     this.remove(collider);

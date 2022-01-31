@@ -78,9 +78,10 @@ class AIPlayer extends Player {
         //   this.addPos(toLookAt);
         // }
         // }
-      } else {
-        this.setAngle(radians(-90));
       }
+      // else {
+        // this.setAngle(radians(-90));
+      // }
     }
   }
 }
