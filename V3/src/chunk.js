@@ -15,9 +15,12 @@ class Chunks {
   }
   update() {
     // if (frameCount % 5 !== 0 && frameCount > 100) {
-      // return;
+    // return;
     // }
-    this.activeChunks = {};
+    // this.activeChunks = {};
+    Object.keys(this.activeChunks).forEach((name) => {
+      this.activeChunks[name] = [];
+    });
     []
       .concat(players.players)
       .concat(obstacles.obstacles)
@@ -31,13 +34,12 @@ class Chunks {
         );
         each.chunkPos = chunkPos;
         const chunkIndex = `${chunkPos[0]}, ${chunkPos[1]}`;
-        if (this.activeChunks[chunkIndex]) {
+        if (this.activeChunks.hasOwnProperty(chunkIndex)) {
           this.activeChunks[chunkIndex].push(each);
         } else {
           this.activeChunks[chunkIndex] = [each];
         }
       });
-    // console.log(this.activeChunks);
   }
   getNear(chunkX, chunkY, radius) {
     // console.log(radius, radius instanceof Number, radius.constructor === Array);
