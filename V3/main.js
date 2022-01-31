@@ -53,18 +53,24 @@ addFunction("setup", () => {
   players.players[0] = player;
   players.realPlayers.push(player);
 
-  let friend = new Player(5, players);
-  friend.health = 400;
-  friend.totalHealth = 400;
-  friend.name = "friend";
-  friend.damage = 2.5;
-  friend.addPos(createVector(100, 0));
-  friend.recovery = 0.001 * friend.health;
-  players.players[1] = friend;
-  players.realPlayers.push(friend);
-  for (let i = 0; i < 0; i++) {
+  // let friend = new Player(5, players);
+  // friend.health = 400;
+  // friend.totalHealth = 400;
+  // friend.name = "friend";
+  // friend.damage = 2.5;
+  // friend.addPos(createVector(100, 0));
+  // friend.recovery = 0.001 * friend.health;
+  // players.players[1] = friend;
+  // players.realPlayers.push(friend);
+  
+  for (let i = 0; i < 100; i++) {
     players.createAIPlayer();
   }
+  // TODO: why 2000 obstacles is slow?
+  // 1. Collisions check
+  // 2. Loop through obstacles.update();
+  // ...
+  // obstacles.initObstacles();
 });
 
 addFunction("draw", () => {

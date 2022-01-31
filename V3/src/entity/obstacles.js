@@ -82,11 +82,6 @@ class Obstacles {
     this.obstacles_surface2.rect(0, 0, 52, 52, 3.5);
     this.obstacles_surface2.pop();
 
-    // TODO: why 2000 obstacles is slow?
-    // 1. Collisions check
-    // 2. Loop through obstacles.update();
-    // ...
-    this.initObstacles();
   }
   FindPath(posStart, posEnd) {
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
