@@ -3,8 +3,9 @@ class PlayerBase extends Base {
     super();
     this.pos = createVector(...pos);
     this.lastPos = createVector(0, 0);
-
+    this.isFreeze = false;
     this.velocity = createVector(0, 0);
+    this.velocity_length = 0
     this.acceleration = createVector(0, 0);
     this.parent = parent;
 
@@ -47,7 +48,7 @@ class PlayerBase extends Base {
 }
 class Player extends PlayerBase {
   constructor(color, parent, name = "love", pos = [0, 0], health = 42) {
-    // health = 10000;
+    health = 10000;
     // color=0: [255, 255, 255],
     // color=1: [255, 255, 0],
     // color=2: [0, 0, 255],

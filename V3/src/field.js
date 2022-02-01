@@ -91,10 +91,10 @@ class Field {
     // if (count.detect_enemy + count.detect_enemy2 > 70) {
     // If 7 zombie players will be attack
 
-    const smell = chunks
-      .getNear(...zombie.chunkPos, 10)
-      .filter((object) => object instanceof SmileParticles)
-    // const smell = this.particles
+    // const smell = chunks
+      // .getNear(...zombie.chunkPos, 10)
+      // .filter((object) => object instanceof SmileParticles)
+    const smell = this.particles
       .filter((each) => {
         return each.pos.dist(zombie.pos) < each.smellRadius;
       })
@@ -223,7 +223,7 @@ class SmileParticles {
     } else if (this.name == "friend_smell") {
       fill(255, 255, 255, 25);
     } else if (this.name == "attack_attention") {
-      fill(100, 0, 0, 25);
+      fill(100, 0, 0, (this.lifeTime / this.totalLifeTime) * 100);
     } else if (this.name == "retreat_attention") {
       fill(128, 255, 128, 25);
     } else if (this.name == "detect_enemy") {

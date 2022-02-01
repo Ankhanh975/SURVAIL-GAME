@@ -6,6 +6,7 @@ class AIPlayer extends Player {
     // TODO: pick target
     this.target = null;
     this.target = this.parent.realPlayers[0];
+    this.addComponent(component.wandering)
     // this.target = int(random(0, this.parent.realPlayers.length));
     // this.path = [];
     // this.lastPathFinding = frameCount - 999;

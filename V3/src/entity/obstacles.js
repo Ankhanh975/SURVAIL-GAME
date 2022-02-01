@@ -154,6 +154,15 @@ class Obstacles {
   draw() {
     push();
     for (const obstacle of this.obstacles) {
+      if (
+        player.pos.x - obstacle.circle.pos.x > 1000 ||
+        player.pos.x - obstacle.circle.pos.x < -1000 ||
+        player.pos.y - obstacle.circle.pos.y > 600 ||
+        player.pos.y - obstacle.circle.pos.y < -600
+      ) {
+        // console.log("too far");
+        return;
+      }
       obstacle.draw();
     }
     pop();
