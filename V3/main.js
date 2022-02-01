@@ -64,7 +64,7 @@ addFunction("setup", () => {
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 10; i++) {
     players.createAIPlayer();
   }
   // TODO: why 2000 obstacles is slow?
@@ -179,7 +179,7 @@ addFunction("draw", () => {
     pop();
   }
   queue.update();
-  // sparks.draw();
+  sparks.draw();
   // const objects = chunks.getNear(...player.chunkPos, [11, 7]);
   // objects
   //   .filter((object) => object instanceof Player)
@@ -190,13 +190,13 @@ addFunction("draw", () => {
   //       body: true,
   //     });
   //   });
-  // players.draw();
+  players.draw();
   // objects
     // .filter((object) => object instanceof Obstacle)
     // .forEach((object) => object.draw());
 
   obstacles.draw();
-  field.draw();
+  // field.draw();
   
   // if (players.players[1]) {
   //   let path = players.players[1].path;

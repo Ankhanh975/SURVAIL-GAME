@@ -6,8 +6,8 @@ class AIPlayer extends Player {
     // TODO: pick target
     this.target = null;
     this.target = this.parent.realPlayers[0];
-    this.addComponent(component.wandering)
-    this.addComponent(component.sensor)
+    this.addComponent(component.wandering);
+    this.addComponent(component.sensor);
     // this.target = int(random(0, this.parent.realPlayers.length));
     // this.path = [];
     // this.lastPathFinding = frameCount - 999;
@@ -53,11 +53,9 @@ class AIPlayer extends Player {
       field.tick(this);
 
       if (
-        collisions.isFreeLine(
-          this.pos,
-          this.target.pos,
-          [this, this.target]
-        )
+        collisions.isFreeLine(this.pos, this.target.pos, {
+          ignore: [this.circle, this.target.circle],
+        })
       ) {
         if (dist < 150) {
           if (!this.onPunch()) {
@@ -67,6 +65,7 @@ class AIPlayer extends Player {
           }
         }
         // this.setAngle(toLookAt.heading());
+
         // if (dist < 1100) {
         // if (dist < 130) {
         //   toLookAt.setMag(3.0);
@@ -78,10 +77,10 @@ class AIPlayer extends Player {
         //   this.addPos(toLookAt);
         // }
         // }
-      }
-      // else {
+        // }
+        // else {
         // this.setAngle(radians(-90));
-      // }
+      }
     }
   }
 }

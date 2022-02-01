@@ -27,21 +27,41 @@ class Collisions2 extends Collisions {
     collider.rotate(angle);
     this.updateBody(collider);
     this.checkOne(collider, (response) => {
-      if (response.b.parent !== p) {
-        if (
-          response.b.parent.pos &&
-          this.isFreeLine(
-            response.b.parent.pos,
-            p.pos,
-            [p, response.b.parent]
-          )
-        ) {
-          all.push(response.b.parent);
+      const b = response.b.parent;
+      if (b !== p && b instanceof Player) {
+        if (this.isFreeLine(b.pos, p.pos, [p.circle, b.circle, collider])) {
+          all.push(b);
         }
       }
     });
     this.remove(collider);
+    console.log("getPunchAble", all);
+
     return all;
+
+    const line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
+      { x: 0, y: 0 },
+      { x: endPos.x - startPos.x, y: endPos.y - startPos.y },
+    ]);
+    // this.updateBody(line);
+    const potentials = this.getPotentials(line);
+    const collided = potentials.some((body) => {
+      for (const each of ignore) {
+        if (body.parent === each) {
+          return false;
+        }
+      }
+      // if (!(body.parent instanceof Obstacle)) {
+      //   return false;
+      // }
+
+      if (this.checkCollision(line, body)) {
+        // console.log("Collision detected", body);
+        return true;
+      }
+    });
+    this.remove(line);
+    return !collided;
   }
   isFreeSlot(entity, newPos) {
     // Check if entity place in new position is in possible slot
@@ -61,7 +81,11 @@ class Collisions2 extends Collisions {
     console.log(entity, collided);
     return !collided;
   }
-  isFreeLine(startPos, endPos, ignore = []) {
+  isFreeLine(startPos, endPos, setting) {
+    setting = setting || {};
+    const ignore = setting.ignore || [];
+    const type = setting.type || [];
+    
     const line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
       { x: 0, y: 0 },
       { x: endPos.x - startPos.x, y: endPos.y - startPos.y },
@@ -70,10 +94,16 @@ class Collisions2 extends Collisions {
     const potentials = this.getPotentials(line);
     const collided = potentials.some((body) => {
       for (const each of ignore) {
-        if (body.parent === each) {
+        if (body === each) {
           return false;
         }
       }
+      // for (const each of type) {
+        // if (body.parent instanceof each) {
+          // return false;
+        // }
+      // }
+      // console.log(body);
       // if (!(body.parent instanceof Obstacle)) {
       //   return false;
       // }

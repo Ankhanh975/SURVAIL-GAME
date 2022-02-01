@@ -18,7 +18,6 @@ class Field {
   }
   update() {
     players.realPlayers
-
       // players.players.filter((player) => !player.AIPlayer)
       .forEach((player) => {
         const smell = this.particles
@@ -94,28 +93,14 @@ class Field {
     // const smell = chunks
     // .getNear(...zombie.chunkPos, 10)
     // .filter((object) => object instanceof SmileParticles)
-    if (!zombie.wandering.is()) {
-      zombie.wandering.start();
-    }
-    return;
-    
+
     const smell = this.particles
-      .filter((each) => {
-        return each.pos.dist(zombie.pos) < each.smellRadius;
-      })
-      .filter((each) => {
-        const free = collisions.isFreeLine(
-          each.pos.x,
-          each.pos.y,
-          zombie.pos.x,
-          zombie.pos.y,
-          [zombie]
-        );
-        return free;
-      });
+      .filter((each) => each.pos.dist(zombie.pos) < each.smellRadius)
+      .filter((each) =>
+        collisions.isFreeLine(each.pos, zombie.pos, { ignore: [zombie.circle] })
+      );
 
     const count = this.countType(smell);
-    console.log(count.enemy_smell !== 0);
     if (count.enemy_smell !== 0) {
       if (zombie.wandering.is()) {
         zombie.wandering.end();
@@ -130,6 +115,7 @@ class Field {
 
         toLookAt.limit(3.0);
         zombie.addPos(toLookAt);
+        zombie.setAngle(toLookAt.heading());
       }
       return;
     }
@@ -166,6 +152,7 @@ class Field {
       if (!zombie.wandering.is()) {
         zombie.wandering.start();
       }
+      return;
     }
   }
 

@@ -27,7 +27,9 @@ class PlayerBase extends Base {
   }
   addPos(pos) {
     // pos: p5js vector add to this.pos
-    this.setPos(this.pos.add(pos));
+    this.pos.add(pos)
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
   }
   update() {
     super.update();
