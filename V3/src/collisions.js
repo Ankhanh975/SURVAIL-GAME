@@ -31,10 +31,8 @@ class Collisions2 extends Collisions {
         if (
           response.b.parent.pos &&
           this.isFreeLine(
-            response.b.parent.pos.x,
-            response.b.parent.pos.y,
-            p.pos.x,
-            p.pos.y,
+            response.b.parent.pos,
+            p.pos,
             [p, response.b.parent]
           )
         ) {
@@ -63,10 +61,10 @@ class Collisions2 extends Collisions {
     console.log(entity, collided);
     return !collided;
   }
-  isFreeLine(startX, startY, endX, endY, ignore = []) {
-    const line = this.createPolygon({ x: startX, y: startY }, [
+  isFreeLine(startPos, endPos, ignore = []) {
+    const line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
       { x: 0, y: 0 },
-      { x: endX - startX, y: endY - startY },
+      { x: endPos.x - startPos.x, y: endPos.y - startPos.y },
     ]);
     // this.updateBody(line);
     const potentials = this.getPotentials(line);
@@ -76,9 +74,9 @@ class Collisions2 extends Collisions {
           return false;
         }
       }
-      if (!(body.parent instanceof Obstacle)) {
-        return false;
-      }
+      // if (!(body.parent instanceof Obstacle)) {
+      //   return false;
+      // }
 
       if (this.checkCollision(line, body)) {
         // console.log("Collision detected", body);

@@ -161,7 +161,7 @@ class Obstacles {
         player.pos.y - obstacle.circle.pos.y < -600
       ) {
         // console.log("too far");
-        return;
+        continue;
       }
       obstacle.draw();
     }

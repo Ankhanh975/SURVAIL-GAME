@@ -12,6 +12,7 @@ component.base = class {
 
 component.rotation = class {
   // limit rotation speed
+  name = "rotation";
   constructor() {
     // Represents In radians and in vector coordinates respectively
     this.angle = 0;

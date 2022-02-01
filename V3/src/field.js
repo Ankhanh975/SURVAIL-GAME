@@ -92,26 +92,34 @@ class Field {
     // If 7 zombie players will be attack
 
     // const smell = chunks
-      // .getNear(...zombie.chunkPos, 10)
-      // .filter((object) => object instanceof SmileParticles)
+    // .getNear(...zombie.chunkPos, 10)
+    // .filter((object) => object instanceof SmileParticles)
+    if (!zombie.wandering.is()) {
+      zombie.wandering.start();
+    }
+    return;
+    
     const smell = this.particles
       .filter((each) => {
         return each.pos.dist(zombie.pos) < each.smellRadius;
       })
-      // .filter((each) => {
-      //   const free = collisions.isFreeLine(
-      //     each.pos.x,
-      //     each.pos.y,
-      //     zombie.pos.x,
-      //     zombie.pos.y,
-      //     [zombie]
-      //   );
-      //   return free;
-      // });
+      .filter((each) => {
+        const free = collisions.isFreeLine(
+          each.pos.x,
+          each.pos.y,
+          zombie.pos.x,
+          zombie.pos.y,
+          [zombie]
+        );
+        return free;
+      });
 
     const count = this.countType(smell);
-
+    console.log(count.enemy_smell !== 0);
     if (count.enemy_smell !== 0) {
+      if (zombie.wandering.is()) {
+        zombie.wandering.end();
+      }
       this.createParticle(zombie.pos, "detect_enemy", 100, 2, {
         heading: null,
       });
@@ -155,8 +163,9 @@ class Field {
     // TODO: tell other to attack_attention
     // TODO: wandering when dont see anything
     else {
-      let toLookAt = p5.Vector.random2D();
-      zombie.addPos(toLookAt);
+      if (!zombie.wandering.is()) {
+        zombie.wandering.start();
+      }
     }
   }
 
