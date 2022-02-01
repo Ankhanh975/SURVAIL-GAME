@@ -66,7 +66,7 @@ component.wandering = class {
     // console.log(this.heading_angle, this.isWandering, this.wanderTime);
     if (this.is() && this._isWalking) {
       this.wanderTime += 1;
-      if (this.wanderTime > Prob.normal(170, 30)()) {
+      if (this.wanderTime > Prob.normal(210, 50)()) {
         this._isWalking = false;
         setTimeout(() => {
           this.wanderTime = 0;
@@ -74,7 +74,7 @@ component.wandering = class {
           if (this.is()) {
             this.start();
           }
-        }, 1000 * 1);
+        }, Prob.normal(1000, 100)());
       }
     }
     if (this.is() && this._isWalking) {
@@ -85,9 +85,9 @@ component.wandering = class {
       this.parent.setAngle(this.heading_angle);
 
       this.parent.sensor.get();
-      console.log(this.parent.sensor.sensor1, this.parent.sensor.sensor2);
+      // console.log(this.parent.sensor.sensor1, this.parent.sensor.sensor2);
       if (this.parent.sensor.sensor1 || this.parent.sensor.sensor2) {
-        this.heading.rotate(radians(30));
+        this.heading.rotate(radians(10));
         this.heading_angle = this.heading.heading();
         // this.parent.setAngle(this.heading)
       }

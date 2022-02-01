@@ -97,7 +97,7 @@ class Field {
     const smell = this.particles
       .filter((each) => each.pos.dist(zombie.pos) < each.smellRadius)
       .filter((each) =>
-        collisions.isFreeLine(each.pos, zombie.pos, { ignore: [zombie.circle] })
+        collisions.isFreeLine(each.pos, zombie.pos, { ignore: [zombie.circle], type: "obstacles" })
       );
 
     const count = this.countType(smell);

@@ -29,7 +29,11 @@ class Collisions2 extends Collisions {
     this.checkOne(collider, (response) => {
       const b = response.b.parent;
       if (b !== p && b instanceof Player) {
-        if (this.isFreeLine(b.pos, p.pos, [p.circle, b.circle, collider])) {
+        if (
+          this.isFreeLine(b.pos, p.pos, {
+            ignore: [p.circle, b.circle, collider],
+          })
+        ) {
           all.push(b);
         }
       }
@@ -38,30 +42,6 @@ class Collisions2 extends Collisions {
     console.log("getPunchAble", all);
 
     return all;
-
-    const line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
-      { x: 0, y: 0 },
-      { x: endPos.x - startPos.x, y: endPos.y - startPos.y },
-    ]);
-    // this.updateBody(line);
-    const potentials = this.getPotentials(line);
-    const collided = potentials.some((body) => {
-      for (const each of ignore) {
-        if (body.parent === each) {
-          return false;
-        }
-      }
-      // if (!(body.parent instanceof Obstacle)) {
-      //   return false;
-      // }
-
-      if (this.checkCollision(line, body)) {
-        // console.log("Collision detected", body);
-        return true;
-      }
-    });
-    this.remove(line);
-    return !collided;
   }
   isFreeSlot(entity, newPos) {
     // Check if entity place in new position is in possible slot
@@ -84,8 +64,8 @@ class Collisions2 extends Collisions {
   isFreeLine(startPos, endPos, setting) {
     setting = setting || {};
     const ignore = setting.ignore || [];
-    const type = setting.type || [];
-    
+    const type = setting.type;
+
     const line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
       { x: 0, y: 0 },
       { x: endPos.x - startPos.x, y: endPos.y - startPos.y },
@@ -98,15 +78,17 @@ class Collisions2 extends Collisions {
           return false;
         }
       }
+      if (type) {
+        if (!(body.parent instanceof Obstacle)) {
+          return false;
+        }
+      }
       // for (const each of type) {
-        // if (body.parent instanceof each) {
-          // return false;
-        // }
+      // if (body.parent instanceof each) {
+      // return false;
+      // }
       // }
       // console.log(body);
-      // if (!(body.parent instanceof Obstacle)) {
-      //   return false;
-      // }
 
       if (this.checkCollision(line, body)) {
         // console.log("Collision detected", body);
