@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Try to survive!</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5.collide2d"></script>
+  <script src="Lib/easystarjs/easystarjs.js"></script>
+  <script src="Lib/noisejs/perlin.js"></script>
+  <!-- https://github.com/bramp/prob.js -->
+  <script src="bower_components/random/lib/random.min.js" type="text/javascript"></script>
+  <script src="bower_components/prob.js/dist/prob-min.js" type="text/javascript"></script>
+  <script src="Lib/bundle.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="utf-8" />
+
+</head>
+
+<body>
+
+  <script language="javascript" type="text/javascript" src="setup.js"></script>
+  <script language="javascript" type="text/javascript" src="Camera.js"></script>
+  <script language="javascript" type="text/javascript" src="players.js"></script>
+  <script language="javascript" type="text/javascript" src="obstacles.js"></script>
+  <script language="javascript" type="text/javascript" src="player.js"></script>
+  <script language="javascript" type="text/javascript" src="particles.js"></script>
+  <!-- old  detect-collisions-->
+  <!-- <script type="module">
+    import Collisions from "./Lib/node_modules/collisions/src/Collisions.mjs";
+
+    globalThis.DetectCollisions = Collisions;
+
+  </script> -->
+  <script language="javascript" type="text/javascript" src="generate.js"></script>
+  <script language="javascript" type="text/javascript" src="sketch.js"></script>
+  <!-- <div class="container" id="container">
+    
+    <div class="ui">
+      <div class="quest-journal-layout">
+        <div class="quest-journal" id="quest-journal">
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="quest-ui-layout">
+        <div class="quest-ui" id="quest-ui">
+          <div class="quest-text-title" id="quest-text-title"></div>
+          <div class="quest-text" id="quest-text"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="icon-ui">
+        <div class="icon-bar" id="icon-bar">
+          <div class="icon-bar-item" id="icon-bar-stats" style="background-image: url('./resources/icons/ui/skills.png');"></div>
+          <div class="icon-bar-item" id="icon-bar-inventory" style="background-image: url('./resources/icons/ui/backpack.png');"></div>
+          <div class="icon-bar-item" id="icon-bar-quests" style="background-image: url('./resources/icons/ui/tied-scroll.png');"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="stats" id="stats">
+        <div class="stats-inner">
+          <div class="stats-title">Statistics</div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Strength
+              <div class="stats-tooltiptext">How strong you are, affects how much damage you do. So blah blah if you're doing stuff then its stronger or whatever, the damage is up. This is text to show the tooltip.</div>
+            </div>
+            <div id="stats-strength">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Wisdomness
+              <div class="stats-tooltiptext">Wisdom is the guage of something to do with wisdom in the game because wisdom is important and wisdom is wise to wisdoming.</div>
+            </div>
+            <div id="stats-wisdomness">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Benchpress
+              <div class="stats-tooltiptext">Gotta have a good bench to be a warrior or something.</div>
+            </div>
+            <div id="stats-benchpress">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Curl
+              <div class="stats-tooltiptext">The ultimate expression of strength, this affects literally everything in your life.</div>
+            </div>
+            <div id="stats-curl">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">XP
+              <div class="stats-tooltiptext">How much xp you've accumulated by killing things for xp. Get enough and you'll gain a level or something.</div>
+            </div>
+            <div id="stats-experience">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="health-ui">
+        <div class="health-bar" id="health-bar"></div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="inventory" id="inventory">
+        <div class="inventory-inner">
+          <div class="inventory-title">Inventory</div>
+          <div class="inventory-row">
+            <div class="inventory-column">
+              <div class="inventory-item" id="inventory-equip-1" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-2" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-3" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-4" draggable="true"></div>
+            </div>
+            <div class="inventory-character"></div>
+            <div class="inventory-column">
+              <div class="inventory-item" id="inventory-equip-5" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-6" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-7" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-8" draggable="true"></div>
+            </div>
+          </div>
+          <div class="inventory-row">
+            <div class="inventory-item" id="inventory-1" draggable="true"></div>
+            <div class="inventory-item" id="inventory-2" draggable="true"></div>
+            <div class="inventory-item" id="inventory-3" draggable="true"></div>
+            <div class="inventory-item" id="inventory-4" draggable="true"></div>
+            <div class="inventory-item" id="inventory-5" draggable="true"></div>
+            <div class="inventory-item" id="inventory-6" draggable="true"></div>
+            <div class="inventory-item" id="inventory-7" draggable="true"></div>
+            <div class="inventory-item" id="inventory-8" draggable="true"></div>
+          </div>
+          <div class="inventory-row">
+            <div class="inventory-item" id="inventory-9" draggable="true"></div>
+            <div class="inventory-item" id="inventory-10" draggable="true"></div>
+            <div class="inventory-item" id="inventory-11" draggable="true"></div>
+            <div class="inventory-item" id="inventory-12" draggable="true"></div>
+            <div class="inventory-item" id="inventory-13" draggable="true"></div>
+            <div class="inventory-item" id="inventory-14" draggable="true"></div>
+            <div class="inventory-item" id="inventory-15" draggable="true"></div>
+            <div class="inventory-item" id="inventory-16" draggable="true"></div>
+          </div>
+          <div class="inventory-row">
+            <div class="inventory-item" id="inventory-17" draggable="true"></div>
+            <div class="inventory-item" id="inventory-18" draggable="true"></div>
+            <div class="inventory-item" id="inventory-19" draggable="true"></div>
+            <div class="inventory-item" id="inventory-20" draggable="true"></div>
+            <div class="inventory-item" id="inventory-21" draggable="true"></div>
+            <div class="inventory-item" id="inventory-22" draggable="true"></div>
+            <div class="inventory-item" id="inventory-23" draggable="true"></div>
+            <div class="inventory-item" id="inventory-24" draggable="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <script>
+    // https://stackoverflow.com/questions/27321672/listen-for-all-events-in-javascript/27322253
+    // let P5canvas = document.getElementById(".canvas")
+    let P5canvas = window
+    // Object.keys(P5canvas).forEach(key => {
+    //   // console.log("key", key)
+    //   if (/(key)/.test(key)) {
+    //     console.log("key", key)
+    //     // if (!/(key|mouse)/.test(key)) {
+    //     window.addEventListener(key.slice(2), event => {
+    //       // console.log("h", event, key.slice(2));
+    //       event.preventDefault()
+    //     });
+    //   }
+    // });
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+  </script>
+</body>
+
+
+</html>

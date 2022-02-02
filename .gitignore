@@ -1,4 +1,3 @@
-*/*.pyc
+# */*.pyc
 Example
-Example2
-Backup
+Backup/*Backup*
