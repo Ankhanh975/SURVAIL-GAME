@@ -71,7 +71,7 @@ addFunction("setup", () => {
   // 1. Collisions check
   // 2. Loop through obstacles.update();
   // ...
-  // obstacles.initObstacles();
+  obstacles.initObstacles();
 });
 
 addFunction("draw", () => {
@@ -137,7 +137,7 @@ addFunction("draw", () => {
           b.pos.y -= y * 0.4;
           b.circle.setPosition(b.pos.x, b.pos.y);
           // } else if (response.b.parent instanceof Obstacle) {
-        } else {
+        } else if (response.b.parent instanceof Obstacle) {
           player.pos.x += x;
           player.pos.y += y;
           player.circle.setPosition(player.pos.x, player.pos.y);
@@ -192,12 +192,12 @@ addFunction("draw", () => {
   //   });
   players.draw();
   // objects
-    // .filter((object) => object instanceof Obstacle)
-    // .forEach((object) => object.draw());
+  // .filter((object) => object instanceof Obstacle)
+  // .forEach((object) => object.draw());
 
   obstacles.draw();
   // field.draw();
-  
+
   // if (players.players[1]) {
   //   let path = players.players[1].path;
   //   path.forEach((e, i) => {

@@ -81,7 +81,6 @@ class Obstacles {
     this.obstacles_surface2.fill([220, 220, 10, 100]);
     this.obstacles_surface2.rect(0, 0, 52, 52, 3.5);
     this.obstacles_surface2.pop();
-
   }
   FindPath(posStart, posEnd) {
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
@@ -131,8 +130,10 @@ class Obstacles {
     let ob = new Obstacle(pos, this, lifeTime);
     const potentials = collisions.getPotentials(ob.circle);
     const collided = potentials.some((body) => {
-      if (collisions.checkCollision(ob.circle, body)) {
-        return true;
+      if (body.parent instanceof Obstacle || body.parent instanceof Player) {
+        if (collisions.checkCollision(ob.circle, body)) {
+          return true;
+        }
       }
     });
 
@@ -168,7 +169,6 @@ class Obstacles {
     pop();
   }
   initObstacles() {
-   
     let chunkX = 0;
     let chunkY = 0;
     // for (let x = 0; x < 100; x++) {
@@ -180,7 +180,7 @@ class Obstacles {
           y / 20 + (chunkY * 100) / 20
         );
         // chunk[x][y] += noisejs.simplex2(x / 5, y / 5) / 20;
-        if (value > 0.30 && value < 0.7) {
+        if (value > 0.3 && value < 0.7) {
           const pos = this.grid.GridCoordsToWorldCoords(x, y);
           this.createObstacle({ x: pos[0], y: pos[1] }, false);
         }

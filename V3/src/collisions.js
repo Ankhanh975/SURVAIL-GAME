@@ -1,4 +1,14 @@
 class Collisions2 extends Collisions {
+  constructor() {
+    super();
+    // this.line = this.createPolygon({ x: 0, y: 0 }, [
+    //   { x: 0, y: 0 },
+    //   { x: 100, y: 0 },
+    // ]);
+  }
+  update() {
+    super.update();
+  }
   getNear(player, range = 1000) {
     player = player.circle;
     // Get near object next to this pos
@@ -6,7 +16,23 @@ class Collisions2 extends Collisions {
     const collider = this.createCircle({ x: player.x, y: player.y }, range);
 
     this.checkOne(collider, (response) => {
-      all.push(response.b.parent);
+      if (
+        response.b.parent instanceof Player ||
+        response.b.parent instanceof Obstacle
+      ) {
+        all.push(response.b.parent);
+      }
+    });
+    const potentials = this.getPotentials(collider);
+    potentials.forEach((body) => {
+      if (
+        response.b.parent instanceof Player ||
+        response.b.parent instanceof Obstacle
+      ) {
+        if (this.checkCollision(collider, body)) {
+          all.push(body);
+        }
+      }
     });
     this.remove(collider);
     return all;
@@ -66,12 +92,18 @@ class Collisions2 extends Collisions {
     const ignore = setting.ignore || [];
     const type = setting.type;
 
-    const line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
+    this.line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
       { x: 0, y: 0 },
       { x: endPos.x - startPos.x, y: endPos.y - startPos.y },
     ]);
-    // this.updateBody(line);
-    const potentials = this.getPotentials(line);
+    // this.line.setPoints([
+    //   { x: 0, y: 0 },
+    //   { x: endPos.x - startPos.x, y: endPos.y - startPos.y },
+    // ]);
+    // this.line.setPosition(startPos.x, startPos.y);
+
+    // this.updateBody(this.line);
+    const potentials = this.getPotentials(this.line);
     const collided = potentials.some((body) => {
       for (const each of ignore) {
         if (body === each) {
@@ -90,12 +122,12 @@ class Collisions2 extends Collisions {
       // }
       // console.log(body);
 
-      if (this.checkCollision(line, body)) {
+      if (this.checkCollision(this.line, body)) {
         // console.log("Collision detected", body);
         return true;
       }
     });
-    this.remove(line);
+    this.remove(this.line);
     return !collided;
   }
 }
