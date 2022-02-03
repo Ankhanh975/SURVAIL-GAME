@@ -138,8 +138,8 @@ component.placeObstacle = class {
         return;
       }
       const ob_pos = obstacles.grid.WorldCoordsToGridCoords(
-        ob.circle.pos.x,
-        ob.circle.pos.y
+        ob.pos.x,
+        ob.pos.y
       );
       setTimeout(() => {
         if (obstacles.grid.isInIsolate(ob_pos[0] - 1, ob_pos[1] - 1)) {

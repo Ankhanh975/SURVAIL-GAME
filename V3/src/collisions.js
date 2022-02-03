@@ -15,24 +15,24 @@ class Collisions2 extends Collisions {
     let all = [];
     const collider = this.createCircle({ x: player.x, y: player.y }, range);
 
-    this.checkOne(collider, (response) => {
-      if (
-        response.b.parent instanceof Player ||
-        response.b.parent instanceof Obstacle
-      ) {
-        all.push(response.b.parent);
-      }
-    });
+    // this.checkOne(collider, (response) => {
+    //   if (
+    //     response.b.parent instanceof Player ||
+    //     response.b.parent instanceof Obstacle
+    //   ) {
+    //     all.push(response.b.parent);
+    //   }
+    // });
     const potentials = this.getPotentials(collider);
     potentials.forEach((body) => {
-      if (
-        response.b.parent instanceof Player ||
-        response.b.parent instanceof Obstacle
-      ) {
-        if (this.checkCollision(collider, body)) {
-          all.push(body);
-        }
+      // if (
+      //   response.b.parent instanceof Player ||
+      //   response.b.parent instanceof Obstacle
+      // ) {
+      if (this.checkCollision(collider, body)) {
+        all.push(body.parent);
       }
+      // }
     });
     this.remove(collider);
     return all;

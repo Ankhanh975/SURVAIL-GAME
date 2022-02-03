@@ -2,6 +2,7 @@ class Obstacle {
   constructor(pos, parent, lifeTime = true) {
     // parent: the Obstacles object this Obstacle belongs to
     this.size = 51.9;
+    this.pos = createVector(pos.x, pos.y);
     this.circle = collisions.createPolygon({ x: pos.x, y: pos.y }, [
       { x: this.size, y: this.size },
       { x: 0, y: this.size },
@@ -24,8 +25,8 @@ class Obstacle {
 
         collisions.remove(this.circle);
         let gridPos = obstacles.grid.WorldCoordsToGridCoords(
-          this.circle.pos.x,
-          this.circle.pos.y
+          this.pos.x,
+          this.pos.y
         );
 
         obstacles.grid.set(gridPos[0], gridPos[1], false);
@@ -41,9 +42,15 @@ class Obstacle {
     //   size: 51.9,
     // });
   }
+  setPos(pos) {
+    this.pos = pos;
+    // this.circle.pos.x = this.pos.x;
+    // this.circle.pos.y = this.pos.y;
+    this.circle.setPosition(this.pos.x, this.pos.y);
+  }
   draw() {
     push();
-    translate(this.circle.pos.x, this.circle.pos.y);
+    translate(this.pos.x, this.pos.y);
     translate(this.size / 2, this.size / 2);
 
     image(this.surface, 0, 0);
@@ -156,10 +163,10 @@ class Obstacles {
     push();
     for (const obstacle of this.obstacles) {
       if (
-        player.pos.x - obstacle.circle.pos.x > 1000 ||
-        player.pos.x - obstacle.circle.pos.x < -1000 ||
-        player.pos.y - obstacle.circle.pos.y > 600 ||
-        player.pos.y - obstacle.circle.pos.y < -600
+        player.pos.x - obstacle.pos.x > 1000 ||
+        player.pos.x - obstacle.pos.x < -1000 ||
+        player.pos.y - obstacle.pos.y > 600 ||
+        player.pos.y - obstacle.pos.y < -600
       ) {
         // console.log("too far");
         continue;

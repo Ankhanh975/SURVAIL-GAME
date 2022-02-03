@@ -23,7 +23,8 @@ class Chunks {
       .concat(field.particles)
       // .concat(sparks.particles)
       .forEach((each) => {
-        const worldCoords = each.pos || each.circle.pos;
+        const worldCoords = each.pos
+          // || each.circle.pos;
         const chunkPos = this.WorldCoordsToChunkCoords(
           worldCoords.x,
           worldCoords.y

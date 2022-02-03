@@ -21,15 +21,14 @@ class PlayerBase extends Base {
   }
   setPos(pos) {
     this.pos = pos;
-    this.circle.pos.x = this.pos.x;
-    this.circle.pos.y = this.pos.y;
-    // this.circle.setPosition(this.pos.x, this.pos.y);
+    // this.circle.pos.x = this.pos.x;
+    // this.circle.pos.y = this.pos.y;
+    this.circle.setPosition(this.pos.x, this.pos.y);
   }
   addPos(pos) {
     // pos: p5js vector add to this.pos
     this.pos.add(pos)
-    this.circle.pos.x = this.pos.x;
-    this.circle.pos.y = this.pos.y;
+    this.circle.setPosition(this.pos.x, this.pos.y);
   }
   update() {
     super.update();

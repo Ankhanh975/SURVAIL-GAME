@@ -10,7 +10,7 @@ let killCount = 0;
 let mousePos = [];
 let field;
 var ctx;
-let chunks;
+// let chunks;
 addFunction("setup", () => {
   // frameRate(150);
   frameRate(60);
@@ -37,7 +37,7 @@ addFunction("setup", () => {
   camera = new Camera();
   players = new Players();
   field = new Field();
-  chunks = new Chunks();
+  // chunks = new Chunks();
   // main player, store in players.player but player is a faster way to access
   player = new Player(5, players);
   player.addComponent(component.onController);
@@ -93,7 +93,7 @@ addFunction("draw", () => {
   // onController need to after players.update
 
   player.setAngle(p5.Vector.sub(mouse, player.pos).heading());
-  chunks.update();
+  // chunks.update();
   {
     sparks.update();
     players.update();
@@ -180,21 +180,7 @@ addFunction("draw", () => {
   }
   queue.update();
   sparks.draw();
-  // const objects = chunks.getNear(...player.chunkPos, [11, 7]);
-  // objects
-  //   .filter((object) => object instanceof Player)
-  //   .forEach((object) => {
-  //     object.draw({
-  //       healthBar: true,
-  //       nameTag: !object.AIPlayer,
-  //       body: true,
-  //     });
-  //   });
   players.draw();
-  // objects
-  // .filter((object) => object instanceof Obstacle)
-  // .forEach((object) => object.draw());
-
   obstacles.draw();
   // field.draw();
 
