@@ -3,13 +3,23 @@ class Obstacle {
     // parent: the Obstacles object this Obstacle belongs to
     this.size = 51.9;
     this.pos = createVector(pos.x, pos.y);
-    this.circle = collisions.createPolygon({ x: pos.x, y: pos.y }, [
-      { x: this.size, y: this.size },
-      { x: 0, y: this.size },
-      { x: 0, y: 0 },
-      { x: this.size, y: 0 },
+    this.pos.x += this.size / 2;
+    this.pos.y += this.size / 2;
+    this.circle = collisions.createPolygon({ x: this.pos.x, y: this.pos.y }, [
+      { x: 0 - this.size / 2, y: 0 - this.size / 2 },
+      { x: 0 - this.size / 2, y: this.size - this.size / 2 },
+      { x: this.size - this.size / 2, y: this.size - this.size / 2 },
+      { x: this.size - this.size / 2, y: 0 - this.size / 2 },
     ]);
-
+    // Debugging
+    // this.circle.normals[0].x = 1;
+    // this.circle.normals[0].y = 0;
+    // this.circle.normals[1].x = 1;
+    // this.circle.normals[1].y = 0;
+    // this.circle.normals[2].x = 1;
+    // this.circle.normals[2].y = 0;
+    // this.circle.normals[3].x = 1;
+    // this.circle.normals[3].y = 0;
     this.circle.parent = this;
     this.color = [220, 220, 10, 200];
     this.parent = parent;
@@ -51,7 +61,7 @@ class Obstacle {
   draw() {
     push();
     translate(this.pos.x, this.pos.y);
-    translate(this.size / 2, this.size / 2);
+    // translate(this.size / 2, this.size / 2);
 
     image(this.surface, 0, 0);
     // strokeWeight(1.5);

@@ -51,7 +51,9 @@ class AIPlayer extends Player {
       toLookAt = p5.Vector.sub(lookAt, this.pos);
 
       field.tick(this);
-
+      
+      // Debugging 
+      return
       if (
         collisions.isFreeLine(this.pos, this.target.pos, {
           ignore: [this.circle, this.target.circle],

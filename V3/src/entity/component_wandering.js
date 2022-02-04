@@ -5,6 +5,8 @@ component.sensor = class {
     this.sensor1 = false;
     this.sensor2 = false;
     this.get = function () {
+      // Debugging 
+      // return [this.sensor1, this.sensor2];
       const v = this.parent.rotation.lookAt
         .copy()
         .rotate(radians(-90))
@@ -56,6 +58,8 @@ component.wandering = class {
     };
   }
   update = () => {
+    // Debugging
+  return
     {
       const h = this.heading.copy().setMag(50).add(this.parent.pos);
       queue.addDraw(

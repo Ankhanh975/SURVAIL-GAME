@@ -27,8 +27,9 @@ class Field {
           });
         // console.log(smell.length);
         if (smell.length < 2) {
-          this.createParticle(player.pos, "enemy_smell", 75, 250
-          );
+          // this.createParticle(player.pos, "enemy_smell", 75, 250
+          // Debugging
+          this.createParticle(player.pos, "enemy_smell", 75, 2);
         } else {
           const chosen = smell[0];
           chosen.lifeTime = chosen.totalLifeTime;
@@ -97,10 +98,20 @@ class Field {
 
     const smell = this.particles
       .filter((each) => each.pos.dist(zombie.pos) < each.smellRadius)
-      .filter((each) =>
-        collisions.isFreeLine(each.pos, zombie.pos, { ignore: [zombie.circle], type: "obstacles" })
-      );
+      .filter((each) => each.name === "enemy_smell");
+    // Debugging
+    // console.log(smell);
     
+    
+    smell.filter((each) =>
+      collisions.isFreeLine(each.pos, zombie.pos, {
+        ignore: [zombie.circle, player.circle],
+        type: "obstacles",
+      })
+    );
+    // Debugging
+    // console.log(smell);
+    // return
     const count = this.countType(smell);
     if (count.enemy_smell !== 0) {
       if (zombie.wandering.is()) {
