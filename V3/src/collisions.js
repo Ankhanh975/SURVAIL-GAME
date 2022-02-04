@@ -181,7 +181,7 @@ class Collisions2 extends Collisions {
 
   isFreeLine(startPos, endPos, setting) {
     const all = this.rayCast(...arguments);
-    console.log(all);
+    // console.log(all, all.length === 0);
     return all.length === 0;
   }
   rayCast(startPos, endPos, setting) {
@@ -195,8 +195,8 @@ class Collisions2 extends Collisions {
     // console.log(startPos.x, startPos.y, endPos.x, endPos.y);
     {
       // Debugging
-      // let near = this._getNeighbors({
-      let near = this.getNeighbors({
+      // let near = this.getNeighbors({
+      let near = this._getNeighbors({
         minX: min(startPos.x, endPos.x),
         minY: min(startPos.y, endPos.y),
         maxX: max(startPos.x, endPos.x),

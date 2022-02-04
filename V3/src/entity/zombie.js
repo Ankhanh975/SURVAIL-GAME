@@ -53,7 +53,7 @@ class AIPlayer extends Player {
       field.tick(this);
       
       // Debugging 
-      return
+      // return
       if (
         collisions.isFreeLine(this.pos, this.target.pos, {
           ignore: [this.circle, this.target.circle],

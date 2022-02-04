@@ -59,7 +59,7 @@ component.wandering = class {
   }
   update = () => {
     // Debugging
-  return
+  // return
     {
       const h = this.heading.copy().setMag(50).add(this.parent.pos);
       queue.addDraw(
