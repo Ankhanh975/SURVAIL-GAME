@@ -1,4 +1,3 @@
-
 class Obstacle {
   constructor(pos, parent, lifeTime = true) {
     // parent: the Obstacles object this Obstacle belongs to
@@ -21,6 +20,8 @@ class Obstacle {
     // this.circle.normals[2].y = 0;
     // this.circle.normals[3].x = 1;
     // this.circle.normals[3].y = 0;
+
+    // this.circle.isStatic = true;
     this.circle.parent = this;
     this.color = [220, 220, 10, 200];
     this.parent = parent;
@@ -172,25 +173,46 @@ class Obstacles {
   }
   draw() {
     push();
-    for (const obstacle of this.obstacles) {
-      if (
-        player.pos.x - obstacle.pos.x > 1000 ||
-        player.pos.x - obstacle.pos.x < -1000 ||
-        player.pos.y - obstacle.pos.y > 600 ||
-        player.pos.y - obstacle.pos.y < -600
-      ) {
-        // console.log("too far");
-        continue;
+    // Test speed of 2 options
+    if (this.obstacles.length > 10_000) {
+      {
+        collisions.getNear(
+          player.pos,
+          {
+            rangeX: 1000,
+            rangeY: 1000,
+          },
+          (each) => {
+            if (each.parent instanceof Obstacle) {
+              each.parent.draw();
+            }
+          }
+        );
       }
-      obstacle.draw();
+      return;
     }
+    {
+      for (const obstacle of this.obstacles) {
+        if (
+          player.pos.x - obstacle.pos.x > 1000 ||
+          player.pos.x - obstacle.pos.x < -1000 ||
+          player.pos.y - obstacle.pos.y > 600 ||
+          player.pos.y - obstacle.pos.y < -600
+        ) {
+          // console.log("too far");
+          continue;
+        }
+        obstacle.draw();
+      }
+    }
+
     pop();
-    
+    return;
   }
   initObstacles() {
     let chunkX = 0;
     let chunkY = 0;
-    const size = 100;
+    const size = 60;
     for (let x = 50 - size / 2; x < 50 + size / 2; x++) {
       for (let y = 50 - size / 2; y < 50 + size / 2; y++) {
         // for (let x = 20; x < 80; x++) {

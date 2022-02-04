@@ -9,6 +9,7 @@ class Field {
         if (each.AIPlayer) {
           this.createParticle(each.pos, "friend_smell", 7, 10 ** 10, {
             syncPos: true,
+            parent: each,
           });
         } else {
           // this.create  Particle(each.pos, "enemy_smell", 70, 10 ** 10,  {syncPos: true});
@@ -23,11 +24,13 @@ class Field {
         const smell = this.particles
           .filter((e) => e.name === "enemy_smell")
           .filter((e) => {
-            return player.pos.dist(e.pos) < 40;
+            return player.pos.dist(e.pos) < 100;
           });
         // console.log(smell.length);
         if (smell.length < 2) {
-          this.createParticle(player.pos, "enemy_smell", 75, 250)
+          this.createParticle(player.pos, "enemy_smell", 75, 250, {
+            parent: player,
+          });
           // Debugging
           // this.createParticle(player.pos, "enemy_smell", 75, 2);
         } else {
@@ -86,10 +89,9 @@ class Field {
       });
     return strongestSmell;
   }
-
   tick(zombie) {
     // The brain of the zombie
-    // if (count.detect_enemy + count.detect_enemy2 > 70) {
+    // if (count.detect_enemy + count.detect_enemy2 > 7) {
     // If 7 zombie players will be attack
 
     // const smell = chunks
@@ -99,13 +101,13 @@ class Field {
     const smell = this.particles
       .filter((each) => each.pos.dist(zombie.pos) < each.smellRadius)
       .filter((each) => each.name === "enemy_smell")
-.filter((each) => each.name === "enemy_smell")
-.filter((each) =>
-      collisions.isFreeLine(each.pos, zombie.pos, {
-        ignore: [zombie.circle, player.circle],
-        type: "obstacles",
-      })
-    );
+      // Debugging
+      .filter((each) =>
+        collisions.isFreeLine(each.pos, zombie.pos, {
+          ignore: [zombie.circle, player.circle],
+          type: Obstacle,
+        })
+      );
     // Debugging
     // console.log(smell);
     // return
@@ -164,7 +166,6 @@ class Field {
       return;
     }
   }
-
   createParticle() {
     if (this.particles.length < 10000) {
       const p = new SmileParticles(...arguments);
@@ -183,16 +184,20 @@ class SmileParticles {
     this.pos = createVector(pos.x, pos.y);
     this.name = name;
     this.size = size;
-    this.totalSize = size;
     this.lifeTime = lifeTime || 100;
-    this.totalLifeTime = lifeTime || 100;
+
+    this.totalSize = this.size;
+    this.totalLifeTime = this.lifeTime;
+
+    this.parent = null;
 
     if (settings) {
       if (settings.syncPos) {
         this.pos = pos;
       }
-      if (settings.heading) {
-        this.heading = settings.heading;
+
+      if (settings.parent) {
+        this.parent = settings.parent;
       }
     }
 
@@ -238,14 +243,26 @@ class SmileParticles {
     }
     translate(this.pos.x, this.pos.y);
     circle(0, 0, 70);
-    if (this.heading) {
+    const direction = this.getDirection();
+    if (direction) {
+      push();
       stroke(255, 255, 255, 255);
       strokeWeight(4);
+      rotate(direction);
       line(0, 0, this.heading.x, this.heading.y);
+      pop();
     }
     // fill(255, 255, 255, 2);
     // circle(0, 0, this.smellRadius * (this.lifeTime / this.totalLifeTime));
 
     pop();
+  }
+  getDirection() {
+    if (this.parent) {
+      if (this.parent.target) {
+        return this.parent.target.heading();
+      }
+    }
+    return null;
   }
 }

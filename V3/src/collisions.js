@@ -5,23 +5,41 @@ class Collisions2 extends Collisions {
   update() {
     super.update();
   }
-  getNear(player, range = 1000) {
-    const circle = player.circle;
-    // Get near object next to this pos
-    let near = this._getNeighbors({
-      minX: circle.minX - range,
-      minY: circle.minY - range,
-      maxX: circle.maxX + range,
-      maxY: circle.maxY + range,
-    });
-    near = near.map((neighbor) => neighbor.parent);
-    near = near.filter((neighbor) => player.pos.dist(neighbor.pos) < range);
+  // TODO: dont use call back
+  getNear(point, options, callback) {
+    // Very similar to this,getNeighbors but faster since we don't' run polygon to polygon collision detection
+    const rangeX = options.rangeX || 1000;
+    const rangeY = options.rangeY || 1000;
+    const guaranteed = options.guaranteed || true;
 
-    return near;
+    // Get near object next to this pos
+    this._getNeighbors(
+      {
+        minX: point.x - rangeX,
+        minY: point.y - rangeY,
+        maxX: point.x + rangeX,
+        maxY: point.y + rangeY,
+      },
+      (neighbor) => {
+        if (guaranteed) {
+          if (
+            point.x - neighbor.pos.x > rangeX ||
+            neighbor.pos.x - point.x > rangeX ||
+            point.y - neighbor.pos.y > rangeY ||
+            neighbor.pos.y - point.y > rangeY
+          ) {
+            return;
+          }
+        }
+        callback(neighbor);
+      }
+    );
+    // near = near.map((neighbor) => neighbor.parent);
   }
-  _getNeighbors(AABB) {
+  _getNeighbors(AABB, callback) {
     // Get all potentials objects overlap with this rectangle.
     // Speed is O(log N)
+
     function collideBox(RectA, RectB) {
       return collideRectRect(
         RectA.minX,
@@ -33,40 +51,30 @@ class Collisions2 extends Collisions {
         RectB.maxX - RectB.minX,
         RectB.maxY - RectB.minY
       );
-      if (
-        RectA.minX < RectB.maxX &&
-        RectA.maxX > RectB.minX &&
-        RectA.minY < RectB.maxY &&
-        RectA.maxY > RectB.minY
-      ) {
-        return true;
-      } else {
-        return false;
-      }
     }
     let queue = [this.data];
-    let overlap = [];
     while (queue.length > 0) {
       const box = queue.shift();
       // console.log(box);
-      if (box.children) {
+      if (box.height >= 2) {
         if (collideBox(box, AABB)) {
           queue.push(...box.children);
         }
       } else {
-        overlap.push(box);
+        box.children.forEach((each) => {
+          if (collideBox(each, AABB)) {
+            // box is a object like player.circle
+            const v = callback(each);
+            if (v) {
+              return v;
+            }
+          }
+        });
       }
     }
-    return overlap;
-    const o = { minX: -1000, minY: -1000, maxX: 1000, maxY: 1000 };
+    // const o = { minX: -1000, minY: -1000, maxX: 1000, maxY: 1000 };
   }
-
   getNeighbors(AABB) {
-    // Debugging
-    // setTimeout(() => {
-    //   noLoop();
-    // }, 4000);
-
     function collideRectPoly2(AABB, polygon) {
       // polygon is a object create with collision.createPolygon()
       // collideRectPoly() not work when polygon is completely contained within AABB
@@ -99,66 +107,21 @@ class Collisions2 extends Collisions {
         AABB.minY,
         AABB.maxX - AABB.minX,
         AABB.maxY - AABB.minY,
-        polygon.points.map((point) =>
-          createVector(point.x + polygon.pos.x, point.y + polygon.pos.y)
-        )
+        polygon.points.map((point) => {
+          return { x: point.x + polygon.pos.x, y: point.y + polygon.pos.y };
+        })
         // .reverse()
       );
       return collided;
     }
-
+    let all = [];
     // Get all objects overlap with this rectangle.
-    let near = this._getNeighbors(AABB);
-    // Debugging
-    // console.log(near);
-    near = near.filter((neighbor) => {
+    this._getNeighbors(AABB, (neighbor) => {
       if (neighbor.type === "Polygon") {
-        return collideRectPoly2(AABB, neighbor);
-        console.log(
-          AABB,
-          neighbor,
-          neighbor.pos.x,
-          neighbor.pos.y,
-          neighbor.r,
-          neighbor.points.map((point) =>
-            createVector(point.x + neighbor.pos.x, point.y + neighbor.pos.y)
-          )
-          // .reverse()
-        );
-        console.log(
-          collideRectPoly(
-            AABB.minX,
-            AABB.minY,
-            AABB.maxX - AABB.minX,
-            AABB.maxY - AABB.minY,
-            neighbor.points.map((point) =>
-              createVector(point.x + neighbor.pos.x, point.y + neighbor.pos.y)
-            )
-            // .reverse()
-          )
-        );
-        return collideRectPoly(
-          AABB.minX,
-          AABB.minY,
-          AABB.maxX - AABB.minX,
-          AABB.maxY - AABB.minY,
-          neighbor.points
-            .map((point) =>
-              createVector(point.x + neighbor.pos.x, point.y + neighbor.pos.y)
-            )
-            .reverse()
-        );
+        if (!collideRectPoly2(AABB, neighbor)) {
+          return;
+        }
       } else if (neighbor.type === "Circle") {
-        // console.log(
-        //   "neighbor.type === Circle",
-        //   AABB.minX,
-        //   AABB.minY,
-        //   AABB.maxX - AABB.minX,
-        //   AABB.maxY - AABB.minY,
-        //   neighbor.pos.x,
-        //   neighbor.pos.y,
-        //   neighbor.r
-        // );
         const collided = collideRectCircle(
           AABB.minX,
           AABB.minY,
@@ -168,41 +131,94 @@ class Collisions2 extends Collisions {
           neighbor.pos.y,
           neighbor.r
         );
-        return collided;
+        if (!collided) {
+          return;
+        }
       } else {
         throw new Error("Unknown type of neighbor: " + neighbor.type);
       }
+      all.push(neighbor);
     });
-    // Debugging
-    // console.log(near);
-
-    return near;
+    return all;
   }
-
   isFreeLine(startPos, endPos, setting) {
-    const all = this.rayCast(...arguments);
-    // console.log(all, all.length === 0);
-    return all.length === 0;
-  }
-  rayCast(startPos, endPos, setting) {
-    function swap(a, b) {
-      return [b, a];
-    }
-    setting = setting = setting || {};
+    setting = setting || {};
     const ignore = setting.ignore || [];
     const type = setting.type;
-
-    // console.log(startPos.x, startPos.y, endPos.x, endPos.y);
-    {
-      // Debugging
-      // let near = this.getNeighbors({
-      let near = this._getNeighbors({
+    let isFree = true;
+    this._getNeighbors(
+      {
         minX: min(startPos.x, endPos.x),
         minY: min(startPos.y, endPos.y),
         maxX: max(startPos.x, endPos.x),
         maxY: max(startPos.y, endPos.y),
-      });
-      // console.log(near);
+      },
+      (neighbor) => {
+        if (neighbor.type === "Polygon") {
+          const collided = collideLinePoly(
+            startPos.x,
+            startPos.y,
+            endPos.x,
+            endPos.y,
+            neighbor.points
+              .map((point) =>
+                createVector(point.x + neighbor.pos.x, point.y + neighbor.pos.y)
+              )
+              .reverse()
+          );
+          if (!collided) {
+            return;
+          }
+        } else if (neighbor.type === "Circle") {
+          const collided = collideLineCircle(
+            startPos.x,
+            startPos.y,
+            endPos.x,
+            endPos.y,
+            neighbor.pos.x,
+            neighbor.pos.y,
+            neighbor.r
+          );
+          if (!collided) {
+            return;
+          }
+        } else {
+          throw new Error("Unknown type of neighbor: " + neighbor.type);
+        }
+
+        if (ignore.includes(neighbor)) {
+          return;
+        }
+        if (type) {
+          if (!(neighbor.parent instanceof type)) {
+            return;
+          }
+        }
+        isFree = false;
+        return true;
+      }
+    );
+
+    return isFree;
+  }
+  rayCast(startPos, endPos, setting) {
+    setting = setting || {};
+    const ignore = setting.ignore || [];
+
+    // console.log(startPos.x, startPos.y, endPos.x, endPos.y);
+    {
+      let near = [];
+      this._getNeighbors(
+        {
+          minX: min(startPos.x, endPos.x),
+          minY: min(startPos.y, endPos.y),
+          maxX: max(startPos.x, endPos.x),
+          maxY: max(startPos.y, endPos.y),
+        },
+        (neighbor) => {
+          near.push(neighbor);
+        }
+      );
 
       near = near.filter((neighbor) => {
         if (neighbor.type === "Polygon") {
