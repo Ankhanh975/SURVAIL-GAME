@@ -117,7 +117,7 @@ class Field {
         zombie.wandering.end();
       }
       this.createParticle(zombie.pos, "detect_enemy", 100, 2, {
-        heading: null,
+        // heading: null,
       });
       const heading = this.getStrongest(smell, "enemy_smell");
       if (heading) {
@@ -243,26 +243,26 @@ class SmileParticles {
     }
     translate(this.pos.x, this.pos.y);
     circle(0, 0, 70);
-    const direction = this.getDirection();
-    if (direction) {
-      push();
-      stroke(255, 255, 255, 255);
-      strokeWeight(4);
-      rotate(direction);
-      line(0, 0, this.heading.x, this.heading.y);
-      pop();
-    }
-    // fill(255, 255, 255, 2);
-    // circle(0, 0, this.smellRadius * (this.lifeTime / this.totalLifeTime));
+    
+    // const direction = this.getDirection();
+    // if (direction) {
+    //   push();
+    //   stroke(255, 255, 255, 255);
+    //   strokeWeight(4);
+    //   rotate(direction);
+    //   line(0, 0, this.heading.x, this.heading.y);
+    //   pop();
+    // }
+    
 
     pop();
   }
-  getDirection() {
-    if (this.parent) {
-      if (this.parent.target) {
-        return this.parent.target.heading();
-      }
-    }
-    return null;
-  }
+  // getDirection() {
+  //   if (this.parent) {
+  //     if (this.parent.target) {
+  //       return this.parent.target.heading();
+  //     }
+  //   }
+  //   return null;
+  // }
 }

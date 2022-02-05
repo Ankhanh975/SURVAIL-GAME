@@ -174,23 +174,23 @@ class Obstacles {
   draw() {
     push();
     // Test speed of 2 options
-    if (this.obstacles.length > 10_000) {
-      {
-        collisions.getNear(
-          player.pos,
-          {
-            rangeX: 1000,
-            rangeY: 1000,
-          },
-          (each) => {
-            if (each.parent instanceof Obstacle) {
-              each.parent.draw();
-            }
-          }
-        );
-      }
-      return;
-    }
+    // if (this.obstacles.length > 10_000) {
+    //   {
+    //     collisions.getNear(
+    //       player.pos,
+    //       {
+    //         rangeX: 1000,
+    //         rangeY: 1000,
+    //       },
+    //       (each) => {
+    //         if (each.parent instanceof Obstacle) {
+    //           each.parent.draw();
+    //         }
+    //       }
+    //     );
+    //   }
+    //   return;
+    // }
     {
       for (const obstacle of this.obstacles) {
         if (

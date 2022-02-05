@@ -28,7 +28,7 @@ class Collisions2 extends Collisions {
             point.y - neighbor.pos.y > rangeY ||
             neighbor.pos.y - point.y > rangeY
           ) {
-            return;
+            return false;
           }
         }
         callback(neighbor);
@@ -36,90 +36,115 @@ class Collisions2 extends Collisions {
     );
     // near = near.map((neighbor) => neighbor.parent);
   }
+  #collideBox(RectA, RectB) {
+    return collideRectRect(
+      RectA.minX,
+      RectA.minY,
+      RectA.maxX - RectA.minX,
+      RectA.maxY - RectA.minY,
+      RectB.minX,
+      RectB.minY,
+      RectB.maxX - RectB.minX,
+      RectB.maxY - RectB.minY
+    );
+  }
+  #isInside(x1, y1, w1, h1, x2, y2, w2, h2) {
+    // If rect1 is isInside rect2
+    // https://stackoverflow.com/questions/27768039/find-out-if-a-rectangle-is-inside-another-rectangle-c
+
+    if (x2 + w2 < x1 + w1 && x2 > x1 && y2 > y1 && y2 + h2 < y1 + h1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  #collideRectPoly(AABB, polygon) {
+    // polygon is a object create with collision.createPolygon()
+    // collideRectPoly() not work when polygon is completely contained within AABB
+    if (
+      this.#isInside(
+        AABB.minX,
+        AABB.minY,
+        AABB.maxX - AABB.minX,
+        AABB.maxY - AABB.minY,
+        polygon.minX,
+        polygon.minY,
+        polygon.maxX - polygon.minX,
+        polygon.maxY - polygon.minY
+      )
+    ) {
+      return true;
+    }
+    const collided = collideRectPoly(
+      AABB.minX,
+      AABB.minY,
+      AABB.maxX - AABB.minX,
+      AABB.maxY - AABB.minY,
+      polygon.points.map((point) => {
+        return { x: point.x + polygon.pos.x, y: point.y + polygon.pos.y };
+      })
+      // .reverse()
+    );
+    return collided;
+  }
+  #AABBFOfLine(startPos, endPos) {
+    return {
+      minX: min(startPos.x, endPos.x),
+      minY: min(startPos.y, endPos.y),
+      maxX: max(startPos.x, endPos.x),
+      maxY: max(startPos.y, endPos.y),
+    };
+  }
+  #collideLinePoly(startPos, endPos, polygon) {
+    const collided = collideLinePoly(
+      startPos.x - polygon.pos.x,
+      startPos.y - polygon.pos.x,
+      endPos.x - polygon.pos.x,
+      endPos.y - polygon.pos.x,
+      polygon.map((point) => {
+        return {
+          x: point.x,
+          y: point.y,
+        };
+      })
+    );
+
+    return collided;
+  }
   _getNeighbors(AABB, callback) {
     // Get all potentials objects overlap with this rectangle.
     // Speed is O(log N)
 
-    function collideBox(RectA, RectB) {
-      return collideRectRect(
-        RectA.minX,
-        RectA.minY,
-        RectA.maxX - RectA.minX,
-        RectA.maxY - RectA.minY,
-        RectB.minX,
-        RectB.minY,
-        RectB.maxX - RectB.minX,
-        RectB.maxY - RectB.minY
-      );
-    }
     let queue = [this.data];
     while (queue.length > 0) {
       const box = queue.shift();
       // console.log(box);
       if (box.height >= 2) {
-        if (collideBox(box, AABB)) {
+        if (this.#collideBox(box, AABB)) {
           queue.push(...box.children);
         }
       } else {
         box.children.forEach((each) => {
-          if (collideBox(each, AABB)) {
+          if (this.#collideBox(each, AABB)) {
             // box is a object like player.circle
             const v = callback(each);
-            if (v) {
+            if (v === true) {
               return v;
             }
           }
         });
       }
     }
+
     // const o = { minX: -1000, minY: -1000, maxX: 1000, maxY: 1000 };
   }
   getNeighbors(AABB) {
-    function collideRectPoly2(AABB, polygon) {
-      // polygon is a object create with collision.createPolygon()
-      // collideRectPoly() not work when polygon is completely contained within AABB
-      function isInside(x1, y1, w1, h1, x2, y2, w2, h2) {
-        // If rect1 is isInside rect2
-        // https://stackoverflow.com/questions/27768039/find-out-if-a-rectangle-is-inside-another-rectangle-c
-
-        if (x2 + w2 < x1 + w1 && x2 > x1 && y2 > y1 && y2 + h2 < y1 + h1) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      if (
-        isInside(
-          AABB.minX,
-          AABB.minY,
-          AABB.maxX - AABB.minX,
-          AABB.maxY - AABB.minY,
-          polygon.minX,
-          polygon.minY,
-          polygon.maxX - polygon.minX,
-          polygon.maxY - polygon.minY
-        )
-      ) {
-        return true;
-      }
-      const collided = collideRectPoly(
-        AABB.minX,
-        AABB.minY,
-        AABB.maxX - AABB.minX,
-        AABB.maxY - AABB.minY,
-        polygon.points.map((point) => {
-          return { x: point.x + polygon.pos.x, y: point.y + polygon.pos.y };
-        })
-        // .reverse()
-      );
-      return collided;
-    }
     let all = [];
     // Get all objects overlap with this rectangle.
     this._getNeighbors(AABB, (neighbor) => {
       if (neighbor.type === "Polygon") {
-        if (!collideRectPoly2(AABB, neighbor)) {
-          return;
+        if (!this.#collideRectPoly(AABB, neighbor)) {
+          return false;
         }
       } else if (neighbor.type === "Circle") {
         const collided = collideRectCircle(
@@ -132,12 +157,13 @@ class Collisions2 extends Collisions {
           neighbor.r
         );
         if (!collided) {
-          return;
+          return false;
         }
       } else {
         throw new Error("Unknown type of neighbor: " + neighbor.type);
       }
       all.push(neighbor);
+      return true;
     });
     return all;
   }
@@ -147,27 +173,17 @@ class Collisions2 extends Collisions {
     const type = setting.type;
     let isFree = true;
     this._getNeighbors(
-      {
-        minX: min(startPos.x, endPos.x),
-        minY: min(startPos.y, endPos.y),
-        maxX: max(startPos.x, endPos.x),
-        maxY: max(startPos.y, endPos.y),
-      },
+      this.#AABBFOfLine(startPos, endPos),
+
       (neighbor) => {
         if (neighbor.type === "Polygon") {
-          const collided = collideLinePoly(
-            startPos.x,
-            startPos.y,
-            endPos.x,
-            endPos.y,
+          const collided = this.#collideLinePoly(
+            startPos,
+            endPos,
             neighbor.points
-              .map((point) =>
-                createVector(point.x + neighbor.pos.x, point.y + neighbor.pos.y)
-              )
-              .reverse()
           );
           if (!collided) {
-            return;
+            return false;
           }
         } else if (neighbor.type === "Circle") {
           const collided = collideLineCircle(
@@ -180,18 +196,18 @@ class Collisions2 extends Collisions {
             neighbor.r
           );
           if (!collided) {
-            return;
+            return false;
           }
         } else {
           throw new Error("Unknown type of neighbor: " + neighbor.type);
         }
 
         if (ignore.includes(neighbor)) {
-          return;
+          return false;
         }
         if (type) {
           if (!(neighbor.parent instanceof type)) {
-            return;
+            return false;
           }
         }
         isFree = false;
@@ -222,22 +238,10 @@ class Collisions2 extends Collisions {
 
       near = near.filter((neighbor) => {
         if (neighbor.type === "Polygon") {
-          // console.log(
-          //   neighbor.points,
-          //   neighbor.points.map((point) =>
-          //     createVector(point.x + neighbor.pos.x, point.y + neighbor.pos.y)
-          //   )
-          // );
-          const collided = collideLinePoly(
-            startPos.x,
-            startPos.y,
-            endPos.x,
-            endPos.y,
+          const collided = this.#collideLinePoly(
+            startPos,
+            endPos,
             neighbor.points
-              .map((point) =>
-                createVector(point.x + neighbor.pos.x, point.y + neighbor.pos.y)
-              )
-              .reverse()
           );
           return collided;
         } else if (neighbor.type === "Circle") {
@@ -259,7 +263,7 @@ class Collisions2 extends Collisions {
       // console.log(near);
       return near;
     }
-    return true;
+    return null;
 
     {
       // this.line = this.createPolygon({ x: startPos.x, y: startPos.y }, [
