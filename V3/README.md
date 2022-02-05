@@ -28,6 +28,7 @@
 - 29/01/2022: TODO: freeze on push back
 - 29/01/2022: TODO: on push back: push back on the path back.
 - Demo: https://youtu.be/NoWH5l08dMM
+- 05/02/2022: TODO: move from p5js canvas to html canvas since html canvas is both faster and have more features like ctx.globalAlpha and clearRect() globalCompositeOperation();
 
 ```
 "V1", "V2", V3: I make a new copy when a major refactored version happens.

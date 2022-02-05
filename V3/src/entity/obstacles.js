@@ -83,12 +83,15 @@ class Obstacles {
   constructor() {
     this.obstacles = [];
     this.grid = new Grid();
+    this.initSpite();
+  }
+  initSpite() {
     this.obstacles_surface = createGraphics(52, 52);
 
     this.obstacles_surface.push();
     this.obstacles_surface.strokeWeight(1.5);
     this.obstacles_surface.stroke(0, 0, 0, 240);
-    this.obstacles_surface.fill([220, 220, 10, 200]);
+    this.obstacles_surface.fill([220, 220, 10, 220]);
     this.obstacles_surface.rect(0, 0, 52, 52, 3.5);
     this.obstacles_surface.pop();
 
@@ -97,10 +100,11 @@ class Obstacles {
     this.obstacles_surface2.push();
     this.obstacles_surface2.strokeWeight(1.5);
     this.obstacles_surface2.stroke(0, 0, 0, 240);
-    this.obstacles_surface2.fill([220, 220, 10, 100]);
+    this.obstacles_surface2.fill([220, 220, 10, 110]);
     this.obstacles_surface2.rect(0, 0, 52, 52, 3.5);
     this.obstacles_surface2.pop();
   }
+
   FindPath(posStart, posEnd) {
     let pGridStart = this.grid.WorldCoordsToGridCoords(posStart.x, posStart.y);
     let pGridEnd = this.grid.WorldCoordsToGridCoords(posEnd.x, posEnd.y);

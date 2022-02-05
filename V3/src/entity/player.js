@@ -90,7 +90,7 @@ class Player extends PlayerBase {
       { x: this.pos.x, y: this.pos.y },
       // PLAYING
       // 60 / 2
-      10 / 2
+      60 / 2
     );
     // this.circle = collisions.createPolygon({ x: this.pos.x, y: this.pos.y }, [
     //   { x: 75 / 2, y: 33 / 2 },

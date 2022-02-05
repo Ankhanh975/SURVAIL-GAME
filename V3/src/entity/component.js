@@ -61,7 +61,9 @@ component.jump = class {
       this.parent.health -= this.parent.totalHealth / 200;
       for (let i = 0; i < 14; i++) {
         let particle = sparks.create_particle(this.parent.pos, [0, 0, 0], 3.5);
-        particle.move(1.5);
+        if (particle) {
+          particle.move(1.5);
+        }
       }
       let d = createVector(0, 0);
       // change listener to useable for all entities

@@ -51,7 +51,7 @@ addFunction("setup", () => {
     player.health = 2000;
     player.totalHealth = 2000;
     player.damage = 4.5;
-    player.recovery = 0.002 * player.health;
+    player.recovery = 0.005 * player.health;
   }
 
   for (let i = 0; i < 14 * 4; i++) {
@@ -71,7 +71,7 @@ addFunction("setup", () => {
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
 
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 150; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -138,6 +138,7 @@ addFunction("draw", () => {
           player.pos.x += x;
           player.pos.y += y;
           player.circle.setPosition(player.pos.x, player.pos.y);
+          player.setFreezeFor(16 * 2);
         }
       });
     });

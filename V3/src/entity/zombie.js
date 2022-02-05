@@ -3,30 +3,12 @@ class AIPlayer extends Player {
     super(animation, parent, "n", pos);
     this.name = generateName.__call();
     this.AIPlayer = true;
-    // TODO: pick target
+    // this.recovery = -0.00001 * player.health;
 
     this.addComponent(component.wandering);
     this.addComponent(component.sensor);
+    
     // this.target = int(random(0, this.parent.realPlayers.length));
-    // this.path = [];
-    // this.lastPathFinding = frameCount - 999;
-
-    // update the target
-    // setInterval(() => {
-    //   //   console.log("update target");
-    //   let target;
-    //   let targetDis = Infinity;
-    //   this.parent.realPlayers.forEach((p) => {
-    //     let d = this.pos.dist(p.pos);
-    //     // console.log("d", d, targetDis);
-    //     if (d < targetDis) {
-    //       targetDis = d;
-    //       target = p;
-    //     }
-    //   });
-    //   this.target = target;
-    // }, 250);
-
     // this.target = null;
     // this.target = this.parent.realPlayers[0];
   }

@@ -108,20 +108,7 @@ class Grid {
       if (this.get(gridX, gridY) === true) {
         return false;
       }
-      function createGrid(n, m) {
-        let grid = [];
-        let grid0 = [];
-        for (let i = 0; i < n; i++) {
-          grid.push(null);
-        }
-        for (let i = 0; i < m; i++) {
-          grid0.push(0);
-        }
-        grid = grid.map(function (grid) {
-          return grid0;
-        });
-        return grid;
-      }
+      
       function IsInMapRange(x, y) {
         return x >= 0 && x < mapSize[0] && y >= 0 && y < mapSize[1];
       }

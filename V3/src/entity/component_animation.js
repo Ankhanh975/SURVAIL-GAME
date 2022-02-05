@@ -1,20 +1,23 @@
 (function () {
-  let Players_img = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-  ];
+  let Players_img;
   addFunction("preload", () => {
+    Players_img = [
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null],
+    ];
     const img = Players_img;
-    img[0][0] = loadImage("Assets/Animation_0.png");
-    img[0][1] = loadImage("Assets/Animation_1.png");
-    img[0][2] = loadImage("Assets/Animation_2.png");
-    img[0][3] = loadImage("Assets/Animation_3.png");
-    img[0][4] = loadImage("Assets/Animation_4.png");
-    img[0][5] = loadImage("Assets/Animation_5.png");
+    img[0] = [
+      loadImage("Assets/Animation_0.png"),
+      loadImage("Assets/Animation_1.png"),
+      loadImage("Assets/Animation_2.png"),
+      loadImage("Assets/Animation_3.png"),
+      loadImage("Assets/Animation_4.png"),
+      loadImage("Assets/Animation_5.png"),
+    ];
 
     // img[0][6] = loadImage("Assets/Demo/Die0.png");
     // img[0][7] = loadImage("Assets/Demo/Die1.png");
@@ -29,28 +32,25 @@
   addFunction("setup", () => {
     const img = Players_img;
     [
-      [255, 255, 0],
-      [0, 0, 255],
-      [248, 147, 29],
-      [0, 255, 0],
-      [255, 0, 0],
+      [255, 255, 0, 200],
+      [0, 0, 255, 50],
+      [248, 147, 29, 200],
+      [0, 255, 0, 200],
+      [255, 0, 0, 255],
     ].forEach((color, ii) => {
       for (let i = 0; i < img[0].length; i++) {
-        img[ii + 1][i] = createImage(img[0][i].width, img[0][i].height);
-        img[ii + 1][i].copy(
-          img[0][i],
-          0,
-          0,
-          img[0][i].width,
-          img[0][i].height,
-          0,
-          0,
-          img[0][i].width,
-          img[0][i].height
-        );
-
+        img[ii + 1][i] = clone(img[0][i]);
         change(img[ii + 1][i], [255, 255, 255], color);
       }
+    });
+    img[0].forEach((color, ii) => {
+      change(img[0][ii], [255, 255, 255], [255, 255, 255, 220]);
+    });
+    // Change black color on the edges to be partly transparent.
+    img.forEach((img0) => {
+      img0.forEach((img1) => {
+        change(img1, [0, 0, 0, 255], [0, 0, 0, 220]);
+      });
     });
   });
   function change(image, pixelFrom, pixelTo) {
@@ -65,13 +65,26 @@
           image.pixels[index + 1] === pixelFrom[1] &&
           image.pixels[index + 2] === pixelFrom[2]
         ) {
+          if (pixelFrom.length === 4) {
+            if (!(image.pixels[index + 3] === pixelFrom[3])) {
+              continue;
+            }
+          }
           image.pixels[index] = pixelTo[0];
           image.pixels[index + 1] = pixelTo[1];
           image.pixels[index + 2] = pixelTo[2];
+          image.pixels[index + 3] = pixelTo[3];
         }
       }
     }
     image.updatePixels();
+  }
+  function clone(image) {
+    const width = image.width;
+    const height = image.height;
+    const img2 = createImage(width, height);
+    img2.copy(image, 0, 0, width, height, 0, 0, width, height);
+    return img2;
   }
   component.animation = class {
     name = "animation";
@@ -110,6 +123,9 @@
     }
   };
 })();
+// clear_img() clears
+// html canvas use clear_rect()
+
 function clear_surface(canvas, startX, startY, endX, endY) {
   canvas.loadPixels();
   const width = canvas.width;
@@ -121,4 +137,18 @@ function clear_surface(canvas, startX, startY, endX, endY) {
     }
   }
   canvas.updatePixels();
+}
+function createGrid(n, m) {
+  let grid = [];
+  let grid0 = [];
+  for (let i = 0; i < n; i++) {
+    grid.push(null);
+  }
+  for (let i = 0; i < m; i++) {
+    grid0.push(0);
+  }
+  grid = grid.map(function (grid) {
+    return grid0;
+  });
+  return grid;
 }
