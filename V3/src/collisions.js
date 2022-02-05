@@ -101,7 +101,7 @@ class Collisions2 extends Collisions {
       startPos.y - polygon.pos.x,
       endPos.x - polygon.pos.x,
       endPos.y - polygon.pos.x,
-      polygon.map((point) => {
+      polygon.points.map((point) => {
         return {
           x: point.x,
           y: point.y,
@@ -177,11 +177,7 @@ class Collisions2 extends Collisions {
 
       (neighbor) => {
         if (neighbor.type === "Polygon") {
-          const collided = this.#collideLinePoly(
-            startPos,
-            endPos,
-            neighbor.points
-          );
+          const collided = this.#collideLinePoly(startPos, endPos, neighbor);
           if (!collided) {
             return false;
           }
@@ -238,11 +234,7 @@ class Collisions2 extends Collisions {
 
       near = near.filter((neighbor) => {
         if (neighbor.type === "Polygon") {
-          const collided = this.#collideLinePoly(
-            startPos,
-            endPos,
-            neighbor.points
-          );
+          const collided = this.#collideLinePoly(startPos, endPos, neighbor);
           return collided;
         } else if (neighbor.type === "Circle") {
           return collideLineCircle(
