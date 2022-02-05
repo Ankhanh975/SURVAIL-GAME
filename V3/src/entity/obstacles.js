@@ -209,10 +209,9 @@ class Obstacles {
     pop();
     return;
   }
-  initObstacles() {
+  initObstacles(size = 60) {
     let chunkX = 0;
     let chunkY = 0;
-    const size = 60;
     for (let x = 50 - size / 2; x < 50 + size / 2; x++) {
       for (let y = 50 - size / 2; y < 50 + size / 2; y++) {
         // for (let x = 20; x < 80; x++) {

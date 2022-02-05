@@ -27,8 +27,8 @@
 - Zombie behavior: Following it friend, wander
 - 29/01/2022: TODO: freeze on push back
 - 29/01/2022: TODO: on push back: push back on the path back.
-Demo: https://youtu.be/NoWH5l08dMM
-# Explained folder structure:
+- Demo: https://youtu.be/NoWH5l08dMM
+
 ```
 "V1", "V2", V3: I make a new copy when a major refactored version happens.
 {
@@ -46,6 +46,7 @@ Demo: https://youtu.be/NoWH5l08dMM
     "README.md": main file path to documentation
 }
 ```js
+
 # Dependent:
 - p5js documentation:
 - https://p5js.org/reference/#/p5.Vector
@@ -57,7 +58,7 @@ Demo: https://youtu.be/NoWH5l08dMM
 - The first few lines of code is done in 2020 Jan, because I found this game https://github.com/Ankhanh975/SURVAIL-GAME/tree/master/V1/Example/OnlinePuch
 - is really cool!
 - Layout:
-
+# Explained folder structure:
 ```
 .
 |-- setup.js        # helper function
@@ -72,6 +73,10 @@ Demo: https://youtu.be/NoWH5l08dMM
 |-- sketch.js       # Main flow
 |-- onControl.js    # Attack keyboard & move event movement to some variable.
 ```js
+
+# More resources:
+- https://www.youtube.com/playlist?list=PLFt_AvWsXl0eZgMK_DT5_biRkWXftAOf9
+- https://www.youtube.com/playlist?list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3
 
 Libraries
 two.js

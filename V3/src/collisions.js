@@ -13,7 +13,7 @@ class Collisions2 extends Collisions {
     const guaranteed = options.guaranteed || true;
 
     // Get near object next to this pos
-    this._getNeighbors(
+    this.#_getNeighbors(
       {
         minX: point.x - rangeX,
         minY: point.y - rangeY,
@@ -96,22 +96,15 @@ class Collisions2 extends Collisions {
     };
   }
   #collideLinePoly(startPos, endPos, polygon) {
-    const collided = collideLinePoly(
+    return collideLinePoly(
       startPos.x - polygon.pos.x,
-      startPos.y - polygon.pos.x,
+      startPos.y - polygon.pos.y,
       endPos.x - polygon.pos.x,
-      endPos.y - polygon.pos.x,
-      polygon.points.map((point) => {
-        return {
-          x: point.x,
-          y: point.y,
-        };
-      })
+      endPos.y - polygon.pos.y,
+      polygon.points
     );
-
-    return collided;
   }
-  _getNeighbors(AABB, callback) {
+  #_getNeighbors(AABB, callback) {
     // Get all potentials objects overlap with this rectangle.
     // Speed is O(log N)
 
@@ -141,7 +134,7 @@ class Collisions2 extends Collisions {
   getNeighbors(AABB) {
     let all = [];
     // Get all objects overlap with this rectangle.
-    this._getNeighbors(AABB, (neighbor) => {
+    this.#_getNeighbors(AABB, (neighbor) => {
       if (neighbor.type === "Polygon") {
         if (!this.#collideRectPoly(AABB, neighbor)) {
           return false;
@@ -172,7 +165,7 @@ class Collisions2 extends Collisions {
     const ignore = setting.ignore || [];
     const type = setting.type;
     let isFree = true;
-    this._getNeighbors(
+    this.#_getNeighbors(
       this.#AABBFOfLine(startPos, endPos),
 
       (neighbor) => {
@@ -220,7 +213,7 @@ class Collisions2 extends Collisions {
     // console.log(startPos.x, startPos.y, endPos.x, endPos.y);
     {
       let near = [];
-      this._getNeighbors(
+      this.#_getNeighbors(
         {
           minX: min(startPos.x, endPos.x),
           minY: min(startPos.y, endPos.y),

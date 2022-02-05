@@ -26,7 +26,7 @@ class AIPlayer extends Player {
     //   });
     //   this.target = target;
     // }, 250);
-    
+
     // this.target = null;
     // this.target = this.parent.realPlayers[0];
   }
@@ -45,43 +45,48 @@ class AIPlayer extends Player {
   }
   update() {
     super.update();
-    field.tick(this);
-    // let target = this.parent.realPlayers[this.target].pos;
-    // if (this.target) {
-    //   let lookAt, dist, toLookAt;
-    //   lookAt = this.target.pos;
-    //   dist = this.pos.dist(lookAt);
-    //   toLookAt = p5.Vector.sub(lookAt, this.pos);
-    return
+
+    // field.tick(this);
+    // return
+
+    this.target = this.parent.realPlayers[0];
     if (
-      collisions.isFreeLine(this.pos, this.target.pos, {
+      !collisions.isFreeLine(this.pos, this.target.pos, {
         ignore: [this.circle, this.target.circle],
+        // type: Obstacle,
       })
     ) {
-      if (dist < 150) {
-        if (!this.onPunch()) {
-          if (random(0, 100) >= 93.5) {
-            this.startPunch(null, [this.target]);
-          }
+      return;
+    }
+    if (!this.target) {
+      return;
+    }
+    let lookAt, dist, toLookAt;
+    lookAt = this.target.pos;
+    dist = this.pos.dist(lookAt);
+    toLookAt = p5.Vector.sub(lookAt, this.pos);
+
+    if (dist < 150) {
+      if (!this.onPunch()) {
+        if (random(0, 100) >= 93.5) {
+          this.startPunch(null, [this.target]);
         }
       }
-      // this.setAngle(toLookAt.heading());
-
-      // if (dist < 1100) {
-      // if (dist < 130) {
-      //   toLookAt.setMag(3.0);
-      //   toLookAt.rotate(radians(180));
-      //   this.addPos(toLookAt);
-      // }
-      // if (dist > 150) {
-      //   toLookAt.setMag(3.0);
-      //   this.addPos(toLookAt);
-      // }
-      // }
-      // }
-      // else {
-      // this.setAngle(radians(-90));
     }
+    this.setAngle(toLookAt.heading());
+
+    if (dist < 1100) {
+      if (dist < 130) {
+        toLookAt.setMag(3.0);
+        toLookAt.rotate(radians(180));
+        this.addPos(toLookAt);
+      }
+      if (dist > 150) {
+        toLookAt.setMag(3.0);
+        this.addPos(toLookAt);
+      }
+    }
+
     return;
     //   a* pathfinding
     // if (this.target) {

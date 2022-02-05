@@ -85,7 +85,7 @@ component.jump = class {
       let deltaT = (millis() - start) / 25 - 0.175;
       d.setMag(150 * Curve.f(deltaT) + 3);
 
-      this.parent.addPos(d);
+      this.parent.addPos(d, false);
       collisions.updateBody(this.parent.circle);
     };
     // console.log(this, start, _jump);

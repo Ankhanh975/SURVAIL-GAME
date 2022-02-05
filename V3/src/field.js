@@ -24,7 +24,7 @@ class Field {
         const smell = this.particles
           .filter((e) => e.name === "enemy_smell")
           .filter((e) => {
-            return player.pos.dist(e.pos) < 100;
+            return player.pos.dist(e.pos) < 20;
           });
         // console.log(smell.length);
         if (smell.length < 2) {

@@ -57,7 +57,7 @@ class Players {
         // console.log("too far");
         return;
       }
-      e.draw({ healthBar: true, nameTag: !e.AIPlayer || i <= 1, body: true });
+      e.draw({ healthBar: true, nameTag: !e.AIPlayer, body: true });
     });
   }
   createAIPlayer(pos, color) {

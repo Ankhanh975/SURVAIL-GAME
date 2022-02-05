@@ -5,7 +5,7 @@ class PlayerBase extends Base {
     this.lastPos = createVector(0, 0);
     this.isFreeze = false;
     this.velocity = createVector(0, 0);
-    this.velocity_length = 0
+    this.velocity_length = 0;
     this.acceleration = createVector(0, 0);
     this.parent = parent;
 
@@ -19,15 +19,35 @@ class PlayerBase extends Base {
     // physics in collision detection system
     this.circle = null;
   }
-  setPos(pos) {
+  setFreezeFor(milliseconds) {
+    if (this.isFreeze === false) {
+      this.isFreeze = true;
+      setTimeout(() => {
+        this.isFreeze = false;
+      }, milliseconds);
+    }
+  }
+  _isFreeze() {
+    return this.isFreeze;
+  }
+  setPos(pos, checkFreeze = true) {
+    console.log(checkFreeze, this.isFreeze);
+    if (checkFreeze && this.isFreeze) {
+      return;
+    }
     this.pos = pos;
     // this.circle.pos.x = this.pos.x;
     // this.circle.pos.y = this.pos.y;
     this.circle.setPosition(this.pos.x, this.pos.y);
   }
-  addPos(pos) {
-    // pos: p5js vector add to this.pos
-    this.pos.add(pos)
+  addPos(pos, checkFreeze = true) {
+    if (checkFreeze && this.isFreeze) {
+      return;
+    }
+    this.pos.x += pos.x;
+    this.pos.y += pos.y;
+    // this.circle.pos.x = this.pos.x;
+    // this.circle.pos.y = this.pos.y;
     this.circle.setPosition(this.pos.x, this.pos.y);
   }
   update() {
@@ -49,7 +69,6 @@ class PlayerBase extends Base {
 }
 class Player extends PlayerBase {
   constructor(color, parent, name = "love", pos = [0, 0], health = 42) {
-    health = 10000;
     // color=0: [255, 255, 255],
     // color=1: [255, 255, 0],
     // color=2: [0, 0, 255],
@@ -191,7 +210,7 @@ class Player extends PlayerBase {
           d.setMag(
             -d.mag() * Curve.f2(deltaT, 0.1, 0.6, 0.275) * 21 * this.damage - 3
           );
-          entity.addPos(d);
+          entity.addPos(d, false);
         };
         jump();
         let id9 = setInterval(() => {
@@ -206,7 +225,7 @@ class Player extends PlayerBase {
   }
   getHit() {
     // animation
-
+    this.setFreezeFor(150);
     this.health -= 13;
     if (this.health >= 0) {
       for (let i = 0; i < 4; i++) {
