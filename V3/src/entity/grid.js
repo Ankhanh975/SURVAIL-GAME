@@ -77,7 +77,7 @@ class Grid {
   getSize() {
     return [100, 100];
   }
-  isInIsolate(gridX, gridY) {
+  isInIsolate(gridX, gridY) { 
     {
       // A region is isolated from every other region when
       // 1. Pathfinding can't find path to any player // 2. Every Player can find path to infinite

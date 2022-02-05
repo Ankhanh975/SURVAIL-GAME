@@ -43,10 +43,17 @@ addFunction("setup", () => {
   player.addComponent(component.onController);
   player.addComponent(component.jump);
   player.addComponent(component.placeObstacle);
+  player.recovery = 0.001 * player.health;
   player.health = 1000;
   player.totalHealth = 1000;
-  player.damage = 4.5;
-  player.recovery = 0.001 * player.health;
+
+  {
+    player.health = 2000;
+    player.totalHealth = 2000;
+    player.damage = 4.5;
+    player.recovery = 0.002 * player.health;
+  }
+
   for (let i = 0; i < 14 * 4; i++) {
     let particle = sparks.create_particle(player.pos, [0, 0, 0], 5);
     particle.move(i / 12);
@@ -64,7 +71,8 @@ addFunction("setup", () => {
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
 
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 200; i++) {
+    // PLAYING
     players.createAIPlayer();
   }
   // TODO: why 2000 obstacles is slow?
@@ -109,8 +117,8 @@ addFunction("draw", () => {
   //     });
   //   }
   // }
-  collisions.update();
 
+  collisions.update();
   for (let i = 0; i < 5; i++) {
     players.players.forEach((player) => {
       collisions.checkOne(player.circle, (response) => {
@@ -148,8 +156,7 @@ addFunction("draw", () => {
   push();
   camera.follow(player.pos);
   camera.draw_background();
-  // {
-  //   // Draw spawn at position 0, 0
+  // Draw spawn at position 0, 0
   push();
   let c = HSVtoRGB((frameCount % 750) / 750, 0.9, 0.7);
   fill(...c, 75);
@@ -167,11 +174,12 @@ addFunction("draw", () => {
     arc(-0, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
     pop();
   }
-  queue.update();
+  // PLAYING
   if (true) {
     sparks.draw();
     players.draw();
   } else {
+    queue.update();
     field.draw();
   }
   obstacles.draw();

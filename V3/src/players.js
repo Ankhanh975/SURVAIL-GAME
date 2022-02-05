@@ -57,7 +57,11 @@ class Players {
         // console.log("too far");
         return;
       }
-      e.draw({ healthBar: true, nameTag: !e.AIPlayer, body: true });
+      if (this.players.length > 100) {
+        e.draw({ healthBar: !e.AIPlayer, nameTag: !e.AIPlayer, body: true });
+      } else {
+        e.draw({ healthBar: true, nameTag: !e.AIPlayer, body: true });
+      }
     });
   }
   createAIPlayer(pos, color) {

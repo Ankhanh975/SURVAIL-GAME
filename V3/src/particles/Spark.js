@@ -116,11 +116,14 @@ class Sparks {
     if (speed === null) {
       speed = random(3, 6);
     }
+    if (this.particles.length > 150 && random(0, 100) >= 90) {
+      return; 
+    }
     let n = new Spark(loc, angle, speed, color, scale);
     this.particles.push(n);
     return n;
   }
-  
+
   draw() {
     for (let spark of this.particles) {
       spark.draw();

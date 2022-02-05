@@ -36,9 +36,9 @@ class PlayerBase extends Base {
       return;
     }
     this.pos = pos;
-    // this.circle.pos.x = this.pos.x;
-    // this.circle.pos.y = this.pos.y;
-    this.circle.setPosition(this.pos.x, this.pos.y);
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
+    // this.circle.setPosition(this.pos.x, this.pos.y);
   }
   addPos(pos, checkFreeze = true) {
     if (checkFreeze && this.isFreeze) {
@@ -46,9 +46,9 @@ class PlayerBase extends Base {
     }
     this.pos.x += pos.x;
     this.pos.y += pos.y;
-    // this.circle.pos.x = this.pos.x;
-    // this.circle.pos.y = this.pos.y;
-    this.circle.setPosition(this.pos.x, this.pos.y);
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
+    // this.circle.setPosition(this.pos.x, this.pos.y);
   }
   update() {
     super.update();
@@ -88,7 +88,9 @@ class Player extends PlayerBase {
     // DONE: this.circle should be a polygon
     this.circle = collisions.createCircle(
       { x: this.pos.x, y: this.pos.y },
-      60 / 2
+      // PLAYING
+      // 60 / 2
+      10 / 2
     );
     // this.circle = collisions.createPolygon({ x: this.pos.x, y: this.pos.y }, [
     //   { x: 75 / 2, y: 33 / 2 },

@@ -50,14 +50,15 @@ class AIPlayer extends Player {
     // return
 
     this.target = this.parent.realPlayers[0];
-    if (
-      !collisions.isFreeLine(this.pos, this.target.pos, {
-        ignore: [this.circle, this.target.circle],
-        // type: Obstacle,
-      })
-    ) {
-      return;
-    }
+    // PLAYING
+    // if (
+    //   !collisions.isFreeLine(this.pos, this.target.pos, {
+    //     ignore: [this.circle, this.target.circle],
+    //     // type: Obstacle,
+    //   })
+    // ) {
+    //   return;
+    // }
     if (!this.target) {
       return;
     }
