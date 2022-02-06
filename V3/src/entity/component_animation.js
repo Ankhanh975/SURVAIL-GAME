@@ -121,6 +121,45 @@
         return this.animateFrames !== 0;
       };
     }
+    draw() {
+      const angle = this.parent.getAngle();
+      const position = [0, 0];
+      const color = this.parent.color;
+      const health = this.parent.health_percentage;
+      const mode = 0;
+      const img = this.getFrames();
+
+      push();
+      ctx.globalAlpha = health;
+      // ctx.globalCompositeOperation = "source-over";
+      rotate(angle);
+      if (this.parent.punchHand === "left" && this.onPunch()) {
+        scale(-1, 1);
+        translate(-10, 0);
+      }
+      image(img, 0, 0);
+      pop();
+      // ctx.direction: "ltr"
+      // ctx.fillStyle: "#ffffff"
+      // ctx.filter: "none"
+      // ctx.font: "12px sans-serif"
+      // ctx.globalAlpha: 1
+      // ctx.globalCompositeOperation: "source-over"
+      // ctx.imageSmoothingEnabled: false
+      // ctx.imageSmoothingQuality: "low"
+      // ctx.lineCap: "round"
+      // ctx.lineDashOffset: 0
+      // ctx.lineJoin: "miter"
+      // ctx.lineWidth: 1
+      // ctx.miterLimit: 10
+      // ctx.shadowBlur: 0
+      // ctx.shadowColor: "rgba(0, 0, 0, 0)"
+      // ctx.shadowOffsetX: 0
+      // ctx.shadowOffsetY: 0
+      // ctx.strokeStyle: "#000000"
+      // ctx.textAlign: "start"
+      // ctx.textBaseline: "alphabetic"
+    }
   };
 })();
 // clear_img() clears

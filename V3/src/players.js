@@ -47,7 +47,7 @@ class Players {
     }
   }
   draw() {
-    this.players.forEach((e, i) => {
+    for (const e of this.players) {
       if (
         player.pos.x - e.pos.x > 1000 ||
         player.pos.x - e.pos.x < -1000 ||
@@ -55,14 +55,14 @@ class Players {
         player.pos.y - e.pos.y < -600
       ) {
         // console.log("too far");
-        return;
+        continue;
       }
       if (this.players.length > 100) {
         e.draw({ healthBar: !e.AIPlayer, nameTag: !e.AIPlayer, body: true });
       } else {
         e.draw({ healthBar: true, nameTag: !e.AIPlayer, body: true });
       }
-    });
+    }
   }
   createAIPlayer(pos, color) {
     pos = pos || p5.Vector.random2D().setMag(random(200, 500));

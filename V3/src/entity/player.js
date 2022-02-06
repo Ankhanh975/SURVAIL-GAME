@@ -13,6 +13,7 @@ class PlayerBase extends Base {
 
     this.health = health;
     this.totalHealth = health;
+    this.health_percentage = this.health / this.totalHealth;
     this.recovery = 0.0;
     this.damage = 1;
 
@@ -55,6 +56,7 @@ class PlayerBase extends Base {
     this.health += this.recovery;
     this.health = constrain(this.health, 0, this.totalHealth);
     this.lastPos = this.pos.copy();
+    this.health_percentage = this.health / this.totalHealth;
   }
   die() {
     collisions.remove(this.circle);
@@ -69,14 +71,15 @@ class PlayerBase extends Base {
 }
 class Player extends PlayerBase {
   constructor(color, parent, name = "love", pos = [0, 0], health = 42) {
-    // color=0: [255, 255, 255],
-    // color=1: [255, 255, 0],
-    // color=2: [0, 0, 255],
-    // color=3: [248, 147, 29],
-    // color=4: [0, 255, 0],
-    // color=5: [255, 0, 0],
     super(parent, pos, name, health);
+
     this.color = color;
+    // if (color === 0) this.color = [255, 255, 255];
+    // else if (color === 1) this.color = [255, 255, 0];
+    // else if (color === 2) this.color = [0, 0, 255];
+    // else if (color === 3) this.color = [248, 147, 29];
+    // else if (color === 4) this.color = [0, 255, 0];
+    // else if (color === 5) this.color = [255, 0, 0];
     this.addComponent(component.animation);
     this.addComponent(component.rotation);
     this.punchHand = "right";
@@ -136,14 +139,15 @@ class Player extends PlayerBase {
     push();
     translate(this.pos);
     if (options.body) {
-      push();
-      rotate(this.getAngle());
-      if (this.punchHand === "left" && this.animateFrames !== 0) {
-        scale(-1, 1);
-        translate(-10, 0);
-      }
-      image(this.animation.getFrames(), 0, 0);
-      pop();
+      this.animation.draw();
+      // push();
+      // rotate(this.getAngle());
+      // if (this.punchHand === "left" && !this.animation.onPunch()) {
+      //   scale(-1, 1);
+      //   translate(-10, 0);
+      // }
+      // image(this.animation.getFrames(), 0, 0);
+      // pop();
     }
     if (options.healthBar) {
       push();

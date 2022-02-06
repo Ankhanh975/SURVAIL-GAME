@@ -16,10 +16,9 @@ addFunction("setup", () => {
   frameRate(60);
   // createCanvas(1024, 768, WEBGL);
   createCanvas(windowWidth, windowHeight);
-  setTimeout(() => {
-    ctx = canvas.getContext("2d");
-  }, 10);
-  // TODO
+  const defaultCanvas = document.querySelector("canvas");
+  // ctx is commonly used but outside of p5js community
+  ctx = defaultCanvas.getContext("2d");
   // pixelDensity(1.0);
   imageMode(CENTER);
   // colorMode(HSB, 255);
@@ -79,7 +78,7 @@ addFunction("setup", () => {
   // 1. Collisions check
   // 2. Loop through obstacles.update();
   // ...
-  obstacles.initObstacles(30);
+  // obstacles.initObstacles(30);
 });
 
 addFunction("draw", () => {
@@ -89,7 +88,9 @@ addFunction("draw", () => {
     player.startPunch();
     for (let i = 0; i < 1; i++) {
       let particle = sparks.create_particle(player.pos, [255, 0, 0], 4);
-      particle.move(1);
+      if (particle) {
+        particle.move(1);
+      }
     }
   }
 
