@@ -45,13 +45,14 @@ addFunction("setup", () => {
   player.recovery = 0.001 * player.health;
   player.health = 1000;
   player.totalHealth = 1000;
+  player.damage = 4.5;
 
-  {
-    player.health = 2000;
-    player.totalHealth = 2000;
-    player.damage = 4.5;
-    player.recovery = 0.005 * player.health;
-  }
+  // {
+  //   player.health = 2000;
+  //   player.totalHealth = 2000;
+  //   player.damage = 4.5;
+  //   player.recovery = 0.005 * player.health;
+  // }
 
   for (let i = 0; i < 14 * 4; i++) {
     let particle = sparks.create_particle(player.pos, [0, 0, 0], 5);
@@ -70,7 +71,7 @@ addFunction("setup", () => {
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
 
-  for (let i = 0; i < 150; i++) {
+  for (let i = 0; i < 300; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -119,31 +120,31 @@ addFunction("draw", () => {
   //   }
   // }
 
-  collisions.update();
-  for (let i = 0; i < 5; i++) {
-    players.players.forEach((player) => {
-      collisions.checkOne(player.circle, (response) => {
-        let x = -response.overlapV.x;
-        let y = -response.overlapV.y;
-        const b = response.b.parent;
-        x = min(x, 15);
-        y = min(y, 15);
-        if (response.b.parent instanceof Player) {
-          player.pos.x += x * 0.6;
-          player.pos.y += y * 0.6;
-          player.circle.setPosition(player.pos.x, player.pos.y);
-          b.pos.x -= x * 0.4;
-          b.pos.y -= y * 0.4;
-          b.circle.setPosition(b.pos.x, b.pos.y);
-        } else if (response.b.parent instanceof Obstacle) {
-          player.pos.x += x;
-          player.pos.y += y;
-          player.circle.setPosition(player.pos.x, player.pos.y);
-          player.setFreezeFor(16 * 2);
-        }
-      });
-    });
-  }
+  // collisions.update();
+  // for (let i = 0; i < 5; i++) {
+  //   players.players.forEach((player) => {
+  //     collisions.checkOne(player.circle, (response) => {
+  //       let x = -response.overlapV.x;
+  //       let y = -response.overlapV.y;
+  //       const b = response.b.parent;
+  //       x = min(x, 15);
+  //       y = min(y, 15);
+  //       if (response.b.parent instanceof Player) {
+  //         player.pos.x += x * 0.6;
+  //         player.pos.y += y * 0.6;
+  //         player.circle.setPosition(player.pos.x, player.pos.y);
+  //         b.pos.x -= x * 0.4;
+  //         b.pos.y -= y * 0.4;
+  //         b.circle.setPosition(b.pos.x, b.pos.y);
+  //       } else if (response.b.parent instanceof Obstacle) {
+  //         player.pos.x += x;
+  //         player.pos.y += y;
+  //         player.circle.setPosition(player.pos.x, player.pos.y);
+  //         player.setFreezeFor(16 * 2);
+  //       }
+  //     });
+  //   });
+  // }
 });
 
 addFunction("draw", () => {
