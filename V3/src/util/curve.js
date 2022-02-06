@@ -20,6 +20,15 @@ let Curve = {
       );
   },
   // https://math.stackexchange.com/questions/1114879/detect-if-two-ellipses-intersect
+  f3(x) {
+    const a = 2;
+    const b = 1;
+    // From https://www.youtube.com/watch?v=n_RHttAaRCk&list=PLFt_AvWsXl0d8aDaovNztYf6iTChHzrHP&index=2&t=13s
+    // https://www.desmos.com/calculator/vksiq6orxe
+    let r = constrain(x, 0, 1);
+    const p = Math.pow(r, a);
+    return  p / (p + Math.pow(b - b * r, a));
+  },
 };
 
 function lineBresenham_1(x1, y1, x2, y2) {

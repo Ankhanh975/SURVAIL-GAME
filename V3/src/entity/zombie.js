@@ -1,6 +1,6 @@
 class AIPlayer extends Player {
-  constructor(animation, parent, pos = [0, 0]) {
-    super(animation, parent, "n", pos);
+  constructor(settings) {
+    super(settings);
     this.name = generateName.__call();
     this.AIPlayer = true;
     // this.recovery = -0.00001 * player.health;

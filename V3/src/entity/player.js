@@ -1,96 +1,31 @@
 class PlayerBase extends Base {
-  constructor(parent, pos = [0, 0], name = "", health) {
+  constructor(settings) {
     super();
-    this.pos = createVector(...pos);
-    this.lastPos = createVector(0, 0);
-    this.isFreeze = false;
-    this.velocity = createVector(0, 0);
-    this.velocity_length = 0;
-    this.acceleration = createVector(0, 0);
-    this.parent = parent;
+    this.parent =
+      settings.parent ||
+      (() => {
+        throw new Error("Parent must be specified");
+      })();
+    settings.pos = settings.pos || [0, 0];
+    this.name = settings.name || "";
 
-    this.name = name;
-
-    this.health = health;
-    this.totalHealth = health;
+    this.health = settings.health || 35;
+    this.totalHealth = settings.totalHealth || settings.health || 35;
     this.health_percentage = this.health / this.totalHealth;
-    this.recovery = 0.0;
-    this.damage = 1;
+    this.recovery = settings.recovery || 0;
+    this.damage = settings.damage || 1;
+    
+    this.#createCollisions(settings.pos);
 
+    this.addComponent(component.position);
+    this.setPos({ x: settings.pos[0], y: settings.pos[1] });
+  }
+  #createCollisions(pos) {
     // physics in collision detection system
-    this.circle = null;
-  }
-  setFreezeFor(milliseconds) {
-    if (this.isFreeze === false) {
-      this.isFreeze = true;
-      setTimeout(() => {
-        this.isFreeze = false;
-      }, milliseconds);
-    }
-  }
-  _isFreeze() {
-    return this.isFreeze;
-  }
-  setPos(pos, checkFreeze = true) {
-    console.log(checkFreeze, this.isFreeze);
-    if (checkFreeze && this.isFreeze) {
-      return;
-    }
-    this.pos = pos;
-    this.circle.pos.x = this.pos.x;
-    this.circle.pos.y = this.pos.y;
-    // this.circle.setPosition(this.pos.x, this.pos.y);
-  }
-  addPos(pos, checkFreeze = true) {
-    if (checkFreeze && this.isFreeze) {
-      return;
-    }
-    this.pos.x += pos.x;
-    this.pos.y += pos.y;
-    this.circle.pos.x = this.pos.x;
-    this.circle.pos.y = this.pos.y;
-    // this.circle.setPosition(this.pos.x, this.pos.y);
-  }
-  update() {
-    super.update();
-    this.health += this.recovery;
-    this.health = constrain(this.health, 0, this.totalHealth);
-    this.lastPos = this.pos.copy();
-    this.health_percentage = this.health / this.totalHealth;
-  }
-  die() {
-    collisions.remove(this.circle);
-
-    const index = this.parent.players.indexOf(this);
-    if (index > -1) {
-      this.parent.players.splice(index, 1);
-    }
-    this._die = true;
-    killCount += 1;
-  }
-}
-class Player extends PlayerBase {
-  constructor(color, parent, name = "love", pos = [0, 0], health = 42) {
-    super(parent, pos, name, health);
-
-    this.color = color;
-    // if (color === 0) this.color = [255, 255, 255];
-    // else if (color === 1) this.color = [255, 255, 0];
-    // else if (color === 2) this.color = [0, 0, 255];
-    // else if (color === 3) this.color = [248, 147, 29];
-    // else if (color === 4) this.color = [0, 255, 0];
-    // else if (color === 5) this.color = [255, 0, 0];
-    this.addComponent(component.animation);
-    this.addComponent(component.rotation);
-    this.punchHand = "right";
-
-    this.recovery = 0.04;
-    this.damage = 0.75;
-
     // physics circle for collision detection
     // DONE: this.circle should be a polygon
     this.circle = collisions.createCircle(
-      { x: this.pos.x, y: this.pos.y },
+      { x: pos[0], y: pos[1] },
       // PLAYING
       // 60 / 2
       60 / 2
@@ -104,6 +39,47 @@ class Player extends PlayerBase {
 
     this.circle.parent = this;
     collisions.updateBody(this.circle);
+    return collisions;
+  }
+  update() {
+    super.update();
+    this.health += this.recovery;
+    this.health = constrain(this.health, 0, this.totalHealth);
+    this.lastPos = this.pos.copy();
+    this.health_percentage = this.health / this.totalHealth;
+  }
+  get pos() {
+    return this.getPos();
+  }
+  die() {
+    collisions.remove(this.circle);
+
+    const index = this.parent.players.indexOf(this);
+    if (index > -1) {
+      this.parent.players.splice(index, 1);
+    }
+    this._die = true;
+    killCount += 1;
+  }
+}
+class Player extends PlayerBase {
+  constructor(settings) {
+    super(settings);
+
+    this.color = settings.color || 0;
+
+    // if (color === 0) this.color = [255, 255, 255];
+    // else if (color === 1) this.color = [255, 255, 0];
+    // else if (color === 2) this.color = [0, 0, 255];
+    // else if (color === 3) this.color = [248, 147, 29];
+    // else if (color === 4) this.color = [0, 255, 0];
+    // else if (color === 5) this.color = [255, 0, 0];
+    this.addComponent(component.animation);
+    this.addComponent(component.rotation);
+    this.punchHand = "right";
+
+    this.recovery = 0.04;
+    this.damage = 0.75;
   }
   setPos(pos) {
     super.setPos(pos);

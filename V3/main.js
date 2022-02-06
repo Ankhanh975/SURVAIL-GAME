@@ -37,16 +37,18 @@ addFunction("setup", () => {
   field = new Field();
   // chunks = new Chunks();
   // main player, store in players.player but player is a faster way to access
-  player = new Player(5, players);
+  player = new Player({
+    color: 5,
+    parent: players,
+    health: 1000,
+    totalHealth: 1000,
+    damage: 4.5,
+  });
   player.addComponent(component.onController);
   player.addComponent(component.jump);
   player.addComponent(component.placeObstacle);
-  player.recovery = 0.001 * player.health;
-  player.health = 1000;
-  player.totalHealth = 1000;
-  player.damage = 4.5;
-
   {
+    player.recovery = 0.001 * player.health;
     player.health = 2000;
     player.totalHealth = 2000;
     player.damage = 4.5;
@@ -70,7 +72,7 @@ addFunction("setup", () => {
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
 
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 10; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -122,41 +124,38 @@ addFunction("draw", () => {
   collisions.update();
   // PLAYING
   for (let i = 0; i < 1; i++) {
-    players.players.forEach((player) => {
+    for (const player of players.players) {
       // response.a.parent instanceof Player
+
       collisions.checkOne(player.circle, (response) => {
         // const a = response.a.parent;
         const a = player;
         const b = response.b.parent;
+        let x = -response.overlapV.x;
+        let y = -response.overlapV.y;
+        x = min(x, 14);
+        y = min(y, 14);
 
         if (b instanceof Player) {
-          let x = -response.overlapV.x;
-          let y = -response.overlapV.y;
-          x = min(x, 14);
-          y = min(y, 14);
-          a.pos.x += x * 0.6;
-          a.pos.y += y * 0.6;
-          a.circle.setPosition(a.pos.x, a.pos.y);
-          b.pos.x -= x * 0.4;
-          b.pos.y -= y * 0.4;
-          b.circle.setPosition(b.pos.x, b.pos.y);
+          const effects = 0.4;
+          a.addPos({ x: x * (1 - effects), y: y * (1 - effects) }, false);
+          b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
         } else if (b instanceof Obstacle) {
-          collisions.separateLineCircle(response.b, a.circle);
-          // a.pos.x += x;
-          // a.pos.y += y;
-          // a.circle.setPosition(a.pos.x, a.pos.y);
+          a.addPos({ x: x, y: y }, false);
           a.setFreezeFor(16 * 2);
-        } else if (b === undefined) {
-          // console.log(response.b);
-          console.log(1);
-          collisions.separateLineCircle(response.b, a.circle);
-          // a.setFreezeFor(16 * 2);
-        } else {
+        }
+        // else if (b === undefined) {
+        //   // console.log(response.b);
+        //   collisions.separateLineCircle(response.b, a.circle);
+        //   a.setFreezeFor(16 * 2);
+
+        // }
+        else {
           console.log(a, b);
           throw new Error("Invalid collision");
         }
       });
-    });
+    }
   }
 });
 

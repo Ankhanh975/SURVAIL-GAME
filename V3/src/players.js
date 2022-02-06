@@ -63,6 +63,7 @@ class Players {
         e.draw({ healthBar: true, nameTag: !e.AIPlayer, body: true });
       }
     }
+
   }
   createAIPlayer(pos, color) {
     pos = pos || p5.Vector.random2D().setMag(random(200, 500));
@@ -73,6 +74,8 @@ class Players {
       // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
     }
 
-    this.players.push(new AIPlayer(color, this, [pos.x, pos.y]));
+    this.players.push(
+      new AIPlayer({ color: color, parent: this, pos: [pos.x, pos.y] })
+    );
   }
 }

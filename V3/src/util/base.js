@@ -9,7 +9,6 @@ class Base {
     allFunctions = allFunctions.map((key) => component[key]);
     allFunctions = allFunctions.filter((key) => typeof key === "function");
 
-    // console.log(allFunctions);
     component.parent = this;
     allFunctions.forEach((func) => {
       if (func.name === "constructor") {
@@ -17,7 +16,10 @@ class Base {
       } else if (func.name === "update") {
         this.updates.push(func);
       } else if (func.name) {
-        eval(`this.${func.name}=func`);
+        if (!func.name.startsWith("#")) {
+          // Start with a # indicate that the function is a private function.
+          eval(`this.${func.name}=func`);
+        }
       }
     });
     if (component.name) {

@@ -32,11 +32,11 @@
   addFunction("setup", () => {
     const img = Players_img;
     [
-      [255, 255, 0, 200],
+      [255, 255, 0, 150],
       [0, 0, 255, 50],
-      [248, 147, 29, 200],
-      [0, 255, 0, 200],
-      [255, 0, 0, 255],
+      [248, 147, 29, 150],
+      [0, 255, 0, 150],
+      [255, 0, 0, 250],
     ].forEach((color, ii) => {
       for (let i = 0; i < img[0].length; i++) {
         img[ii + 1][i] = clone(img[0][i]);
@@ -44,7 +44,7 @@
       }
     });
     img[0].forEach((color, ii) => {
-      change(img[0][ii], [255, 255, 255], [255, 255, 255, 220]);
+      change(img[0][ii], [255, 255, 255], [255, 255, 255, 150]);
     });
     // Change black color on the edges to be partly transparent.
     img.forEach((img0) => {
@@ -130,7 +130,7 @@
       const img = this.getFrames();
 
       push();
-      ctx.globalAlpha = health;
+      ctx.globalAlpha = Curve.f3(health);
       // ctx.globalCompositeOperation = "source-over";
       rotate(angle);
       if (this.parent.punchHand === "left" && this.onPunch()) {

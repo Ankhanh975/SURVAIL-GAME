@@ -5,7 +5,7 @@ component.sensor = class {
     this.sensor1 = false;
     this.sensor2 = false;
     this.get = function () {
-      // Debugging 
+      // Debugging
       // return [this.sensor1, this.sensor2];
       const v = this.parent.rotation.lookAt
         .copy()
@@ -59,8 +59,8 @@ component.wandering = class {
   }
   update = () => {
     // Debugging
-  // return
-    {
+    // return
+    if (this.is()) {
       const h = this.heading.copy().setMag(50).add(this.parent.pos);
       queue.addDraw(
         `line(${this.parent.pos.x},${this.parent.pos.y}, ${h.x},${h.y})`
