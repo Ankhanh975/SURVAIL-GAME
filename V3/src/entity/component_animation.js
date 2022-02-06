@@ -49,7 +49,7 @@
     // Change black color on the edges to be partly transparent.
     img.forEach((img0) => {
       img0.forEach((img1) => {
-        change(img1, [0, 0, 0, 255], [0, 0, 0, 220]);
+        change(img1, [0, 0, 0, 255], [0, 0, 0, 240]);
       });
     });
   });

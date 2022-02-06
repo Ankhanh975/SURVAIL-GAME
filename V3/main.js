@@ -28,7 +28,6 @@ addFunction("setup", () => {
   // textureWrap(REPEAT);
   // background(100);
 });
-
 addFunction("setup", () => {
   noisejs.seed(Math.random());
   sparks = new Sparks();
@@ -47,12 +46,12 @@ addFunction("setup", () => {
   player.totalHealth = 1000;
   player.damage = 4.5;
 
-  // {
-  //   player.health = 2000;
-  //   player.totalHealth = 2000;
-  //   player.damage = 4.5;
-  //   player.recovery = 0.005 * player.health;
-  // }
+  {
+    player.health = 2000;
+    player.totalHealth = 2000;
+    player.damage = 4.5;
+    player.recovery = 0.005 * player.health;
+  }
 
   for (let i = 0; i < 14 * 4; i++) {
     let particle = sparks.create_particle(player.pos, [0, 0, 0], 5);
@@ -71,7 +70,7 @@ addFunction("setup", () => {
   // players.players[1] = friend;
   // players.realPlayers.push(friend);
 
-  for (let i = 0; i < 300; i++) {
+  for (let i = 0; i < 0; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -79,7 +78,7 @@ addFunction("setup", () => {
   // 1. Collisions check
   // 2. Loop through obstacles.update();
   // ...
-  // obstacles.initObstacles(30);
+  // obstacles.initObstacles(70);
 });
 
 addFunction("draw", () => {
@@ -120,31 +119,45 @@ addFunction("draw", () => {
   //   }
   // }
 
-  // collisions.update();
-  // for (let i = 0; i < 5; i++) {
-  //   players.players.forEach((player) => {
-  //     collisions.checkOne(player.circle, (response) => {
-  //       let x = -response.overlapV.x;
-  //       let y = -response.overlapV.y;
-  //       const b = response.b.parent;
-  //       x = min(x, 15);
-  //       y = min(y, 15);
-  //       if (response.b.parent instanceof Player) {
-  //         player.pos.x += x * 0.6;
-  //         player.pos.y += y * 0.6;
-  //         player.circle.setPosition(player.pos.x, player.pos.y);
-  //         b.pos.x -= x * 0.4;
-  //         b.pos.y -= y * 0.4;
-  //         b.circle.setPosition(b.pos.x, b.pos.y);
-  //       } else if (response.b.parent instanceof Obstacle) {
-  //         player.pos.x += x;
-  //         player.pos.y += y;
-  //         player.circle.setPosition(player.pos.x, player.pos.y);
-  //         player.setFreezeFor(16 * 2);
-  //       }
-  //     });
-  //   });
-  // }
+  collisions.update();
+  // PLAYING
+  for (let i = 0; i < 1; i++) {
+    players.players.forEach((player) => {
+      // response.a.parent instanceof Player
+      collisions.checkOne(player.circle, (response) => {
+        // const a = response.a.parent;
+        const a = player;
+        const b = response.b.parent;
+
+        if (b instanceof Player) {
+          let x = -response.overlapV.x;
+          let y = -response.overlapV.y;
+          x = min(x, 14);
+          y = min(y, 14);
+          a.pos.x += x * 0.6;
+          a.pos.y += y * 0.6;
+          a.circle.setPosition(a.pos.x, a.pos.y);
+          b.pos.x -= x * 0.4;
+          b.pos.y -= y * 0.4;
+          b.circle.setPosition(b.pos.x, b.pos.y);
+        } else if (b instanceof Obstacle) {
+          collisions.separateLineCircle(response.b, a.circle);
+          // a.pos.x += x;
+          // a.pos.y += y;
+          // a.circle.setPosition(a.pos.x, a.pos.y);
+          a.setFreezeFor(16 * 2);
+        } else if (b === undefined) {
+          // console.log(response.b);
+          console.log(1);
+          collisions.separateLineCircle(response.b, a.circle);
+          // a.setFreezeFor(16 * 2);
+        } else {
+          console.log(a, b);
+          throw new Error("Invalid collision");
+        }
+      });
+    });
+  }
 });
 
 addFunction("draw", () => {

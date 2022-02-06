@@ -52,4 +52,6 @@ const list= [
     "luminosity",
     // Preserves the hue and chroma of the bottom layer, while adopting the luma of the top layer.
   ];
-  ctx.globalCompositeOperation = list[0]
+ctx.globalCompositeOperation = list[0]
+  
+// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
