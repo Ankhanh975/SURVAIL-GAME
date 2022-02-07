@@ -14,11 +14,8 @@ class PlayerBase extends Base {
     this.health_percentage = this.health / this.totalHealth;
     this.recovery = settings.recovery || 0;
     this.damage = settings.damage || 1;
-    
-    this.#createCollisions(settings.pos);
 
-    this.addComponent(component.position);
-    this.setPos({ x: settings.pos[0], y: settings.pos[1] });
+    this.#createCollisions(settings.pos);
   }
   #createCollisions(pos) {
     // physics in collision detection system
@@ -48,9 +45,7 @@ class PlayerBase extends Base {
     this.lastPos = this.pos.copy();
     this.health_percentage = this.health / this.totalHealth;
   }
-  get pos() {
-    return this.getPos();
-  }
+
   die() {
     collisions.remove(this.circle);
 
@@ -76,41 +71,46 @@ class Player extends PlayerBase {
     // else if (color === 5) this.color = [255, 0, 0];
     this.addComponent(component.animation);
     this.addComponent(component.rotation);
+    this.addComponent(component.position);
+    this.setPos({ x: settings.pos[0], y: settings.pos[1] });
     this.punchHand = "right";
 
     this.recovery = 0.04;
     this.damage = 0.75;
   }
-  setPos(pos) {
-    super.setPos(pos);
-
-    // collisions.checkOne(this.circle, (response) => {
-    //   const x = -response.overlapV.x;
-    //   const y = -response.overlapV.y;
-    //   const b = response.b.parent;
-    //   const pushOut = createVector(x, y);
-    //   if (response.b.parent instanceof Player) {
-    //     const pushOut2 = createVector(x, y);
-    //     pushOut.limit(5);
-    //     pushOut2.limit(5);
-
-    //     pushOut.setMag(pushOut.mag() * 0.6);
-    //     pushOut2.setMag(pushOut2.mag() * -0.4);
-
-    //     this.pos.add(pushOut);
-    //     this.circle.setPosition(this.pos.x, this.pos.y);
-    //     b.pos.add(pushOut2);
-    //     b.circle.setPosition(b.pos.x, b.pos.y);
-    //   } else if (response.b.parent instanceof Obstacle) {
-    //     this.pos.add(pushOut);
-    //     this.circle.setPosition(this.pos.x, this.pos.y);
-    //   }
-    // });
+  get pos() {
+    return this.getPos();
   }
-  update() {
-    super.update();
-    // this.circle.setAngle(this.getAngle());
-  }
+  // setPos(pos) {
+  // super.setPos(pos);
+
+  // collisions.checkOne(this.circle, (response) => {
+  //   const x = -response.overlapV.x;
+  //   const y = -response.overlapV.y;
+  //   const b = response.b.parent;
+  //   const pushOut = createVector(x, y);
+  //   if (response.b.parent instanceof Player) {
+  //     const pushOut2 = createVector(x, y);
+  //     pushOut.limit(5);
+  //     pushOut2.limit(5);
+
+  //     pushOut.setMag(pushOut.mag() * 0.6);
+  //     pushOut2.setMag(pushOut2.mag() * -0.4);
+
+  //     this.pos.add(pushOut);
+  //     this.circle.setPosition(this.pos.x, this.pos.y);
+  //     b.pos.add(pushOut2);
+  //     b.circle.setPosition(b.pos.x, b.pos.y);
+  //   } else if (response.b.parent instanceof Obstacle) {
+  //     this.pos.add(pushOut);
+  //     this.circle.setPosition(this.pos.x, this.pos.y);
+  //   }
+  // });
+  // }
+  // update() {
+  // super.update();
+  // this.circle.setAngle(this.getAngle());
+  // }
   draw(options = {}) {
     push();
     translate(this.pos);

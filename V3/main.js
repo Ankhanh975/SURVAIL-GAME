@@ -61,20 +61,20 @@ addFunction("setup", () => {
   }
   players.players[0] = player;
   players.realPlayers.push(player);
-
-  // let friend = new Player({
-  //   color: 5,
-  //   parent: players,
-  //   health: 100,
-  //   totalHealth: 100,
-  //   damage: 2.5,
-  //   name: "friend",
-  //   pos: [100, 0],
-  // });
-  // friend.recovery = 0.001 * friend.health;
-  // players.players.push(friend);
-  // players.realPlayers.push(friend);
-
+  if (true) {
+    let friend = new Player({
+      color: 5,
+      parent: players,
+      health: 1000,
+      totalHealth: 1000,
+      damage: 2.5,
+      name: "friend",
+      pos: [100, 0],
+    });
+    friend.recovery = 0.001 * friend.health;
+    players.players.push(friend);
+    players.realPlayers.push(friend);
+  }
   for (let i = 0; i < 1; i++) {
     // PLAYING
     players.createAIPlayer();
@@ -185,7 +185,7 @@ addFunction("draw", () => {
   if (isPressed) {
     push();
     translate(player.pos);
-    rotate(radians(0 - 90) + player.getAngle());
+    rotate(player.getAngle());
     fill(255, 0, 0, 90);
     stroke(255, 255, 0, 180);
     strokeWeight(4);

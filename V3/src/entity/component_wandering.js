@@ -5,9 +5,7 @@ component.sensor = class {
     this.sensor1 = false;
     this.sensor2 = false;
     this.get = function () {
-      // Debugging
-      // return [this.sensor1, this.sensor2];
-      const v = this.parent.rotation.lookAt
+      const v = this.parent.rotation.headTo
         .copy()
         .rotate(radians(-90))
         .setMag(70);

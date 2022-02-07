@@ -295,7 +295,7 @@ class Collisions2 extends Collisions {
     //   From p to anther close player
     let all = [];
     let angle = p.getAngle();
-    angle = createVector(0, -1).rotate(angle).rotate(-radians(90)).heading();
+    angle = createVector(0, -1).rotate(angle).heading();
     // console.log(angle, degrees(angle));
 
     const collider = this.createPolygon({ x: p.pos.x, y: p.pos.y }, [

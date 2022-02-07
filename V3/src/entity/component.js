@@ -31,9 +31,11 @@ component.rotation = class {
     this.angle = this.headTo.heading();
   };
   setAngle = (angle) => {
-    this.lookAt = createVector(100, 0).rotate(angle).rotate(radians(90));
+    this.lookAt.setHeading(angle);
   };
   getAngle = () => {
+    // Carefully because the angle original may be Vector(100, 0) 
+    // or Vector(0, -100) for different system(drawing and collision detection);
     return this.angle;
   };
 };

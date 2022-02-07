@@ -122,7 +122,7 @@
       };
     }
     draw() {
-      const angle = this.parent.getAngle();
+      const angle = this.parent.getAngle() + radians(90);
       const position = [0, 0];
       const color = this.parent.color;
       const health = this.parent.health_percentage;
