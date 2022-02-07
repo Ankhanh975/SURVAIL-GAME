@@ -14,22 +14,22 @@ class AIPlayer extends Player {
   }
   startPunch(hand, target) {
     super.startPunch(hand, target);
-    field.createParticle(
-      createVector(
-        (this.pos.x + this.target.pos.x) / 2,
-        (this.pos.y + this.target.pos.y) / 2
-      ),
-      "attack_attention",
-      70,
-      7,
-      { syncPos: true, parent: this }
-    );
+    // field.createParticle(
+    //   createVector(
+    //     (this.pos.x + this.target.pos.x) / 2,
+    //     (this.pos.y + this.target.pos.y) / 2
+    //   ),
+    //   "attack_attention",
+    //   70,
+    //   7,
+    //   { syncPos: true, parent: this }
+    // );
   }
   update() {
     super.update();
 
-    // field.tick(this);
-    // return
+    field.tick(this);
+    return
 
     this.target = this.parent.realPlayers[0];
     // PLAYING

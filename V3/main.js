@@ -49,8 +49,8 @@ addFunction("setup", () => {
   player.addComponent(component.placeObstacle);
   {
     player.recovery = 0.001 * player.health;
-    player.health = 2000;
-    player.totalHealth = 2000;
+    player.health = 4000;
+    player.totalHealth = 4000;
     player.damage = 4.5;
     player.recovery = 0.005 * player.health;
   }
@@ -62,17 +62,20 @@ addFunction("setup", () => {
   players.players[0] = player;
   players.realPlayers.push(player);
 
-  // let friend = new Player(5, players);
-  // friend.health = 400;
-  // friend.totalHealth = 400;
-  // friend.name = "friend";
-  // friend.damage = 2.5;
-  // friend.addPos(createVector(100, 0));
+  // let friend = new Player({
+  //   color: 5,
+  //   parent: players,
+  //   health: 100,
+  //   totalHealth: 100,
+  //   damage: 2.5,
+  //   name: "friend",
+  //   pos: [100, 0],
+  // });
   // friend.recovery = 0.001 * friend.health;
-  // players.players[1] = friend;
+  // players.players.push(friend);
   // players.realPlayers.push(friend);
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -190,13 +193,14 @@ addFunction("draw", () => {
     pop();
   }
   // PLAYING
-  if (true) {
+  if (false) {
     sparks.draw();
     players.draw();
   } else {
     queue.update();
     field.draw();
   }
+
   obstacles.draw();
 
   // if (players.players[1]) {

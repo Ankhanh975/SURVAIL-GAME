@@ -65,7 +65,7 @@ class PlayerBase extends Base {
 class Player extends PlayerBase {
   constructor(settings) {
     super(settings);
-
+    this.AIPlayer = false;
     this.color = settings.color || 0;
 
     // if (color === 0) this.color = [255, 255, 255];
