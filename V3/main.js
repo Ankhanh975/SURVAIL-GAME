@@ -196,11 +196,11 @@ addFunction("draw", () => {
   if (true) {
     queue.update();
     field.draw();
-  } else if (true) {
+  }
+  if (true) {
     sparks.draw();
     players.draw();
   }
-
   obstacles.draw();
 
   // if (players.players[1]) {

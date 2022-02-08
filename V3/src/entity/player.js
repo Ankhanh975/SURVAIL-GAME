@@ -42,7 +42,6 @@ class PlayerBase extends Base {
     super.update();
     this.health += this.recovery;
     this.health = constrain(this.health, 0, this.totalHealth);
-    this.lastPos = this.pos.copy();
     this.health_percentage = this.health / this.totalHealth;
   }
 

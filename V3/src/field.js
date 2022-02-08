@@ -69,7 +69,7 @@ class Particle {
   }
   removeSyncHeadTo() {
     this.syncHeadTo = false;
-    this.referToSource2=null;
+    this.referToSource2 = null;
   }
   get lifeTimePercent() {
     return this.lifeTime / this.totalLifeTime;
@@ -123,6 +123,7 @@ class Particle {
       fill(0, 0, 255, 25);
     }
     translate(this.pos);
+    fill(...this.color, lifeTimePercent * 80);
     circle(0, 0, 70);
 
     if (this.haveHeadTo) {
@@ -153,7 +154,7 @@ class Field {
   }
   #createParticleAttachTo(player) {
     let type = player.AIPlayer ? "friend_smell" : "enemy_smell";
-    let lifeTime = 10 ** 10;
+    let lifeTime = 10 ** 6;
 
     const particle = this.createParticle({
       source: player,
@@ -180,14 +181,15 @@ class Field {
     this.collisions.update();
     // console.log(this.particles.length);
     players.realPlayers.forEach((player) => {
-      const get = this.getNear(player).filter((e) => e.source === player);
+      const get = this.getNear(player)
+        .filter((e) => e.source === player)
+        .filter((e) => e.lifeTime < 1000);
 
       const thisSmell = get
         .filter((e) => e.lifeTimePercent > 0.75)
         .filter((e) => player.pos.dist(e.pos) < 35);
 
       const close_smell = get.filter((e) => player.pos.dist(e.pos) < 5);
-
       if (thisSmell.length < 2) {
         if (close_smell.length === 1) {
           let type = player.AIPlayer ? "friend_smell" : "enemy_smell";
@@ -202,6 +204,7 @@ class Field {
           close_smell[0].useAbsoluteCoords = true;
           close_smell[0].headToInAbsoluteCoords = newParticle.pos;
         } else if (close_smell.length > 1) {
+          console.log(" close_smell.length > 1");
           const chosen = close_smell[0];
 
           chosen.lifeTime = chosen.totalLifeTime;
@@ -215,27 +218,47 @@ class Field {
     this.particles.forEach((each) => each.draw());
   }
   getNear(particle) {
-    // Debugging 
+    // Debugging
     // return this.particles;
     let all = [];
     this.collisions.getNear(
       particle.pos,
-      { rangeX: 1000, rangeY: 1000 },
+      { rangeX: 500, rangeY: 500 },
       (each) => {
         all.push(each.parent);
       }
     );
     return all;
   }
+  #getStrongest(list) {
+    if (list.length < 0) {
+      return null;
+    }
+    let now = list[0];
+    for (const each of list) {
+      if (each.lifeTime > now.lifeTime) {
+        now = each;
+      }
+    }
+    return now;
+  }
   tick(zombie) {
-    return;
-    const smell = this.getNear(zombie)
-      .filter((each) => each.pos.dist(zombie.pos) < each.smellRadius)
-      .filter((each) =>
-        collisions.isFreeLine(each.pos, zombie.pos, {
-          ignore: [zombie.circle, player.circle],
-          type: Obstacle,
-        })
-      );
+    let smell = this.getNear(zombie);
+    // .filter((each) => each.pos.dist(zombie.pos) > 10)
+    // .filter((each) => each.pos.dist(zombie.pos) < 500)
+    // .filter((each) =>
+    //   collisions.isFreeLine(each.pos, zombie.pos, {
+    //     ignore: [zombie.circle, player.circle],
+    //     type: Obstacle,
+    //   })
+    // );
+
+    let enemy_smell = this.#getStrongest(smell);
+    if (enemy_smell) {
+      // directly see some enemy
+      const headTo = enemy_smell.pos;
+      console.log(enemy_smell.lifeTime);
+      queue.addDraw(`circle(${headTo.x},${headTo.y}, 70)`);
+    }
   }
 }
