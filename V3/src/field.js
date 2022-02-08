@@ -122,13 +122,13 @@ class Particle {
     } else {
       fill(0, 0, 255, 25);
     }
-    translate(this.pos.x, this.pos.y);
+    translate(this.pos);
     circle(0, 0, 70);
 
     if (this.haveHeadTo) {
       push();
 
-      stroke(...this.color, 200);
+      stroke(...this.color, 150);
       strokeWeight(3);
       line(0, 0, this.headTo.x / 2, this.headTo.y / 2);
       pop();
@@ -201,18 +201,6 @@ class Field {
           close_smell[0].totalLifeTime = lifeTime;
           close_smell[0].useAbsoluteCoords = true;
           close_smell[0].headToInAbsoluteCoords = newParticle.pos;
-          // close_smell[0].headToInAbsoluteCoords.x = 0;
-          // close_smell[0].headToInAbsoluteCoords.y = 0;
-
-          // console.log(close_smell[0], newParticle);
-
-          // this.createParticle({
-          //   source: player,
-          //   type: type,
-          //   lifeTime: lifeTime,
-          //   syncPos: false,
-          //   pos: player.pos,
-          // });
         } else if (close_smell.length > 1) {
           const chosen = close_smell[0];
 
@@ -233,7 +221,7 @@ class Field {
     this.collisions.getNear(
       particle.pos,
       { rangeX: 1000, rangeY: 1000 },
-      ([each]) => {
+      (each) => {
         all.push(each.parent);
       }
     );

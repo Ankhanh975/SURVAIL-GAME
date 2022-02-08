@@ -75,7 +75,7 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 1; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -194,11 +194,11 @@ addFunction("draw", () => {
   }
   // PLAYING
   if (true) {
-    sparks.draw();
-    players.draw();
-  } else {
     queue.update();
     field.draw();
+  } else if (true) {
+    sparks.draw();
+    players.draw();
   }
 
   obstacles.draw();

@@ -7,23 +7,21 @@ class AIPlayer extends Player {
 
     this.addComponent(component.wandering);
     this.addComponent(component.sensor);
-    
+
     // this.target = int(random(0, this.parent.realPlayers.length));
     // this.target = null;
     // this.target = this.parent.realPlayers[0];
   }
   startPunch(hand, target) {
     super.startPunch(hand, target);
-    // field.createParticle(
-    //   createVector(
-    //     (this.pos.x + this.target.pos.x) / 2,
-    //     (this.pos.y + this.target.pos.y) / 2
-    //   ),
-    //   "attack_attention",
-    //   70,
-    //   7,
-    //   { syncPos: true, parent: this }
-    // );
+    field.createParticle({
+      source: this,
+      pos: {
+        x: (this.pos.x + this.target.pos.x) / 2,
+        y: (this.pos.y + this.target.pos.y) / 2,
+      },
+      type: "attack_attention",
+    });
   }
   update() {
     super.update();
