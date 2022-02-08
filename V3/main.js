@@ -61,7 +61,7 @@ addFunction("setup", () => {
   }
   players.players[0] = player;
   players.realPlayers.push(player);
-  if (true) {
+  if (false) {
     let friend = new Player({
       color: 5,
       parent: players,
@@ -75,7 +75,7 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 200; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -83,7 +83,7 @@ addFunction("setup", () => {
   // 1. Collisions check
   // 2. Loop through obstacles.update();
   // ...
-  // obstacles.initObstacles(70);
+  obstacles.initObstacles(60);
 });
 
 addFunction("draw", () => {
@@ -126,7 +126,7 @@ addFunction("draw", () => {
 
   collisions.update();
   // PLAYING
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 3; i++) {
     for (const player of players.players) {
       // response.a.parent instanceof Player
 
@@ -144,8 +144,8 @@ addFunction("draw", () => {
           a.addPos({ x: x * (1 - effects), y: y * (1 - effects) }, false);
           b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
         } else if (b instanceof Obstacle) {
-          a.addPos({ x: x, y: y }, false);
-          a.setFreezeFor(16 * 2);
+          a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
+          a.setFreezeFor(16 * 3);
         }
         // else if (b === undefined) {
         //   // console.log(response.b);
@@ -193,7 +193,7 @@ addFunction("draw", () => {
     pop();
   }
   // PLAYING
-  if (false) {
+  if (true) {
     sparks.draw();
     players.draw();
   } else {

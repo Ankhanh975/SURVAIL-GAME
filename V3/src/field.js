@@ -10,32 +10,49 @@ class Particle {
     this.strength = options.strength || 100;
     this.lifeTime = options.lifeTime || 100;
     this.totalLifeTime = options.lifeTime || 100;
-    this.source = options.source || undefined;
+    this.source = options.source || null;
+    this.referToSource = null;
 
     {
       this.pos = createVector(0, 0);
-      this.syncPos = options.syncPos || false;
+      this.syncPos = false;
       if (options.pos) {
         this.pos.x = options.pos.x;
         this.pos.y = options.pos.y;
       }
       if (options.syncPos === true) {
-        this.pos = options.pos;
+        this.referToSource = options.pos;
+        this.syncPos = true;
+
+        // this.pos = options.pos;
       }
     }
+    this.referToSource2 = null;
+
     {
-      this.headTo = createVector(100, 0);
-      this.syncHeadTo = options.syncHeadTo || false;
+      this.headTo = createVector(99, 101);
+      this.syncHeadTo = false;
       if (options.headTo) {
         this.headTo.x = options.headTo.x;
         this.headTo.y = options.headTo.y;
       }
       if (options.syncHeadTo === true) {
-        this.headTo = options.headTo;
+        this.referToSource2 = options.headTo;
+        this.syncHeadTo = true;
+        // this.headTo = options.headTo;
       }
     }
 
+    this.useAbsoluteCoords = false;
+    this.headToInAbsoluteCoords = createVector(0, 0);
+    if (options.headToInAbsoluteCoords) {
+      this.headToInAbsoluteCoords.x = options.headToInAbsoluteCoords.x;
+      this.headToInAbsoluteCoords.y = options.headToInAbsoluteCoords.y;
+      this.useAbsoluteCoords = true;
+    }
+
     // For get_near particle efficient using collision detection library
+
     this.circle = this.parent.collisions.createPolygon(
       { x: this.pos.x, y: this.pos.y },
       [
@@ -44,30 +61,45 @@ class Particle {
       ]
     );
     this.circle.parent = this;
+    this.color = [random(0, 255), random(0, 255), random(0, 255)];
+  }
+  removeSyncPos() {
+    this.syncPos = false;
+    this.referToSource = null;
+  }
+  removeSyncHeadTo() {
+    this.syncHeadTo = false;
+    this.referToSource2=null;
   }
   get lifeTimePercent() {
     return this.lifeTime / this.totalLifeTime;
   }
   get haveHeadTo() {
     // Not equals to initialize values
-    return this.headTo.x !== 100 && this.headTo.y !== 0;
+    return this.headTo.x !== 99 && this.headTo.y !== 101;
   }
   setPos(pos) {
     this.pos.x = pos.x;
     this.pos.y = pos.y;
-    if (this.syncPos) {
-      this.circle.pos.x = this.pos.x;
-      this.circle.pos.y = this.pos.y;
-    }
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
   }
   update() {
     this.lifeTime -= 1;
     this.lifeTime = max(this.lifeTime, 0);
-    if (this.syncPos) {
-      this.circle.pos.x = this.pos.x;
-      this.circle.pos.y = this.pos.y;
-    }
+    this.circle.pos.x = this.pos.x;
+    this.circle.pos.y = this.pos.y;
     if (this.syncHeadTo) {
+      this.headTo.x = this.referToSource2.x;
+      this.headTo.y = this.referToSource2.y;
+    }
+    if (this.syncPos) {
+      this.pos.x = this.referToSource.x;
+      this.pos.y = this.referToSource.y;
+    }
+    if (this.useAbsoluteCoords) {
+      this.headTo.x = this.headToInAbsoluteCoords.x - this.pos.x;
+      this.headTo.y = this.headToInAbsoluteCoords.y - this.pos.y;
     }
     if (this.lifeTime <= 0) {
       this.die();
@@ -76,7 +108,7 @@ class Particle {
   draw() {
     push();
     noStroke();
-    const lifeTimePercent = Curve.f3(this.lifeTimePercent)
+    const lifeTimePercent = Curve.f3(this.lifeTimePercent);
     if (this.type == "enemy_smell") {
       fill(100, 255, 0, lifeTimePercent * 65);
     } else if (this.type == "friend_smell") {
@@ -95,9 +127,10 @@ class Particle {
 
     if (this.haveHeadTo) {
       push();
-      stroke(255, 255, 255, 200);
+
+      stroke(...this.color, 200);
       strokeWeight(3);
-      line(0, 0, this.headTo.x, this.headTo.y);
+      line(0, 0, this.headTo.x / 2, this.headTo.y / 2);
       pop();
     }
 
@@ -113,7 +146,7 @@ class Field {
     this.collisions = new Collisions2();
     this.particles = [];
     setTimeout(() => {
-      players.players.forEach((player) => {
+      players.realPlayers.forEach((player) => {
         this.#createParticleAttachTo(player);
       });
     }, 100);
@@ -122,7 +155,7 @@ class Field {
     let type = player.AIPlayer ? "friend_smell" : "enemy_smell";
     let lifeTime = 10 ** 10;
 
-    this.createParticle({
+    const particle = this.createParticle({
       source: player,
       type: type,
       lifeTime: lifeTime,
@@ -131,18 +164,21 @@ class Field {
       headTo: player.rotation.headTo,
       syncHeadTo: true,
     });
+    return particle;
   }
   createParticle(options) {
     options.parent = this;
     const particle = new Particle(options);
     this.particles.push(particle);
+    return particle;
   }
 
   update() {
+    // Debugging
     this.particles.forEach((each) => each.update());
     this.particles = this.particles.filter((each) => each.lifeTime > 0);
-
-    console.log(this.particles.length);
+    this.collisions.update();
+    // console.log(this.particles.length);
     players.realPlayers.forEach((player) => {
       const get = this.getNear(player).filter((e) => e.source === player);
 
@@ -153,19 +189,33 @@ class Field {
       const close_smell = get.filter((e) => player.pos.dist(e.pos) < 5);
 
       if (thisSmell.length < 2) {
-        if (close_smell.length <= 1) {
+        if (close_smell.length === 1) {
           let type = player.AIPlayer ? "friend_smell" : "enemy_smell";
           let lifeTime = player.AIPlayer ? 250 : 250;
 
-          this.createParticle({
-            source: player,
-            type: type,
-            lifeTime: lifeTime,
-            syncPos: false,
-            pos: player.pos,
-          });
-        } else {
+          const newParticle = this.#createParticleAttachTo(player);
+          close_smell[0].removeSyncPos();
+          close_smell[0].removeSyncHeadTo();
+
+          close_smell[0].lifeTime = lifeTime;
+          close_smell[0].totalLifeTime = lifeTime;
+          close_smell[0].useAbsoluteCoords = true;
+          close_smell[0].headToInAbsoluteCoords = newParticle.pos;
+          // close_smell[0].headToInAbsoluteCoords.x = 0;
+          // close_smell[0].headToInAbsoluteCoords.y = 0;
+
+          // console.log(close_smell[0], newParticle);
+
+          // this.createParticle({
+          //   source: player,
+          //   type: type,
+          //   lifeTime: lifeTime,
+          //   syncPos: false,
+          //   pos: player.pos,
+          // });
+        } else if (close_smell.length > 1) {
           const chosen = close_smell[0];
+
           chosen.lifeTime = chosen.totalLifeTime;
           chosen.setPos(player.pos);
         }
@@ -177,8 +227,8 @@ class Field {
     this.particles.forEach((each) => each.draw());
   }
   getNear(particle) {
-    // TODO
-    return this.particles;
+    // Debugging 
+    // return this.particles;
     let all = [];
     this.collisions.getNear(
       particle.pos,
