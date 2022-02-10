@@ -1,6 +1,6 @@
 **Objective**
 
-- Simple, Complex, Creative, Infinity, Cooperative, Realistic, and Functional, Interactive
+"Simple, Complex, Creative, Infinity, Cooperative, Realistic, and Functional, Interactive"
 - 
 - finalizing
 - done: find font, main character animation, background, sound
@@ -26,9 +26,14 @@
 - 30/01/2022: a surface obstacles.surface for static obstacles 
 - Zombie behavior: Following it friend, wander
 - 29/01/2022: TODO: freeze on push back
-- 29/01/2022: TODO: on push back: push back on the path back.
 - Demo: https://youtu.be/NoWH5l08dMM
-- 05/02/2022: TODO: move from p5js canvas to html canvas since html canvas is both faster and have more features like ctx.globalAlpha and clearRect() globalCompositeOperation();
+- 05/02/2022: move from p5js canvas to html canvas since html canvas is both faster and have more features like ctx.globalAlpha and clearRect() globalCompositeOperation();
+- 08/02/2022: TODO: 
+1. Use collision vector instead of p5js vector => no synchronization required.
+1. Collisions: implement a custom respond when player enters inside obstacles: move player according to normalized vector.
+1. Big mountain now have pre-calculate normalized vector for each obstacles heading to closest free slot. 
+1. Implement a drop off particles field for real players.
+
 
 ```
 "V1", "V2", V3: I make a new copy when a major refactored version happens.

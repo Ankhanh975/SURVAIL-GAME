@@ -26,8 +26,8 @@ class AIPlayer extends Player {
   update() {
     super.update();
 
-    field.tick(this);
-    return
+    // field.tick(this);
+    // return
 
     this.target = this.parent.realPlayers[0];
     // PLAYING

@@ -34,7 +34,7 @@ component.rotation = class {
     this.lookAt.setHeading(angle);
   };
   getAngle = () => {
-    // Carefully because the angle original may be Vector(100, 0) 
+    // Carefully because the angle original may be Vector(100, 0)
     // or Vector(0, -100) for different system(drawing and collision detection);
     return this.angle;
   };
@@ -44,11 +44,11 @@ component.position = class {
   // TODO: add acceleration to speed calculation
   constructor() {
     this.pos = createVector(0, 0);
-    this.lastPos = createVector(0, 0);
+    // this.lastPos = createVector(0, 0);
     this.isFreeze = false;
-    this.velocity = createVector(0, 0);
+    // this.velocity = createVector(0, 0);
     this.velocity_length = 0;
-    this.acceleration = createVector(0, 0);
+    // this.acceleration = createVector(0, 0);
   }
   update = () => {};
   getPos = () => {
@@ -64,6 +64,7 @@ component.position = class {
     this.parent.circle.pos.y = this.pos.y;
     // this.parent.circle.setPosition(this.pos.x, this.pos.y);
   };
+
   addPos = (pos, checkFreeze = true) => {
     if (checkFreeze && this.isFreeze) {
       return;

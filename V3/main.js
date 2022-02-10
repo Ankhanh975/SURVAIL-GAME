@@ -75,7 +75,7 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 250; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -111,7 +111,7 @@ addFunction("draw", () => {
     sparks.update();
     players.update();
     obstacles.update();
-    field.update();
+    // field.update();
   }
 
   // for (const object in this.chunk) {
@@ -141,7 +141,7 @@ addFunction("draw", () => {
 
         if (b instanceof Player) {
           const effects = 0.4;
-          a.addPos({ x: x * (1 - effects), y: y * (1 - effects) }, false);
+          a.addPos({ x: x * (1.01 - effects), y: y * (1.01 - effects) }, false);
           b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
         } else if (b instanceof Obstacle) {
           a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
@@ -195,7 +195,7 @@ addFunction("draw", () => {
   // PLAYING
   if (true) {
     queue.update();
-    field.draw();
+    // field.draw();
   }
   if (true) {
     sparks.draw();
