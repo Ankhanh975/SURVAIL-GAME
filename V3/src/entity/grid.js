@@ -77,7 +77,7 @@ class Grid {
   getSize() {
     return [100, 100];
   }
-  isInIsolate(gridX, gridY) { 
+  isInIsolate(gridX, gridY) {
     {
       // A region is isolated from every other region when
       // 1. Pathfinding can't find path to any player // 2. Every Player can find path to infinite
@@ -108,7 +108,7 @@ class Grid {
       if (this.get(gridX, gridY) === true) {
         return false;
       }
-      
+
       function IsInMapRange(x, y) {
         return x >= 0 && x < mapSize[0] && y >= 0 && y < mapSize[1];
       }
@@ -155,5 +155,156 @@ class Grid {
       }
     });
     return isValid;
+  }
+}
+function getNormal(grid, pos) {
+  // Normal is a vector with 8 unique values in 8 direction.
+  // Point to the closest point that is not inside a wall
+  const x = pos.x;
+  const y = pos.y;
+  const state = grid.get(x, y);
+  function addDirection(vec, direction) {
+    const n = createVector(...direction).normalize();
+    vec.add(n);
+  }
+  function getNormalOne(grid, x, y) {
+    let normal = createVector(0, 0);
+    if (
+      grid.get(x - 1, y) !== state &&
+      grid.get(x, y - 1) !== state &&
+      grid.get(x + 1, y) !== state &&
+      grid.get(x, y + 1) !== state
+    ) {
+      console.log("ff");
+      return null;
+    }
+
+    if (grid.get(x - 1, y) === state) {
+      addDirection(normal, [-1, 0]);
+    }
+    if (grid.get(x, y - 1) === state) {
+      addDirection(normal, [0, -1]);
+    }
+    if (grid.get(x + 1, y) === state) {
+      addDirection(normal, [+1, 0]);
+    }
+    if (grid.get(x, y + 1) === state) {
+      addDirection(normal, [0, 1]);
+    }
+    if (grid.get(x - 1, y - 1) === state) {
+      addDirection(normal, [-1, -1]);
+    }
+    if (grid.get(x - 1, y + 1) === state) {
+      addDirection(normal, [-1, +1]);
+    }
+    if (grid.get(x + 1, y - 1) === state) {
+      addDirection(normal, [+1, -1]);
+    }
+    if (grid.get(x + 1, y + 1) === state) {
+      addDirection(normal, [+1, +1]);
+    }
+    if (normal.mag() < 0.9) {
+      return null;
+    } else {
+      return normal.rotate(radians(180)).normalize();
+    }
+  }
+  function getNormalTwo(grid, x, y) {
+    let normal = createVector(0, 0);
+    console.log(
+      grid.get(x - 2, y - 1),
+      grid.get(x - 2, y + 0),
+      grid.get(x - 2, y + 1),
+      grid.get(x + 2, y - 1),
+      grid.get(x + 2, y + 0),
+      grid.get(x + 2, y + 1),
+      grid.get(x - 1, y - 2),
+      grid.get(x + 0, y - 2),
+      grid.get(x + 1, y - 2),
+      grid.get(x - 1, y + 2),
+      grid.get(x + 0, y + 2),
+      grid.get(x + 1, y + 2),
+      grid.get(x - 2, y - 2),
+      grid.get(x - 2, y + 2),
+      grid.get(x + 2, y - 2),
+      grid.get(x + 2, y + 2)
+    );
+    if (grid.get(x - 2, y - 1) === state) {
+      addDirection(normal, [x - 2, y - 1]);
+    }
+    if (grid.get(x - 2, y + 0) === state) {
+      addDirection(normal, [x - 2, y + 0]);
+    }
+    if (grid.get(x - 2, y + 1) === state) {
+      addDirection(normal, [x - 2, y + 1]);
+    }
+    if (grid.get(x + 2, y - 1) === state) {
+      addDirection(normal, [x + 2, y - 1]);
+    }
+    if (grid.get(x + 2, y + 0) === state) {
+      addDirection(normal, [x + 2, y + 0]);
+    }
+    if (grid.get(x + 2, y + 1) === state) {
+      addDirection(normal, [x + 2, y + 1]);
+    }
+    if (grid.get(x - 1, y - 2) === state) {
+      addDirection(normal, [x - 1, y - 2]);
+    }
+    if (grid.get(x + 0, y - 2) === state) {
+      addDirection(normal, [x + 0, y - 2]);
+    }
+    if (grid.get(x + 1, y - 2) === state) {
+      addDirection(normal, [x + 1, y - 2]);
+    }
+    if (grid.get(x - 1, y + 2) === state) {
+      addDirection(normal, [x - 1, y + 2]);
+    }
+    if (grid.get(x + 0, y + 2) === state) {
+      addDirection(normal, [x + 0, y + 2]);
+    }
+    if (grid.get(x + 1, y + 2) === state) {
+      addDirection(normal, [x + 1, y + 2]);
+    }
+    if (grid.get(x - 2, y - 2) === state) {
+      addDirection(normal, [x - 2, y - 2]);
+    }
+    if (grid.get(x - 2, y + 2) === state) {
+      addDirection(normal, [x - 2, y + 2]);
+    }
+    if (grid.get(x + 2, y - 2) === state) {
+      addDirection(normal, [x + 2, y - 2]);
+    }
+    if (grid.get(x + 2, y + 2) === state) {
+      addDirection(normal, [x + 2, y + 2]);
+    }
+    return normal.rotate(radians(180)).normalize();
+  }
+
+  let normal = createVector(0, 0);
+  const one = getNormalOne(grid, x, y);
+  if (one) {
+    return one;
+  } else {
+    console.log(one, x, y);
+    const two = getNormalTwo(grid, x, y);
+    return two;
+  }
+  if (one) {
+    normal.add(one);
+  }
+  if (normal.length >= 0.9) {
+    return normal;
+  }
+  const two = getNormalTwo(grid, x, y);
+  if (two) {
+    // Mean that all neighbors cell is full so we will look farther
+    normal.add(two);
+  }
+  if (two && two.mag() < 0.3) {
+  }
+  if (normal.length >= 0.9) {
+    return normal.normalize();
+  } else {
+    return null;
   }
 }

@@ -39,7 +39,6 @@
   // for (let i = 0; i < 8; i++) {console.log(i);
   // }
 }
-
 {
   class x {
     constructor() {
@@ -55,5 +54,5 @@
     super.update();
     console.log("update2");
   };
-  x1.update()
+  x1.update();
 }

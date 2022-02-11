@@ -194,13 +194,11 @@ class Player extends PlayerBase {
           entity.addPos(d, false);
         };
         jump();
-        let id9 = setInterval(() => {
-          jump();
-        }, 16);
-
-        setTimeout(() => {
-          clearInterval(id9);
-        }, 16 * 5);
+        for (let i = 1; i <= 5; i++) {
+          setTimeout(() => {
+            jump();
+          }, 16 * i);
+        }
       });
     }, 190);
   }

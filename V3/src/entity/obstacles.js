@@ -60,6 +60,12 @@ class Obstacle {
     // this.circle.pos.y = this.pos.y;
     this.circle.setPosition(this.pos.x, this.pos.y);
   }
+  setNormal(vec) {
+    if (vec) {
+      this.circle.normals[0].x = vec.x;
+      this.circle.normals[0].y = vec.y;
+    }
+  }
   draw() {
     push();
     translate(this.pos.x, this.pos.y);
@@ -174,6 +180,9 @@ class Obstacles {
       obstacle.update();
     }
     // console.log(pixelDensity());
+    this.allNormal.forEach((normal) => {
+      queue.addDraw(normal);
+    });
   }
   draw() {
     push();
@@ -232,5 +241,32 @@ class Obstacles {
       }
     }
     return;
+  }
+  initNormal() {
+    this.allNormal = [];
+    this.obstacles.forEach((obstacle) => {
+      const _gridCoords = this.grid.WorldCoordsToGridCoords(
+        obstacle.pos.x,
+        obstacle.pos.y
+      );
+      const gridCoords = { x: _gridCoords[0], y: _gridCoords[1] };
+      // console.log(gridCoords);
+      const vec = getNormal(this.grid, gridCoords);
+
+      // console.log(vec);
+      obstacle.setNormal(vec);
+      {
+        // Debugging
+        if (!vec) {
+          return;
+        }
+        degrees;
+        const vec2 = vec.copy().setMag(50);
+        const end = p5.Vector.add(vec2, obstacle.pos);
+        this.allNormal.push(
+          `line(${obstacle.pos.x}, ${obstacle.pos.y}, ${end.x}, ${end.y})`
+        );
+      }
+    });
   }
 }

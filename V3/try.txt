@@ -1,0 +1,26 @@
+# copy()            |   copy(other)         
+# add()             |   clone()           
+# rem()             |   perp()            
+# sub()             |   rotate(angle)     
+mult()              |   reverse()         
+div()               |   normalize()       
+mag()               |   add(other)        
+magSq()             |   sub(other)        
+dot()               |   scale(x,y         
+cross()             |   project(other)    
+dist()              |   projectN(other)   
+normalize()         |   reflect(axis)       
+limit()             |   reflectN(axis)    
+setMag()            |   dot(other)          
+heading()           |   len2()              
+setHeading()        |   len()                   
+rotate()            |                    
+angleBetween()      |                        
+lerp()              |                
+reflect()           |                    
+array()             |                
+equals()            |                    
+fromAngle()         |                    
+fromAngles()        |                        
+random2D()          |                    
+random3D()          |                    

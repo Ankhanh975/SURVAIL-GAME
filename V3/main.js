@@ -29,7 +29,7 @@ addFunction("setup", () => {
   // background(100);
 });
 addFunction("setup", () => {
-  noisejs.seed(Math.random());
+  // noisejs.seed(Math.random());
   sparks = new Sparks();
   obstacles = new Obstacles();
   camera = new Camera();
@@ -75,7 +75,7 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 250; i++) {
+  for (let i = 0; i < 0; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -83,7 +83,8 @@ addFunction("setup", () => {
   // 1. Collisions check
   // 2. Loop through obstacles.update();
   // ...
-  obstacles.initObstacles(60);
+  obstacles.initObstacles(30);
+  obstacles.initNormal();
 });
 
 addFunction("draw", () => {
@@ -194,7 +195,7 @@ addFunction("draw", () => {
   }
   // PLAYING
   if (true) {
-    queue.update();
+    // queue.update();
     // field.draw();
   }
   if (true) {
@@ -202,7 +203,7 @@ addFunction("draw", () => {
     players.draw();
   }
   obstacles.draw();
-
+  queue.update();
   // if (players.players[1]) {
   //   let path = players.players[1].path;
   //   path.forEach((e, i) => {
