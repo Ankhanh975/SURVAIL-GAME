@@ -1,7 +1,6 @@
 
-SURVAIL-GAME
-- More: 
-- https://github.com/Ankhanh975/SURVAIL-GAME/tree/master/V3
+# SURVAIL-GAME
+1. More: https://github.com/Ankhanh975/SURVAIL-GAME/tree/master/V3
 
 
 
@@ -14,8 +13,7 @@ SURVAIL-GAME
 - Game I make in 3 months of summer.
 - You now in a great team try to alive in a nightmare of constant zombie dark
 - Try to stay at a good place and save your teammates
-- 
-# Soucre code: 
-- https://github.com/Ankhanh975/SURVAIL-GAME
 
-<!-- - https://github.com/Prozi/detect-collisions -->
+# Soucre code: 
+1. https://github.com/Ankhanh975/SURVAIL-GAME
+1. https://github.com/Prozi/detect-collisions
