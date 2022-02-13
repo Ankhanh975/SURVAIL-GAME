@@ -169,13 +169,10 @@ function getNormal(grid, pos) {
   }
   function getNormalOne(grid, x, y) {
     let normal = createVector(0, 0);
-    if (
-      grid.get(x - 1, y) !== state &&
-      grid.get(x, y - 1) !== state &&
-      grid.get(x + 1, y) !== state &&
-      grid.get(x, y + 1) !== state
-    ) {
-      console.log("ff");
+    if (grid.get(x - 1, y) !== state && grid.get(x + 1, y) !== state) {
+      return null;
+    }
+    if (grid.get(x, y - 1) !== state && grid.get(x, y + 1) !== state) {
       return null;
     }
 
@@ -210,101 +207,96 @@ function getNormal(grid, pos) {
     }
   }
   function getNormalTwo(grid, x, y) {
+    const list = [
+      [-2, -1],
+      [-2, +0],
+      [-2, +1],
+      [+2, -1],
+      [+2, +0],
+      [+2, +1],
+      [-1, -2],
+      [+0, -2],
+      [+1, -2],
+      [-1, +2],
+      [+0, +2],
+      [+1, +2],
+      [-2, -2],
+      [-2, +2],
+      [+2, -2],
+      [+2, +2],
+    ];
     let normal = createVector(0, 0);
-    console.log(
-      grid.get(x - 2, y - 1),
-      grid.get(x - 2, y + 0),
-      grid.get(x - 2, y + 1),
-      grid.get(x + 2, y - 1),
-      grid.get(x + 2, y + 0),
-      grid.get(x + 2, y + 1),
-      grid.get(x - 1, y - 2),
-      grid.get(x + 0, y - 2),
-      grid.get(x + 1, y - 2),
-      grid.get(x - 1, y + 2),
-      grid.get(x + 0, y + 2),
-      grid.get(x + 1, y + 2),
-      grid.get(x - 2, y - 2),
-      grid.get(x - 2, y + 2),
-      grid.get(x + 2, y - 2),
-      grid.get(x + 2, y + 2)
-    );
-    if (grid.get(x - 2, y - 1) === state) {
-      addDirection(normal, [x - 2, y - 1]);
-    }
-    if (grid.get(x - 2, y + 0) === state) {
-      addDirection(normal, [x - 2, y + 0]);
-    }
-    if (grid.get(x - 2, y + 1) === state) {
-      addDirection(normal, [x - 2, y + 1]);
-    }
-    if (grid.get(x + 2, y - 1) === state) {
-      addDirection(normal, [x + 2, y - 1]);
-    }
-    if (grid.get(x + 2, y + 0) === state) {
-      addDirection(normal, [x + 2, y + 0]);
-    }
-    if (grid.get(x + 2, y + 1) === state) {
-      addDirection(normal, [x + 2, y + 1]);
-    }
-    if (grid.get(x - 1, y - 2) === state) {
-      addDirection(normal, [x - 1, y - 2]);
-    }
-    if (grid.get(x + 0, y - 2) === state) {
-      addDirection(normal, [x + 0, y - 2]);
-    }
-    if (grid.get(x + 1, y - 2) === state) {
-      addDirection(normal, [x + 1, y - 2]);
-    }
-    if (grid.get(x - 1, y + 2) === state) {
-      addDirection(normal, [x - 1, y + 2]);
-    }
-    if (grid.get(x + 0, y + 2) === state) {
-      addDirection(normal, [x + 0, y + 2]);
-    }
-    if (grid.get(x + 1, y + 2) === state) {
-      addDirection(normal, [x + 1, y + 2]);
-    }
-    if (grid.get(x - 2, y - 2) === state) {
-      addDirection(normal, [x - 2, y - 2]);
-    }
-    if (grid.get(x - 2, y + 2) === state) {
-      addDirection(normal, [x - 2, y + 2]);
-    }
-    if (grid.get(x + 2, y - 2) === state) {
-      addDirection(normal, [x + 2, y - 2]);
-    }
-    if (grid.get(x + 2, y + 2) === state) {
-      addDirection(normal, [x + 2, y + 2]);
-    }
-    return normal.rotate(radians(180)).normalize();
-  }
+    list.forEach((each) => {
+      const i = each[0];
+      const j = each[1];
+      if (grid.get(x + i, y + j) === state) {
+        addDirection(normal, each);
+      }
+    });
 
-  let normal = createVector(0, 0);
+    if (normal.mag() < 0.9) {
+      return null;
+    } else {
+      return normal.rotate(radians(180)).normalize();
+    }
+  }
+  function getNormalThree(grid, x, y) {
+    const list = [
+      [-3, -2],
+      [-3, -1],
+      [-3, +0],
+      [-3, +1],
+      [-3, +2],
+      //
+      [+3, -2],
+      [+3, -1],
+      [+3, +0],
+      [+3, +1],
+      [+3, +2],
+      //
+      [-2, -3],
+      [-1, -3],
+      [+0, -3],
+      [+1, -3],
+      [+2, -3],
+      //
+      [-2, +3],
+      [-1, +3],
+      [+0, +3],
+      [+1, +3],
+      [+2, +3],
+      //
+      [-3, -3],
+      [-3, +3],
+      [+3, -3],
+      [+3, +3],
+    ];
+    let normal = createVector(0, 0);
+    list.forEach((each) => {
+      const i = each[0];
+      const j = each[1];
+      if (grid.get(x + i, y + j) === state) {
+        addDirection(normal, each);
+      }
+    });
+    if (normal.mag() < 0.9) {
+      return null;
+    } else {
+      return normal.rotate(radians(180)).normalize();
+    }
+  }
   const one = getNormalOne(grid, x, y);
   if (one) {
     return one;
-  } else {
-    console.log(one, x, y);
-    const two = getNormalTwo(grid, x, y);
-    return two;
   }
-  if (one) {
-    normal.add(one);
-  }
-  if (normal.length >= 0.9) {
-    return normal;
-  }
+
   const two = getNormalTwo(grid, x, y);
   if (two) {
-    // Mean that all neighbors cell is full so we will look farther
-    normal.add(two);
+    return two;
   }
-  if (two && two.mag() < 0.3) {
+  const three = getNormalThree(grid, x, y);
+  if (three) {
+    return three;
   }
-  if (normal.length >= 0.9) {
-    return normal.normalize();
-  } else {
-    return null;
-  }
+  return null;
 }

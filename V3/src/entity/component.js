@@ -25,7 +25,7 @@ component.rotation = class {
     // Limit max rotate to speed of radians(37.5) per update
     let heading = this.lookAt;
     let angle = heading.angleBetween(this.headTo);
-    angle = constrain(angle, radians(-35), radians(35));
+    angle = constrain(angle, radians(-37.5), radians(37.5));
     this.headTo.rotate(-angle);
 
     this.angle = this.headTo.heading();

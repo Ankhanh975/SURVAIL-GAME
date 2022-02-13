@@ -1,8 +1,6 @@
 // Idea: feel and coordinates chanel of zombie
 // Zombie act to this field to do complex things
-function throwError(str) {
-  throw new Error(str);
-}
+
 class Particle {
   constructor(options) {
     this.type = options.type || throwError("type not specified");

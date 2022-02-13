@@ -1,11 +1,7 @@
 class PlayerBase extends Base {
   constructor(settings) {
     super();
-    this.parent =
-      settings.parent ||
-      (() => {
-        throw new Error("Parent must be specified");
-      })();
+    this.parent = settings.parent || throwError("Invalid parent");
     settings.pos = settings.pos || [0, 0];
     this.name = settings.name || "";
 

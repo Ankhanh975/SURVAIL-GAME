@@ -340,82 +340,77 @@ class Collisions2 extends Collisions {
     console.log(entity, collided);
     return !collided;
   }
-  // separateLineCircle(line, circle) {
-  //   // Separate circle out of the line, (solve collision)
-  //   // Based on normal vector of the line
-  //   // Normal vector is perpendicular to the line
-  //   // And point to the left region of the line, if count from line starts position
+  separateLineCircle(line, circle) {
+    // Separate circle out of the line, (solve collision)
+    // Based on normal vector of the line
+    // Normal vector is perpendicular to the line
+    // And point to the left region of the line, if count from line starts position
 
-  //   const LineEquationFrom2Points = function (P1, P2) {
-  //     return {
-  //       a: P2.y - P1.y,
-  //       b: -(P2.x - P1.x),
-  //       c: P1.y * P2.x - P1.x * P2.y,
-  //     };
-  //   };
-  //   const distLinePoint = (start, end, point) => {
-  //     const x0 = point.x;
-  //     const y0 = point.y;
-  //     const line = LineEquationFrom2Points(start, end);
-  //     const a = line.a;
-  //     const b = line.b;
-  //     const c = line.c;
+    function LineEquationFrom2Points(P1, P2) {
+      return {
+        a: P2.y - P1.y,
+        b: -(P2.x - P1.x),
+        c: P1.y * P2.x - P1.x * P2.y,
+      };
+    }
+    function distLinePoint(line, point) {
+      const x0 = point.x;
+      const y0 = point.y;
+      const a = line.a;
+      const b = line.b;
+      const c = line.c;
 
-  //     const d = Math.abs(a * x0 + b * y0 + c) / Math.sqrt(a * a + b * b);
-  //     return d;
-  //   };
-  //   const distLineCircle = (start, end, circle) => {
-  //     return distLinePoint(start, end, circle.pos) - circle.r;
-  //   };
-  //   const start = {
-  //     x: line.pos.x + line.points[0].x,
-  //     y: line.pos.y + line.points[0].y,
-  //   };
-  //   const end = {
-  //     x: line.pos.x + line.points[1].x,
-  //     y: line.pos.y + line.points[1].y,
-  //   };
-  //   const normal = line.normals[0];
-  //   // console.log(normals);
-  //   const x = circle.pos.x;
-  //   const y = circle.pos.y;
-  //   const r = circle.r;
-  //   const dist = distLineCircle(start, end, circle);
-  //   let moveTo = createVector(normal.x, normal.y);
-  //   // if (
-  //   //   moveTo.angleBetween(createVector(start.x - point.x, start.y - point.y)) >
-  //   //   radians(180)
-  //   // ) {
-  //   //   dist = -dist;
-  //   // }
-  //   // console.log(
-  //   //   degrees(
-  //   //     moveTo.angleBetween(createVector(start.x - point.x, start.y - point.y))
-  //   //   ),
-  //   //   moveTo.angleBetween(createVector(start.x - point.x, start.y - point.y))
-  //   // );
-  //   moveTo.setMag(dist);
-  //   moveTo.limit(14);
-  //   // if (dist > 0) {
-  //   //  // No intersection
-  //   // return;
-  //   // } else {
-  //   // console.log(circle);
-  //   circle.parent.addPos(moveTo);
-  //   // const normalVector = createVector(x, y).normalize();
-  //   // a.pos.x += x;
-  //   // a.pos.y += y;
-  //   // a.circle.setPosition(a.pos.x, a.pos.y);
-  //   // return [x, y];
-  //   // }
-  // }
-  // createLine = function (x1, y1, x2, y2) {
-  //   const line = this.createPolygon({ x: x1, y: y1 }, [
-  //     { x: 0, y: 0 },
-  //     { x: x2 - x1, y: y2 - y1 },
-  //   ]);
-  //   return line;
-  // };
+      const d = Math.abs(a * x0 + b * y0 + c) / Math.sqrt(a * a + b * b);
+      return d;
+    }
+    function distLineCircle(line, circle) {
+      return distLinePoint(line, circle.pos) - circle.r;
+    }
+    function distLineCircle2(line, circle, normal) {
+      // Now line have a direction like surface of water.
+      const x = circle.pos.x + normal.x * 500;
+      const y = circle.pos.y + normal.y * 500;
+      const re = distLineCircle(line, {
+        pos: { x: x, y: y },
+        r: circle.r,
+      });
+      return re - 500;
+    }
+    const start = {
+      x: line.pos.x + line.points[0].x,
+      y: line.pos.y + line.points[0].y,
+    };
+    const end = {
+      x: line.pos.x + line.points[1].x,
+      y: line.pos.y + line.points[1].y,
+    };
+    const LineEquation = LineEquationFrom2Points(start, end);
+    const normal = line.normals[0];
+
+    let dist = distLineCircle2(LineEquation, circle, normal);
+    dist = -dist;
+    dist = min(dist, 4);
+    let moveTo = createVector(normal.x, normal.y).setMag(dist);
+    // if (dist > 0) {
+    //  // No intersection
+    // return;
+    // } else {
+    // console.log(circle);
+    circle.parent.addPos(moveTo);
+    // const normalVector = createVector(x, y).normalize();
+    // a.pos.x += x;
+    // a.pos.y += y;
+    // a.circle.setPosition(a.pos.x, a.pos.y);
+    // return [x, y];
+    // }
+  }
+  createLine = function (x1, y1, x2, y2) {
+    const line = this.createPolygon({ x: x1, y: y1 }, [
+      { x: 0, y: 0 },
+      { x: x2 - x1, y: y2 - y1 },
+    ]);
+    return line;
+  };
 }
 
 let collisions = new Collisions2();

@@ -67,3 +67,7 @@ class Queue {
     this.queue2 = [];
   }
 }
+
+function throwError(str) {
+  throw new Error(str);
+}

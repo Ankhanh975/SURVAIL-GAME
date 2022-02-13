@@ -145,16 +145,20 @@ addFunction("draw", () => {
           a.addPos({ x: x * (1.01 - effects), y: y * (1.01 - effects) }, false);
           b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
         } else if (b instanceof Obstacle) {
-          a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
-          a.setFreezeFor(16 * 3);
-        }
-        // else if (b === undefined) {
-        //   // console.log(response.b);
-        //   collisions.separateLineCircle(response.b, a.circle);
-        //   a.setFreezeFor(16 * 2);
-
-        // }
-        else {
+          if (b.customCollisionHandler === false) {
+            a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
+            // a.setFreezeFor(16 * 3);
+          }
+          // else if (x < 13 && y < 13) {
+          //   a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
+          //   // a.setFreezeFor(16 * 3);
+          // }
+          else {
+            // console.log(response.b);
+            collisions.separateLineCircle(response.b, a.circle);
+            a.setFreezeFor(16 * 2);
+          }
+        } else {
           console.log(a, b);
           throw new Error("Invalid collision");
         }

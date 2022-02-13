@@ -1,10 +1,15 @@
 class Obstacle {
-  constructor(pos, parent, lifeTime = true) {
+  constructor(settings) {
+    //  pos, parent, lifeTime = true
     // parent: the Obstacles object this Obstacle belongs to
     this.size = 51.9;
-    this.pos = createVector(pos.x, pos.y);
+
+    this.pos = createVector(0, 0);
+    this.pos.x = settings.pos.x;
+    this.pos.y = settings.pos.y;
     this.pos.x += this.size / 2;
     this.pos.y += this.size / 2;
+
     this.circle = collisions.createPolygon({ x: this.pos.x, y: this.pos.y }, [
       { x: 0 - this.size / 2, y: 0 - this.size / 2 },
       { x: 0 - this.size / 2, y: this.size - this.size / 2 },
@@ -23,11 +28,12 @@ class Obstacle {
 
     // this.circle.isStatic = true;
     this.circle.parent = this;
-    this.color = [220, 220, 10, 200];
-    this.parent = parent;
-    this.life = 60 * 16; //(frame)
+    this.color = settings.color || [220, 220, 10, 200];
+    this.parent = settings.parent || throwError("Invalid parent");
+    this.life = settings.life || 60 * 16; //(frame)
     this.surface = this.parent.obstacles_surface;
-    lifeTime &&
+    this.customCollisionHandler = false;
+    if (settings.lifeTime) {
       setTimeout(() => {
         // Remove the obstacle from the world
         const index = obstacles.obstacles.indexOf(this);
@@ -43,10 +49,12 @@ class Obstacle {
 
         obstacles.grid.set(gridPos[0], gridPos[1], false);
       }, 16 * 1000);
-    lifeTime &&
+    }
+    if (settings.lifeTime) {
       setTimeout(() => {
         this.surface = this.parent.obstacles_surface2;
       }, 15.1 * 1000);
+    }
 
     // anime({
     //   targets: this,
@@ -62,6 +70,7 @@ class Obstacle {
   }
   setNormal(vec) {
     if (vec) {
+      this.customCollisionHandler = true;
       this.circle.normals[0].x = vec.x;
       this.circle.normals[0].y = vec.y;
     }
@@ -156,7 +165,7 @@ class Obstacles {
       // This cell is already in the grid
       return null;
     }
-    let ob = new Obstacle(pos, this, lifeTime);
+    let ob = new Obstacle({ pos: pos, parent: this, lifeTime: lifeTime });
     const potentials = collisions.getPotentials(ob.circle);
     const collided = potentials.some((body) => {
       if (body.parent instanceof Obstacle || body.parent instanceof Player) {
@@ -261,7 +270,7 @@ class Obstacles {
           return;
         }
         degrees;
-        const vec2 = vec.copy().setMag(50);
+        const vec2 = vec.copy().setMag(35);
         const end = p5.Vector.add(vec2, obstacle.pos);
         this.allNormal.push(
           `line(${obstacle.pos.x}, ${obstacle.pos.y}, ${end.x}, ${end.y})`
