@@ -169,12 +169,6 @@ function getNormal(grid, pos) {
   }
   function getNormalOne(grid, x, y) {
     let normal = createVector(0, 0);
-    if (grid.get(x - 1, y) !== state && grid.get(x + 1, y) !== state) {
-      return null;
-    }
-    if (grid.get(x, y - 1) !== state && grid.get(x, y + 1) !== state) {
-      return null;
-    }
 
     if (grid.get(x - 1, y) === state) {
       addDirection(normal, [-1, 0]);
@@ -284,6 +278,12 @@ function getNormal(grid, pos) {
     } else {
       return normal.rotate(radians(180)).normalize();
     }
+  }
+  if (grid.get(x - 1, y) !== state && grid.get(x + 1, y) !== state) {
+    return null;
+  }
+  if (grid.get(x, y - 1) !== state && grid.get(x, y + 1) !== state) {
+    return null;
   }
   const one = getNormalOne(grid, x, y);
   if (one) {

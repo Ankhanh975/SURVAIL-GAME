@@ -75,7 +75,7 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 100; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -143,8 +143,22 @@ addFunction("draw", () => {
         if (b instanceof Player) {
           const effects = 0.4;
           a.addPos({ x: x * (1.01 - effects), y: y * (1.01 - effects) }, false);
+          {
+            const vec = a.rotation.headTo.copy();
+            if (random(0, 100) > 50) {
+              vec.rotate(radians(90)).setMag(0.3);
+            } else {
+              vec.rotate(radians(-90)).setMag(0.3);
+            }
+            a.addPos(vec);
+          }
           b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
         } else if (b instanceof Obstacle) {
+          {
+            // Debugging
+            a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
+            return;
+          }
           if (b.customCollisionHandler === false) {
             a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
             // a.setFreezeFor(16 * 3);
@@ -154,7 +168,7 @@ addFunction("draw", () => {
           //   // a.setFreezeFor(16 * 3);
           // }
           else {
-            // console.log(response.b);
+            // console.log(1);
             collisions.separateLineCircle(response.b, a.circle);
             a.setFreezeFor(16 * 2);
           }

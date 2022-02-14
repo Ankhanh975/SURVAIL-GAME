@@ -345,7 +345,12 @@ class Collisions2 extends Collisions {
     // Based on normal vector of the line
     // Normal vector is perpendicular to the line
     // And point to the left region of the line, if count from line starts position
-
+    {
+      // Debugging
+      let moveTo = createVector(line.normals[0].x, line.normals[0].y).setMag(20);
+      circle.parent.addPos(moveTo);
+      return;
+    }
     function LineEquationFrom2Points(P1, P2) {
       return {
         a: P2.y - P1.y,
@@ -388,13 +393,16 @@ class Collisions2 extends Collisions {
     const normal = line.normals[0];
 
     let dist = distLineCircle2(LineEquation, circle, normal);
+    if (dist > 0) {
+      // No intersection
+      return;
+    }
     dist = -dist;
-    dist = min(dist, 4);
+    console.log(dist);
+    dist = min(dist, 14);
     let moveTo = createVector(normal.x, normal.y).setMag(dist);
-    // if (dist > 0) {
-    //  // No intersection
-    // return;
-    // } else {
+
+    // else {
     // console.log(circle);
     circle.parent.addPos(moveTo);
     // const normalVector = createVector(x, y).normalize();
