@@ -49,10 +49,10 @@ addFunction("setup", () => {
   player.addComponent(component.placeObstacle);
   {
     player.recovery = 0.001 * player.health;
-    player.health = 4000;
-    player.totalHealth = 4000;
-    player.damage = 4.5;
-    player.recovery = 0.005 * player.health;
+    player.health = 1250;
+    player.totalHealth = 1250;
+    player.damage = 5;
+    player.recovery = 0.0015 * player.health;
   }
 
   for (let i = 0; i < 14 * 4; i++) {
@@ -83,8 +83,8 @@ addFunction("setup", () => {
   // 1. Collisions check
   // 2. Loop through obstacles.update();
   // ...
-  obstacles.initObstacles(30);
-  obstacles.initNormal();
+  obstacles.initObstacles(35);
+  // obstacles.initNormal();
 });
 
 addFunction("draw", () => {
@@ -126,7 +126,6 @@ addFunction("draw", () => {
   // }
 
   collisions.update();
-  // PLAYING
   for (let i = 0; i < 3; i++) {
     for (const player of players.players) {
       // response.a.parent instanceof Player
@@ -143,16 +142,13 @@ addFunction("draw", () => {
         if (b instanceof Player) {
           const effects = 0.4;
           a.addPos({ x: x * (1.01 - effects), y: y * (1.01 - effects) }, false);
+
+          b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
           {
             const vec = a.rotation.headTo.copy();
-            if (random(0, 100) > 50) {
-              vec.rotate(radians(90)).setMag(0.3);
-            } else {
-              vec.rotate(radians(-90)).setMag(0.3);
-            }
+            vec.rotate(radians(a.random * 90)).setMag(0.4);
             a.addPos(vec);
           }
-          b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
         } else if (b instanceof Obstacle) {
           {
             // Debugging
@@ -201,16 +197,16 @@ addFunction("draw", () => {
 
   pop();
 
-  if (isPressed) {
-    push();
-    translate(player.pos);
-    rotate(player.getAngle());
-    fill(255, 0, 0, 90);
-    stroke(255, 255, 0, 180);
-    strokeWeight(4);
-    arc(-0, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
-    pop();
-  }
+  // if (isPressed) {
+  //   push();
+  //   translate(player.pos);
+  //   rotate(player.getAngle());
+  //   fill(255, 0, 0, 90);
+  //   stroke(255, 255, 0, 180);
+  //   strokeWeight(4);
+  //   arc(-0, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
+  //   pop();
+  // }
   // PLAYING
   if (true) {
     // queue.update();

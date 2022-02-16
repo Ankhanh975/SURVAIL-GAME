@@ -48,12 +48,12 @@ class Obstacle {
         );
 
         obstacles.grid.set(gridPos[0], gridPos[1], false);
-      }, 16 * 1000);
+      }, 18 * 1000);
     }
     if (settings.lifeTime) {
       setTimeout(() => {
         this.surface = this.parent.obstacles_surface2;
-      }, 15.1 * 1000);
+      }, 17.1 * 1000);
     }
 
     // anime({
@@ -188,10 +188,6 @@ class Obstacles {
     for (const obstacle of this.obstacles) {
       obstacle.update();
     }
-    // console.log(pixelDensity());
-    this.allNormal.forEach((normal) => {
-      queue.addDraw(normal);
-    });
   }
   draw() {
     push();

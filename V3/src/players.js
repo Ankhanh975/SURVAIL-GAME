@@ -37,13 +37,6 @@ class Players {
   update() {
     for (const e of this.players) {
       e.update();
-      // if (e.AIPlayer) {
-      // e.update();
-      // } else if (e === player) {
-      // e.update();
-      // } else {
-      // e.update();
-      // }
     }
   }
   draw() {
@@ -54,16 +47,29 @@ class Players {
         player.pos.y - e.pos.y > 600 ||
         player.pos.y - e.pos.y < -600
       ) {
-        // console.log("too far");
         continue;
       }
-      if (this.players.length > 100) {
-        e.draw({ healthBar: !e.AIPlayer, nameTag: !e.AIPlayer, body: true });
-      } else {
-        e.draw({ healthBar: true, nameTag: !e.AIPlayer, body: true });
-      }
-    }
+      let healthBar = false;
 
+      const angle = player.rotation.lookAt.angleBetween(e.rotation.lookAt);
+      if (angle > radians(140) || angle < radians(-140)) {
+        if (
+          collisions.isFreeLine(e.pos, player.pos, {
+            ignore: [e.circle, player.circle],
+            type: Obstacle,
+          })
+        ) {
+          if (player.pos.dist(e.pos) < 400) {
+            healthBar = true;
+          }
+        }
+      }
+      e.draw({
+        healthBar: !e.AIPlayer || healthBar,
+        nameTag: !e.AIPlayer,
+        body: true,
+      });
+    }
   }
   createAIPlayer(pos, color) {
     pos = pos || p5.Vector.random2D().setMag(random(200, 500));

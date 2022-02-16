@@ -72,6 +72,19 @@ class Player extends PlayerBase {
 
     this.recovery = 0.04;
     this.damage = 0.75;
+
+    {
+      // this.random = random(0, 100) > 50 ? 1 : -1;
+      // setInterval(() => {
+      // this.random = random(0, 100) > 50 ? 1 : -1;
+      // }, 1000);
+      this.random = 1;
+      setInterval(() => {
+        this.random = this.random * -1;
+      }, 1000 * 10);
+      this.int = 0;
+      this.int2 = 0;
+    }
   }
   get pos() {
     return this.getPos();
@@ -126,12 +139,12 @@ class Player extends PlayerBase {
       translate(-20, -35);
       strokeWeight(4);
 
-      stroke(25, 25, 25);
-      rect(0, 0, 55, 1);
+      stroke(25, 25, 25, 150);
+      rect(0, 0, 45, 1);
 
       strokeWeight(3);
       stroke(250, 50, 25);
-      rect(0, 0, 55 * (this.health / this.totalHealth), 1);
+      rect(0, 0, 45 * (this.health / this.totalHealth), 1);
       pop();
     }
     if (options.nameTag) {
