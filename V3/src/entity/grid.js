@@ -43,14 +43,6 @@ class Grid {
     // path = PF.Util.compressPath(path);
     return path;
   }
-  set(x, y, state) {
-    // if (x < 0 || y < 0 || x >= 100 || y >= 100) {
-    //   // console.log("out of bounds", x, y, state);
-    //   return;
-    // }
-    // state == true means that the point is have obstacles
-    this.data.setWalkableAt(x, y, !state);
-  }
   FindPathFast(startx, starty, endx, endy) {
     // console.log("What is 'this'", this, this.data)
     let grid = this.data.clone();
