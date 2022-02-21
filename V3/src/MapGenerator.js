@@ -1,27 +1,17 @@
 class MapGenerator {
-  constructor(width, height, seed, useRandomSeed, randomFillPercent) {
-    this.width = width;
-    this.height = height;
+  constructor(settings) {
+    this.width = settings.width || 100;
+    this.height = settings.height || 100;
     //   seed: string
-    this.seed = seed;
-    this.useRandomSeed = useRandomSeed;
-    this.randomFillPercent = randomFillPercent;
+    this.seed = settings.seed || 100;
+    this.useRandomSeed = settings.useRandomSeed || true;
+    this.randomFillPercent = settings.randomFillPercent || 70;
+
     this.map = this.#createGrid(this.width, this.height);
     this.GenerateMap();
   }
   #createGrid(n, m) {
-    let grid = [];
-    let grid0 = [];
-    for (let i = 0; i < n; i++) {
-      grid.push(0);
-    }
-    for (let i = 0; i < m; i++) {
-      grid0.push(0);
-    }
-    grid = grid.map(function (grid) {
-      return grid0;
-    });
-    return grid;
+    return new Array(n).fill(0).map(() => new Array(m).fill(0));
   }
   #randInt(min, max) {
     // if (useRandomSeed) {
@@ -68,6 +58,7 @@ class MapGenerator {
   }
   GenerateMap() {
     this.map = this.#createGrid(this.width, this.height);
+
     this.RandomFillMap();
     for (let i = 0; i < 5; i++) {
       this.SmoothMap();
@@ -76,15 +67,16 @@ class MapGenerator {
 
   RandomFillMap() {
     if (this.useRandomSeed) {
-      this.seed = Math.floor(Date.now() / 1000);
+      this.seed = Math.floor(Date.now() / 1000) - 1644438983 - 1000012;
     }
 
     for (let x = 0; x < this.width; x++) {
       for (let y = 0; y < this.height; y++) {
         if (x == 0 || x == this.width - 1 || y == 0 || y == this.height - 1) {
-          map[x][y] = 1;
+          this.map[x][y] = 1;
         } else {
-          map[x][y] = this.#randInt(0, 100) < randomFillPercent ? 1 : 0;
+          this.map[x][y] =
+            this.#randInt(0, 100) < this.randomFillPercent ? 1 : 0;
         }
       }
     }
@@ -92,10 +84,10 @@ class MapGenerator {
   SmoothMap() {
     for (let x = 0; x < this.width; x++) {
       for (let y = 0; y < this.height; y++) {
-        let neighbourWallTiles = GetSurroundingWallCount(x, y);
+        let neighbourWallTiles = this.GetSurroundingWallCount(x, y);
 
-        if (neighbourWallTiles > 4) map[x][y] = 1;
-        else if (neighbourWallTiles < 4) map[x][y] = 0;
+        if (neighbourWallTiles > 4) this.map[x][y] = 1;
+        else if (neighbourWallTiles < 4) this.map[x][y] = 0;
       }
     }
   }
@@ -110,7 +102,7 @@ class MapGenerator {
           neighbourY < this.height
         ) {
           if (neighbourX != gridX || neighbourY != gridY) {
-            wallCount += map[(neighbourX, neighbourY)];
+            wallCount += this.map[(neighbourX, neighbourY)];
           }
         } else {
           wallCount++;

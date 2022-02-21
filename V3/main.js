@@ -75,7 +75,7 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 100; i++) {
     // PLAYING
     players.createAIPlayer();
   }
@@ -168,7 +168,7 @@ addFunction("draw", () => {
             a.setFreezeFor(16 * 2);
           }
         } else if (b instanceof Obstacle2) {
-          console.log(1);
+          // console.log(1);
           a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
         } else {
           console.log(a, b);

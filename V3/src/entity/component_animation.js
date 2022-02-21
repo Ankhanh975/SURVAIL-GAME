@@ -100,7 +100,7 @@
           createVector(centerX, centerY),
           createVector(x, y)
         );
-        dist = constrain(dist, 30, 100) - 30;
+        dist = constrain(dist, 31, 100) - 31;
         let index = (x + y * image.width) * 4;
         if (
           !(
@@ -109,7 +109,7 @@
             image.pixels[index + 2] === 0
           )
         ) {
-          image.pixels[index + 3] -= Math.round(dist * 2.8);
+          image.pixels[index + 3] -= Math.round(dist * 3.2);
           image.pixels[index + 3] = constrain(image.pixels[index + 3], 0, 255);
         }
       });

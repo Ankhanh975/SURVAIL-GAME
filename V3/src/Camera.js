@@ -9,8 +9,8 @@ class Ground {
   draw(playerPos, radius) {
     this.size = [this.img[0].width, this.img[0].height];
     playerPos = [
-      round(playerPos[0] / this.size[0]),
-      round(playerPos[1] / this.size[1]),
+      Math.round(playerPos[0] / this.size[0]),
+      Math.round(playerPos[1] / this.size[1]),
     ];
     // print("this.size", this.size, playerPos);
 
@@ -53,16 +53,11 @@ class Camera {
     translate(Math.round(-player.pos.x), Math.round(-player.pos.y));
     this.transform = [-player.pos.x, -player.pos.y];
   }
-  draw_background(
-    // radius = [
-    //   [-3, +4],
-    //   [-2, +3],
-    // ]
-    radius = [
+  draw_background(radius) {
+    radius = radius || [
       [-5, +6],
       [-3, +4],
-    ]
-  ) {
+    ];
     // Draw background behind everything (close to player for speed)
     this.ground.draw([-this.transform[0], -this.transform[1]], radius);
   }
