@@ -30,28 +30,91 @@
     // img[0][14] = loadImage("Assets/Demo/Die8.png");
   });
   addFunction("setup", () => {
+    function getAll(exclusive) {
+      if (exclusive) {
+        return [].concat(
+          Players_img[0],
+          Players_img[1],
+          Players_img[2],
+          Players_img[3],
+          Players_img[4]
+        );
+      }
+      return [].concat(
+        Players_img[0],
+        Players_img[1],
+        Players_img[2],
+        Players_img[3],
+        Players_img[4],
+        Players_img[5]
+      );
+    }
+    function requestColor(image, color) {
+      const n = clone(image);
+      change(n, [255, 255, 255], color);
+      return n;
+    }
     const img = Players_img;
     [
+      [255, 255, 255, 150],
       [255, 255, 0, 150],
       [0, 0, 255, 50],
       [248, 147, 29, 150],
       [0, 255, 0, 150],
       [255, 0, 0, 250],
+    ];
+    [
+      [255, 255, 255, 200],
+      [255, 255, 0, 200],
+      [0, 0, 255, 75],
+      [248, 147, 29, 200],
+      [0, 255, 0, 200],
+      [255, 0, 0, 255],
     ].forEach((color, ii) => {
       for (let i = 0; i < img[0].length; i++) {
-        img[ii + 1][i] = clone(img[0][i]);
-        change(img[ii + 1][i], [255, 255, 255], color);
+        img[ii][i] = requestColor(img[0][i], color);
       }
     });
-    img[0].forEach((color, ii) => {
-      change(img[0][ii], [255, 255, 255], [255, 255, 255, 150]);
-    });
     // Change black color on the edges to be partly transparent.
-    img.forEach((img0) => {
-      img0.forEach((img1) => {
-        change(img1, [0, 0, 0, 255], [0, 0, 0, 240]);
-        // effect1(img1);
+    getAll().forEach((img) => {
+      change(img, [0, 0, 0, 255], [0, 0, 0, 240]);
+    });
+    getAll().forEach((image) => {
+      function getPixel(image) {
+        let list = [];
+        for (let y = 0; y < image.height; y++) {
+          for (let x = 0; x < image.width; x++) {
+            list.push([x, y]);
+          }
+        }
+        return list;
+      }
+      image.loadPixels();
+      const centerX = image.width / 2;
+      const centerY = image.height / 2;
+      getPixel(image).forEach((point) => {
+        const x = point[0];
+        const y = point[1];
+
+        let dist = p5.Vector.dist(
+          createVector(centerX, centerY),
+          createVector(x, y)
+        );
+        dist = constrain(dist, 30, 100) - 30;
+        let index = (x + y * image.width) * 4;
+        if (
+          !(
+            image.pixels[index + 0] === 0 &&
+            image.pixels[index + 1] === 0 &&
+            image.pixels[index + 2] === 0
+          )
+        ) {
+          image.pixels[index + 3] -= Math.round(dist * 2.8);
+          image.pixels[index + 3] = constrain(image.pixels[index + 3], 0, 255);
+        }
       });
+
+      image.updatePixels();
     });
   });
   function change(image, pixelFrom, pixelTo) {
@@ -62,7 +125,7 @@
       for (let x = 0; x < image.width; x++) {
         let index = (x + y * image.width) * 4;
         if (
-          image.pixels[index] === pixelFrom[0] &&
+          image.pixels[index + 0] === pixelFrom[0] &&
           image.pixels[index + 1] === pixelFrom[1] &&
           image.pixels[index + 2] === pixelFrom[2]
         ) {
@@ -78,24 +141,6 @@
             image.pixels[index + 3] = pixelTo[3];
           }
         }
-      }
-    }
-    image.updatePixels();
-  }
-  function effect1(image) {
-    image.loadPixels();
-    const centerX = image.width / 2;
-    const centerY = image.height / 2;
-
-    for (let y = 0; y < image.height; y++) {
-      for (let x = 0; x < image.width; x++) {
-        const dist = p5.Vector.dist(
-          createVector(centerX, centerY),
-          createVector(x, y)
-        );
-        if (image.pixels[index + 3] === 255) {
-        }
-        let index = (x + y * image.width) * 4;
       }
     }
     image.updatePixels();
@@ -187,6 +232,7 @@
 // html canvas use clear_rect()
 
 function clear_surface(canvas, startX, startY, endX, endY) {
+  // TODO
   canvas.loadPixels();
   const width = canvas.width;
   for (var x = startX; x < endX; x++) {

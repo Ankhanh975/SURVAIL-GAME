@@ -124,14 +124,6 @@ class Player extends PlayerBase {
     translate(this.pos);
     if (options.body) {
       this.animation.draw();
-      // push();
-      // rotate(this.getAngle());
-      // if (this.punchHand === "left" && !this.animation.onPunch()) {
-      //   scale(-1, 1);
-      //   translate(-10, 0);
-      // }
-      // image(this.animation.getFrames(), 0, 0);
-      // pop();
     }
     if (options.healthBar) {
       push();
@@ -142,9 +134,9 @@ class Player extends PlayerBase {
       stroke(25, 25, 25, 150);
       rect(0, 0, 45, 1);
 
-      strokeWeight(3);
+      strokeWeight(2);
       stroke(250, 50, 25);
-      rect(0, 0, 45 * (this.health / this.totalHealth), 1);
+      rect(0, 0, 45 * (this.health / this.totalHealth), 2);
       pop();
     }
     if (options.nameTag) {
