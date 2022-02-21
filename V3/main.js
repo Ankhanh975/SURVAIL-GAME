@@ -49,8 +49,8 @@ addFunction("setup", () => {
   player.addComponent(component.placeObstacle);
   {
     player.recovery = 0.001 * player.health;
-    player.health = 1250;
-    player.totalHealth = 1250;
+    player.health = 1000;
+    player.totalHealth = 1000;
     player.damage = 5;
     player.recovery = 0.0015 * player.health;
   }

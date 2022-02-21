@@ -62,11 +62,11 @@ class AIPlayer extends Player {
         this.addPos(toLookAt);
       }
       if (dist > 150) {
-        let rotate = constrain(dist, 30, 1000);
-        rotate = 1 / rotate ** 2;
-        rotate = rotate / 200;
-        rotate = radians(10) * rotate;
-        rotate = constrain(rotate, radians(0), radians(20));
+        // let rotate = constrain(dist, 30, 1000);
+        // rotate = 1 / rotate ** 2;
+        // rotate = rotate / 200;
+        // rotate = radians(10) * rotate;
+        // rotate = constrain(rotate, radians(0), radians(20));
 
         toLookAt.rotate(radians(10));
         toLookAt.setMag(3.0);

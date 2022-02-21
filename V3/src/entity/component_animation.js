@@ -50,6 +50,7 @@
     img.forEach((img0) => {
       img0.forEach((img1) => {
         change(img1, [0, 0, 0, 255], [0, 0, 0, 240]);
+        // effect1(img1);
       });
     });
   });
@@ -73,8 +74,28 @@
           image.pixels[index] = pixelTo[0];
           image.pixels[index + 1] = pixelTo[1];
           image.pixels[index + 2] = pixelTo[2];
-          image.pixels[index + 3] = pixelTo[3];
+          if (pixelTo[3]) {
+            image.pixels[index + 3] = pixelTo[3];
+          }
         }
+      }
+    }
+    image.updatePixels();
+  }
+  function effect1(image) {
+    image.loadPixels();
+    const centerX = image.width / 2;
+    const centerY = image.height / 2;
+
+    for (let y = 0; y < image.height; y++) {
+      for (let x = 0; x < image.width; x++) {
+        const dist = p5.Vector.dist(
+          createVector(centerX, centerY),
+          createVector(x, y)
+        );
+        if (image.pixels[index + 3] === 255) {
+        }
+        let index = (x + y * image.width) * 4;
       }
     }
     image.updatePixels();
