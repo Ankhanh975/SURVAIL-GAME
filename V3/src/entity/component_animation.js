@@ -91,7 +91,7 @@
       }
       image.loadPixels();
       const centerX = image.width / 2;
-      const centerY = image.height / 2;
+      const centerY = image.height / 2 - 10;
       getPixel(image).forEach((point) => {
         const x = point[0];
         const y = point[1];
@@ -100,7 +100,7 @@
           createVector(centerX, centerY),
           createVector(x, y)
         );
-        dist = constrain(dist, 31, 100) - 31;
+        dist = constrain(dist, 27.5, 100) - 25  ;
         let index = (x + y * image.width) * 4;
         if (
           !(
@@ -109,7 +109,7 @@
             image.pixels[index + 2] === 0
           )
         ) {
-          image.pixels[index + 3] -= Math.round(dist * 3.2);
+          image.pixels[index + 3] -= Math.round(dist * 3.25);
           image.pixels[index + 3] = constrain(image.pixels[index + 3], 0, 255);
         }
       });

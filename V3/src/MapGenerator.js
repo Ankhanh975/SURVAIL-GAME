@@ -6,6 +6,7 @@ class MapGenerator {
     this.seed = settings.seed || 100;
     this.useRandomSeed = settings.useRandomSeed || true;
     this.randomFillPercent = settings.randomFillPercent || 70;
+    this.randomFillPercent = constrain(this.randomFillPercent, 0, 100);
 
     this.map = this.#createGrid(this.width, this.height);
     this.GenerateMap();

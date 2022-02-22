@@ -1,6 +1,3 @@
-// Call to translate() or rect() is not work inside setTimeout(() => {});
-// So we queue the event to the next frame
-
 class Ground {
   // Set background base on player position
   constructor(img) {
