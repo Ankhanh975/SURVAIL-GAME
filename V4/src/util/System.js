@@ -96,6 +96,7 @@ class System {
     frameRate(60);
     this.fpsMeter = this.#createFPSMetering();
     this.collisions = new Collisions2();
+
     this.centerChunk = [0, 0];
     this.activeChunksRadius = 5;
     this.backgroundIMG = backgroundIMG;
@@ -114,7 +115,7 @@ class System {
     imageMode(CENTER);
     this.#updateSparks();
     this.fpsMeter.tick();
-    this.collisions.update();
+    this.#updateCollisions();
 
     if (this.movingEntities.length > 0) {
       this.centerChunk = this.PosToChunkCoord(
@@ -131,6 +132,35 @@ Testing, ${frameCount}
   `
     );
     this.#drawSparks();
+  }
+  #updateCollisions() {
+    this.collisions.update();
+    // this.collisions.separate();
+    for (let i = 0; i < 3; i++) {
+      for (const player of this.movingEntities) {
+        this.collisions.checkOne(player.physic.circle, (response) => {
+          const a = player;
+          const b = response.b.parent;
+          let x = -response.overlapV.x;
+          let y = -response.overlapV.y;
+          x = min(x, 14);
+          y = min(y, 14);
+
+          if (b instanceof Player) {
+            const effects = 0.4;
+            a.addPos(
+              { x: x * (1.01 - effects), y: y * (1.01 - effects) },
+              false
+            );
+            b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
+
+            const vec = a.rotation.headTo.copy();
+            vec.rotate(radians(a.random * 90)).setMag(0.4);
+            a.addPos(vec);
+          } else a.physic.addPos({ x: x * 1.1, y: y * 1.1 }, false);
+        });
+      }
+    }
   }
   #updateSparks() {
     for (var i = this.sparks.length - 1; i >= 0; i--) {

@@ -25,29 +25,40 @@ class Player {
   };
   #Physic = class {
     // Implement freeze response
-    // potentialy to support acceleration
-    constructor(pos) {
-      this.pos = pos;
+    constructor(pos, system) {
+      console.log(pos);
       this.isFreeze = false;
       this.circle = undefined;
+      this.addCollisionBox(pos, system.collisions);
+
+      this.lastLocation = pos.copy();
+      this.last2Location = pos.copy();
+      this.last3Location = pos.copy();
     }
-    getPos() {
-      return this.pos;
+    update() {
+      this.last3Location = this.last2Location;
+      this.last2Location = this.lastLocation;
+      this.lastLocation = { x: this.pos.x, y: this.pos.y };
     }
     setPos(pos) {
       if (this.isFreeze) return;
-      this.pos.x = pos.x;
-      this.pos.y = pos.y;
-      this.circle.pos.x = this.pos.x;
-      this.circle.pos.y = this.pos.y;
+      this.circle.pos.x = pos.x;
+      this.circle.pos.y = pos.y;
     }
-
+    get pos() {
+      return this.circle.pos;
+    }
     addPos(pos) {
       if (this.isFreeze) return;
-      this.pos.x += pos.x;
-      this.pos.y += pos.y;
-      this.circle.pos.x = this.pos.x;
-      this.circle.pos.y = this.pos.y;
+      const speed = this.getAvgSpeed();
+
+      if (speed < 5) {
+        this.circle.pos.x += constrain(pos.x, -speed - 0.5, speed + 0.5);
+        this.circle.pos.y += constrain(pos.y, -speed - 0.5, speed + 0.5);
+      } else {
+        this.circle.pos.x += pos.x;
+        this.circle.pos.y += pos.y;
+      }
     }
     setFreezeFor(sec) {
       if (this.isFreeze === false) {
@@ -57,16 +68,21 @@ class Player {
         }, sec * 1000);
       }
     }
-    addCollisionBox(collisions) {
-      this.circle = collisions.createCircle(
-        { x: this.pos.x, y: this.pos.y },
-        60 / 2
-      );
+    addCollisionBox(pos, collisions) {
+      this.circle = collisions.createCircle({ x: pos.x, y: pos.y }, 60 / 2, {
+        isStatic: false,
+      });
       this.circle.parent = this.parent;
       collisions.updateBody(this.circle);
     }
     isFreeze() {
       return this.isFreeze;
+    }
+    getAvgSpeed() {
+      let dX = abs(this.pos.x - this.last3Location.x);
+      let dY = abs(this.pos.y - this.last3Location.y);
+      let d = sqrt(dX * dX + dY * dY);
+      return d;
     }
   };
   #Proprties = class {
@@ -126,7 +142,7 @@ class Player {
     this.system = system;
     this.system.addEntity(this);
 
-    this.physic = new this.#Physic(settings.pos || createVector(0, 0));
+    this.physic = new this.#Physic(settings.pos || createVector(0, 0), system);
     this.rotation = new this.#Rotation();
     this.proprties = new this.#Proprties(settings);
     this.animation = new this.#Animation();
@@ -134,13 +150,13 @@ class Player {
     this.physic.parent = this;
     this.rotation.parent = this;
     this.proprties.parent = this;
-
-    this.physic.addCollisionBox(this.system.collisions);
   }
   update() {
     if (!this.proprties.alive) return;
     this.rotation.update();
     this.proprties.update();
+    this.physic.update();
+    console.log(this.physic.getAvgSpeed());
   }
 
   die() {
@@ -150,7 +166,7 @@ class Player {
   }
   draw(options = {}) {
     push();
-    translate(this.physic.pos);
+    translate(this.physic.pos.x, this.physic.pos.y);
 
     const angle = this.rotation.getCurrentAngle() + radians(90);
     const health = this.proprties.health_percentage;
@@ -264,7 +280,6 @@ class OnControllerPlayer extends Player {
     this.jumpCooldown = 0;
     document.body.addEventListener("keydown", (event) => {
       if (event.key == " ") {
-        // console.log(this.physic.pos.x, this.physic.pos.y);
         if (this.jumpCooldown > 0) return;
         this.#jump();
         this.jumpCooldown = 20;

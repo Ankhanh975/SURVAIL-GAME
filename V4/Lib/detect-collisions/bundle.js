@@ -39,30 +39,25 @@
   {
     1: [
       function (require, module, exports) {
+        // https://github.com/Prozi/detect-collisions
         const { System } = require("../node_modules/detect-collisions/dist");
 
         globalThis.Collisions = System;
       },
-      { "../node_modules/detect-collisions/dist": 6 },
+      { "../node_modules/detect-collisions/dist": 8 },
     ],
     2: [
       function (require, module, exports) {
         "use strict";
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
         Object.defineProperty(exports, "__esModule", { value: true });
         exports.Box = void 0;
-        const sat_1 = __importDefault(require("sat"));
         const model_1 = require("../model");
         const utils_1 = require("../utils");
         const polygon_1 = require("./polygon");
         /**
          * collider - box
          */
-        class Box extends sat_1.default.Polygon {
+        class Box extends polygon_1.Polygon {
           /**
            * collider - box
            * @param {Vector} position {x, y}
@@ -70,47 +65,63 @@
            * @param {number} height
            */
           constructor(position, width, height) {
-            super(
-              (0, utils_1.ensureVectorPoint)(position),
-              (0, utils_1.createBox)(width, height)
-            );
+            super(position, (0, utils_1.createBox)(width, height));
             this.type = model_1.Types.Box;
-            this.updateAABB();
+            this._width = width;
+            this._height = height;
           }
           /**
-           * update position
-           * @param {number} x
-           * @param {number} y
+           * get box width
            */
-          setPosition(x, y) {
-            var _a;
-            this.pos.x = x;
-            this.pos.y = y;
-            (_a = this.system) === null || _a === void 0
-              ? void 0
-              : _a.updateBody(this);
+          get width() {
+            return this._width;
           }
           /**
-           * Updates Bounding Box of collider
+           * set box width, update points
            */
-          updateAABB() {
-            const [topLeft, _, topRight] = this.calcPoints;
-            this.minX = this.pos.x + topLeft.x;
-            this.minY = this.pos.y + topLeft.y;
-            this.maxX = this.pos.x + topRight.x;
-            this.maxY = this.pos.y + topRight.y;
+          set width(width) {
+            this._width = width;
+            this.setPoints((0, utils_1.createBox)(this._width, this._height));
           }
           /**
-           * Draws collider on a CanvasRenderingContext2D's current path
-           * @param {CanvasRenderingContext2D} context The canvas context to draw on
+           * get box height
            */
-          draw(context) {
-            polygon_1.Polygon.prototype.draw.call(this, context);
+          get height() {
+            return this._height;
+          }
+          /**
+           * set box height, update points
+           */
+          set height(height) {
+            this._height = height;
+            this.setPoints((0, utils_1.createBox)(this._width, this._height));
+          }
+          getCentroidWithoutRotation() {
+            // reset angle for get centroid
+            const angle = this.angle;
+            this.setAngle(0);
+            const centroid = this.getCentroid();
+            // revert angle change
+            this.setAngle(angle);
+            return centroid;
+          }
+          /**
+           * reCenters the box anchor
+           */
+          center() {
+            const firstPoint = this.points[0];
+            // skip if has original points translated already
+            if (firstPoint.x !== 0 || firstPoint.y !== 0) {
+              return;
+            }
+            const { x, y } = this.getCentroidWithoutRotation();
+            this.translate(-x, -y);
+            this.setPosition(this.pos.x + x, this.pos.y + y);
           }
         }
         exports.Box = Box;
       },
-      { "../model": 7, "../utils": 9, "./polygon": 5, sat: 11 },
+      { "../model": 9, "../utils": 11, "./polygon": 7 },
     ],
     3: [
       function (require, module, exports) {
@@ -138,6 +149,32 @@
             super((0, utils_1.ensureVectorPoint)(position), radius);
             this.type = model_1.Types.Circle;
             this.updateAABB();
+          }
+          get x() {
+            return this.pos.x;
+          }
+          /**
+           * updating this.pos.x by this.x = x updates AABB
+           */
+          set x(x) {
+            var _a;
+            this.pos.x = x;
+            (_a = this.system) === null || _a === void 0
+              ? void 0
+              : _a.updateBody(this);
+          }
+          get y() {
+            return this.pos.y;
+          }
+          /**
+           * updating this.pos.y by this.y = y updates AABB
+           */
+          set y(y) {
+            var _a;
+            this.pos.y = y;
+            (_a = this.system) === null || _a === void 0
+              ? void 0
+              : _a.updateBody(this);
           }
           /**
            * update position
@@ -186,9 +223,132 @@
         }
         exports.Circle = Circle;
       },
-      { "../model": 7, "../utils": 9, sat: 11 },
+      { "../model": 9, "../utils": 11, sat: 13 },
     ],
     4: [
+      function (require, module, exports) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", { value: true });
+        exports.Line = void 0;
+        const model_1 = require("../model");
+        const polygon_1 = require("./polygon");
+        /**
+         * collider - line
+         */
+        class Line extends polygon_1.Polygon {
+          /**
+           * collider - line from start to end
+           * @param {Vector} start {x, y}
+           * @param {Vector} end {x, y}
+           */
+          constructor(start, end) {
+            // position at middle of (start, end)
+            super({ x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 }, [
+              // first point at minus half length
+              { x: -(end.x - start.x) / 2, y: -(end.y - start.y) / 2 },
+              // second point at plus half length
+              { x: (end.x - start.x) / 2, y: (end.y - start.y) / 2 },
+            ]);
+            this.type = model_1.Types.Line;
+            if (this.calcPoints.length === 1 || !end) {
+              console.error({ start, end });
+              throw new Error("No end point for line provided");
+            }
+          }
+          get start() {
+            return {
+              x: this.x + this.calcPoints[0].x,
+              y: this.y + this.calcPoints[0].y,
+            };
+          }
+          get end() {
+            return {
+              x: this.x + this.calcPoints[1].x,
+              y: this.y + this.calcPoints[1].y,
+            };
+          }
+        }
+        exports.Line = Line;
+      },
+      { "../model": 9, "./polygon": 7 },
+    ],
+    5: [
+      function (require, module, exports) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", { value: true });
+        exports.Oval = void 0;
+        const model_1 = require("../model");
+        const utils_1 = require("../utils");
+        const polygon_1 = require("./polygon");
+        /**
+         * collider - oval
+         */
+        class Oval extends polygon_1.Polygon {
+          /**
+           * collider - oval
+           * @param {Vector} position {x, y}
+           * @param {number} radiusX
+           * @param {number} radiusY defaults to radiusX
+           * @param {number} step precision division >= 1px
+           */
+          constructor(position, radiusX, radiusY = radiusX, step = 1) {
+            super(position, (0, utils_1.createOval)(radiusX, radiusY, step));
+            this.type = model_1.Types.Oval;
+            this._radiusX = radiusX;
+            this._radiusY = radiusY;
+            this._step = step;
+          }
+          /**
+           * get oval step number
+           */
+          get step() {
+            return this._step;
+          }
+          /**
+           * set oval step number
+           */
+          set step(step) {
+            this._step = step;
+            this.setPoints(
+              (0, utils_1.createOval)(this._radiusX, this._radiusY, this._step)
+            );
+          }
+          /**
+           * get oval radiusX
+           */
+          get radiusX() {
+            return this._radiusX;
+          }
+          /**
+           * set oval radiusX, update points
+           */
+          set radiusX(radiusX) {
+            this._radiusX = radiusX;
+            this.setPoints(
+              (0, utils_1.createOval)(this._radiusX, this._radiusY, this._step)
+            );
+          }
+          /**
+           * get oval radiusY
+           */
+          get radiusY() {
+            return this._radiusY;
+          }
+          /**
+           * set oval radiusY, update points
+           */
+          set radiusY(radiusY) {
+            this._radiusY = radiusY;
+            this.setPoints(
+              (0, utils_1.createOval)(this._radiusX, this._radiusY, this._step)
+            );
+          }
+        }
+        exports.Oval = Oval;
+      },
+      { "../model": 9, "../utils": 11, "./polygon": 7 },
+    ],
+    6: [
       function (require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", { value: true });
@@ -211,9 +371,9 @@
         }
         exports.Point = Point;
       },
-      { "../model": 7, "../utils": 9, "./box": 2 },
+      { "../model": 9, "../utils": 11, "./box": 2 },
     ],
-    5: [
+    7: [
       function (require, module, exports) {
         "use strict";
         var __importDefault =
@@ -241,7 +401,38 @@
               (0, utils_1.ensurePolygonPoints)(points)
             );
             this.type = model_1.Types.Polygon;
+            if (
+              !(points === null || points === void 0 ? void 0 : points.length)
+            ) {
+              throw new Error("No points in polygon");
+            }
             this.updateAABB();
+          }
+          get x() {
+            return this.pos.x;
+          }
+          /**
+           * updating this.pos.x by this.x = x updates AABB
+           */
+          set x(x) {
+            var _a;
+            this.pos.x = x;
+            (_a = this.system) === null || _a === void 0
+              ? void 0
+              : _a.updateBody(this);
+          }
+          get y() {
+            return this.pos.y;
+          }
+          /**
+           * updating this.pos.y by this.y = y updates AABB
+           */
+          set y(y) {
+            var _a;
+            this.pos.y = y;
+            (_a = this.system) === null || _a === void 0
+              ? void 0
+              : _a.updateBody(this);
           }
           /**
            * update position
@@ -271,7 +462,8 @@
            * @param {CanvasRenderingContext2D} context The canvas context to draw on
            */
           draw(context) {
-            [...this.calcPoints, this.calcPoints[0]].forEach((point, index) => {
+            const points = [...this.calcPoints, this.calcPoints[0]];
+            points.forEach((point, index) => {
               const toX = this.pos.x + point.x;
               const toY = this.pos.y + point.y;
               const prev =
@@ -297,9 +489,9 @@
         }
         exports.Polygon = Polygon;
       },
-      { "../model": 7, "../utils": 9, sat: 11 },
+      { "../model": 9, "../utils": 11, sat: 13 },
     ],
-    6: [
+    8: [
       function (require, module, exports) {
         "use strict";
         var __createBinding =
@@ -307,12 +499,21 @@
           (Object.create
             ? function (o, m, k, k2) {
                 if (k2 === undefined) k2 = k;
-                Object.defineProperty(o, k2, {
-                  enumerable: true,
-                  get: function () {
-                    return m[k];
-                  },
-                });
+                var desc = Object.getOwnPropertyDescriptor(m, k);
+                if (
+                  !desc ||
+                  ("get" in desc
+                    ? !m.__esModule
+                    : desc.writable || desc.configurable)
+                ) {
+                  desc = {
+                    enumerable: true,
+                    get: function () {
+                      return m[k];
+                    },
+                  };
+                }
+                Object.defineProperty(o, k2, desc);
               }
             : function (o, m, k, k2) {
                 if (k2 === undefined) k2 = k;
@@ -331,21 +532,27 @@
         Object.defineProperty(exports, "__esModule", { value: true });
         __exportStar(require("./model"), exports);
         __exportStar(require("./bodies/circle"), exports);
+        __exportStar(require("./bodies/oval"), exports);
         __exportStar(require("./bodies/polygon"), exports);
         __exportStar(require("./bodies/box"), exports);
         __exportStar(require("./bodies/point"), exports);
+        __exportStar(require("./bodies/line"), exports);
         __exportStar(require("./system"), exports);
+        __exportStar(require("./utils"), exports);
       },
       {
         "./bodies/box": 2,
         "./bodies/circle": 3,
-        "./bodies/point": 4,
-        "./bodies/polygon": 5,
-        "./model": 7,
-        "./system": 8,
+        "./bodies/line": 4,
+        "./bodies/oval": 5,
+        "./bodies/point": 6,
+        "./bodies/polygon": 7,
+        "./model": 9,
+        "./system": 10,
+        "./utils": 11,
       },
     ],
-    7: [
+    9: [
       function (require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", { value: true });
@@ -362,15 +569,17 @@
          */
         var Types;
         (function (Types) {
+          Types["Oval"] = "Oval";
+          Types["Line"] = "Line";
           Types["Circle"] = "Circle";
           Types["Box"] = "Box";
           Types["Point"] = "Point";
           Types["Polygon"] = "Polygon";
         })((Types = exports.Types || (exports.Types = {})));
       },
-      { sat: 11 },
+      { sat: 13 },
     ],
-    8: [
+    10: [
       function (require, module, exports) {
         "use strict";
         var __importDefault =
@@ -385,6 +594,7 @@
         const model_1 = require("./model");
         const utils_1 = require("./utils");
         const _1 = require(".");
+        const oval_1 = require("./bodies/oval");
         /**
          * collision system
          */
@@ -392,6 +602,71 @@
           constructor() {
             super(...arguments);
             this.response = new sat_1.default.Response();
+          }
+          // https://stackoverflow.com/questions/37224912/circle-line-segment-collision
+          static intersectLineCircle(line, circle) {
+            const v1 = {
+              x: line.end.x - line.start.x,
+              y: line.end.y - line.start.y,
+            };
+            const v2 = {
+              x: line.start.x - circle.pos.x,
+              y: line.start.y - circle.pos.y,
+            };
+            const b = (v1.x * v2.x + v1.y * v2.y) * -2;
+            const c = 2 * (v1.x * v1.x + v1.y * v1.y);
+            const d = Math.sqrt(
+              b * b - 2 * c * (v2.x * v2.x + v2.y * v2.y - circle.r * circle.r)
+            );
+            if (isNaN(d)) {
+              // no intercept
+              return [];
+            }
+            const u1 = (b - d) / c; // these represent the unit distance of point one and two on the line
+            const u2 = (b + d) / c;
+            const results = []; // return array
+            if (u1 <= 1 && u1 >= 0) {
+              // add point if on the line segment
+              results.push({
+                x: line.start.x + v1.x * u1,
+                y: line.start.y + v1.y * u1,
+              });
+            }
+            if (u2 <= 1 && u2 >= 0) {
+              // second add point if on the line segment
+              results.push({
+                x: line.start.x + v1.x * u2,
+                y: line.start.y + v1.y * u2,
+              });
+            }
+            return results;
+          }
+          // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
+          static intersectLineLine(line1, line2) {
+            const dX = line1.end.x - line1.start.x;
+            const dY = line1.end.y - line1.start.y;
+            const determinant =
+              dX * (line2.end.y - line2.start.y) -
+              (line2.end.x - line2.start.x) * dY;
+            if (determinant === 0) {
+              return null;
+            }
+            const lambda =
+              ((line2.end.y - line2.start.y) * (line2.end.x - line1.start.x) +
+                (line2.start.x - line2.end.x) * (line2.end.y - line1.start.y)) /
+              determinant;
+            const gamma =
+              ((line1.start.y - line1.end.y) * (line2.end.x - line1.start.x) +
+                dX * (line2.end.y - line1.start.y)) /
+              determinant;
+            // check if there is an intersection
+            if (!(0 <= lambda && lambda <= 1) || !(0 <= gamma && gamma <= 1)) {
+              return null;
+            }
+            return {
+              x: line1.start.x + lambda * dX,
+              y: line1.start.y + lambda * dY,
+            };
           }
           /**
            * draw bodies
@@ -564,6 +839,51 @@
             }
           }
           /**
+           * raycast to get collider of ray from start to end
+           * @param {Vector} start {x, y}
+           * @param {Vector} end {x, y}
+           * @returns {TBody}
+           */
+          raycast(start, end, allowCollider = () => true) {
+            const ray = this.createLine(start, end);
+            const colliders = this.getPotentials(ray).filter(
+              (potential) =>
+                allowCollider(potential) && this.checkCollision(ray, potential)
+            );
+            this.remove(ray);
+            const results = [];
+            const sort = (0, utils_1.closest)(start);
+            colliders.forEach((collider) => {
+              switch (collider.type) {
+                case model_1.Types.Circle: {
+                  const points = System.intersectLineCircle(ray, collider);
+                  results.push(...points.map((point) => ({ point, collider })));
+                  break;
+                }
+                default: {
+                  const points = collider.calcPoints
+                    .map((to, index) => {
+                      const from = index
+                        ? collider.calcPoints[index - 1]
+                        : collider.calcPoints[collider.calcPoints.length - 1];
+                      const line = new _1.Line(
+                        {
+                          x: from.x + collider.pos.x,
+                          y: from.y + collider.pos.y,
+                        },
+                        { x: to.x + collider.pos.x, y: to.y + collider.pos.y }
+                      );
+                      return System.intersectLineLine(ray, line);
+                    })
+                    .filter((test) => !!test);
+                  results.push(...points.map((point) => ({ point, collider })));
+                  break;
+                }
+              }
+            });
+            return results.sort(sort)[0];
+          }
+          /**
            * create point
            * @param {Vector} position {x, y}
            */
@@ -571,6 +891,17 @@
             const point = new _1.Point(position);
             this.insert(point);
             return point;
+          }
+          /**
+           * create line
+           * @param {Vector} start {x, y}
+           * @param {Vector} end {x, y}
+           */
+          createLine(start, end, angle = 0) {
+            const line = new _1.Line(start, end);
+            line.setAngle(angle);
+            this.insert(line);
+            return line;
           }
           /**
            * create circle
@@ -596,6 +927,20 @@
             return box;
           }
           /**
+           * create oval
+           * @param {Vector} position {x, y}
+           * @param {number} radiusX
+           * @param {number} radiusY
+           * @param {number} step
+           * @param {number} angle
+           */
+          createOval(position, radiusX, radiusY, step = 1, angle = 0) {
+            const oval = new oval_1.Oval(position, radiusX, radiusY, step);
+            oval.setAngle(angle);
+            this.insert(oval);
+            return oval;
+          }
+          /**
            * create polygon
            * @param {Vector} position {x, y}
            * @param {Vector[]} points
@@ -610,9 +955,16 @@
         }
         exports.System = System;
       },
-      { ".": 6, "./model": 7, "./utils": 9, rbush: 10, sat: 11 },
+      {
+        ".": 8,
+        "./bodies/oval": 5,
+        "./model": 9,
+        "./utils": 11,
+        rbush: 12,
+        sat: 13,
+      },
     ],
-    9: [
+    11: [
       function (require, module, exports) {
         "use strict";
         var __importDefault =
@@ -623,11 +975,25 @@
         Object.defineProperty(exports, "__esModule", { value: true });
         exports.dashLineTo =
           exports.clockwise =
+          exports.closest =
+          exports.distance =
           exports.ensurePolygonPoints =
           exports.ensureVectorPoint =
           exports.createBox =
+          exports.createOval =
             void 0;
         const sat_1 = __importDefault(require("sat"));
+        function createOval(radiusX, radiusY = radiusX, step = 1) {
+          const steps = 2 * Math.PI * Math.hypot(radiusX, radiusY);
+          const length = Math.max(8, Math.ceil(steps / step));
+          return Array.from({ length }, (_, index) => {
+            const value = (index / length) * 2 * Math.PI;
+            const x = Math.cos(value) * radiusX;
+            const y = Math.sin(value) * radiusY;
+            return new sat_1.default.Vector(x, y);
+          });
+        }
+        exports.createOval = createOval;
         /**
          * creates box polygon points
          * @param {number} width
@@ -647,10 +1013,10 @@
          * ensure returns a SAT.Vector
          * @param {SAT.Vector} point
          */
-        function ensureVectorPoint(point) {
+        function ensureVectorPoint(point = {}) {
           return point instanceof sat_1.default.Vector
             ? point
-            : new sat_1.default.Vector(point.x, point.y);
+            : new sat_1.default.Vector(point.x || 0, point.y || 0);
         }
         exports.ensureVectorPoint = ensureVectorPoint;
         /**
@@ -658,11 +1024,35 @@
          * @param {SAT.Vector[]} points
          */
         function ensurePolygonPoints(points) {
-          return (clockwise(points) ? points.reverse() : points).map(
-            ensureVectorPoint
-          );
+          if (!points) {
+            throw new Error("No points array provided");
+          }
+          const vectorPoints = points.map(ensureVectorPoint);
+          return clockwise(vectorPoints)
+            ? vectorPoints.reverse()
+            : vectorPoints;
         }
         exports.ensurePolygonPoints = ensurePolygonPoints;
+        /**
+         * get distance between two {x, y} points
+         * @param {Vector} a
+         * @param {Vector} b
+         * @returns {number}
+         */
+        function distance(a, b) {
+          return Math.hypot(a.x - b.x, a.y - b.y);
+        }
+        exports.distance = distance;
+        /**
+         * returns function to sort raycast results
+         * @param {Vector} from
+         * @returns {function}
+         */
+        function closest(from) {
+          return ({ point: a }, { point: b }) =>
+            distance(from, a) - distance(from, b);
+        }
+        exports.closest = closest;
         /**
          * check direction of polygon
          * @param {SAT.Vector[]} points
@@ -703,21 +1093,21 @@
           const offsetY = Math.sin(arc);
           let posX = fromX;
           let posY = fromY;
-          let distance = Math.hypot(xDiff, yDiff);
-          while (distance > 0) {
-            const step = Math.min(distance, dash);
+          let dist = Math.hypot(xDiff, yDiff);
+          while (dist > 0) {
+            const step = Math.min(dist, dash);
             context.moveTo(posX, posY);
             context.lineTo(posX + offsetX * step, posY + offsetY * step);
             posX += offsetX * (dash + gap);
             posY += offsetY * (dash + gap);
-            distance -= dash + gap;
+            dist -= dash + gap;
           }
         }
         exports.dashLineTo = dashLineTo;
       },
-      { sat: 11 },
+      { sat: 13 },
     ],
-    10: [
+    12: [
       function (require, module, exports) {
         !(function (t, i) {
           "object" == typeof exports && "undefined" != typeof module
@@ -1119,7 +1509,7 @@
       },
       {},
     ],
-    11: [
+    13: [
       function (require, module, exports) {
         // Version 0.9.0 - Copyright 2012 - 2021 -  Jim Riecken <jimr@jimr.ca>
         //
