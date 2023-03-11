@@ -16,15 +16,7 @@ class Obstacle {
       { x: this.size - this.size / 2, y: this.size - this.size / 2 },
       { x: this.size - this.size / 2, y: 0 - this.size / 2 },
     ]);
-    // Debugging
-    // this.circle.normals[0].x = 1;
-    // this.circle.normals[0].y = 0;
-    // this.circle.normals[1].x = 1;
-    // this.circle.normals[1].y = 0;
-    // this.circle.normals[2].x = 1;
-    // this.circle.normals[2].y = 0;
-    // this.circle.normals[3].x = 1;
-    // this.circle.normals[3].y = 0;
+
 
     // this.circle.isStatic = true;
     this.circle.parent = this;

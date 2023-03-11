@@ -32,3 +32,24 @@ class Base {
     }
   }
 }
+// let base = new Base();
+// base.addComponent({
+//   name: "position",
+//   constructor: () => {
+//     this.x = 1;
+//     this.y = 2;
+//     console.log("component constructor");
+//   },
+
+//   update: () => {
+//     this.x = 1;
+//     this.y = 2;
+//     console.log("component update", this);
+//   },
+//   setPos: () => {
+//     console.log("component setPos");
+//   },
+// });
+// console.log(base);
+// base.setPos();
+// base.update();

@@ -2,21 +2,85 @@
 <html lang="en">
 
 <head>
-  <title>J.A.R.V.I.S.</title>
+  <title>Try to survive!</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <script src="Lib/p5js/p5.min.js"></script>
   <script src="Lib/p5js/p5.sound.min.js"></script>
+  <script src="Lib/p5.collide2d/p5.collide2d.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pts/0.10.9/pts.min.js"></script>
+  <script src="https://unpkg.com/console.js@2.0.1/dist/console.js"></script>
+  <!-- open the file in Lib to get link to source Authors-->
+  <script src="Lib/Fps/fps.min.js"></script>
+  <script src="Lib/animejs/anime.min.js"></script>
+  <script src="Lib/bower_components/pathfinding/pathfinding-browser.min.js"></script>
+  <script src="Lib/noisejs/perlin.min.js"></script>
+  <script src="Lib/bower_components/prob.js/prob-min.js" type="text/javascript"></script>
+  <script src="Lib/detect-collisions/bundle.js"></script>
+  <script src="Lib/nipplejs/bundle.js"></script>
+  <script src="Lib/p5.collide2d/p5.collide2d.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
   <link rel="stylesheet" type="text/css" href="style.css">
   <meta charset="utf-8" />
 
 </head>
 
 <body>
-  <script src="src/util/addComponent.js"></script>
-  <script src="src/util/gameLoop.js"></script>
-  <!-- <script src="src/util/curve.js"></script> -->
+  <script src="src/util/curve.js"></script>
+  <script src="src/util/generate.js"></script>
+  <script src="src/collisions.js"></script>
+  <script src="src/entity/player.js"></script>
+  <!-- <script src="src/entity/component.js"></script> -->
+  
+  <script src="src/util/System.js"></script>
+  <script src="main2.js"></script>
 
-  <script src="main.js"></script>
+
+  <script>
+    // Left button is down, right button is down, middle button is down respectively.
+    globalThis.isPressed = false;
+    globalThis.isPressed2 = false;
+    globalThis.isPressed3 = false;
+    globalThis.toggleF1 = false;
+    globalThis.toggleF3 = false;
+    globalThis.toggleEscape = false;
+    document.addEventListener('mousedown', e => {
+      // console.log("mousePressed", event.button  )
+      if (e.button === 0) isPressed = true;
+      else if (e.button === 2) isPressed2 = true;
+      else isPressed3 = true;
+    });
+    document.addEventListener('mouseup', e => {
+      if (e.button === 0) isPressed = false;
+      else if (e.button === 2) isPressed2 = false;
+      else isPressed3 = false;
+    });
+    document.addEventListener('keydown', e => {
+      if (e.code === "F1") {
+        toggleF1 = !toggleF1;
+        if (toggleF1 === true) {
+          fpsMeter.hide();
+        } else {
+          fpsMeter.show();
+        }
+      } else if (e.code === "F3") {
+        toggleF3 = !toggleF3;
+      } else if (e.code === "Escape") {
+        toggleEscape = !toggleEscape
+      }
+    });
+
+  </script>
+
+  <script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+  </script>
 </body>
 
 
