@@ -1,5 +1,5 @@
 class MapGenerator {
-  constructor(settings) {
+  constructor(settings = {}) {
     this.width = settings.width || 100;
     this.height = settings.height || 100;
     //   seed: string

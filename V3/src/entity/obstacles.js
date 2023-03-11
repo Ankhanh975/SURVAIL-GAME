@@ -132,24 +132,51 @@ class Obstacles {
     return;
   }
   initObstacles(size = 60) {
-    let chunkX = 0;
-    let chunkY = 0;
-    for (let x = 50 - size / 2; x < 50 + size / 2; x++) {
-      for (let y = 50 - size / 2; y < 50 + size / 2; y++) {
-        // for (let x = 20; x < 80; x++) {
-        // for (let y = 20; y < 80; y++) {
-        let value = noisejs.simplex2(
-          x / 20 + (chunkX * 100) / 20,
-          y / 20 + (chunkY * 100) / 20
-        );
-        // chunk[x][y] += noisejs.simplex2(x / 5, y / 5) / 20;
-        if (value > 0.3 && value < 0.7) {
-          const pos = this.grid.GridCoordsToWorldCoords(x, y);
-          this.createObstacle({ x: pos[0], y: pos[1] }, false);
+    {
+      let chunkX = 0;
+      let chunkY = 0;
+      for (let x = 50 - size / 2; x < 50 + size / 2; x++) {
+        for (let y = 50 - size / 2; y < 50 + size / 2; y++) {
+          // for (let x = 20; x < 80; x++) {
+          // for (let y = 20; y < 80; y++) {
+          let value = noisejs.simplex2(
+            x / 20 + (chunkX * 100) / 20,
+            y / 20 + (chunkY * 100) / 20
+          );
+          // chunk[x][y] += noisejs.simplex2(x / 5, y / 5) / 20;
+          if (value > 0.3 && value < 0.7) {
+            const pos = this.grid.GridCoordsToWorldCoords(x, y);
+            this.createObstacle({ x: pos[0], y: pos[1] }, false);
+          }
         }
       }
     }
     return;
+    {
+      const map_obj = new MapGenerator({ randomFillPercent: 20 });
+      for (let i = 0; i < 5; i++) {
+        map_obj.SmoothMap();
+      }
+      const map = map_obj.map;
+      map.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (
+            !(
+              x >= 50 - size / 2 &&
+              x < 50 + size / 2 &&
+              y >= 50 - size / 2 &&
+              y < 50 + size / 2
+            )
+          ) {
+            return;
+          }
+          if (value == 1) {
+            const pos = this.grid.GridCoordsToWorldCoords(x, y);
+            this.createObstacle({ x: pos[0], y: pos[1] }, false);
+          }
+        });
+      });
+    }
   }
   initNormal() {
     this.allNormal = [];

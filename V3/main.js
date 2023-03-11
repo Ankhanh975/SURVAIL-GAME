@@ -75,7 +75,7 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 0; i++) {
     // PLAYING
     players.createAIPlayer();
   }
