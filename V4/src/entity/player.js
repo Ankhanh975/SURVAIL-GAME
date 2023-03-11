@@ -27,7 +27,7 @@ class Player {
     // Implement freeze response
     // potentialy to support acceleration
     constructor(pos) {
-      this.pos = createVector(0, 0);
+      this.pos = pos;
       this.isFreeze = false;
       this.circle = undefined;
     }
@@ -104,7 +104,8 @@ class Player {
         this.animateFrames = 3;
       }, 80 * 2);
       setTimeout(() => {
-        this.animateFrames = 4;      }, 80 * 3);
+        this.animateFrames = 4;
+      }, 80 * 3);
       setTimeout(() => {
         this.animateFrames = 5;
       }, 80 * 4);
@@ -134,7 +135,7 @@ class Player {
     this.rotation.parent = this;
     this.proprties.parent = this;
 
-    this.physic.addCollisionBox(collisions);
+    this.physic.addCollisionBox(this.system.collisions);
   }
   update() {
     if (!this.proprties.alive) return;
@@ -143,7 +144,7 @@ class Player {
   }
 
   die() {
-    collisions.remove(this.circle);
+    this.system.collisions.remove(this.circle);
     this.system.removeEntity(this);
     this.proprties.alive = false;
   }
@@ -203,7 +204,7 @@ class Player {
 
     // effects to players getting punch: push them backwards and minus their health
     setTimeout(() => {
-      target = target || collisions.getPunchAble(this);
+      target = target || this.system.collisions.getPunchAble(this);
       target.forEach((entity) => {
         if (!(entity instanceof Player)) {
           return;
@@ -316,7 +317,7 @@ class OnControllerPlayer extends Player {
       d.setMag(150 * Curve.f(deltaT) + 3);
 
       player.physic.addPos(d);
-      collisions.updateBody(player.physic.circle);
+      this.system.collisions.updateBody(player.physic.circle);
     };
 
     _jump();

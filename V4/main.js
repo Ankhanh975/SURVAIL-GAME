@@ -49,12 +49,7 @@ addFunction("setup", () => {
     // PLAYING
     players.createAIPlayer();
   }
-  // TODO: why 2000 obstacles is slow?
-  // 1. Collisions check
-  // 2. Loop through obstacles.update();
-  // ...
   obstacles.initObstacles(35);
-  // obstacles.initNormal();
 });
 
 addFunction("draw", () => {
@@ -77,30 +72,15 @@ addFunction("draw", () => {
   }
 
   player.setAngle(p5.Vector.sub(mouse, player.pos).heading());
-  {
-    sparks.update();
-    players.update();
-    obstacles.update();
-    field.update();
-  }
-
-  // for (const object in this.chunk) {
-  //   const chunk = this.chunk[object];
-  //   if (chunk) {
-  //     chunk.forEach((each) => {
-  //       console.log(each);
-  //       each.update();
-  //     });
-  //   }
-  // }
+  sparks.update();
+  players.update();
+  obstacles.update();
+  field.update();
 
   collisions.update();
   for (let i = 0; i < 3; i++) {
     for (const player of players.players) {
-      // response.a.parent instanceof Player
-
       collisions.checkOne(player.circle, (response) => {
-        // const a = response.a.parent;
         const a = player;
         const b = response.b.parent;
         let x = -response.overlapV.x;
@@ -111,32 +91,13 @@ addFunction("draw", () => {
         if (b instanceof Player) {
           const effects = 0.4;
           a.addPos({ x: x * (1.01 - effects), y: y * (1.01 - effects) }, false);
-
           b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
-          {
-            const vec = a.rotation.headTo.copy();
-            vec.rotate(radians(a.random * 90)).setMag(0.4);
-            a.addPos(vec);
-          }
+          
+          const vec = a.rotation.headTo.copy();
+          vec.rotate(radians(a.random * 90)).setMag(0.4);
+          a.addPos(vec);
         } else if (b instanceof Obstacle) {
-          {
-            // Debugging
-            a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
-            return;
-          }
-          if (b.customCollisionHandler === false) {
-            a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
-            // a.setFreezeFor(16 * 3);
-          }
-          // else if (x < 13 && y < 13) {
-          //   a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
-          //   // a.setFreezeFor(16 * 3);
-          // }
-          else {
-            // console.log(1);
-            collisions.separateLineCircle(response.b, a.circle);
-            a.setFreezeFor(16 * 2);
-          }
+          a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
         } else if (b instanceof Obstacle2) {
           // console.log(1);
           a.addPos({ x: x * 1.1, y: y * 1.1 }, false);
@@ -161,29 +122,7 @@ addFunction("draw", () => {
   push();
   camera.follow(player.pos);
   camera.draw_background();
-  // Draw spawn at position 0, 0
-  push();
-  let c = HSVtoRGB((frameCount % 750) / 750, 0.9, 0.7);
-  fill(...c, 75);
-  circle(0, 0, 100);
 
-  pop();
-
-  // if (isPressed) {
-  //   push();
-  //   translate(player.pos);
-  //   rotate(player.getAngle());
-  //   fill(255, 0, 0, 90);
-  //   stroke(255, 255, 0, 180);
-  //   strokeWeight(4);
-  //   arc(-0, 0, 2 * 300, 2 * 300, -radians(40) / 2, radians(40) / 2, PIE);
-  //   pop();
-  // }
-  // PLAYING
-  if (false) {
-    queue.update();
-    field.draw();
-  }
   if (true) {
     sparks.draw();
     players.draw();
@@ -208,50 +147,3 @@ function keyPressed() {
     player.jump();
   }
 }
-
-
-
-(function () {
-  let list = [];
-  addFunction("setup", () => {
-    let n;
-    const n01 = new Obstacle2(0, 0, 0);
-    const n02 = new Obstacle2(100, 0, 1);
-    const n03 = new Obstacle2(200, 0, 2);
-    const n04 = new Obstacle2(300, 0, 3);
-    const n05 = new Obstacle2(400, 0, 4);
-    const n06 = new Obstacle2(500, 0, 5);
-    const n07 = new Obstacle2(600, 0, 6);
-    const n08 = new Obstacle2(700, 0, 7);
-    const n09 = new Obstacle2(800, 0, 8);
-    const n10 = new Obstacle2(900, 0, 9);
-    const n11 = new Obstacle2(1000, 0, 10);
-    const n12 = new Obstacle2(1100, 0, 11);
-    const n13 = new Obstacle2(1200, 0, 12);
-    const n14 = new Obstacle2(1300, 0, 13);
-    const n15 = new Obstacle2(1400, 0, 14);
-    const n16 = new Obstacle2(1500, 0, 15);
-    list.push(n01);
-    list.push(n02);
-    list.push(n03);
-    list.push(n04);
-    list.push(n05);
-    list.push(n06);
-    list.push(n07);
-    list.push(n08);
-    list.push(n09);
-    list.push(n10);
-    list.push(n11);
-    list.push(n12);
-    list.push(n13);
-    list.push(n14);
-    list.push(n15);
-    list.push(n16);
-  });
-  addFunction("draw", () => {
-    camera.follow(player.pos);
-    list.forEach((element) => {
-      element.draw();
-    });
-  });
-})();

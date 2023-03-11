@@ -1,12 +1,5 @@
 class Collisions2 extends Collisions {
-  constructor() {
-    super();
-  }
-  update() {
-    super.update();
-  }
   getNear(point, options, callback) {
-    // TODO: use call back
     // Very similar to this,getNeighbors but faster since we don't' run polygon to polygon collision detection
     const rangeX = options.rangeX || 1000;
     const rangeY = options.rangeY || 1000;
@@ -319,7 +312,6 @@ class Collisions2 extends Collisions {
       }
     });
     this.remove(collider);
-    // console.log("getPunchAble", all);
     return all;
   }
   isFreeSlot(entity, newPos) {
@@ -422,13 +414,3 @@ class Collisions2 extends Collisions {
     return line;
   };
 }
-
-// collisions.createLine(0, 0, 0, 500);
-// collisions.createLine(0, 500, 500, 500);
-// collisions.createLine(500, 500, 500, 0);
-// collisions.createLine(500, 0, 0, 0);
-
-// collisions.createLine(10, 10, 10, 490);
-// collisions.createLine(10, 490, 490, 490);
-// collisions.createLine(490, 490, 490, 10);
-// collisions.createLine(490, 10, 10, 10);

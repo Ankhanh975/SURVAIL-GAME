@@ -2,27 +2,6 @@
 
 chunkSize = 233;
 
-function createFPSMetering() {
-  return new FPSMeter(null, {
-    graph: 1,
-    decimals: 0,
-    heat: 1,
-    smoothing: 1,
-    position: "absolute",
-    zIndex: 10,
-    left: "17px",
-    top: "8px",
-    right: "auto",
-    bottom: "auto",
-    margin: "0 0 0 0",
-  });
-}
-
-
-function throwError(str) {
-  throw new Error(str);
-}
-
 class Spark {
   //  By https://www.youtube.com/watch?v=wNMRq_uoWM0
   constructor(loc, angle, speed, color, scale = 1) {
@@ -95,10 +74,28 @@ class Spark {
   }
 }
 class System {
+  #createFPSMetering() {
+    return new FPSMeter(null, {
+      graph: 1,
+      decimals: 0,
+      heat: 1,
+      smoothing: 1,
+      position: "absolute",
+      zIndex: 10,
+      left: "17px",
+      top: "8px",
+      right: "auto",
+      bottom: "auto",
+      margin: "0 0 0 0",
+    });
+  }
+  throwError(str) {
+    throw new Error(str);
+  }
   constructor() {
     frameRate(60);
-    this.fpsMeter = createFPSMetering();
-
+    this.fpsMeter = this.#createFPSMetering();
+    this.collisions = new Collisions2();
     this.centerChunk = [0, 0];
     this.activeChunksRadius = 5;
     this.backgroundIMG = backgroundIMG;
@@ -115,8 +112,10 @@ class System {
   update() {
     translate(width / 2, height / 2);
     imageMode(CENTER);
-    this.#updateSpark();
+    this.#updateSparks();
     this.fpsMeter.tick();
+    this.collisions.update();
+
     if (this.movingEntities.length > 0) {
       this.centerChunk = this.PosToChunkCoord(
         this.movingEntities[0].physic.pos
@@ -131,9 +130,9 @@ class System {
 Testing, ${frameCount}
   `
     );
-    this.#drawSpark();
+    this.#drawSparks();
   }
-  #updateSpark() {
+  #updateSparks() {
     for (var i = this.sparks.length - 1; i >= 0; i--) {
       this.sparks[i].move(1);
 
@@ -142,7 +141,7 @@ Testing, ${frameCount}
       }
     }
   }
-  #drawSpark() {
+  #drawSparks() {
     for (let spark of this.sparks) {
       spark.draw();
     }

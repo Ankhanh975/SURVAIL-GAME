@@ -4,10 +4,8 @@ var myFont;
 let canva;
 let tower;
 
-let collisions = new Collisions2();
-console.log(collisions);
-
 let Players_img;
+let Obstacles_img;
 function preload() {
   backgroundIMG = loadImage("Assets/BackGround4.png");
   myFont = loadFont("Assets/Minecraft.ttf");
@@ -27,6 +25,22 @@ function preload() {
     [null, null, null, null, null, null],
     [null, null, null, null, null, null],
   ];
+  
+  Obstacles_img = [0, 0];
+  Obstacles_img[0] = createGraphics(52, 52);
+  Obstacles_img[0].push();
+  Obstacles_img[0].strokeWeight(1.5);
+  Obstacles_img[0].stroke(0, 0, 0, 240);
+  Obstacles_img[0].fill([220, 220, 10, 220]);
+  Obstacles_img[0].rect(0, 0, 52, 52, 3.5);
+  Obstacles_img[0].pop();
+  Obstacles_img[1] = createGraphics(52, 52);
+  Obstacles_img[1].push();
+  Obstacles_img[1].strokeWeight(1.5);
+  Obstacles_img[1].stroke(0, 0, 0, 240);
+  Obstacles_img[1].fill([220, 220, 10, 110]);
+  Obstacles_img[1].rect(0, 0, 52, 52, 3.5);
+  Obstacles_img[1].pop();
 }
 let player;
 
@@ -186,7 +200,7 @@ function mouseClicked() {
       )
       .move(0, 5);
   }
-  player.startPunch()
+  player.startPunch();
 }
 class Tower {
   constructor(size = 600) {
