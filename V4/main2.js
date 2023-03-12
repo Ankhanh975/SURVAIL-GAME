@@ -26,7 +26,7 @@ function preload() {
   ];
 }
 let player;
-let chunk;
+let chunks;
 function setup() {
   canva = createCanvas(windowWidth, windowHeight);
   const defaultCanvas = document.querySelector("canvas");
@@ -36,9 +36,8 @@ function setup() {
   console.log(backgroundIMG);
 
   // tower = new Tower();
-  chunk = new Chunk([-1, -1], system);
   player = new OnControllerPlayer({ color: 5 }, system);
-
+  chunks = new Chunks([0, 0], system);
   (function () {
     // Setup the animation of 6*6 frames of player punching animations Players_img
     function change(image, pixelFrom, pixelTo) {
@@ -172,7 +171,8 @@ function draw() {
   player.draw();
   // tower.update();
   // tower.draw();
-  chunk.draw();
+  chunks.update(player.physic.pos.x, player.physic.pos.y);
+  chunks.draw();
 }
 
 function mouseClicked() {

@@ -290,7 +290,7 @@ class OnControllerPlayer extends Player {
       if (event.key == " ") {
         if (this.jumpCooldown > 0) return;
         this.#jump();
-        this.jumpCooldown = 20;
+        this.jumpCooldown = 10;
       }
     });
   }
@@ -349,47 +349,5 @@ class OnControllerPlayer extends Player {
         _jump(this);
       }, 16 * i);
     }
-  }
-}
-
-class BotPlayer extends Player {
-  constructor(settings) {
-    super(settings);
-    this.name = createName();
-    this.AIPlayer = true;
-  }
-  aimStraight() {
-    // Most simple algrithm for a zomble I can think of and also very functional code taken from last codebase minded
-    const target = this.system.movingEntities[0];
-    if (!target) return;
-    let lookAt, dist, toLookAt;
-
-    dist = this.physic.dist(target);
-    toLookAt = p5.Vector.sub(lookAt, this.pos);
-    lookAt = target.physic.pos;
-
-    if (dist < 150) {
-      if (!this.onPunch()) {
-        if (random(0, 100) >= 93.5) {
-          this.startPunch(target);
-        }
-      }
-    }
-    this.setAngle(toLookAt.heading());
-
-    if (dist < 130) {
-      toLookAt.setMag(3.0);
-      toLookAt.rotate(radians(180));
-      this.addPos(toLookAt);
-    }
-    if (dist > 150 && dist < 1100) {
-      toLookAt.rotate(radians(10));
-      toLookAt.setMag(3.0);
-      this.addPos(toLookAt);
-    }
-  }
-  update() {
-    super.update();
-    this.aimStraight();
   }
 }

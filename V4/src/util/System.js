@@ -1,7 +1,5 @@
 // The system will be responsible for managing the game loop and the game state.
 
-chunkSize = 233;
-
 class Spark {
   //  By https://www.youtube.com/watch?v=wNMRq_uoWM0
   constructor(loc, angle, speed, color, scale = 1) {
@@ -73,7 +71,57 @@ class Spark {
     pop();
   }
 }
+
 class System {
+  #ZoomScope = class {
+    #AverageTer = class {
+      constructor(averageOver = 15) {
+        this.averageOver = averageOver;
+        this.data = new Array(averageOver).fill(0);
+      }
+      update(newSensorData) {
+        if (this.data.length > this.averageOver) {
+          this.data.shift();
+        }
+        this.data.push(newSensorData);
+      }
+      get() {
+        let total = 0;
+        this.data.forEach((value) => {
+          total += value;
+        });
+        return total / this.data.length;
+      }
+    };
+    constructor() {
+      this.averageTer = new this.#AverageTer();
+      this.scaleCoefficient = 1;
+    }
+    update() {
+      setTimeout(() => {
+        this.averageTer.update(int(this.isOnEdge()));
+      }, 16 * 13);
+      this.scaleCoefficient = -this.averageTer.get() / 1.55 + 1;
+      scale(this.scaleCoefficient);
+    }
+
+    isOnEdge() {
+      let onEdge = 0;
+      if (abs(mouseX - width) < 30) {
+        onEdge = 1;
+      }
+      if (abs(mouseX) < 30) {
+        onEdge = 1;
+      }
+      if (abs(mouseY - height) < 30) {
+        onEdge = 1;
+      }
+      if (abs(mouseY) < 30) {
+        onEdge = 1;
+      }
+      return onEdge;
+    }
+  };
   #createFPSMetering() {
     return new FPSMeter(null, {
       graph: 1,
@@ -93,9 +141,11 @@ class System {
     throw new Error(str);
   }
   constructor() {
+    this.tileSize = 233;
     frameRate(60);
     this.fpsMeter = this.#createFPSMetering();
     this.collisions = new Collisions2();
+    this.zoomScope = new this.#ZoomScope();
 
     this.centerChunk = [0, 0];
     this.activeChunksRadius = 5;
@@ -116,21 +166,25 @@ class System {
     this.#updateSparks();
     this.fpsMeter.tick();
     this.#updateCollisions();
+    this.zoomScope.update();
 
     if (this.movingEntities.length > 0) {
-      this.centerChunk = this.PosToChunkCoord(
-        this.movingEntities[0].physic.pos
-      );
+      this.centerChunk = this.PosToTileCoord(this.movingEntities[0].physic.pos);
     }
+    this.activeChunksRadius = int(6 / this.zoomScope.scaleCoefficient);
   }
   draw() {
     noSmooth();
+    background(100);
     this.#drawBackground();
+    push();
+    translate(player.physic.pos.x, player.physic.pos.y);
     this.#drawMenu(
       `\
-Testing, ${frameCount}
-  `
+      Testing, ${frameCount}
+      `
     );
+    pop();
     this.#drawSparks();
   }
   #updateCollisions() {
@@ -187,7 +241,7 @@ Testing, ${frameCount}
   }
   #drawBackground() {
     push();
-    translate(...this.ChunkCoordToPos(...this.centerChunk));
+    translate(...this.tileCoordToPos(...this.centerChunk));
     for (
       let x = this.centerChunk[0] - this.activeChunksRadius;
       x < this.centerChunk[0] + this.activeChunksRadius;
@@ -204,8 +258,9 @@ Testing, ${frameCount}
     pop();
   }
   #drawChunk(x, y) {
-    image(this.backgroundIMG, ...this.ChunkCoordToPos([x, y]));
+    image(this.backgroundIMG, ...this.tileCoordToPos([x, y]));
   }
+
   #drawMenu(text) {
     push();
     translate(width / 2 - 205, height / 4 - 400);
@@ -224,10 +279,10 @@ Testing, ${frameCount}
 
     pop();
   }
-  ChunkCoordToPos(coord) {
-    return [(coord[0] + 0.5) * chunkSize, (coord[1] + 0.5) * chunkSize];
+  tileCoordToPos(coord) {
+    return [(coord[0] + 0.5) * this.tileSize, (coord[1] + 0.5) * this.tileSize];
   }
-  PosToChunkCoord(pos) {
-    return [floor(pos.x / chunkSize), floor(pos.y / chunkSize)];
+  PosToTileCoord(pos) {
+    return [floor(pos.x / this.tileSize), floor(pos.y / this.tileSize)];
   }
 }
