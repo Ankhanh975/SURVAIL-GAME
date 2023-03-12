@@ -153,7 +153,7 @@ class Chunks {
     this.data = {};
     this.system = system;
     this.center = center || [0, 0];
-    this.radius = 2;
+    this.radius = 3;
     this.#initRegion();
   }
   #initRegion() {
@@ -254,7 +254,6 @@ class Chunks {
     });
   }
   createChunk(x, y) {
-    console.log("Creating chunk at " + x + " " + y);
     this.data[this.#encodeChunkPos(x, y)] = new Chunk([x, y], this);
   }
   deleteChunk(x, y) {

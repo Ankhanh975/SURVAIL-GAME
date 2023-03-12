@@ -27,6 +27,8 @@ function preload() {
 }
 let player;
 let chunks;
+let alpha_mask;
+
 function setup() {
   canva = createCanvas(windowWidth, windowHeight);
   const defaultCanvas = document.querySelector("canvas");
@@ -38,6 +40,53 @@ function setup() {
   // tower = new Tower();
   player = new OnControllerPlayer({ color: 5 }, system);
   chunks = new Chunks([0, 0], system);
+
+  function create_alpha_mask() {
+    function getPixel(image) {
+      let list = [];
+      for (let y = 0; y < image.height; y++) {
+        for (let x = 0; x < image.width; x++) {
+          list.push([x, y]);
+        }
+      }
+      return list;
+    }
+    let mask = createGraphics(1000, 1000);
+
+    mask.loadPixels();
+
+    const centerX = mask.width / 2;
+    const centerY = mask.height / 2;
+    getPixel(mask).forEach((point) => {
+      const [x, y] = point;
+      const index = (x + y * mask.width) * 4;
+      let dist = p5.Vector.dist(
+        createVector(centerX, centerY),
+        createVector(x, y)
+      );
+      dist = constrain(dist - 195, 1, 10000) / 0.8;
+      dist = constrain(dist, 1, 250);
+      mask.pixels[index + 3] = int(dist);
+    });
+    
+
+    mask.updatePixels();
+    // mask.stroke(...c, 30);
+    // mask.fill(...c, 5);
+    // mask.arc(
+    //   0,
+    //   0,
+    //   this.size - 14 + size,
+    //   this.size - 14 + size,
+    //   0,
+    //   constrain(speed / 300, radians(50), radians(50))
+    // );
+    // mask.push();
+    // mask.pop();
+    return mask;
+  }
+  alpha_mask = create_alpha_mask();
+  console.log(alpha_mask);
   (function () {
     // Setup the animation of 6*6 frames of player punching animations Players_img
     function change(image, pixelFrom, pixelTo) {
@@ -113,9 +162,10 @@ function setup() {
         img[ii][i] = requestColor(img[0][i], color);
       }
     });
-    // Change black color on the edges to be partly transparent.
+
     getAll().forEach((img) => {
-      change(img, [0, 0, 0, 255], [0, 0, 0, 240]);
+      // Change black color on the edges to be partly transparent.
+      change(img, [0, 0, 0, 255], [0, 0, 0, 245]);
     });
     getAll().forEach((image) => {
       function getPixel(image) {
@@ -166,13 +216,26 @@ function setup() {
 function draw() {
   system.update();
   player.update();
+  chunks.update(player.physic.pos.x, player.physic.pos.y);
+  // tower.update();
+  push();
   translate(-player.physic.pos.x, -player.physic.pos.y);
   system.draw();
   player.draw();
-  // tower.update();
   // tower.draw();
-  chunks.update(player.physic.pos.x, player.physic.pos.y);
   chunks.draw();
+  pop();
+
+  push();
+  system.drawMenu(
+    `\
+Testing, ${frameCount}
+    `
+  );
+  scale(5.5);
+
+  image(alpha_mask, 0, 0);
+  pop();
 }
 
 function mouseClicked() {

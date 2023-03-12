@@ -177,19 +177,11 @@ class System {
     noSmooth();
     background(100);
     this.#drawBackground();
-    push();
-    translate(player.physic.pos.x, player.physic.pos.y);
-    this.#drawMenu(
-      `\
-      Testing, ${frameCount}
-      `
-    );
-    pop();
+
     this.#drawSparks();
   }
   #updateCollisions() {
     this.collisions.update();
-    // this.collisions.separate();
     for (let i = 0; i < 3; i++) {
       for (const player of this.movingEntities) {
         this.collisions.checkOne(player.physic.circle, (response) => {
@@ -261,7 +253,7 @@ class System {
     image(this.backgroundIMG, ...this.tileCoordToPos([x, y]));
   }
 
-  #drawMenu(text) {
+  drawMenu(text) {
     push();
     translate(width / 2 - 205, height / 4 - 400);
     stroke(50, 50, 50, 125);
