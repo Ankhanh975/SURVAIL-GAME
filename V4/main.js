@@ -28,7 +28,7 @@ function preload() {
 let player;
 let chunks;
 let alpha_mask;
-
+let enemis = [];
 function setup() {
   canva = createCanvas(windowWidth, windowHeight);
   const defaultCanvas = document.querySelector("canvas");
@@ -39,6 +39,14 @@ function setup() {
 
   // tower = new Tower();
   player = new OnControllerPlayer({ color: 5 }, system);
+  for (let index = 0; index < 100; index++) {
+    enemis.push(
+      new AI_Player(
+        { pos: createVector(random(-1000, 1000), random(-1000, 1000)) },
+        system
+      )
+    );
+  }
   chunks = new Chunks([0, 0], system);
 
   function create_alpha_mask() {
@@ -68,7 +76,6 @@ function setup() {
       dist = constrain(dist, 1, 250);
       mask.pixels[index + 3] = int(dist);
     });
-    
 
     mask.updatePixels();
     // mask.stroke(...c, 30);
@@ -216,12 +223,18 @@ function setup() {
 function draw() {
   system.update();
   player.update();
+  for (let index = 0; index < enemis.length; index++) {
+    enemis[index].update();
+  }
   chunks.update(player.physic.pos.x, player.physic.pos.y);
   // tower.update();
   push();
   translate(-player.physic.pos.x, -player.physic.pos.y);
   system.draw();
   player.draw();
+  for (let index = 0; index < enemis.length; index++) {
+    enemis[index].draw();
+  }
   // tower.draw();
   chunks.draw();
   pop();

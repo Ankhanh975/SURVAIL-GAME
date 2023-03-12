@@ -4,6 +4,7 @@ class Chunk {
       this.x = x; // 0 <= this.x < Chunk.size
       this.y = y; // 0 <= this.x < Chunk.size
       this.initTime = frameCount - lifeTime || 0;
+      this.system = undefined;
       // Mutiple cells that sit next to each other can have the same collision box in a shape of a complex polygon. That is idealy it's to be so.
       // But the collision box work wonderful and fast and didn't need to be changed. Also I want to make the cell on and off dynamicly for the game.
       this.collisionBox = collisionBox || undefined;
@@ -12,6 +13,23 @@ class Chunk {
     kill() {
       this.alive = false;
       this.collisionBox = undefined;
+    }
+  };
+  super_cell = class {
+    constructor(space, x, y, alive, lifeTime, collisionBox) {
+      this.ocupied_space = space;
+      this.polygon = undefined;
+      this.area = undefined;
+      this.x = x;
+      this.y = y;
+      this.initTime = frameCount - lifeTime || 0;
+      this.collisionBox = collisionBox || undefined;
+      this.alive = alive || false;
+    }
+    kill() {
+      this.cells.forEach((cell) => {
+        cell.kill();
+      });
     }
   };
   constructor(coords, system) {
@@ -45,7 +63,7 @@ class Chunk {
         const super_cell_cells = super_cell_pos.map(
           (pos) => this.grid[pos.x][pos.y]
         );
-        this.super_cells.push(super_cell_cells);
+        this.super_cells.push(new this.super_cell(super_cell_cells, 0, 0));
       }
     });
   }
@@ -67,6 +85,7 @@ class Chunk {
                 { x: 52 - 52 / 2, y: 0 - 52 / 2 },
               ]
             );
+          this.grid[x][y].collisionBox.parent = this.grid[x][y];
         }
       }
     }
@@ -148,12 +167,13 @@ class Chunk {
   }
   draw() {
     for (const super_cell of this.super_cells) {
-      const color = random(0, 1) > 0.5 ? true : false;
-      for (const cell of super_cell) {
+      const color = 1;
+      // const color = random(0, 1) > 0.5 ? true : false;
+      for (const cell of super_cell.ocupied_space) {
         if (cell.alive == true) {
           if (color) {
             image(this.yellow_alive, ...this.toWorldPos(cell));
-          } else  {
+          } else {
             image(this.yellow_half_alive, ...this.toWorldPos(cell));
           }
         }
@@ -186,7 +206,7 @@ class Chunks {
     this.data = {};
     this.system = system;
     this.center = center || [0, 0];
-    this.radius = 3;
+    this.radius = 1;
     this.#initRegion();
   }
   #initRegion() {

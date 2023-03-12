@@ -29,10 +29,10 @@ class Player {
   #Physic = class {
     // Implement freeze response
     constructor(pos, system) {
-      console.log(pos);
+      this.system = system;
       this.isFreeze = false;
       this.circle = undefined;
-      this.addCollisionBox(pos, system.collisions);
+      this.addCollisionBox(pos, system.system.collisions);
 
       this.lastLocation = pos.copy();
       this.last2Location = pos.copy();
@@ -75,7 +75,7 @@ class Player {
       this.circle = collisions.createCircle({ x: pos.x, y: pos.y }, 60 / 2, {
         isStatic: false,
       });
-      this.circle.parent = this.parent;
+      this.circle.parent = this;
       collisions.updateBody(this.circle);
     }
     isFreeze() {
@@ -147,11 +147,10 @@ class Player {
     }
   };
   constructor(settings, system) {
-    console.log("settings: ", settings, "system", system, "this", this);
     this.system = system;
     this.system.addEntity(this);
 
-    this.physic = new this.#Physic(settings.pos || createVector(0, 0), system);
+    this.physic = new this.#Physic(settings.pos || createVector(0, 0), this);
     this.rotation = new this.#Rotation();
     this.proprties = new this.#Proprties(settings);
     this.animation = new this.#Animation();
@@ -225,30 +224,31 @@ class Player {
   startPunch(target) {
     this.proprties.health -= 1;
     this.animation.start();
-
     // effects to players getting punch: push them backwards and minus their health
     setTimeout(() => {
-      target = target || this.system.collisions.getPunchAble(this);
+      target = [target] || this.system.collisions.getPunchAble(this);
       target.forEach((entity) => {
-        if (!(entity instanceof Player)) {
-          return;
-        }
+        if (!(entity instanceof Player)) return;
+
         entity.getHit();
 
-        if (entity.health < 0) {
-          entity.die();
-          return;
-        }
         // Push enemies backwards
         let start = millis();
         let jump = () => {
           let deltaT = (millis() - start) / 16 / 1.75;
-          let d = p5.Vector.sub(this.pos, entity.pos);
+          let d = createVector(
+            this.physic.pos.x - entity.physic.pos.x,
+            this.physic.pos.y - entity.physic.pos.y
+          );
           d.normalize();
           d.setMag(
-            -d.mag() * Curve.f2(deltaT, 0.1, 0.6, 0.275) * 21 * this.damage - 3
+            -d.mag() *
+              Curve.f2(deltaT, 0.1, 0.6, 0.275) *
+              21 *
+              this.proprties.damage -
+              3
           );
-          entity.addPos(d, false);
+          entity.physic.addPos(d);
         };
         jump();
         for (let i = 1; i <= 5; i++) {
@@ -260,7 +260,7 @@ class Player {
     }, 190);
   }
   getHit() {
-    this.physic.setFreezeFor(0.15);
+    // this.physic.setFreezeFor(0.15);
     this.proprties.health -= 13;
     if (this.proprties.health >= 0) {
       for (let i = 0; i < 4; i++) {
@@ -286,6 +286,8 @@ class OnControllerPlayer extends Player {
   constructor(settings, system) {
     super(settings, system);
     this.jumpCooldown = 0;
+    this.proprties.totalHealth = 1000;
+    this.proprties.health = 1000;
     document.body.addEventListener("keydown", (event) => {
       if (event.key == " ") {
         if (this.jumpCooldown > 0) return;
@@ -293,11 +295,11 @@ class OnControllerPlayer extends Player {
         this.jumpCooldown = 10;
       }
     });
-     
+
     this.#ability_place_entity();
   }
   #ability_place_entity() {
-    mouseIsPressed
+    mouseIsPressed;
   }
 
   update() {

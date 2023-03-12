@@ -137,12 +137,12 @@ class System {
       margin: "0 0 0 0",
     });
   }
-  throwError(str) {
+  static throwError(str) {
     throw new Error(str);
   }
   constructor() {
-    this.tileSize = 233;
     frameRate(60);
+    this.tileSize = 233;
     this.fpsMeter = this.#createFPSMetering();
     this.collisions = new Collisions2();
     this.zoomScope = new this.#ZoomScope();
@@ -182,28 +182,22 @@ class System {
   }
   #updateCollisions() {
     this.collisions.update();
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       for (const player of this.movingEntities) {
         this.collisions.checkOne(player.physic.circle, (response) => {
-          const a = player;
+          const a = player.physic;
           const b = response.b.parent;
           let x = -response.overlapV.x;
           let y = -response.overlapV.y;
+          a.addPos({ x: x * 1.1, y: y * 1.1 });
+          return;
           x = min(x, 14);
           y = min(y, 14);
-
-          if (b instanceof Player) {
+          if (b.system instanceof Player) {
             const effects = 0.4;
-            a.addPos(
-              { x: x * (1.01 - effects), y: y * (1.01 - effects) },
-              false
-            );
-            b.addPos({ x: -(x * effects), y: -(y * effects) }, false);
-
-            const vec = a.rotation.headTo.copy();
-            vec.rotate(radians(a.random * 90)).setMag(0.4);
-            a.addPos(vec);
-          } else a.physic.addPos({ x: x * 1.1, y: y * 1.1 }, false);
+            a.addPos({ x: x * (1.01 - effects), y: y * (1.01 - effects) });
+            b.addPos({ x: -(x * effects), y: -(y * effects) });
+          } else a.addPos({ x: x * 1.1, y: y * 1.1 });
         });
       }
     }
@@ -252,7 +246,6 @@ class System {
   #drawChunk(x, y) {
     image(this.backgroundIMG, ...this.tileCoordToPos([x, y]));
   }
-
   drawMenu(text) {
     push();
     translate(width / 2 - 205, height / 4 - 400);
@@ -278,3 +271,7 @@ class System {
     return [floor(pos.x / this.tileSize), floor(pos.y / this.tileSize)];
   }
 }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+document.addEventListener("contextmenu", (event) => event.preventDefault());

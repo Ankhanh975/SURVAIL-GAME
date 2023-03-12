@@ -1,6 +1,6 @@
 class AI_Player extends Player {
-  constructor(settings) {
-    super(settings);
+  constructor(settings, system) {
+    super(settings, system);
     this.name = createName();
     this.AIPlayer = true;
   }
@@ -8,11 +8,14 @@ class AI_Player extends Player {
     // Most simple algrithm for a zomble I can think of and also very functional code taken from last codebase minded
     const target = this.system.movingEntities[0];
     if (!target) return;
-    let lookAt, dist, toLookAt;
 
-    dist = this.physic.dist(target);
-    toLookAt = p5.Vector.sub(lookAt, this.pos);
-    lookAt = target.physic.pos;
+    let dist = this.physic.getDist(target);
+    let lookAt = target.physic.pos;
+    let p5js_lookAt = createVector(lookAt.x, lookAt.y);
+    let toLookAt = p5.Vector.sub(
+      p5js_lookAt,
+      createVector(this.physic.pos.x, this.physic.pos.y)
+    );
 
     if (dist < 150) {
       if (!this.onPunch()) {
@@ -21,17 +24,17 @@ class AI_Player extends Player {
         }
       }
     }
-    this.setAngle(toLookAt.heading());
+    this.rotation.target = toLookAt.copy();
 
     if (dist < 130) {
       toLookAt.setMag(3.0);
       toLookAt.rotate(radians(180));
-      this.addPos(toLookAt);
+      this.physic.addPos(toLookAt);
     }
-    if (dist > 150 && dist < 1100) {
-      toLookAt.rotate(radians(10));
+    if (dist > 150 && dist < 100000) {
       toLookAt.setMag(3.0);
-      this.addPos(toLookAt);
+      toLookAt.rotate(radians(0));
+      this.physic.addPos(toLookAt);
     }
   }
   update() {
