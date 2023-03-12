@@ -1,6 +1,3 @@
-// Idea: feel and coordinates chanel of zombie
-// Zombie act to this field to do complex things
-
 class Particle {
   constructor(options) {
     this.type = options.type || throwError("type not specified");
@@ -11,19 +8,15 @@ class Particle {
     this.source = options.source || null;
     this.referToSource = null;
 
-    {
-      this.pos = createVector(0, 0);
-      this.syncPos = false;
-      if (options.pos) {
-        this.pos.x = options.pos.x;
-        this.pos.y = options.pos.y;
-      }
-      if (options.syncPos === true) {
-        this.referToSource = options.pos;
-        this.syncPos = true;
-
-        // this.pos = options.pos;
-      }
+    this.pos = createVector(0, 0);
+    this.syncPos = false;
+    if (options.pos) {
+      this.pos.x = options.pos.x;
+      this.pos.y = options.pos.y;
+    }
+    if (options.syncPos === true) {
+      this.referToSource = options.pos;
+      this.syncPos = true;
     }
     this.referToSource2 = null;
 
@@ -37,7 +30,6 @@ class Particle {
       if (options.syncHeadTo === true) {
         this.referToSource2 = options.headTo;
         this.syncHeadTo = true;
-        // this.headTo = options.headTo;
       }
     }
 
@@ -48,9 +40,6 @@ class Particle {
       this.headToInAbsoluteCoords.y = options.headToInAbsoluteCoords.y;
       this.useAbsoluteCoords = true;
     }
-
-    // For get_near particle efficient using collision detection library
-
     this.circle = this.parent.collisions.createPolygon(
       { x: this.pos.x, y: this.pos.y },
       [
@@ -137,7 +126,6 @@ class Particle {
   }
   die() {
     this.parent.collisions.remove(this.circle);
-    // Remove this from class Field done in the Field update()
   }
 }
 class Field {
@@ -177,32 +165,7 @@ class Field {
     this.particles.forEach((each) => each.update());
     this.particles = this.particles.filter((each) => each.lifeTime > 0);
     this.collisions.update();
-    // for (const player of players.realPlayers) {
-    //   const get = this.getNear(player)
-    //     .filter((e) => e.source === player)
-    //     .filter((e) => e.lifeTime < 1000);
-
-    //   if (
-    //     get
-    //       .filter((e) => e.lifeTimePercent > 0.75)
-    //       .filter((e) => player.pos.dist(e.pos) < 35).length === 0
-    //   ) {
-    //     // console.log("this");
-    //     const closest_smell = this.#getClosest(player.pos, get);
-    //     if (!closest_smell) {
-    //       continue;
-    //     }
-    //     const newParticle = this.#createParticleAttachTo(player);
-
-    //     closest_smell.removeSyncPos();
-    //     closest_smell.removeSyncHeadTo();
-
-    //     closest_smell.lifeTime = lifeTime;
-    //     closest_smell.totalLifeTime = lifeTime;
-    //     closest_smell.useAbsoluteCoords = true;
-    //     closest_smell.headToInAbsoluteCoords = newParticle.pos;
-    //   }
-    // }
+  
     return;
   }
   draw() {
@@ -220,18 +183,6 @@ class Field {
       }
     );
     return all;
-  }
-  #getYoungest(list) {
-    if (list.length < 0) {
-      return null;
-    }
-    let now = list[0];
-    for (const each of list) {
-      if (each.lifeTime > now.lifeTime) {
-        now = each;
-      }
-    }
-    return now;
   }
   #getStrongest(list) {
     if (list.length < 0) {
@@ -274,11 +225,7 @@ class Field {
     if (enemy_smell) {
       // directly see some enemy
       let headTo = p5.Vector.sub(enemy_smell.pos, zombie.pos);
-
-      // console.log(enemy_smell.lifeTime);
-      // headTo.rotate(radians(180));
-      
-      headTo.limit(3)
+      headTo.limit(3);
       zombie.addPos(headTo);
     }
   }

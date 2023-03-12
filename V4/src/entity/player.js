@@ -293,6 +293,11 @@ class OnControllerPlayer extends Player {
         this.jumpCooldown = 10;
       }
     });
+     
+    this.#ability_place_entity();
+  }
+  #ability_place_entity() {
+    mouseIsPressed
   }
 
   update() {
@@ -300,6 +305,11 @@ class OnControllerPlayer extends Player {
     if (this.jumpCooldown > 0) {
       this.jumpCooldown--;
     }
+    this.#awsd();
+    this.rotation.target.x = mouseX - width / 2;
+    this.rotation.target.y = mouseY - height / 2;
+  }
+  #awsd() {
     if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
       this.physic.addPos(createVector(-7, 0));
     }
@@ -312,8 +322,6 @@ class OnControllerPlayer extends Player {
     if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
       this.physic.addPos(createVector(0, 7));
     }
-    this.rotation.target.x = mouseX - width / 2;
-    this.rotation.target.y = mouseY - height / 2;
   }
   #jump() {
     let start = millis();

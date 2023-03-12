@@ -14,6 +14,7 @@ class Chunk {
       this.#initPoligons();
     }
     #initPoligons() {
+      
       for (const cell of this.cells) {
       }
     }

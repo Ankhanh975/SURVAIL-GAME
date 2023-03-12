@@ -1,3 +1,5 @@
-let a = { 1: 2, 3: 4 };
-
-console.log(0.0+ " "+0.1);
+let a = [1, 2, 3];
+for (const iterator of a) {
+  console.log(iterator);
+  a.push(4);
+}

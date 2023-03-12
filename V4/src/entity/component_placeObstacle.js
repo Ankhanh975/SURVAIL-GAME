@@ -11,39 +11,14 @@ component.placeObstacle = class {
       y = y - height / 2 + this.parent.pos.y;
       return { x: x, y: y };
     };
-    canvas = document.querySelector("#defaultCanvas0");
-    canvas.addEventListener("mousedown", (event) => {
-      if (event.button === 2) {
-        this.mouseDown = true;
-        this.mousePos = this.getRealPos(event.clientX, event.clientY);
-        this.mousePosHistory.push(this.mousePos);
-      }
-    });
-    canvas.addEventListener("mouseup", (event) => {
-      if (event.button === 2) {
-        this.mouseDown = false;
-        this.mousePosHistory.length = 0;
-      }
-    });
-    canvas.addEventListener("mousemove", (event) => {
-      this.mousePos = this.getRealPos(event.clientX, event.clientY);
-
-      if (!this.mouseDown) {
-        return;
-      }
-      this.mousePosHistory.push(this.mousePos);
-
-      if (this.mousePosHistory.length > 2) {
-        this.mousePosHistory.shift();
-      }
-    });
   }
   update = () => {
     // Fill all positions from current mouse position and last mouse position
     // console.log(this.mouseDown, this.mousePos);
     // console.log(this.to_fill.length);
     let solve = 0;
-    if (this.to_fill.length > 100) { // Emergecy patch if necessary
+    if (this.to_fill.length > 100) {
+      // Emergecy patch if necessary
       this.to_fill = [];
     }
     for (let i = 0; i < this.to_fill.length; i++) {
@@ -91,15 +66,6 @@ component.placeObstacle = class {
         each = { x: each[0], y: each[1] };
         return each;
       });
-    } else if (this.mousePosHistory.length >= 3) {
-      // path = bezierCurve(
-      //   this.mousePosHistory[this.mousePosHistory.length - 1].x,
-      //   this.mousePosHistory[this.mousePosHistory.length - 1].y,
-      //   this.mousePosHistory[this.mousePosHistory.length - 2].x,
-      //   this.mousePosHistory[this.mousePosHistory.length - 2].y,
-      //   this.mousePosHistory[this.mousePosHistory.length - 3].x,
-      //   this.mousePosHistory[this.mousePosHistory.length - 3].y
-      // );
     }
     sparks.create_particle(this.mousePos, [9, 200, 9]);
 

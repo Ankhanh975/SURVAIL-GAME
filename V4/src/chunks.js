@@ -25,6 +25,29 @@ class Chunk {
     this.#initGrid();
     this.#initDraw();
     this.#initCollisionsMesh();
+
+    function create_matrix(m, n, cell) {
+      var result = [];
+      for (var i = 0; i < n; i++) {
+        var row = new Array(m).fill(cell);
+        result.push(row);
+      }
+      return result;
+    }
+    this.super_cells = [];
+    let mask = create_matrix(this.size, this.size, false);
+    this.alive_cells.forEach((cell) => {
+      if (mask[cell.x][cell.y] === false) {
+        const super_cell_pos = Algritham(cell, this.grid);
+        super_cell_pos.forEach((pos) => {
+          mask[pos.x][pos.y] = true;
+        });
+        const super_cell_cells = super_cell_pos.map(
+          (pos) => this.grid[pos.x][pos.y]
+        );
+        this.super_cells.push(super_cell_cells);
+      }
+    });
   }
   #initCollisionsMesh() {
     for (let x = 0; x < this.size; x++) {
@@ -56,7 +79,6 @@ class Chunk {
       }
     }
   }
-
   #create_matrix(m, n, cell) {
     var result = [];
     for (var i = 0; i < n; i++) {
@@ -125,17 +147,28 @@ class Chunk {
     return;
   }
   draw() {
-    for (const cell of this.alive_cells) {
-      if (cell.alive == true) {
-        if (frameCount - cell.initTime < 30) {
-          image(this.yellow_alive, ...this.toWorldPos(cell));
-        } else if (frameCount - cell.initTime < 60) {
-          image(this.yellow_half_alive, ...this.toWorldPos(cell));
+    for (const super_cell of this.super_cells) {
+      const color = random(0, 1) > 0.5 ? true : false;
+      for (const cell of super_cell) {
+        if (cell.alive == true) {
+          if (color) {
+            image(this.yellow_alive, ...this.toWorldPos(cell));
+          } else  {
+            image(this.yellow_half_alive, ...this.toWorldPos(cell));
+          }
         }
       }
     }
+    // for (const cell of this.alive_cells) {
+    //   if (cell.alive == true) {
+    //     if (frameCount - cell.initTime < 30) {
+    //       image(this.yellow_alive, ...this.toWorldPos(cell));
+    //     } else if (frameCount - cell.initTime < 60) {
+    //       image(this.yellow_half_alive, ...this.toWorldPos(cell));
+    //     }
+    //   }
+    // }
   }
-
   toWorldPos(cell) {
     const chunkSize = this.size * this.cell_size;
     let [x, y] = [
@@ -228,7 +261,6 @@ class Chunks {
 
     this.center = [NewX, NewY];
   }
-
   update(playerX, playerY) {
     let currentRegion = this.#posToChunkPos(playerX, playerY);
     if (
@@ -284,4 +316,59 @@ class Chunks {
       func(this.data[iterator]);
     }
   }
+}
+function Algritham(start, grid) {
+  function create_matrix(m, n, cell) {
+    var result = [];
+    for (var i = 0; i < n; i++) {
+      var row = new Array(m).fill(cell);
+      result.push(row);
+    }
+    return result;
+  }
+  function array_4_directions() {
+    return [
+      [-1, 0],
+      [0, -1],
+      [0, 1],
+      [1, 0],
+    ];
+  }
+
+  let to_fill = [];
+  let final = [];
+  let mask = create_matrix(grid.length, grid[0].length, false);
+  if (grid[start.x][start.y].alive === false) {
+    return [];
+  } else {
+    to_fill.push({ x: start.x, y: start.y });
+  }
+  while (to_fill.length > 0) {
+    let to_fill2 = [];
+    for (const pos of to_fill) {
+      if (grid[pos.x][pos.y].alive === true && mask[pos.x][pos.y] === false) {
+        mask[pos.x][pos.y] = true;
+        final.push(pos);
+        array_4_directions().forEach(([x, y], i) => {
+          const nextIteration = { x: pos.x + x, y: pos.y + y };
+          if (
+            nextIteration.x >= 0 &&
+            nextIteration.y >= 0 &&
+            nextIteration.x < grid.length &&
+            nextIteration.y < grid[0].length
+          ) {
+            if (
+              grid[nextIteration.x][nextIteration.y].alive === true &&
+              mask[nextIteration.x][nextIteration.y] === false
+            ) {
+              to_fill2.push(nextIteration);
+            }
+          }
+        });
+      }
+    }
+    to_fill = to_fill2;
+  }
+
+  return final;
 }
