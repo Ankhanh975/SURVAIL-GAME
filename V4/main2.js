@@ -37,7 +37,7 @@ function setup() {
 
   // tower = new Tower();
   chunk = new Chunk([-1, -1], system);
-  player = new OnControllerPlayer({}, system);
+  player = new OnControllerPlayer({ color: 5 }, system);
 
   (function () {
     // Setup the animation of 6*6 frames of player punching animations Players_img

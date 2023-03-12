@@ -287,15 +287,16 @@ class Collisions2 extends Collisions {
   getPunchAble(p) {
     //   From p to anther close player
     let all = [];
-    let angle = p.getAngle();
-    angle = createVector(0, -1).rotate(angle).heading();
-    // console.log(angle, degrees(angle));
+    let angle = p.rotation.getCurrent().copy();
 
-    const collider = this.createPolygon({ x: p.pos.x, y: p.pos.y }, [
-      { x: -152, y: 310 },
-      { x: 152, y: 310 },
-      { x: -0, y: -10 },
-    ]);
+    const collider = this.createPolygon(
+      { x: p.physic.pos.x, y: p.physic.pos.y },
+      [
+        { x: -152, y: 310 },
+        { x: 152, y: 310 },
+        { x: -0, y: -10 },
+      ]
+    );
 
     collider.rotate(angle);
     this.updateBody(collider);
@@ -303,8 +304,8 @@ class Collisions2 extends Collisions {
       const b = response.b.parent;
       if (b !== p && b instanceof Player) {
         if (
-          this.isFreeLine(b.pos, p.pos, {
-            ignore: [p.circle, b.circle, collider],
+          this.isFreeLine(b.physic.pos, p.physic.pos, {
+            ignore: [p.physic.circle, b.physic.circle, collider],
           })
         ) {
           all.push(b);

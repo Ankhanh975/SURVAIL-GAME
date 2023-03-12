@@ -1,14 +1,4 @@
 class Players {
-  constructor() {
-    this.parent = globalThis;
-    this.players = [];
-    this.realPlayers = [];
-  }
-  update() {
-    for (const e of this.players) {
-      e.update();
-    }
-  }
   draw() {
     for (const e of this.players) {
       if (
@@ -45,13 +35,52 @@ class Players {
     pos = pos || p5.Vector.random2D().setMag(random(200, 500));
     color = int(((color % 5) + 5) % 5) || int(random(0, 5));
 
-    if (this.players[0]) {
-      // pos.add(this.players[0].pos);
-      // pos.add(this.AIs[int(random(0, this.AIs.length))].pos);
-    }
-
     this.players.push(
       new AIPlayer({ color: color, parent: this, pos: [pos.x, pos.y] })
     );
+  }
+}
+class AIPlayer extends Player {
+  constructor(settings) {
+    super(settings);
+    this.name = generateName.__call();
+    this.AIPlayer = true;
+    this.addComponent(component.wandering);
+    this.addComponent(component.sensor);
+  }
+  update() {
+    super.update();
+    this.target = this.parent.realPlayers[0];
+    if (!this.target) {
+      return;
+    }
+    let lookAt, dist, toLookAt;
+    lookAt = this.target.pos;
+    dist = this.pos.dist(lookAt);
+    toLookAt = p5.Vector.sub(lookAt, this.pos);
+
+    if (dist < 150) {
+      if (!this.onPunch()) {
+        if (random(0, 100) >= 93.5) {
+          this.startPunch(null, [this.target]);
+        }
+      }
+    }
+    this.setAngle(toLookAt.heading());
+
+    if (dist < 1100) {
+      if (dist < 130) {
+        toLookAt.setMag(3.0);
+        toLookAt.rotate(radians(180));
+        this.addPos(toLookAt);
+      }
+      if (dist > 150) {
+        toLookAt.rotate(radians(10));
+        toLookAt.setMag(3.0);
+        this.addPos(toLookAt);
+      }
+    }
+
+    return;
   }
 }

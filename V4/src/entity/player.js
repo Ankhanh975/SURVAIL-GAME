@@ -22,6 +22,9 @@ class Player {
     getCurrentAngle() {
       return this.currentAngle;
     }
+    getCurrent() {
+      return this.current;
+    }
   };
   #Physic = class {
     // Implement freeze response
@@ -84,16 +87,22 @@ class Player {
       let d = sqrt(dX * dX + dY * dY);
       return d;
     }
+    getDist(player) {
+      let dX = abs(this.pos.x - player.physic.pos.x);
+      let dY = abs(this.pos.y - player.physic.pos.y);
+      let d = sqrt(dX * dX + dY * dY);
+      return d;
+    }
   };
   #Proprties = class {
     constructor(settings) {
-      this.health = 35;
-      this.totalHealth = 35;
+      this.health = settings.health || 35;
+      this.totalHealth = settings.totalHealth || 35;
       this.health_percentage = this.health / this.totalHealth;
-      this.recovery = 0.04;
-      this.damage = 0.75;
+      this.recovery = settings.recovery || 0.04;
+      this.damage = settings.damage || 0.75;
       this.alive = true;
-      this.color = 0;
+      this.color = settings.color || 0;
       this.name = settings.name || "";
     }
     update() {
@@ -156,7 +165,6 @@ class Player {
     this.rotation.update();
     this.proprties.update();
     this.physic.update();
-    console.log(this.physic.getAvgSpeed());
   }
 
   die() {
@@ -215,7 +223,7 @@ class Player {
     return this.animation.onPunch();
   }
   startPunch(target) {
-    this.health -= 1;
+    this.proprties.health -= 1;
     this.animation.start();
 
     // effects to players getting punch: push them backwards and minus their health
@@ -341,5 +349,47 @@ class OnControllerPlayer extends Player {
         _jump(this);
       }, 16 * i);
     }
+  }
+}
+
+class BotPlayer extends Player {
+  constructor(settings) {
+    super(settings);
+    this.name = createName();
+    this.AIPlayer = true;
+  }
+  aimStraight() {
+    // Most simple algrithm for a zomble I can think of and also very functional code taken from last codebase minded
+    const target = this.system.movingEntities[0];
+    if (!target) return;
+    let lookAt, dist, toLookAt;
+
+    dist = this.physic.dist(target);
+    toLookAt = p5.Vector.sub(lookAt, this.pos);
+    lookAt = target.physic.pos;
+
+    if (dist < 150) {
+      if (!this.onPunch()) {
+        if (random(0, 100) >= 93.5) {
+          this.startPunch(target);
+        }
+      }
+    }
+    this.setAngle(toLookAt.heading());
+
+    if (dist < 130) {
+      toLookAt.setMag(3.0);
+      toLookAt.rotate(radians(180));
+      this.addPos(toLookAt);
+    }
+    if (dist > 150 && dist < 1100) {
+      toLookAt.rotate(radians(10));
+      toLookAt.setMag(3.0);
+      this.addPos(toLookAt);
+    }
+  }
+  update() {
+    super.update();
+    this.aimStraight();
   }
 }

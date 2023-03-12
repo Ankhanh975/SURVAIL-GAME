@@ -4,6 +4,8 @@ class Chunk {
       this.x = x; // 0 <= this.x < Chunk.size
       this.y = y; // 0 <= this.x < Chunk.size
       this.initTime = frameCount - lifeTime || 0;
+      // Mutiple cells that sit next to each other can have the same collision box in a shape of a complex polygon. That is idealy it's to be so.
+      // But the collision box work wonderful and fast and didn't need to be changed. Also I want to make the cell on and off dynamicly for the game.
       this.collisionBox = collisionBox || undefined;
       this.alive = alive || false;
     }
@@ -21,6 +23,27 @@ class Chunk {
     this.grid = this.#create_matrix(this.size, this.size, this.cell);
     this.#initGrid();
     this.#initDraw();
+    this.#initCollisionsMesh();
+  }
+  #initCollisionsMesh() {
+    for (let x = 0; x < this.size; x++) {
+      for (let y = 0; y < this.size; y++) {
+        if (this.grid[x][y].alive === true) {
+          this.grid[x][y].collisionBox = this.system.collisions.createPolygon(
+            {
+              x: this.toWorldPos(this.grid[x][y])[0],
+              y: this.toWorldPos(this.grid[x][y])[1],
+            },
+            [
+              { x: 0 - 52 / 2, y: 0 - 52 / 2 },
+              { x: 0 - 52 / 2, y: 52 - 52 / 2 },
+              { x: 52 - 52 / 2, y: 52 - 52 / 2 },
+              { x: 52 - 52 / 2, y: 0 - 52 / 2 },
+            ]
+          );
+        }
+      }
+    }
   }
   #create_matrix(m, n, cell) {
     var result = [];
@@ -65,18 +88,6 @@ class Chunk {
         if (0.3 < value && value < 0.7) {
           this.grid[x][y].alive = true;
           this.grid[x][y].initTime = 10 ** 10;
-          this.grid[x][y].collisionBox = this.system.collisions.createPolygon(
-            {
-              x: this.toWorldPos(this.grid[x][y])[0],
-              y: this.toWorldPos(this.grid[x][y])[1],
-            },
-            [
-              { x: 0 - 52 / 2, y: 0 - 52 / 2 },
-              { x: 0 - 52 / 2, y: 52 - 52 / 2 },
-              { x: 52 - 52 / 2, y: 52 - 52 / 2 },
-              { x: 52 - 52 / 2, y: 0 - 52 / 2 },
-            ]
-          );
         }
       }
     }
