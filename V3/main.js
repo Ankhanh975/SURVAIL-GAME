@@ -61,7 +61,7 @@ addFunction("setup", () => {
   }
   players.players[0] = player;
   players.realPlayers.push(player);
-  if (false) {
+  if (true) {
     let friend = new Player({
       color: 5,
       parent: players,
@@ -75,9 +75,10 @@ addFunction("setup", () => {
     players.players.push(friend);
     players.realPlayers.push(friend);
   }
-  for (let i = 0; i < 0; i++) {
-    // PLAYING
-    players.createAIPlayer();
+  for (let i = 0; i < 300; i++) {
+      setTimeout(() => {
+       players.createAIPlayer();
+     }, 16 * 10 * i);
   }
   // TODO: why 2000 obstacles is slow?
   // 1. Collisions check
